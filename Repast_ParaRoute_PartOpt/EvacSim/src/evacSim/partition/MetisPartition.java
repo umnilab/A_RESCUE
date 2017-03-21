@@ -1,0 +1,229 @@
+/*
+Galois, a framework to exploit amorphous data-parallelism in irregular
+programs.
+
+Copyright (C) 2010, The University of Texas at Austin. All rights reserved.
+UNIVERSITY EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES CONCERNING THIS SOFTWARE
+AND DOCUMENTATION, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR ANY
+PARTICULAR PURPOSE, NON-INFRINGEMENT AND WARRANTIES OF PERFORMANCE, AND ANY
+WARRANTY THAT MIGHT OTHERWISE ARISE FROM COURSE OF DEALING OR USAGE OF TRADE.
+NO WARRANTY IS EITHER EXPRESS OR IMPLIED WITH RESPECT TO THE USE OF THE
+SOFTWARE OR DOCUMENTATION. Under no circumstances shall University be liable
+for incidental, special, indirect, direct or consequential damages or loss of
+profits, interruption of business, or related expenses which may arise from use
+of Software or Documentation, including but not limited to those resulting from
+defects in Software and/or Documentation, or loss or inaccuracy of data of any
+kind.
+
+File: AbstractMain.java 
+
+ */
+
+package evacSim.partition;
+
+import evacSim.citycontext.Road;
+import evacSim.partition.GrowBisection.SaveNodesToArray;
+import galois.objects.graph.GNode;
+import galois.objects.graph.IntGraph;
+import galois.runtime.GaloisRuntime;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
+import util.Launcher;
+
+public class MetisPartition {
+	private int npartition;
+	private ArrayList<ArrayList<Road>> PartitionedInRoads;
+	private ArrayList<Road> PartitionedBwRoads;
+	
+	public MetisPartition(int nparts) {
+		this.npartition = nparts;
+		this.PartitionedInRoads = new ArrayList<ArrayList<Road>>();
+		this.PartitionedBwRoads = new ArrayList<Road>();
+	}
+	
+	public ArrayList<ArrayList<Road>> getPartitionedInRoads() {
+		return this.PartitionedInRoads;
+	}
+	
+	public ArrayList<Road> getPartitionedBwRoads() {
+		return this.PartitionedBwRoads;
+	}
+	
+	public void first_run() throws NumberFormatException, ExecutionException {
+		GaliosGraphConverter graphConverter = new GaliosGraphConverter();
+		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(true);
+		System.out.println("Metis Running...");
+		
+		if (Launcher.getLauncher().isFirstRun()) {
+			System.err.println("Configuration");
+			System.err.println("-------------");
+			System.err.println(" Num of partitions: " + this.npartition);
+			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
+					+ " edges");
+			System.err.println();
+		}
+		
+		System.gc(); // For gabage collection
+		
+		long time = System.nanoTime();
+		Launcher.getLauncher().startTiming();
+		IntGraph<MetisNode> resultGraph = partition(metisGraph, npartition);
+		Launcher.getLauncher().stopTiming();
+		time = (System.nanoTime() - time) / 1000000;
+//		System.err.println("mincut: " + metisGraph.getMinCut());
+		System.err.println("runtime: " + time + " ms");
+		System.err.println();
+		
+		// Calling GaliosToRepastGraph method for testing
+		graphConverter.GaliosToRepastGraph(resultGraph, npartition);
+		
+		// Testing retrieving the partitioned results
+		this.PartitionedInRoads = graphConverter.getPartitionedInRoads();
+		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
+		int i;
+		for (i = 0; i < this.npartition; i++){
+			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size());
+			// Compute number of vehicles currently in the partition
+			int totNumVeh = 0;
+			int totShadowVeh = 0;
+			int totRoutingVeh = 0;
+			for (Road road : PartitionedInRoads.get(i)){
+				totNumVeh += road.getVehicleNum();
+				totShadowVeh += road.getShadowVehicleNum();
+				totRoutingVeh += road.getFutureRoutingVehNum();
+				
+			}
+			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+
+		}
+		
+		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
+		// Compute number of vehicles currently in the partition
+		int totNumVeh = 0;
+		int totShadowVeh = 0;
+		int totRoutingVeh = 0;
+		for (Road road : PartitionedBwRoads){
+			totNumVeh += road.getVehicleNum();
+			totShadowVeh += road.getShadowVehicleNum();
+			totRoutingVeh += road.getFutureRoutingVehNum();
+		}
+		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+	}
+	
+	
+	public void run() throws NumberFormatException, ExecutionException {
+		GaliosGraphConverter graphConverter = new GaliosGraphConverter();
+		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(false);
+		/*System.out.println("Metis Running...");
+		
+		if (Launcher.getLauncher().isFirstRun()) {
+			System.err.println("Configuration");
+			System.err.println("-------------");
+			System.err.println(" Num of partitions: " + this.npartition);
+			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
+					+ " edges");
+			System.err.println();
+		}*/
+		
+		System.gc(); // For gabage collection
+		
+		long time = System.nanoTime();
+		Launcher.getLauncher().startTiming();
+		IntGraph<MetisNode> resultGraph = partition(metisGraph, npartition);
+		
+		Launcher.getLauncher().stopTiming();
+		time = (System.nanoTime() - time) / 1000000;
+		System.err.println("mincut: " + metisGraph.getMinCut());
+		System.err.println("runtime: " + time + " ms");
+		System.err.println();
+		
+		/*// For testing only, remove after done
+		if (Launcher.getLauncher().isFirstRun()) {
+			verify(metisGraph);
+		}*/
+		
+		// Calling GaliosToRepastGraph method for testing
+		graphConverter.GaliosToRepastGraph(resultGraph, npartition);
+		
+		// Testing retrieving the partitioned results
+		this.PartitionedInRoads = graphConverter.getPartitionedInRoads();
+		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
+		int i;
+		for (i = 0; i < this.npartition; i++){
+			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size());
+			// Compute number of vehicles currently in the partition
+			int totNumVeh = 0;
+			int totShadowVeh = 0;
+			int totRoutingVeh = 0;
+			for (Road road : PartitionedInRoads.get(i)){
+				totNumVeh += road.getVehicleNum();
+				totShadowVeh += road.getShadowVehicleNum();
+				totRoutingVeh += road.getFutureRoutingVehNum();
+				
+			}
+			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+
+		}
+		
+		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
+		// Compute number of vehicles currently in the partition
+		int totNumVeh = 0;
+		int totShadowVeh = 0;
+		int totRoutingVeh = 0;
+		for (Road road : PartitionedBwRoads){
+			totNumVeh += road.getVehicleNum();
+			totShadowVeh += road.getShadowVehicleNum();
+			totRoutingVeh += road.getFutureRoutingVehNum();
+		}
+		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+	}
+
+	/**
+	 * KMetis Algorithm 
+	 */
+	public IntGraph<MetisNode> partition(MetisGraph metisGraph, int nparts) throws ExecutionException {
+		IntGraph<MetisNode> graph = metisGraph.getGraph();
+		// Zhan: Number of coarsen nodes
+		int coarsenTo = (int) Math.max(graph.size() / (40 * Math.log(nparts)), 20 * (nparts));
+		int maxVertexWeight = (int) (1.5 * ((graph.size()) / (double) coarsenTo));
+		Coarsener coarsener = new Coarsener(false, coarsenTo, maxVertexWeight);
+		long time = System.nanoTime();
+		MetisGraph mcg = coarsener.coarsen(metisGraph);
+		time = (System.nanoTime() - time) / 1000000;
+		
+		System.err.println("coarsening time: " + time + " ms");
+ 
+		MetisGraph.nparts = 2;
+		float[] totalPartitionWeights = new float[nparts];
+		Arrays.fill(totalPartitionWeights, 1 / (float) nparts);
+		time = System.nanoTime();
+		maxVertexWeight = (int) (1.5 * ((mcg.getGraph().size()) / Coarsener.COARSEN_FRACTION));
+		PMetis pmetis = new PMetis(20, maxVertexWeight);
+		pmetis.mlevelRecursiveBisection(mcg, nparts, totalPartitionWeights, 0, 0);
+		time = (System.nanoTime() - time) / 1000000;
+		System.err.println("initial partition time: " + time + " ms");
+		MetisGraph.nparts = nparts;
+		time = System.nanoTime();
+		Arrays.fill(totalPartitionWeights, 1 / (float) nparts);
+		// Zhan: we can just run KWayRefiner for future steps
+		KWayRefiner refiner = new KWayRefiner();
+		refiner.refineKWay(mcg, metisGraph, totalPartitionWeights, (float) 1.03, nparts);
+		time = (System.nanoTime() - time) / 1000000;
+		
+		return metisGraph.getGraph();
+	}
+
+	public void verify(MetisGraph metisGraph) {
+		if (!metisGraph.verify()) {
+			System.err.println("KMetis verify not passed!");
+//			throw new IllegalStateException("KMetis failed.");
+		}
+		System.err.println("KMetis okay");
+		System.err.println();
+	}
+}

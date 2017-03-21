@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommitComments>	<CommitComment>Figured out the issue with the GMetis partition:
+The number of partitions should be a power of 2, otherwise produce incorrect result.</CommitComment>
+</CommitComments>

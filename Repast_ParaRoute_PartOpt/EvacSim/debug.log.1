@@ -1,0 +1,1456 @@
+ERROR [AWT-EventQueue-0] 2016-04-14 13:49:57,567 repast.simphony.ui.RSApplication - Error while initializing simulation
+java.lang.NullPointerException
+	at repast.simphony.engine.schedule.CallBackAction.initMethod(CallBackAction.java:84)
+	at repast.simphony.engine.schedule.CallBackAction.<init>(CallBackAction.java:79)
+	at repast.simphony.engine.schedule.DefaultActionFactory.createAction(DefaultActionFactory.java:45)
+	at repast.simphony.engine.schedule.DefaultSchedulableActionFactory.createAction(DefaultSchedulableActionFactory.java:81)
+	at repast.simphony.engine.schedule.Schedule.schedule(Schedule.java:191)
+	at evacSim.ContextCreator.build(ContextCreator.java:148)
+	at repast.simphony.dataLoader.engine.ClassNameContextBuilder.build(ClassNameContextBuilder.java:41)
+	at repast.simphony.dataLoader.engine.DataLoaderControllerAction.runInitialize(DataLoaderControllerAction.java:48)
+	at repast.simphony.engine.controller.DefaultController$2.visit(DefaultController.java:214)
+	at repast.simphony.engine.controller.DefaultController$2.visit(DefaultController.java:1)
+	at repast.simphony.util.collections.NaryTree.preOrderTraverals(NaryTree.java:292)
+	at repast.simphony.util.collections.NaryTree.preOrderTraverals(NaryTree.java:295)
+	at repast.simphony.util.collections.NaryTree.preOrderTraverals(NaryTree.java:295)
+	at repast.simphony.util.collections.NaryTree.preOrderTraversal(NaryTree.java:288)
+	at repast.simphony.engine.controller.DefaultController.runInitialize(DefaultController.java:212)
+	at repast.simphony.engine.controller.DefaultController.runInitialize(DefaultController.java:383)
+	at repast.simphony.ui.RSApplication.initSim(RSApplication.java:157)
+	at repast.simphony.ui.RSApplication.start(RSApplication.java:189)
+	at repast.simphony.ui.action.StartRun.actionPerformed(StartRun.java:17)
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:2022)
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2348)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:402)
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:259)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:252)
+	at java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:289)
+	at java.awt.Component.processMouseEvent(Component.java:6535)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3324)
+	at java.awt.Component.processEvent(Component.java:6300)
+	at java.awt.Container.processEvent(Container.java:2236)
+	at java.awt.Component.dispatchEventImpl(Component.java:4891)
+	at java.awt.Container.dispatchEventImpl(Container.java:2294)
+	at java.awt.Component.dispatchEvent(Component.java:4713)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4888)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4525)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4466)
+	at java.awt.Container.dispatchEventImpl(Container.java:2280)
+	at java.awt.Window.dispatchEventImpl(Window.java:2750)
+	at java.awt.Component.dispatchEvent(Component.java:4713)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:758)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.awt.EventQueue$4.run(EventQueue.java:731)
+	at java.awt.EventQueue$4.run(EventQueue.java:729)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:728)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+FATAL [Thread-5] 2016-04-21 16:38:16,028 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 60004
+	at evacSim.partition.GrowBisection$SaveNodesToArray.call(GrowBisection.java:193)
+	at evacSim.partition.GrowBisection$SaveNodesToArray.call(GrowBisection.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:107)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:63)
+	... 9 more
+FATAL [Thread-5] 2016-04-21 16:40:24,646 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 60004
+	at evacSim.partition.GrowBisection$SaveNodesToArray.call(GrowBisection.java:193)
+	at evacSim.partition.GrowBisection$SaveNodesToArray.call(GrowBisection.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:107)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:63)
+	... 9 more
+FATAL [Thread-5] 2016-05-07 17:15:40,891 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:55)
+	... 9 more
+FATAL [Thread-5] 2016-05-07 17:18:42,502 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:55)
+	... 9 more
+FATAL [Thread-5] 2016-05-07 17:20:47,620 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:55)
+	... 9 more
+FATAL [Thread-5] 2016-05-07 17:28:33,713 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:55)
+	... 9 more
+FATAL [Thread-5] 2016-05-07 17:39:25,379 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.util.concurrent.ExecutionException: java.lang.ArrayIndexOutOfBoundsException: 12741
+	at galois.runtime.GaloisRuntime.pushContextAndCall(GaloisRuntime.java:389)
+	at galois.runtime.GaloisRuntime.runBody(GaloisRuntime.java:476)
+	at galois.runtime.GaloisRuntime.runBody(GaloisRuntime.java:436)
+	at galois.runtime.GaloisRuntime.foreach(GaloisRuntime.java:160)
+	at evacSim.partition.Coarsener.parallelCreateCoarserGraph(Coarsener.java:152)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:76)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:86)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 12741
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:189)
+	at evacSim.partition.Coarsener$4.call(Coarsener.java:171)
+	at evacSim.partition.Coarsener$4.call(Coarsener.java:1)
+	at galois.runtime.SerialExecutor.call(SerialExecutor.java:69)
+	at galois.runtime.GaloisRuntime$5.call(GaloisRuntime.java:479)
+	at galois.runtime.GaloisRuntime$5.call(GaloisRuntime.java:1)
+	at galois.runtime.GaloisRuntime.__stackSamplerRecordMe(GaloisRuntime.java:352)
+	at galois.runtime.GaloisRuntime.pushContextAndCall(GaloisRuntime.java:385)
+	... 16 more
+FATAL [Thread-5] 2016-05-07 17:48:29,447 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:196)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:122)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:111)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:02:11,367 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: -1
+	at evacSim.partition.PQueue.insert(PQueue.java:88)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:263)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:70)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:104)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:09:19,059 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:110)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:19:45,386 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:122)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:111)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:21:17,937 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:111)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:28:48,402 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:30:38,837 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.Balancer$4.call(Balancer.java:381)
+	at evacSim.partition.Balancer$4.call(Balancer.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:328)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:77)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:104)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:31:20,467 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:32:20,017 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.Balancer$4.call(Balancer.java:381)
+	at evacSim.partition.Balancer$4.call(Balancer.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:328)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:77)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:104)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:33:30,915 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:33:55,992 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:34:25,950 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.Balancer$4.call(Balancer.java:381)
+	at evacSim.partition.Balancer$4.call(Balancer.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:328)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:70)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:104)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:40:05,585 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:46:26,099 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:47:09,929 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:122)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:111)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:47:38,658 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:196)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:110)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 15:55:13,393 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:111)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:96)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:26:28,244 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.Balancer$4.call(Balancer.java:381)
+	at evacSim.partition.Balancer$4.call(Balancer.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:328)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:77)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:104)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:29:29,953 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:32:31,105 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:36:34,982 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:123)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:44:43,386 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:126)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:47:42,373 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:127)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:51:21,344 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:126)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:52:26,990 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.Balancer$4.call(Balancer.java:381)
+	at evacSim.partition.Balancer$4.call(Balancer.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:328)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:77)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:108)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:53:20,776 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:127)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:54:00,858 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:127)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:55:05,491 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:127)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-12 16:56:06,258 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:127)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-19 15:15:23,852 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.IllegalStateException: KMetis failed.
+	at evacSim.partition.MetisPartition.verify(MetisPartition.java:126)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:72)
+	... 9 more
+FATAL [Thread-5] 2016-05-19 15:24:41,462 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.Balancer$4.call(Balancer.java:381)
+	at evacSim.partition.Balancer$4.call(Balancer.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Balancer.greedyKWayEdgeBalance(Balancer.java:328)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:77)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:105)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-19 15:34:56,054 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:227)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+	at evacSim.partition.MetisGraph$ComputeKWayPartitionParamsClosure.call(MetisGraph.java:217)
+	at evacSim.partition.MetisGraph$ComputeKWayPartitionParamsClosure.call(MetisGraph.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:181)
+	at evacSim.partition.MetisGraph.computeKWayPartitionParams(MetisGraph.java:206)
+	at evacSim.partition.KWayRefiner.refineKWay(KWayRefiner.java:47)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:105)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:65)
+	... 9 more
+FATAL [Thread-5] 2016-05-30 11:49:52,422 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (1.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.Error: Unresolved compilation problems: 
+	Duplicate local variable nodes
+	nodeWeight cannot be resolved to a variable
+	mode cannot be resolved to a variable
+	vertexDemand cannot be resolved
+	nodeWeight cannot be resolved to a variable
+	vertexDemand cannot be resolved
+	nodeWeight cannot be resolved to a variable
+
+	at evacSim.partition.GaliosGraphConverter.GaliosToRepastGraph(GaliosGraphConverter.java:172)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:76)
+	... 9 more
+FATAL [Thread-5] 2016-05-30 14:43:00,442 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (1.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	The method GaliosToRepastGraph(IntGraph) in the type GaliosGraphConverter is not applicable for the arguments ()
+
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:76)
+	... 9 more
+FATAL [Thread-5] 2016-05-31 17:29:40,171 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (1.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.Error: Unresolved compilation problems: 
+	Cannot invoke get(Integer) on the array type GNode<MetisNode>[]
+	Cannot invoke get(Integer) on the array type GNode<MetisNode>[]
+
+	at evacSim.partition.GaliosGraphConverter.GaliosToRepastGraph(GaliosGraphConverter.java:201)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:76)
+	... 9 more
+WARN  [AWT-EventQueue-0] 2016-09-08 16:40:39,979 repast.simphony.util.ClassUtilities - Utilities.findMethod: warning, could not find method 'updateFreeFlowSpeed([])' in class evacSim.citycontext.Road, returning null
+ERROR [AWT-EventQueue-0] 2016-09-08 16:40:39,979 repast.simphony.ui.RSApplication - Error while initializing simulation
+java.lang.IllegalArgumentException: Method evacSim.citycontext.Road.updateFreeFlowSpeed() not found!
+	at repast.simphony.engine.schedule.CallBackAction.initMethod(CallBackAction.java:101)
+	at repast.simphony.engine.schedule.CallBackAction.<init>(CallBackAction.java:79)
+	at repast.simphony.engine.schedule.DefaultActionFactory.createAction(DefaultActionFactory.java:45)
+	at repast.simphony.engine.schedule.DefaultSchedulableActionFactory.createAction(DefaultSchedulableActionFactory.java:81)
+	at repast.simphony.engine.schedule.Schedule.schedule(Schedule.java:191)
+	at evacSim.ContextCreator.build(ContextCreator.java:122)
+	at repast.simphony.dataLoader.engine.ClassNameContextBuilder.build(ClassNameContextBuilder.java:41)
+	at repast.simphony.dataLoader.engine.DataLoaderControllerAction.runInitialize(DataLoaderControllerAction.java:48)
+	at repast.simphony.engine.controller.DefaultController$2.visit(DefaultController.java:214)
+	at repast.simphony.engine.controller.DefaultController$2.visit(DefaultController.java:1)
+	at repast.simphony.util.collections.NaryTree.preOrderTraverals(NaryTree.java:292)
+	at repast.simphony.util.collections.NaryTree.preOrderTraverals(NaryTree.java:295)
+	at repast.simphony.util.collections.NaryTree.preOrderTraverals(NaryTree.java:295)
+	at repast.simphony.util.collections.NaryTree.preOrderTraversal(NaryTree.java:288)
+	at repast.simphony.engine.controller.DefaultController.runInitialize(DefaultController.java:212)
+	at repast.simphony.engine.controller.DefaultController.runInitialize(DefaultController.java:383)
+	at repast.simphony.ui.RSApplication.initSim(RSApplication.java:157)
+	at repast.simphony.ui.RSApplication.start(RSApplication.java:189)
+	at repast.simphony.ui.action.StartRun.actionPerformed(StartRun.java:17)
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:2022)
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2348)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:402)
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:259)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:252)
+	at java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:289)
+	at java.awt.Component.processMouseEvent(Component.java:6533)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3324)
+	at java.awt.Component.processEvent(Component.java:6298)
+	at java.awt.Container.processEvent(Container.java:2236)
+	at java.awt.Component.dispatchEventImpl(Component.java:4889)
+	at java.awt.Container.dispatchEventImpl(Container.java:2294)
+	at java.awt.Component.dispatchEvent(Component.java:4711)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4888)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4525)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4466)
+	at java.awt.Container.dispatchEventImpl(Container.java:2280)
+	at java.awt.Window.dispatchEventImpl(Window.java:2746)
+	at java.awt.Component.dispatchEvent(Component.java:4711)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:758)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.awt.EventQueue$4.run(EventQueue.java:731)
+	at java.awt.EventQueue$4.run(EventQueue.java:729)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:728)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+FATAL [Thread-6] 2016-10-13 15:45:23,871 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.runPartitioning(MetisPartition.java:61)
+	... 9 more
+FATAL [Thread-6] 2016-10-13 15:46:54,530 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.runPartitioning(MetisPartition.java:61)
+	... 9 more
+FATAL [Thread-6] 2016-10-13 15:49:18,856 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (0.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at evacSim.partition.MetisPartition.runPartitioning(MetisPartition.java:61)
+	... 9 more
+FATAL [Thread-6] 2016-10-13 15:53:02,003 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (2000.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:110)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:140)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:93)
+	... 9 more
+FATAL [Thread-6] 2016-10-13 15:57:43,354 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (2000.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:129)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:231)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.reflect.InvocationTargetException
+	at evacSim.partition.MetisPartition$$FastClassByCGLIB$$f3427092.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.CallBackAction.execute(CallBackAction.java:127)
+	... 6 more
+Caused by: java.lang.NullPointerException
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.access$16(SerialVectorMorphObjectGraph.java:582)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.addEdge(SerialVectorMorphObjectGraph.java:227)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.addEdge(ObjectGraphToIntGraphAdapter.java:211)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:232)
+	at evacSim.partition.Coarsener$buildNeighborClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:827)
+	at galois.objects.graph.SerialVectorMorphObjectGraph$EdgeGraphNode.map(SerialVectorMorphObjectGraph.java:816)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:194)
+	at evacSim.partition.Coarsener$AddEdgesClosure.call(Coarsener.java:1)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:441)
+	at galois.objects.graph.SerialVectorMorphObjectGraph.map(SerialVectorMorphObjectGraph.java:428)
+	at galois.objects.graph.ObjectGraphToIntGraphAdapter.map(ObjectGraphToIntGraphAdapter.java:176)
+	at evacSim.partition.Coarsener.serialCreateCoarserGraph(Coarsener.java:145)
+	at evacSim.partition.Coarsener.coarsen(Coarsener.java:73)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:89)
+	at evacSim.partition.PMetis.mlevelRecursiveBisection(PMetis.java:110)
+	at evacSim.partition.MetisPartition.partition(MetisPartition.java:142)
+	at evacSim.partition.MetisPartition.run(MetisPartition.java:95)
+	... 9 more
+ERROR [pool-1-thread-4] 2016-10-21 16:02:54,631 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-1] 2016-10-21 16:02:55,934 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-8] 2016-10-21 16:02:55,991 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-5] 2016-10-21 16:06:00,897 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-7] 2016-10-21 16:06:16,662 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-8] 2016-10-21 16:07:51,165 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-4] 2016-10-21 16:08:13,546 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:80)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-3] 2016-10-26 14:15:17,872 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:847)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:616)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-6] 2016-10-26 14:19:55,214 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-7] 2016-10-26 14:19:55,270 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-7] 2016-10-26 14:19:55,304 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-3] 2016-10-26 14:19:55,347 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-6] 2016-10-26 14:19:55,365 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.primitiveMove(Vehicle.java:938)
+	at evacSim.citycontext.Road.step(Road.java:129)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-8] 2016-10-26 14:19:55,481 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-5] 2016-10-26 14:19:55,490 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+ERROR [pool-1-thread-5] 2016-10-26 14:19:55,561 repast.simphony.space.gis.DefaultGeography - Error moving object by vector
+java.lang.IllegalStateException: The direction has not been set.
+	at org.geotools.referencing.GeodeticCalculator.computeDestinationPoint(GeodeticCalculator.java:850)
+	at org.geotools.referencing.GeodeticCalculator.getDestinationGeographicPoint(GeodeticCalculator.java:711)
+	at repast.simphony.space.gis.DefaultGeography.moveByVector(DefaultGeography.java:427)
+	at evacSim.vehiclecontext.Vehicle.move(Vehicle.java:850)
+	at evacSim.vehiclecontext.Vehicle.travel(Vehicle.java:619)
+	at evacSim.citycontext.Road.step(Road.java:142)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:78)
+	at evacSim.PartitionThread.call(ThreadedScheduler.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
