@@ -19,6 +19,7 @@ import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.RepastEdge;
 import evacSim.citycontext.*;
 import evacSim.ContextCreator;
+import evacSim.GlobalVariables;
 
 
 public class GaliosGraphConverter<T> implements ProjectionListener<T> {
@@ -40,9 +41,9 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	public int edgeNum;
 	
 	// For adaptive network partitioning
-	private int alpha = 5; // weight to current vehicle count
-	private int beta = 5; // weight to shadow vehicle count
-	private int gamma = 5; // weight to future routing roads
+	private int alpha; // weight to current vehicle count
+	private int beta; // weight to shadow vehicle count
+	private int gamma; // weight to future routing roads
 	
 	
 	public GaliosGraphConverter(){
@@ -58,6 +59,11 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	    zoneGeography = ContextCreator.getZoneGeography();
 	    ResolvedRoads = new ArrayList<Road>();
 	    LeftOverRoads = new ArrayList<Road>();
+	    
+	    // Setting the alpha, beta, gamma
+	    alpha = GlobalVariables.PART_ALPHA;
+	    beta = GlobalVariables.PART_BETA;
+	    gamma = GlobalVariables.PART_GAMMA;
 	}
 	
 	/* Convert from Repast graph to Galios graph:
