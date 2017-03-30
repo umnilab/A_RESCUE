@@ -93,6 +93,16 @@ public class GlobalVariables {
 	public static final int SIMULATION_PARTITION_REFRESH_INTERVAL = Integer
 			.valueOf(loadConfig("SIMULATION_PARTITION_REFRESH_INTERVAL"));
 	
+	/* For global variables of the adaptive network weighting */
+	public static final int PART_ALPHA = Integer
+			.valueOf(loadConfig("PART_ALPHA"));
+	public static final int PART_BETA = Integer
+			.valueOf(loadConfig("PART_BETA"));
+	public static final int PART_GAMMA = Integer
+			.valueOf(loadConfig("PART_GAMMA"));
+	// Number of times that the partition interval is larger than the network refresh interval
+	public static final int PART_REFRESH_MULTIPLIER = (int) (SIMULATION_PARTITION_REFRESH_INTERVAL / SIMULATION_NETWORK_REFRESH_INTERVAL);
+	
 	public static final int SIMULATION_INTERVAL_SIZE = Integer
 			.valueOf(loadConfig("SIMULATION_INTERVAL_SIZE"));
 	public static final int SIMULATION_STOP_TIME = Integer

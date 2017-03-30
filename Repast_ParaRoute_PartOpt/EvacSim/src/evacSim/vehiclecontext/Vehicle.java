@@ -121,7 +121,7 @@ public class Vehicle {
 	
 	// For adaptive network partitioning
 	private int Nshadow; // Number of current shadow roads in the path
-	private Road futureRoutingRoad;
+	private ArrayList<Road> futureRoutingRoad;
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
@@ -165,7 +165,7 @@ public class Vehicle {
 		
 		// For adaptive network partitioning
 		this.Nshadow = 0;
-		this.futureRoutingRoad = null;
+		this.futureRoutingRoad = new ArrayList<Road>();
 	}
 
 	public void setNextPlan() {
@@ -239,10 +239,11 @@ public class Vehicle {
 				}
 			}
 			this.Nshadow = 0;
-			if (this.futureRoutingRoad != null) {
-				this.futureRoutingRoad.decreaseFutureRoutingVehNum();
-				this.futureRoutingRoad = null;
+			// Clear future routing road impact
+			for (Road r : this.futureRoutingRoad) {
+				r.decreaseFutureRoutingVehNum();
 			}
+			this.futureRoutingRoad.clear();
 		}
 	}
 	
@@ -252,9 +253,11 @@ public class Vehicle {
 			r.decreaseShadowVehicleNum();
 			this.Nshadow--;
 		}
-		if (this.futureRoutingRoad == r) {
-			this.futureRoutingRoad.decreaseFutureRoutingVehNum();
-			this.futureRoutingRoad = null;
+		
+		// Remove the future routing road impact
+		if (this.futureRoutingRoad.contains(r)){
+			r.decreaseFutureRoutingVehNum();
+			this.futureRoutingRoad.remove(r);
 		}
 	}
 	
@@ -265,18 +268,23 @@ public class Vehicle {
 			this.Nshadow = this.roadPath.size();
 		if (this.Nshadow > 0) {
 			double cumulativeTT = 0.0;
-			boolean foundFutureRoutingRoad = false;
+			int foundFutureRoutingRoad = 0; // Future routing road count: number of road found in shadow roads
 			for (int i=0; i < this.Nshadow; i++) {
 				// Increase the shadow vehicle count: include current road
 				Road r = this.roadPath.get(i);
+				// Set the shadow vehicle count
 				r.incrementShadowVehicleNum();
 				cumulativeTT += r.getTravelTime();
 				// Found the road with cumulative TT greater than than network refresh interval, use it as the future routing road
-				if (!foundFutureRoutingRoad) {
+				if (foundFutureRoutingRoad < GlobalVariables.PART_REFRESH_MULTIPLIER) {
 					if (cumulativeTT >= GlobalVariables.SIMULATION_NETWORK_REFRESH_INTERVAL){
-						this.futureRoutingRoad = r;
+						this.futureRoutingRoad.add(r);
 						r.incrementFutureRoutingVehNum();
-						foundFutureRoutingRoad = true;
+						// Update the future routing road count
+						foundFutureRoutingRoad += 1;
+						// Reset the cumulative TT
+						cumulativeTT = 0.0;
+						
 					}
 				}
 			}
