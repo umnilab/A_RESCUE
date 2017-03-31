@@ -277,20 +277,20 @@ public class Vehicle {
 				cumulativeTT += r.getTravelTime();
 				// Found the road with cumulative TT greater than than network refresh interval, use it as the future routing road
 				if (foundFutureRoutingRoad < GlobalVariables.PART_REFRESH_MULTIPLIER) {
-					if (cumulativeTT >= GlobalVariables.SIMULATION_NETWORK_REFRESH_INTERVAL){
+					if (cumulativeTT >= GlobalVariables.SIMULATION_NETWORK_REFRESH_INTERVAL * GlobalVariables.SIMULATION_STEP_SIZE){
 						this.futureRoutingRoad.add(r);
 						r.incrementFutureRoutingVehNum();
 						// Update the future routing road count
 						foundFutureRoutingRoad += 1;
 						// Reset the cumulative TT
 						cumulativeTT = 0.0;
-						
 					}
 				}
 			}
 		} else {
 			this.Nshadow = 0;
 		}
+		
 	}
 	
 	public void setNextRoad() {
