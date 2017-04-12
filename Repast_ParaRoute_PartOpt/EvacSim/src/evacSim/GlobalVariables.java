@@ -78,6 +78,9 @@ public class GlobalVariables {
 	// Path for the Signal Shape (data) File
 	public static final String SIGNALS_SHAPEFILE = loadConfig("SIGNALS_SHAPEFILE");
 
+	// Path for the supply side event file
+	public static final String EVENT_FILE = loadConfig("EVENT_FILE");
+	
 	/* Simulation Setup */
 	public static final Random RandomGenerator = new Random(123456777); // 123456777
 																		// generate

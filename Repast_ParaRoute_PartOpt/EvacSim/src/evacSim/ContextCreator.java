@@ -44,6 +44,9 @@ public class ContextCreator implements ContextBuilder<Object> {
 	// Create the network partitioning object
 	public static MetisPartition partitioner = new MetisPartition(GlobalVariables.N_Partition);
 	
+	// Create the event handler object
+	public static NetworkEventHandler eventHandler = new NetworkEventHandler();
+	
 	// Create a global lock to enforce concurrency
 	public static ReentrantLock lock = new ReentrantLock();
 	
@@ -130,6 +133,11 @@ public class ContextCreator implements ContextBuilder<Object> {
 		for (Road r : getRoadContext().getObjects(Road.class)) {
 			schedule.schedule(speedProfileParams, r, "updateFreeFlowSpeed");
 		}
+		
+		// ZH: schedule the check of the supply side events
+		ScheduleParameters supplySideEventParams = ScheduleParameters.createRepeating(0, 1, 1);
+		schedule.schedule(supplySideEventParams, eventHandler, "checkEvents");
+		
 		
 		// Schedule parameters for both serial and parallel road updates
 		if (GlobalVariables.MULTI_THREADING){
