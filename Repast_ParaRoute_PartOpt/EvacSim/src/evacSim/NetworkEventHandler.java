@@ -26,11 +26,9 @@ public class NetworkEventHandler {
 	// We use a treeMap and use the end time as the key
 	// TreeMap usage see: https://docs.oracle.com/javase/7/docs/api/java/util/TreeMap.html
 	private TreeMap<Integer, ArrayList<NetworkEventObject>> runningQueue;
-	private CityContext cityContext; // Load cityContext object
 	
 	// Constructor: initialize everything
 	public NetworkEventHandler() {
-		this.cityContext = ContextCreator.getCityContext();
 		newEventQueue = new LinkedList<NetworkEventObject>();
 		runningQueue = new TreeMap<Integer, ArrayList<NetworkEventObject>>();
 		readEventFile();
