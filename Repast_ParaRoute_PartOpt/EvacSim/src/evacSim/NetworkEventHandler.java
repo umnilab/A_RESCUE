@@ -9,8 +9,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 import repast.simphony.essentials.RepastEssentials;
-
+import repast.simphony.space.gis.Geography;
 import au.com.bytecode.opencsv.CSVReader;
+import evacSim.citycontext.CityContext;
+import evacSim.citycontext.Road;
 
 /* Author: Xianyuan Zhan and Hemant Gehlot
  * Schedules and handles the supplyside Events to be executed
@@ -24,9 +26,11 @@ public class NetworkEventHandler {
 	// We use a treeMap and use the end time as the key
 	// TreeMap usage see: https://docs.oracle.com/javase/7/docs/api/java/util/TreeMap.html
 	private TreeMap<Integer, ArrayList<NetworkEventObject>> runningQueue;
+	private CityContext cityContext; // Load cityContext object
 	
 	// Constructor: initialize everything
 	public NetworkEventHandler() {
+		this.cityContext = ContextCreator.getCityContext();
 		newEventQueue = new LinkedList<NetworkEventObject>();
 		runningQueue = new TreeMap<Integer, ArrayList<NetworkEventObject>>();
 		readEventFile();
@@ -97,18 +101,20 @@ public class NetworkEventHandler {
 			if (e != null) {
 				if (e.startTime <= tickcount) {
 					// Make the event happen
-					this.setEvent(e, true);
-					// Add it into the running queue and remove the event from the newEventQueue and 
-					if (this.runningQueue.containsKey(e.endTime)) {
-						// If running queue already contains a endTime entry, simply append it to the arrayList
-						this.runningQueue.get(e.endTime).add(e);
-					} else {
-						// Create a new arrayList that contains e
-						ArrayList<NetworkEventObject> runningEvents = new ArrayList<NetworkEventObject>();
-						runningEvents.add(e);
-						this.runningQueue.put(e.endTime, runningEvents);
+					NetworkEventObject event = this.setEvent(e, true);
+					if (event != null) {
+						// Add it into the running queue and remove the event from the newEventQueue and 
+						if (this.runningQueue.containsKey(e.endTime)) {
+							// If running queue already contains a endTime entry, simply append it to the arrayList
+							this.runningQueue.get(e.endTime).add(e);
+						} else {
+							// Create a new arrayList that contains e
+							ArrayList<NetworkEventObject> runningEvents = new ArrayList<NetworkEventObject>();
+							runningEvents.add(e);
+							this.runningQueue.put(e.endTime, runningEvents);
+						}
 					}
-					this.newEventQueue.remove();
+					this.newEventQueue.remove(); 
 				} else {
 					// If the event has start time later than current tick, no need to check the rest
 					flag = false;
@@ -127,7 +133,7 @@ public class NetworkEventHandler {
 			ArrayList<NetworkEventObject> terminateEvents = this.runningQueue.get(tickcount);
 			// We terminate every events in the set
 			for (NetworkEventObject e : terminateEvents) {
-				this.setEvent(e, false);
+				NetworkEventObject event = this.setEvent(e, false);
 			}
 			this.runningQueue.remove(tickcount);
 			terminateEvents.clear();
@@ -135,8 +141,43 @@ public class NetworkEventHandler {
 	}
 	
 	// Make the event work in the simulation, do actual work. If mode = true, set the event; if false, terminate the event
-	public void setEvent(NetworkEventObject event, boolean mode) {
-		// TODO
+	public NetworkEventObject setEvent(NetworkEventObject event, boolean mode) {
+		if (event == null)
+			return null;
+		// Iterate over the roads to identify the correct road object
+		Geography<Road> roadGeography = ContextCreator.getRoadGeography();
+		Iterable<Road> roadIt = roadGeography.getAllObjects();
+		for (Road road : roadIt) {
+			if (road.getLinkid() == event.roadID) {
+				// Found the road, and we do the change
+				if (mode) {
+					// Set the event
+					switch (event.eventID) {
+						case 1: // Change speed limit
+							event.defaultValue = road.getFreeSpeed(); // To be moved into a buffer variable in the road
+							road.updateFreeFlowSpeed_event(event.value1);
+							road.setEventFlag();
+							return event;
+						// Other cases to be implemented later
+						default: break;
+					}
+				} else {
+					// Restore the event
+					switch (event.eventID) {
+						case 1: // restore speed limit
+							road.updateFreeFlowSpeed_event(event.defaultValue); // To be moved into a buffer variable in the road
+							road.restoreEventFlag();
+							return event;
+						// Other cases to be implemented later
+						default: break;
+					}
+				}
+				break;
+			}
+		}
+		
+		
+		return null;
 	}
 	
 }

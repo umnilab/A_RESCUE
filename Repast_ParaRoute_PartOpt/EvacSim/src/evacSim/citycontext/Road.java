@@ -78,6 +78,8 @@ public class Road {
 	
 	private Vehicle lastVehicle_;
 	private Vehicle firstVehicle_;
+	
+	private boolean eventFlag; // Indicator whether there is an event happening on the road
 
 	// Road constructor
 	public Road() {
@@ -98,7 +100,17 @@ public class Road {
 		// For adaptive network partitioning
 		this.nShadowVehicles = 0;
 		this.nFutureRoutingVehicles = 0;
-		
+		this.eventFlag = false;
+	}
+	
+	// Set the eventFlag
+	public void setEventFlag() {
+		this.eventFlag = true;
+	}
+	
+	// Restore the eventFlag after the event
+	public void restoreEventFlag() {
+		this.eventFlag = false;
 	}
 	
 	// TODO: write Step 
@@ -1253,6 +1265,10 @@ public class Road {
 		// We just need to do nothing
 	}
 	
+	/* Modify the free flow speed based on the events */
+	public void updateFreeFlowSpeed_event(double newFFSpd) {
+		this.freeSpeed_ = newFFSpd;
+	}
 	
 	public void printTick(){
 		int tickcount = (int) RepastEssentials.GetTickCount();
