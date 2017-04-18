@@ -138,7 +138,6 @@ public class ContextCreator implements ContextBuilder<Object> {
 		ScheduleParameters supplySideEventParams = ScheduleParameters.createRepeating(0, 1, 1);
 		schedule.schedule(supplySideEventParams, eventHandler, "checkEvents");
 		
-		
 		// Schedule parameters for both serial and parallel road updates
 		if (GlobalVariables.MULTI_THREADING){
 			ThreadedScheduler s = new ThreadedScheduler(GlobalVariables.N_Partition);

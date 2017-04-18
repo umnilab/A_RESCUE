@@ -1,11 +1,16 @@
 package evacSim;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 import repast.simphony.essentials.RepastEssentials;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /* Author: Xianyuan Zhan and Hemant Gehlot
  * Schedules and handles the supplyside Events to be executed
@@ -31,9 +36,47 @@ public class NetworkEventHandler {
 	public void readEventFile(){
 		// Hemant: implement the file read and insert to the event queue
 		// Note queue is first in first out, so the eventfile should order event start time in ascending order, earliest comes first
-		File eventFile = new File(GlobalVariables.EVENT_FILE);
 		
-		// TODO
+		File eventFile = new File(GlobalVariables.EVENT_FILE);
+		CSVReader csvreader = null;
+		String[] nextLine;
+		int startTime = 0;
+		int endTime = 0;
+		int eventID = 0;
+		int roadID = 0;
+		double value1 = 0.0d;
+		double value2 = 0.0d;
+		
+		try {
+			csvreader = new CSVReader(new FileReader(eventFile));
+			// This is used to avoid reading the header (Data is assumed to
+			// start from the second row)
+			boolean readingheader = true;
+
+			// This while loop is used to read the CSV iterating through the row
+			while ((nextLine = csvreader.readNext()) != null) {
+				// Do not read the first row (header)
+				if (readingheader) {
+					readingheader = false;
+					
+				} else {
+					startTime = Math.round(Integer.parseInt(nextLine[0])/GlobalVariables.SIMULATION_STEP_SIZE);
+					endTime = Math.round(Integer.parseInt(nextLine[1])/GlobalVariables.SIMULATION_STEP_SIZE);
+					eventID = Integer.parseInt(nextLine[2]);
+					roadID = Integer.parseInt(nextLine[3]);
+					value1 = Double.parseDouble(nextLine[4]);
+					value2 = Double.parseDouble(nextLine[5]);
+					//System.out.println("starttime = "+startTime+ "endtime ="+endTime+"eventID = " + eventID+"roadID = "+ roadID+"value1 =" + value1+ "value2 =" + value2);
+					
+					NetworkEventObject EventObject = new NetworkEventObject(startTime, endTime, eventID, roadID, value1, value2); 
+					this.newEventQueue.add(EventObject);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// To be scheduled at every tick in Context Creator
