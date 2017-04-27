@@ -80,6 +80,8 @@ public class Road {
 	private Vehicle firstVehicle_;
 	
 	private boolean eventFlag; // Indicator whether there is an event happening on the road
+	
+	private double defaultFreeSpeed_; // Store default speed limit value in case of events
 
 	// Road constructor
 	public Road() {
@@ -101,6 +103,24 @@ public class Road {
 		this.nShadowVehicles = 0;
 		this.nFutureRoutingVehicles = 0;
 		this.eventFlag = false;
+		
+		// Set default value
+		this.defaultFreeSpeed_ = this.freeSpeed_;
+	}
+	
+	// Set the defaultFreeSpeed_
+	public void setDefaultFreeSpeed() {
+		this.defaultFreeSpeed_ = this.freeSpeed_;
+	}
+	
+	// Get the defaultFreeSpeed_
+	public double getDefaultFreeSpeed() {
+		return this.defaultFreeSpeed_;
+	}
+	
+	// Check the eventFlag
+	public boolean checkEventFlag() {
+		return this.eventFlag;
 	}
 	
 	// Set the eventFlag

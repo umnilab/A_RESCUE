@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 import repast.simphony.essentials.RepastEssentials;
@@ -152,11 +153,37 @@ public class NetworkEventHandler {
 					// Set the event
 					switch (event.eventID) {
 						case 1: // Change speed limit
-							event.defaultValue = road.getFreeSpeed(); // To be moved into a buffer variable in the road
-							System.out.println("Road ID: " + road.getLinkid() + " add events: " + " end time: " + event.endTime + " default value= " + road.getFreeSpeed());
-							road.updateFreeFlowSpeed_event(event.value1);
-							road.setEventFlag();
-							return event;
+							if (!road.checkEventFlag()) {
+								road.setDefaultFreeSpeed();
+								road.updateFreeFlowSpeed_event(event.value1);
+								road.setEventFlag();
+								return event;
+							} else {
+								// If there is another event running on the same road, we need to terminate it
+								NetworkEventObject conflictEvent = null;
+								for (Map.Entry<Integer, ArrayList<NetworkEventObject>> entry: runningQueue.entrySet()) {
+									ArrayList<NetworkEventObject> tempEventList = entry.getValue();
+									// Iterate through the event list
+									for (NetworkEventObject e : tempEventList) {
+										if (e.roadID == event.roadID) {
+											// We found a conflicting event
+											conflictEvent = e;
+											break;
+										}
+									}
+								}
+								// terminate the conflict event
+								if (conflictEvent != null) {
+									// restore the event
+									NetworkEventObject tempEvent = setEvent(conflictEvent, false);
+									// Clear the running queue
+									runningQueue.get(conflictEvent.endTime).remove(conflictEvent);
+									// Set the new event
+									tempEvent = setEvent(event, true);
+									return tempEvent;
+								}
+								
+							}
 						// Other cases to be implemented later
 						default: break;
 					}
@@ -164,8 +191,7 @@ public class NetworkEventHandler {
 					// Restore the event
 					switch (event.eventID) {
 						case 1: // restore speed limit
-							road.updateFreeFlowSpeed_event(event.defaultValue); // To be moved into a buffer variable in the road
-							System.out.println("Road ID: " + road.getLinkid() + " terminate events: " + "Time: " + event.endTime + " default value= " + event.defaultValue);
+							road.updateFreeFlowSpeed_event(road.getDefaultFreeSpeed()); // To be moved into a buffer variable in the road
 							road.restoreEventFlag();
 							return event;
 						// Other cases to be implemented later
