@@ -153,6 +153,7 @@ public class NetworkEventHandler {
 					switch (event.eventID) {
 						case 1: // Change speed limit
 							event.defaultValue = road.getFreeSpeed(); // To be moved into a buffer variable in the road
+							System.out.println("Road ID: " + road.getLinkid() + " add events: " + " end time: " + event.endTime + " default value= " + road.getFreeSpeed());
 							road.updateFreeFlowSpeed_event(event.value1);
 							road.setEventFlag();
 							return event;
@@ -164,6 +165,7 @@ public class NetworkEventHandler {
 					switch (event.eventID) {
 						case 1: // restore speed limit
 							road.updateFreeFlowSpeed_event(event.defaultValue); // To be moved into a buffer variable in the road
+							System.out.println("Road ID: " + road.getLinkid() + " terminate events: " + "Time: " + event.endTime + " default value= " + event.defaultValue);
 							road.restoreEventFlag();
 							return event;
 						// Other cases to be implemented later
