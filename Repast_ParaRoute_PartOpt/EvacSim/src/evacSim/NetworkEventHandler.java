@@ -172,6 +172,9 @@ public class NetworkEventHandler {
 										}
 									}
 								}
+//								System.out.println("Conflict events on road" + event.roadID + "\n" + "Event 1: start: " + conflictEvent.startTime + " end: " + conflictEvent.endTime + 
+//										"\nEvent 2: start: " + event.startTime + " end: " + event.endTime);
+								
 								// terminate the conflict event
 								if (conflictEvent != null) {
 									// restore the event
