@@ -716,31 +716,6 @@ public class Road {
 		return this.downStreamMovements;
 	}
 
-	// TODO: need to check and remove this function
-	public void addVehicleToRoad(Vehicle v) {
-		// this.vehicles.add(v);
-		this.nVehicles_++;
-	}
-
-	public void addVehicleToRoad() {
-		// this.vehicles.add(v);
-		this.nVehicles_++;
-		// v.setRoad(this);
-	}
-
-	// TODO: need to check and remove this function
-	public void removeVehicleFromRoad(Vehicle v) {
-		// this.vehicles.remove(v);
-		this.nVehicles_--;
-	}
-
-	public void removeVehicleFromRoad() {
-		this.nVehicles_--;
-		if (nVehicles_ < 0)
-			System.err.println("Road " + this.getLinkid() + " has "
-					+ this.nVehicles_ + " vehicles");
-	}
-
 	public void setNumberOfVehicles(int nVeh){
 		this.nVehicles_ = nVeh;
 	}
