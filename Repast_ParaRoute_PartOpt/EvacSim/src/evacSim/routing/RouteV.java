@@ -33,8 +33,7 @@ public class RouteV {
 	// Buffers used for efficiency (so don't have to search for objects in
 	// entire space), not sure if these values are any good
 	public static double little_buffer_distance; // Used when searching for a
-													// point on
-	// a road
+													// point on a road
 	public static double big_buffer_distance; // Used when searching nearby
 												// objects
 

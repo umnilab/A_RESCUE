@@ -47,10 +47,9 @@ public class ContextCreator implements ContextBuilder<Object> {
 	// Create the event handler object
 	public static NetworkEventHandler eventHandler = new NetworkEventHandler();
 	
-	// Create a global lock to enforce concurrency
-	public static ReentrantLock lock = new ReentrantLock();
+//	// Create a global lock to enforce concurrency
+//	public static ReentrantLock lock = new ReentrantLock();
 	
-	//public static Route<T> route;
 	/**
 	 * The citycontext will create its own subcontexts (RoadContext,
 	 * JunctionContext and HouseContext).

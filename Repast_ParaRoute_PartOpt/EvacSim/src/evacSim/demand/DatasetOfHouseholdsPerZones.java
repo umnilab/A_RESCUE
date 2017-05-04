@@ -12,12 +12,6 @@ import evacSim.GlobalVariables;
 import evacSim.citycontext.House;
 
 public class DatasetOfHouseholdsPerZones {
-
-	// -------------------------------------------------------------------------------
-	// Set up Database calls
-	static final String JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
-	// -------------------------------------------------------------------------------
-
 	private HashMap<Integer, ArrayList<House>> housesbyzone;
 	private HashMap<Integer, House> housesbyID;
 

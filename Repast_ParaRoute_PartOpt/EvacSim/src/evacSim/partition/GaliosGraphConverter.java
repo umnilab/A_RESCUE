@@ -37,8 +37,8 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	public ArrayList<GNode<MetisNode>> nodes;
 	public ArrayList<Road> ResolvedRoads; // Roads that can be resolved from the graph transformation
 	public ArrayList<Road> LeftOverRoads; // Roads that are not resolvable from graph transformation
-	public int nodeNum;
-	public int edgeNum;
+	private int nodeNum;
+	private int edgeNum;
 	
 	// For adaptive network partitioning
 	private int alpha; // weight to current vehicle count
