@@ -644,37 +644,8 @@ public class Vehicle {
 	}
 
 	public void makeLaneChangingDecision() {
-		// check if using dynamic routing alg
-		if (GlobalVariables.APPROX_DYNAMIC_ROUTING) {
-			if (this.getRouteUpdateFlag()) { // check if the vehicle has updated
-				// the route
-				if (this.isCorrectLane() != true) { // if it is not in correct
-					// lane then change the lane
-					Lane plane = this.tempLane();
-					if (plane != null)
-						this.mandatoryLC(plane);
-					else {
-						System.out.println("Vehicle " + this.getId()
-								+ "has no lane to change");
-						System.out.println("this vehicle is on road "
-								+ this.road.getID() + " which has "
-								+ this.road.getnLanes()
-								+ " lane(s) and I am on lane "
-								+ this.road.getLaneIndex(this.lane));
-						System.out.println("my next lane is "
-								+ this.nextRoad().getLaneIndex(this.nextLane_)
-								+ " of road " + this.nextRoad().getID()
-								+ " which has " + this.nextRoad().getnLanes()
-								+ " lane(s)");
-						System.out.println("this lane is connected with lane "
-								+ this.road.getLaneIndex(this.targetLane_
-										.getUpStreamConnection(this.road)));
-					}
-				}
-			}
-		} else if (this.distFraction() < 0.5) { // if not using dynamic routing
-			// alg, then check the correct
-			// lane
+		if (this.distFraction() < 0.5) { 
+			// Halfway to the downstream intersection, only mantatory LC allowed, check the correct lane
 			if (this.isCorrectLane() != true) { // change lane if not in correct
 				// lane
 				Lane plane = this.tempLane();
@@ -690,9 +661,70 @@ public class Vehicle {
 							+ this.road.getLaneIndex(this.lane));
 				}
 			}
+		} else {
+			// First half in the road, we do discretionary LC with 50% chance
+			double laneChangeProb = GlobalVariables.RandomGenerator
+					.nextDouble();
+			// The vehicle is at beginning of the lane, it is free to change lane
+			Lane tarLane = this.findBetterLane();
+			if (tarLane != null) {
+				if (laneChangeProb > 0.5)
+					this.discretionaryLC(tarLane);
+			}
 		}
-
 	}
+	
+	public void makeLaneChangingDecision_oldCode() {
+		// if not using dynamic routing alg, then check the correct lane
+		if (this.distFraction() > 0.70) {
+			double laneChangeProb = GlobalVariables.RandomGenerator
+					.nextDouble();
+			// The vehicle is at beginning of the lane, it is free to change
+			// lane
+			Lane tarLane = this.findBetterLane();
+			if (tarLane != null) {
+				// TODO: input a PDF of normal distribution
+				if (laneChangeProb > 0.5)
+					this.discretionaryLC(tarLane);
+			}
+		} else if (this.distFraction() > 0.50) {
+			// vehicle is half the lane length to downstream node
+			// only DLC if the target lane is also correct lane
+			// otherwise only MLC
+			if (this.isCorrectLane() != true) {
+				// change lane if not in correct lane
+				Lane plane = this.tempLane();
+				if (plane != null)
+					this.mandatoryLC(plane);
+				else {
+					System.out.println("Vehicle " + this.getId()
+							+ "has no lane to change");
+				}
+			} else {
+				// if the vehicle is already in correct lane.
+				// it seek for another connected lane with better traffic
+				// condition
+				Lane tarLane = this.findBetterCorrectLane();
+				if (tarLane != null) {
+					this.discretionaryLC(tarLane);
+				}
+			}
+		} else {
+			// when the vehicle is close to downstream node, only DLC is
+			// accepted
+			if (this.isCorrectLane() != true) {
+				// change lane if not in correct lane
+				Lane plane = this.tempLane();
+				if (plane != null)
+					this.mandatoryLC(plane);
+				else {
+					System.out.println("Vehicle " + this.getId()
+							+ "has no lane to change");
+				}
+			}
+		}
+	}
+	
 
 	/*
 	 * Calculate new location and speed after an iteration based on its current

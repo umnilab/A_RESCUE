@@ -65,6 +65,9 @@ public class NetworkEventHandler {
 				} else {
 					startTime = Math.round(Integer.parseInt(nextLine[0])/GlobalVariables.SIMULATION_STEP_SIZE);
 					endTime = Math.round(Integer.parseInt(nextLine[1])/GlobalVariables.SIMULATION_STEP_SIZE);
+					// Make StartTime and endTime divisable by EVENT_CHECK_FREQUENCY
+					startTime = startTime - (startTime % GlobalVariables.EVENT_CHECK_FREQUENCY);
+					endTime = endTime - (endTime % GlobalVariables.EVENT_CHECK_FREQUENCY);
 					eventID = Integer.parseInt(nextLine[2]);
 					roadID = Integer.parseInt(nextLine[3]);
 					value1 = Double.parseDouble(nextLine[4]);

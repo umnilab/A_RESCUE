@@ -134,7 +134,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		}
 		
 		// ZH: schedule the check of the supply side events
-		ScheduleParameters supplySideEventParams = ScheduleParameters.createRepeating(0, 1, 1);
+		ScheduleParameters supplySideEventParams = ScheduleParameters.createRepeating(0, GlobalVariables.EVENT_CHECK_FREQUENCY, 1);
 		schedule.schedule(supplySideEventParams, eventHandler, "checkEvents");
 		
 		// Schedule parameters for both serial and parallel road updates

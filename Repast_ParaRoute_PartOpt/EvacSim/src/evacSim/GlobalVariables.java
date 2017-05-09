@@ -71,6 +71,7 @@ public class GlobalVariables {
 
 	// Path for the supply side event file
 	public static final String EVENT_FILE = loadConfig("EVENT_FILE");
+	public static final int EVENT_CHECK_FREQUENCY = Integer.valueOf(loadConfig("EVENT_CHECK_FREQUENCY"));
 	
 	/* Simulation Setup */
 	public static final Random RandomGenerator = new Random(123456777); // 123456777
@@ -165,10 +166,10 @@ public class GlobalVariables {
 	public static final float GAMMA_ACC = Float
 			.valueOf(loadConfig("GAMMA_ACC"));
 
-	public static final boolean APPROX_DYNAMIC_ROUTING = Boolean
-			.valueOf(loadConfig("APPROX_DYNAMIC_ROUTING")); // SH - created this
-															// variable to
-	// enable dynamic routing
+//	public static final boolean APPROX_DYNAMIC_ROUTING = Boolean
+//			.valueOf(loadConfig("APPROX_DYNAMIC_ROUTING")); // SH - created this
+//															// variable to
+//	// enable dynamic routing
 	public static final boolean SINGLE_SHORTEST_PATH = Boolean
 			.valueOf(loadConfig("SINGLE_SHORTEST_PATH")); // SH - created this
 															// variable to
