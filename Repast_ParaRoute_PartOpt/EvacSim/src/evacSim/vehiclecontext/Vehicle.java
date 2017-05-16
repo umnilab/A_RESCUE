@@ -644,7 +644,7 @@ public class Vehicle {
 	}
 
 	public void makeLaneChangingDecision() {
-		if (this.distFraction() < 0.7) { 
+		if (this.distFraction() < 0.5) { 
 			// Halfway to the downstream intersection, only mantatory LC allowed, check the correct lane
 			if (this.isCorrectLane() != true) { // change lane if not in correct
 				// lane
@@ -662,14 +662,27 @@ public class Vehicle {
 				}
 			}
 		} else {
-			// First half in the road, we do discretionary LC with 50% chance
-			double laneChangeProb = GlobalVariables.RandomGenerator
-					.nextDouble();
-			// The vehicle is at beginning of the lane, it is free to change lane
-			Lane tarLane = this.findBetterLane();
-			if (tarLane != null) {
-				if (laneChangeProb > 0.0)
-					this.discretionaryLC(tarLane);
+			if (this.distFraction() > 0.75) {
+				// First 25% in the road, do discretionary LC with 50% chance
+				double laneChangeProb1 = GlobalVariables.RandomGenerator
+						.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change lane
+				Lane tarLane = this.findBetterLane();
+				if (tarLane != null) {
+					if (laneChangeProb1 < 0.5)
+						this.discretionaryLC(tarLane);
+				}
+			} else {
+				// First 25%-50% in the road, we do discretionary LC with 25% chance
+				double laneChangeProb2 = GlobalVariables.RandomGenerator
+						.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change lane
+				Lane tarLane = this.findBetterLane();
+				if (tarLane != null) {
+					if (laneChangeProb2 < 0.25)
+						this.discretionaryLC(tarLane);
+				}
+				
 			}
 		}
 	}

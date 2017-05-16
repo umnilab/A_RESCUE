@@ -910,7 +910,8 @@ public class Road {
 			pv = pv.macroTrailing();
 		}
 		if (averageSpeed < 0.00001f) {
-			averageSpeed = (float) this.freeSpeed_;
+//			averageSpeed = (float) this.freeSpeed_;
+			averageSpeed = 0.00001f;
 		} else {
 			// averageSpeed = averageSpeed / this.vehicles.size();
 			if (this.nVehicles_ < 0) {
