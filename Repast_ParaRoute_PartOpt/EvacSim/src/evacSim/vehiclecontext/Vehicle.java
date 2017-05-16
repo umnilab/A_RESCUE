@@ -644,7 +644,7 @@ public class Vehicle {
 	}
 
 	public void makeLaneChangingDecision() {
-		if (this.distFraction() < 0.5) { 
+		if (this.distFraction() < 0.7) { 
 			// Halfway to the downstream intersection, only mantatory LC allowed, check the correct lane
 			if (this.isCorrectLane() != true) { // change lane if not in correct
 				// lane
@@ -668,7 +668,7 @@ public class Vehicle {
 			// The vehicle is at beginning of the lane, it is free to change lane
 			Lane tarLane = this.findBetterLane();
 			if (tarLane != null) {
-				if (laneChangeProb > 0.5)
+				if (laneChangeProb > 0.0)
 					this.discretionaryLC(tarLane);
 			}
 		}

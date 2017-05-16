@@ -39,7 +39,7 @@ public class RouteV {
 
 	/* Initialize route object */
 	public static void createRoute() throws Exception {
-		System.out.println("Creating Vehicle-based routing");
+	//	System.out.println("Creating Vehicle-based routing");
 		vehicleGeography = ContextCreator.getVehicleGeography();
 		junctionGeography = ContextCreator.getJunctionGeography();
 		roadNetwork = ContextCreator.getRoadNetwork();
