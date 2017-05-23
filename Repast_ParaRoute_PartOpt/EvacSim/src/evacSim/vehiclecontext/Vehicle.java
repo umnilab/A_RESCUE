@@ -68,7 +68,6 @@ public class Vehicle {
 	private float distanceToNormalStop_; // assuming normal dec is applied
 	private float lastStepMove_;
 	public float accummulatedDistance_;
-	private boolean routeUpdateFlag; // to check if it has latest route information: When set false, new routing will be performed
 
 	private double travelPerTurn;
 
@@ -635,41 +634,30 @@ public class Vehicle {
 		return (headwayDistance);
 	}
 
-	public void setRouteUpdateFlag(boolean state) {
-		this.routeUpdateFlag = state;
-	}
-
-	public boolean getRouteUpdateFlag() {
-		return this.routeUpdateFlag;
-	}
-
 	public void makeLaneChangingDecision() {
 		// check if using dynamic routing alg
 		if (GlobalVariables.APPROX_DYNAMIC_ROUTING) {
-			if (this.getRouteUpdateFlag()) { // check if the vehicle has updated
-				// the route
-				if (this.isCorrectLane() != true) { // if it is not in correct
-					// lane then change the lane
-					Lane plane = this.tempLane();
-					if (plane != null)
-						this.mandatoryLC(plane);
-					else {
-						System.out.println("Vehicle " + this.getId()
-								+ "has no lane to change");
-						System.out.println("this vehicle is on road "
-								+ this.road.getID() + " which has "
-								+ this.road.getnLanes()
-								+ " lane(s) and I am on lane "
-								+ this.road.getLaneIndex(this.lane));
-						System.out.println("my next lane is "
-								+ this.nextRoad().getLaneIndex(this.nextLane_)
-								+ " of road " + this.nextRoad().getID()
-								+ " which has " + this.nextRoad().getnLanes()
-								+ " lane(s)");
-						System.out.println("this lane is connected with lane "
-								+ this.road.getLaneIndex(this.targetLane_
-										.getUpStreamConnection(this.road)));
-					}
+			if (this.isCorrectLane() != true) { // if it is not in correct
+				// lane then change the lane
+				Lane plane = this.tempLane();
+				if (plane != null)
+					this.mandatoryLC(plane);
+				else {
+					System.out.println("Vehicle " + this.getId()
+							+ "has no lane to change");
+					System.out.println("this vehicle is on road "
+							+ this.road.getID() + " which has "
+							+ this.road.getnLanes()
+							+ " lane(s) and I am on lane "
+							+ this.road.getLaneIndex(this.lane));
+					System.out.println("my next lane is "
+							+ this.nextRoad().getLaneIndex(this.nextLane_)
+							+ " of road " + this.nextRoad().getID()
+							+ " which has " + this.nextRoad().getnLanes()
+							+ " lane(s)");
+					System.out.println("this lane is connected with lane "
+							+ this.road.getLaneIndex(this.targetLane_
+									.getUpStreamConnection(this.road)));
 				}
 			}
 		} else if (this.distFraction() < 0.5) { // if not using dynamic routing
