@@ -68,7 +68,6 @@ public class Vehicle {
 	private float distanceToNormalStop_; // assuming normal dec is applied
 	private float lastStepMove_;
 	public float accummulatedDistance_;
-	private boolean routeUpdateFlag; // to check if it has latest route information: When set false, new routing will be performed
 
 	private double travelPerTurn;
 
@@ -635,14 +634,6 @@ public class Vehicle {
 		return (headwayDistance);
 	}
 
-	public void setRouteUpdateFlag(boolean state) {
-		this.routeUpdateFlag = state;
-	}
-
-	public boolean getRouteUpdateFlag() {
-		return this.routeUpdateFlag;
-	}
-
 	public void makeLaneChangingDecision() {
 		if (this.distFraction() < 0.5) { 
 			// Halfway to the downstream intersection, only mantatory LC allowed, check the correct lane
@@ -668,18 +659,19 @@ public class Vehicle {
 						.nextDouble();
 				// The vehicle is at beginning of the lane, it is free to change lane
 				Lane tarLane = this.findBetterLane();
+//				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb1 < 0.5)
 						this.discretionaryLC(tarLane);
 				}
 			} else {
-				// First 25%-50% in the road, we do discretionary LC with 25% chance
+				// First 25%-50% in the road, we do discretionary LC but only to correct lanes with 100% chance
 				double laneChangeProb2 = GlobalVariables.RandomGenerator
 						.nextDouble();
 				// The vehicle is at beginning of the lane, it is free to change lane
-				Lane tarLane = this.findBetterLane();
+				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
-					if (laneChangeProb2 < 0.25)
+					if (laneChangeProb2 < 1.0)
 						this.discretionaryLC(tarLane);
 				}
 				
@@ -1646,6 +1638,7 @@ public class Vehicle {
 	 */
 	public Lane tempLane() {
 		Lane plane = this.targetLane();
+		Lane tempLane_ = null;
 		if (this.road.getLaneIndex(plane) > this.road.getLaneIndex(this.lane)) {
 			tempLane_ = this.rightLane();
 		}
