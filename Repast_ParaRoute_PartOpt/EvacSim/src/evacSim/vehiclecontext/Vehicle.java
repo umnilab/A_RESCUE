@@ -658,8 +658,8 @@ public class Vehicle {
 				double laneChangeProb1 = GlobalVariables.RandomGenerator
 						.nextDouble();
 				// The vehicle is at beginning of the lane, it is free to change lane
-				Lane tarLane = this.findBetterLane();
-//				Lane tarLane = this.findBetterCorrectLane();
+//				Lane tarLane = this.findBetterLane();
+				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb1 < 0.5)
 						this.discretionaryLC(tarLane);
@@ -771,7 +771,7 @@ public class Vehicle {
 		// this iteration
 		double time = System.currentTimeMillis(); // used for debugging
 		double duration = 0.0f;
-
+		
 		/*
 		 * For debuging: print out the current road and next junction ID of the
 		 * vehicle
@@ -1126,8 +1126,8 @@ public class Vehicle {
 				}
 				return 0;
 			} else {
-				float maxMove = GlobalVariables.FREE_SPEED
-						* GlobalVariables.SIMULATION_STEP_SIZE;
+//				float maxMove = GlobalVariables.FREE_SPEED
+//						* GlobalVariables.SIMULATION_STEP_SIZE;
 				// if (distance_ < maxMove && !onlane) {
 				if (!onlane) {
 					this.setCoordMap(nextLane_);
@@ -1140,6 +1140,8 @@ public class Vehicle {
 //					this.lock.unlock();
 					this.setNextRoad();
 					this.assignNextLane();
+					// Reset the desired speed according to the new road
+					this.desiredSpeed_ = (float) (this.road.getFreeSpeed());
 					return 1;
 				}
 			}
@@ -2015,14 +2017,11 @@ public class Vehicle {
 				if (leftLane.isConnectToLane(this.nextLane_)
 						&& rightLane.isConnectToLane(this.nextLane_)) {
 					Lane tempLane = leftLane.betterLane(rightLane);
-					targetLane = curLane.betterLane(tempLane); // get the lane
-					// that
-					// has best traffic
-					// condition
+					targetLane = curLane.betterLane(tempLane); // get the lane that
+					// has best traffic condition
 				}
 				// if only left lane connects to downstream lane
 				else if (leftLane.isConnectToLane(this.nextLane_)) {
-
 					targetLane = curLane.betterLane(leftLane);
 				}
 				// if only right lane connects to downstream lane
@@ -2049,6 +2048,7 @@ public class Vehicle {
 					if (front.currentSpeed_ > this.currentSpeed_
 							&& front.accRate_ > 0)
 						return targetLane;
+					
 				}
 			}
 			return null;
