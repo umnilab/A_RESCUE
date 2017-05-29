@@ -891,43 +891,46 @@ public class Road {
 		System.out
 				.println("Road " + this.linkid + " has length " + this.length);
 	}
-
+	
 	/**
 	 * This function set the current travel time of the road based on the
 	 * average speed of the road.
 	 * 
-	 * @author Samiul
+	 * @author Zhan & Hemant
 	 */
 	public void setTravelTime() {
 		float averageSpeed = 0;
-		Vehicle pv = this.firstVehicle();
-		while (pv != null) {
-			if (pv.currentSpeed() < 0) {
-				System.err.println("Vehicle " + pv.getId()
-						+ " has error speed of " + pv.currentSpeed());
-			} else
-				averageSpeed = +pv.currentSpeed();
-			pv = pv.macroTrailing();
-		}
-		if (averageSpeed < 0.00001f) {
-//			averageSpeed = (float) this.freeSpeed_;
-			averageSpeed = 0.00001f;
+		if (this.nVehicles_ == 0) {
+			averageSpeed = (float) this.freeSpeed_;
 		} else {
-			// averageSpeed = averageSpeed / this.vehicles.size();
-			if (this.nVehicles_ < 0) {
-				System.err.println("Road " + this.getLinkid() + " has "
-						+ this.nVehicles_ + " vehicles");
-				averageSpeed = (float) this.freeSpeed_;
-			} else
-				averageSpeed = averageSpeed / this.nVehicles_;
+			Vehicle pv = this.firstVehicle();
+			while (pv != null) {
+				if (pv.currentSpeed() < 0) {
+					System.err.println("Vehicle " + pv.getId()
+							+ " has error speed of " + pv.currentSpeed());
+				} else
+					averageSpeed = +pv.currentSpeed();
+				pv = pv.macroTrailing();
+			}
+			if (averageSpeed < 0.00001f) {
+				averageSpeed = 0.00001f;
+			} else {
+				if (this.nVehicles_ < 0) {
+					System.err.println("Road " + this.getLinkid() + " has "
+							+ this.nVehicles_ + " vehicles");
+					averageSpeed = (float) this.freeSpeed_;
+				} else
+					averageSpeed = averageSpeed / this.nVehicles_;
+			}
+			// outAverageSpeed: For output travel times
+			DecimalFormat myFormatter = new DecimalFormat("##.##");
+
+			String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
+
+			this.travelTime = (float) this.length / averageSpeed;
 		}
-
-		DecimalFormat myFormatter = new DecimalFormat("##.##");
-
-		String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
-
-		this.travelTime = (float) this.length / averageSpeed;
 	}
+	
 
 	/**
 	 * This function will initialize the dynamic travel time vector of the road.

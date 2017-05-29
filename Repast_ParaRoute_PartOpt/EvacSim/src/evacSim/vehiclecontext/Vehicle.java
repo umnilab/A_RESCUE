@@ -671,7 +671,7 @@ public class Vehicle {
 				// The vehicle is at beginning of the lane, it is free to change lane
 				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
-					if (laneChangeProb2 < 1.0)
+					if (laneChangeProb2 < 0.5)
 						this.discretionaryLC(tarLane);
 				}
 				
