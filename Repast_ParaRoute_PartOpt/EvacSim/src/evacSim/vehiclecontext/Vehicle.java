@@ -679,7 +679,7 @@ public class Vehicle {
 		}
 	}
 	
-	public void makeLaneChangingDecision_oldCode() {
+	public void makeLaneChangingDecision_oldCode() { //OLD CODE
 		// if not using dynamic routing alg, then check the correct lane
 		if (this.distFraction() > 0.70) {
 			double laneChangeProb = GlobalVariables.RandomGenerator

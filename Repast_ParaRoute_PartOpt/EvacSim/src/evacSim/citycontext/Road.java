@@ -98,6 +98,7 @@ public class Road {
 		this.speedProfile = new ArrayList<Double>();
 		this.identifier = " ";
 		this.curhour = -1;
+		this.travelTime = (float) this.length / this.freeSpeed_;
 		
 		// For adaptive network partitioning
 		this.nShadowVehicles = 0;
@@ -912,8 +913,8 @@ public class Road {
 					averageSpeed = +pv.currentSpeed();
 				pv = pv.macroTrailing();
 			}
-			if (averageSpeed < 0.00001f) {
-				averageSpeed = 0.00001f;
+			if (averageSpeed < 0.001f) {
+				averageSpeed = 0.001f;
 			} else {
 				if (this.nVehicles_ < 0) {
 					System.err.println("Road " + this.getLinkid() + " has "
@@ -922,13 +923,13 @@ public class Road {
 				} else
 					averageSpeed = averageSpeed / this.nVehicles_;
 			}
-			// outAverageSpeed: For output travel times
-			DecimalFormat myFormatter = new DecimalFormat("##.##");
-
-			String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
-
-			this.travelTime = (float) this.length / averageSpeed;
 		}
+		// outAverageSpeed: For output travel times
+		DecimalFormat myFormatter = new DecimalFormat("##.##");
+
+		String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
+
+		this.travelTime = (float) this.length / averageSpeed;
 	}
 	
 
