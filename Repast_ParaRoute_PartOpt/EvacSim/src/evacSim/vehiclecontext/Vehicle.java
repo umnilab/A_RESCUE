@@ -301,13 +301,24 @@ public class Vehicle {
 				}
 				
 				if (this.lastRouteTime < RouteV.getValidTime()) {
-					// Clear legacy impact
-					this.clearShadowImpact();
 					// The information are outdated, needs to be recomputed
-					this.roadPath = RouteV.vehicleRoute(this, this.destCoord);
-					this.setShadowImpact();
-					this.lastRouteTime = (int) RepastEssentials.GetTickCount();
-					this.nextRoad_ = this.roadPath.get(1);
+					// Check if the current lane connects to the next road in the new path
+					List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);
+					if (this.checkNextLaneConnected(tempPath.get(1))){
+						// If the next road is connected to the current lane, then we assign the apth, otherwise, we use the old path
+						// Clear legacy impact
+						this.clearShadowImpact();
+						this.roadPath = tempPath;
+						this.setShadowImpact();
+						this.lastRouteTime = (int) RepastEssentials.GetTickCount();
+						this.nextRoad_ = this.roadPath.get(1);
+					} else {
+						// New Route will cause blocking, use the old path
+						// Remove the current road from the path
+						this.removeShadowCount(this.roadPath.get(0));
+						this.roadPath.remove(0);
+						this.nextRoad_ = this.roadPath.get(1);
+					}
 //					System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				} else {
 					// Route information is still valid
@@ -1544,6 +1555,27 @@ public class Vehicle {
 		return this.correctLane;
 	}
 
+	// Find if the potential next road and current lane are connected
+	public boolean checkNextLaneConnected(Road nextRoad) {
+		boolean connected = false;
+		Lane curLane = this.lane;
+		Road curRoad = this.getRoad();
+		
+		if (nextRoad != null) {
+			for (Lane dl : curLane.getDnLanes()) {
+				if (dl.road_().equals(nextRoad)) {
+					// if this lane already connects to downstream road then
+					// assign to the connected lane
+					connected = true;
+					break;
+				}
+			}
+		}
+		
+		return connected;
+	}
+	
+	
 	public void assignNextLane() {
 		boolean connected = false;
 		Lane curLane = this.lane;
