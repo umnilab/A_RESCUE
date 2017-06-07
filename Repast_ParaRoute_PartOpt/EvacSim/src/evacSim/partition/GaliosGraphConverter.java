@@ -145,8 +145,8 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		        n2.getData().addEdgeWeight(edgeWeight);
 		        n2.getData().incNumEdges();
 		        // Add edge weight back the nodes
-		        n1.getData().setWeight(n1.getData().getWeight()+edgeWeight-1);
-		        n2.getData().setWeight(n2.getData().getWeight()+edgeWeight-1);
+		        n1.getData().setWeight(n1.getData().getWeight()+(int)((edgeWeight+1)/2)-1);
+		        n2.getData().setWeight(n2.getData().getWeight()+(int)((edgeWeight+1)/2)-1);
 		        
 		        edgeNum++;
 		    }
