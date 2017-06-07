@@ -122,10 +122,10 @@ public class ContextCreator implements ContextBuilder<Object> {
 		
 		// K: schedule parameter for network reloading
 		ScheduleParameters agentParamsNW = ScheduleParameters.createRepeating(
-				0, duration02_, 1);
+				0, duration02_, 3);
 		
 		//BL: speedProfileParams is the schedule parameter to update free flow speed for each road every hour
-		ScheduleParameters speedProfileParams = ScheduleParameters.createRepeating(0, duration_, 2);
+		ScheduleParameters speedProfileParams = ScheduleParameters.createRepeating(0, duration_, 4);
 		
 		schedule.schedule(agentParamsNW, cityContext, "modifyRoadNetwork");
 
@@ -165,8 +165,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 		//schedule.schedule(agentParams, r, "printTick");
 		
 		/* Schedule Parameters for the graph partitioning */
-		ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 3);
-		ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 3);
+		ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
+		ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
 		schedule.schedule(initialPartitionParams, partitioner, "first_run");
 		schedule.schedule(partitionParams, partitioner, "run");
 		
