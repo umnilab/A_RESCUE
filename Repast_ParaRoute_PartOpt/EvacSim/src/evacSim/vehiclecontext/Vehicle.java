@@ -305,7 +305,7 @@ public class Vehicle {
 					// Check if the current lane connects to the next road in the new path
 					List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);
 					if (this.checkNextLaneConnected(tempPath.get(1))){
-						// If the next road is connected to the current lane, then we assign the apth, otherwise, we use the old path
+						// If the next road is connected to the current lane, then we assign the path, otherwise, we use the old path
 						// Clear legacy impact
 						this.clearShadowImpact();
 						this.roadPath = tempPath;
