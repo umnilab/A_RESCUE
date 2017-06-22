@@ -266,13 +266,26 @@ public class Vehicle {
 		if (this.roadPath.size() < this.Nshadow)
 			this.Nshadow = this.roadPath.size();
 		if (this.Nshadow > 0) {
+			int shadowCount = 1; // Count actual number of Nshadow vehicles added
+			double cumlativeTT_Nshadow = 0.0; // Cumulative TT for Nshadow allocation
 			double cumulativeTT = 0.0;
 			int foundFutureRoutingRoad = 0; // Future routing road count: number of road found in shadow roads
 			for (int i=0; i < this.Nshadow; i++) {
-				// Increase the shadow vehicle count: include current road
 				Road r = this.roadPath.get(i);
-				// Set the shadow vehicle count
-				r.incrementShadowVehicleNum();
+				// Increase the shadow vehicle count: include current road
+				if (i < 1) {
+					// Current vehicle will always be added by default
+					// Set the shadow vehicle count
+					r.incrementShadowVehicleNum();
+				} else {
+					if (cumlativeTT_Nshadow <= GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL * GlobalVariables.SIMULATION_STEP_SIZE) {
+						// Set the shadow vehicle count
+						r.incrementShadowVehicleNum();
+						cumlativeTT_Nshadow += r.getTravelTime();
+						shadowCount += 1;
+					}
+				}
+				
 				cumulativeTT += r.getTravelTime();
 				// Found the road with cumulative TT greater than than network refresh interval, use it as the future routing road
 				if (foundFutureRoutingRoad < GlobalVariables.PART_REFRESH_MULTIPLIER) {
@@ -286,6 +299,10 @@ public class Vehicle {
 					}
 				}
 			}
+			
+			// Reset the Nshadow count
+			this.Nshadow = shadowCount;
+			
 		} else {
 			this.Nshadow = 0;
 		}
