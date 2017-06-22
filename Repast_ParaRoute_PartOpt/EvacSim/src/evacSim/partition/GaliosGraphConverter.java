@@ -153,10 +153,10 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		        
 		        if (edgeWeight > 1) {
 		        	// Push weights only to downstream nodes
-		        	n2.getData().setWeight(n2.getData().getWeight() - 1 + edgeWeight);
+//		        	n2.getData().setWeight(n2.getData().getWeight() - 1 + edgeWeight);
 		        	
 //		        	// Push weights only to upstream nodes
-//		        	n1.getData().setWeight(n1.getData().getWeight() - 1 + edgeWeight);
+		        	n1.getData().setWeight(n1.getData().getWeight() - 1 + edgeWeight);
 		        } 
 		        
 		        
