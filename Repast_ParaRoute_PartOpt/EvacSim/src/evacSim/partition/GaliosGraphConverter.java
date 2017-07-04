@@ -37,8 +37,8 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	public ArrayList<GNode<MetisNode>> nodes;
 	public ArrayList<Road> ResolvedRoads; // Roads that can be resolved from the graph transformation
 	public ArrayList<Road> LeftOverRoads; // Roads that are not resolvable from graph transformation
-	public int nodeNum;
-	public int edgeNum;
+	private int nodeNum;
+	private int edgeNum;
 	
 	// For adaptive network partitioning
 	private int alpha; // weight to current vehicle count
@@ -144,9 +144,21 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		        n1.getData().incNumEdges();
 		        n2.getData().addEdgeWeight(edgeWeight);
 		        n2.getData().incNumEdges();
-		        // Add edge weight back the nodes
-		        n1.getData().setWeight(n1.getData().getWeight()+edgeWeight-1);
-		        n2.getData().setWeight(n2.getData().getWeight()+edgeWeight-1);
+		        
+//		        // Add edge weight back to both ends
+//		        n1.getData().setWeight(n1.getData().getWeight()+(int)((edgeWeight+1)/2)-1);
+//		        n2.getData().setWeight(n2.getData().getWeight()+(int)((edgeWeight+1)/2)-1);
+		        
+		        /* Weighting scheme by only pushing weights on one end */
+		        
+		        if (edgeWeight > 1) {
+		        	// Push weights only to downstream nodes
+//		        	n2.getData().setWeight(n2.getData().getWeight() - 1 + edgeWeight);
+		        	
+//		        	// Push weights only to upstream nodes
+		        	n1.getData().setWeight(n1.getData().getWeight() - 1 + edgeWeight);
+		        } 
+		        
 		        
 		        edgeNum++;
 		    }

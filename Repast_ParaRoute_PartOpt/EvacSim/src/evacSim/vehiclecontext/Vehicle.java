@@ -266,13 +266,26 @@ public class Vehicle {
 		if (this.roadPath.size() < this.Nshadow)
 			this.Nshadow = this.roadPath.size();
 		if (this.Nshadow > 0) {
+			int shadowCount = 1; // Count actual number of Nshadow vehicles added
+			double cumlativeTT_Nshadow = 0.0; // Cumulative TT for Nshadow allocation
 			double cumulativeTT = 0.0;
 			int foundFutureRoutingRoad = 0; // Future routing road count: number of road found in shadow roads
 			for (int i=0; i < this.Nshadow; i++) {
-				// Increase the shadow vehicle count: include current road
 				Road r = this.roadPath.get(i);
-				// Set the shadow vehicle count
-				r.incrementShadowVehicleNum();
+				// Increase the shadow vehicle count: include current road
+				if (i < 1) {
+					// Current vehicle will always be added by default
+					// Set the shadow vehicle count
+					r.incrementShadowVehicleNum();
+				} else {
+					if (cumlativeTT_Nshadow <= GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL * GlobalVariables.SIMULATION_STEP_SIZE) {
+						// Set the shadow vehicle count
+						r.incrementShadowVehicleNum();
+						cumlativeTT_Nshadow += r.getTravelTime();
+						shadowCount += 1;
+					}
+				}
+				
 				cumulativeTT += r.getTravelTime();
 				// Found the road with cumulative TT greater than than network refresh interval, use it as the future routing road
 				if (foundFutureRoutingRoad < GlobalVariables.PART_REFRESH_MULTIPLIER) {
@@ -286,6 +299,10 @@ public class Vehicle {
 					}
 				}
 			}
+			
+			// Reset the Nshadow count
+			this.Nshadow = shadowCount;
+			
 		} else {
 			this.Nshadow = 0;
 		}
@@ -301,13 +318,24 @@ public class Vehicle {
 				}
 				
 				if (this.lastRouteTime < RouteV.getValidTime()) {
-					// Clear legacy impact
-					this.clearShadowImpact();
 					// The information are outdated, needs to be recomputed
-					this.roadPath = RouteV.vehicleRoute(this, this.destCoord);
-					this.setShadowImpact();
-					this.lastRouteTime = (int) RepastEssentials.GetTickCount();
-					this.nextRoad_ = this.roadPath.get(1);
+					// Check if the current lane connects to the next road in the new path
+					List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);
+					if (this.checkNextLaneConnected(tempPath.get(1))){
+						// If the next road is connected to the current lane, then we assign the path, otherwise, we use the old path
+						// Clear legacy impact
+						this.clearShadowImpact();
+						this.roadPath = tempPath;
+						this.setShadowImpact();
+						this.lastRouteTime = (int) RepastEssentials.GetTickCount();
+						this.nextRoad_ = this.roadPath.get(1);
+					} else {
+						// New Route will cause blocking, use the old path
+						// Remove the current road from the path
+						this.removeShadowCount(this.roadPath.get(0));
+						this.roadPath.remove(0);
+						this.nextRoad_ = this.roadPath.get(1);
+					}
 //					System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				} else {
 					// Route information is still valid
@@ -635,34 +663,8 @@ public class Vehicle {
 	}
 
 	public void makeLaneChangingDecision() {
-		// check if using dynamic routing alg
-		if (GlobalVariables.APPROX_DYNAMIC_ROUTING) {
-			if (this.isCorrectLane() != true) { // if it is not in correct
-				// lane then change the lane
-				Lane plane = this.tempLane();
-				if (plane != null)
-					this.mandatoryLC(plane);
-				else {
-					System.out.println("Vehicle " + this.getId()
-							+ "has no lane to change");
-					System.out.println("this vehicle is on road "
-							+ this.road.getID() + " which has "
-							+ this.road.getnLanes()
-							+ " lane(s) and I am on lane "
-							+ this.road.getLaneIndex(this.lane));
-					System.out.println("my next lane is "
-							+ this.nextRoad().getLaneIndex(this.nextLane_)
-							+ " of road " + this.nextRoad().getID()
-							+ " which has " + this.nextRoad().getnLanes()
-							+ " lane(s)");
-					System.out.println("this lane is connected with lane "
-							+ this.road.getLaneIndex(this.targetLane_
-									.getUpStreamConnection(this.road)));
-				}
-			}
-		} else if (this.distFraction() < 0.5) { // if not using dynamic routing
-			// alg, then check the correct
-			// lane
+		if (this.distFraction() < 0.5) { 
+			// Halfway to the downstream intersection, only mantatory LC allowed, check the correct lane
 			if (this.isCorrectLane() != true) { // change lane if not in correct
 				// lane
 				Lane plane = this.tempLane();
@@ -678,9 +680,84 @@ public class Vehicle {
 							+ this.road.getLaneIndex(this.lane));
 				}
 			}
+		} else {
+			if (this.distFraction() > 0.75) {
+				// First 25% in the road, do discretionary LC with 50% chance
+				double laneChangeProb1 = GlobalVariables.RandomGenerator
+						.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change lane
+//				Lane tarLane = this.findBetterLane();
+				Lane tarLane = this.findBetterCorrectLane();
+				if (tarLane != null) {
+					if (laneChangeProb1 < 1.0)
+						this.discretionaryLC(tarLane);
+				}
+			} else {
+				// First 25%-50% in the road, we do discretionary LC but only to correct lanes with 100% chance
+				double laneChangeProb2 = GlobalVariables.RandomGenerator
+						.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change lane
+				Lane tarLane = this.findBetterCorrectLane();
+				if (tarLane != null) {
+					if (laneChangeProb2 < 1.0)
+						this.discretionaryLC(tarLane);
+				}
+				
+			}
 		}
-
 	}
+	
+	public void makeLaneChangingDecision_oldCode() { //OLD CODE
+		// if not using dynamic routing alg, then check the correct lane
+		if (this.distFraction() > 0.70) {
+			double laneChangeProb = GlobalVariables.RandomGenerator
+					.nextDouble();
+			// The vehicle is at beginning of the lane, it is free to change
+			// lane
+			Lane tarLane = this.findBetterLane();
+			if (tarLane != null) {
+				// TODO: input a PDF of normal distribution
+				if (laneChangeProb > 0.5)
+					this.discretionaryLC(tarLane);
+			}
+		} else if (this.distFraction() > 0.50) {
+			// vehicle is half the lane length to downstream node
+			// only DLC if the target lane is also correct lane
+			// otherwise only MLC
+			if (this.isCorrectLane() != true) {
+				// change lane if not in correct lane
+				Lane plane = this.tempLane();
+				if (plane != null)
+					this.mandatoryLC(plane);
+				else {
+					System.out.println("Vehicle " + this.getId()
+							+ "has no lane to change");
+				}
+			} else {
+				// if the vehicle is already in correct lane.
+				// it seek for another connected lane with better traffic
+				// condition
+				Lane tarLane = this.findBetterCorrectLane();
+				if (tarLane != null) {
+					this.discretionaryLC(tarLane);
+				}
+			}
+		} else {
+			// when the vehicle is close to downstream node, only DLC is
+			// accepted
+			if (this.isCorrectLane() != true) {
+				// change lane if not in correct lane
+				Lane plane = this.tempLane();
+				if (plane != null)
+					this.mandatoryLC(plane);
+				else {
+					System.out.println("Vehicle " + this.getId()
+							+ "has no lane to change");
+				}
+			}
+		}
+	}
+	
 
 	/*
 	 * Calculate new location and speed after an iteration based on its current
@@ -722,7 +799,7 @@ public class Vehicle {
 		// this iteration
 		double time = System.currentTimeMillis(); // used for debugging
 		double duration = 0.0f;
-
+		
 		/*
 		 * For debuging: print out the current road and next junction ID of the
 		 * vehicle
@@ -1077,8 +1154,8 @@ public class Vehicle {
 				}
 				return 0;
 			} else {
-				float maxMove = GlobalVariables.FREE_SPEED
-						* GlobalVariables.SIMULATION_STEP_SIZE;
+//				float maxMove = GlobalVariables.FREE_SPEED
+//						* GlobalVariables.SIMULATION_STEP_SIZE;
 				// if (distance_ < maxMove && !onlane) {
 				if (!onlane) {
 					this.setCoordMap(nextLane_);
@@ -1091,6 +1168,8 @@ public class Vehicle {
 //					this.lock.unlock();
 					this.setNextRoad();
 					this.assignNextLane();
+					// Reset the desired speed according to the new road
+					this.desiredSpeed_ = (float) (this.road.getFreeSpeed());
 					return 1;
 				}
 			}
@@ -1493,6 +1572,27 @@ public class Vehicle {
 		return this.correctLane;
 	}
 
+	// Find if the potential next road and current lane are connected
+	public boolean checkNextLaneConnected(Road nextRoad) {
+		boolean connected = false;
+		Lane curLane = this.lane;
+		Road curRoad = this.getRoad();
+		
+		if (nextRoad != null) {
+			for (Lane dl : curLane.getDnLanes()) {
+				if (dl.road_().equals(nextRoad)) {
+					// if this lane already connects to downstream road then
+					// assign to the connected lane
+					connected = true;
+					break;
+				}
+			}
+		}
+		
+		return connected;
+	}
+	
+	
 	public void assignNextLane() {
 		boolean connected = false;
 		Lane curLane = this.lane;
@@ -1589,6 +1689,7 @@ public class Vehicle {
 	 */
 	public Lane tempLane() {
 		Lane plane = this.targetLane();
+		Lane tempLane_ = null;
 		if (this.road.getLaneIndex(plane) > this.road.getLaneIndex(this.lane)) {
 			tempLane_ = this.rightLane();
 		}
@@ -1965,14 +2066,11 @@ public class Vehicle {
 				if (leftLane.isConnectToLane(this.nextLane_)
 						&& rightLane.isConnectToLane(this.nextLane_)) {
 					Lane tempLane = leftLane.betterLane(rightLane);
-					targetLane = curLane.betterLane(tempLane); // get the lane
-					// that
-					// has best traffic
-					// condition
+					targetLane = curLane.betterLane(tempLane); // get the lane that
+					// has best traffic condition
 				}
 				// if only left lane connects to downstream lane
 				else if (leftLane.isConnectToLane(this.nextLane_)) {
-
 					targetLane = curLane.betterLane(leftLane);
 				}
 				// if only right lane connects to downstream lane
@@ -1999,6 +2097,7 @@ public class Vehicle {
 					if (front.currentSpeed_ > this.currentSpeed_
 							&& front.accRate_ > 0)
 						return targetLane;
+					
 				}
 			}
 			return null;

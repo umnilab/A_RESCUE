@@ -67,25 +67,16 @@ public class GlobalVariables {
 
 	public static final String ZONES_SHAPEFILE = loadConfig("ZONES_SHAPEFILE");
 
-	public static final String HOUSES_CSV = loadConfig("HOUSES_CSV");
-
-	public static final String VEHICLES_CSV = loadConfig("VEHICLES_CSV");
-	
-	public static final String READING_CSV = loadConfig("DYNAMIC_CSV");//2013-10-19: For reading file dynamically
-
 	public static final String ACTIVITY_CSV = loadConfig("ACTIVITY_SEQ_CSV");
-
-	// Path for the Signal Shape (data) File
-	public static final String SIGNALS_SHAPEFILE = loadConfig("SIGNALS_SHAPEFILE");
 
 	// Path for the supply side event file
 	public static final String EVENT_FILE = loadConfig("EVENT_FILE");
+	public static final int EVENT_CHECK_FREQUENCY = Integer.valueOf(loadConfig("EVENT_CHECK_FREQUENCY"));
 	
 	/* Simulation Setup */
 	public static final Random RandomGenerator = new Random(123456777); // 123456777
 																		// generate
 																		// problem
-	public static final float DEPARTURE_RANGE = 0.1f; // The time interval to start looking for road path
 	
 	public static final float SIMULATION_STEP_SIZE = Float
 			.valueOf(loadConfig("SIMULATION_STEP_SIZE"));
@@ -130,14 +121,10 @@ public class GlobalVariables {
 			.valueOf(loadConfig("N_THREADS"));
 	
 	// Load the number of partitions from the config file
-	public static final int N_Partition = Integer.valueOf(loadConfig("N_PARTITION"));
+	public static final int N_Partition = Integer.valueOf(loadConfig("N_THREADS"));
 
 	public static final float FREE_SPEED = Float
 			.valueOf(loadConfig("FREE_SPEED"));
-	public static final float HEADWAY_UPPER = Float
-			.valueOf(loadConfig("HEADWAY_UPPER"));
-	public static final float HEADWAY_LOWER = Float
-			.valueOf(loadConfig("HEADWAY_LOWER"));
 
 	public static final float MAX_ACCELERATION = Float
 			.valueOf(loadConfig("MAX_ACCELERATION")); // meter/sec2
@@ -154,17 +141,8 @@ public class GlobalVariables {
 	public static final double ACC_EPSILON = Double
 			.valueOf(loadConfig("ACC_EPSILON")); // meter/sec2
 
-	public static final int Agents_Per_House = Integer
-			.valueOf(loadConfig("Agents_Per_House"));
-
-	public static final float ROAD_MOVE_SIZE = Float
-			.valueOf(loadConfig("ROAD_MOVE_SIZE"));
 	public static final float LANE_WIDTH = Float
 			.valueOf(loadConfig("LANE_WIDTH"));
-	public static final double MIN_ROAD_LENGTH = Double
-	.valueOf(loadConfig("MIN_ROAD_LENGTH"));
-	// public static final int Vehicle_Per_House =
-	// Integer.valueOf(loadConfig("Vehicle_Per_House"));
 
 	public static final float H_UPPER = Float.valueOf(loadConfig("H_UPPER"));
 	public static final float H_LOWER = Float.valueOf(loadConfig("H_LOWER"));
@@ -172,7 +150,6 @@ public class GlobalVariables {
 	public static final double FLT_INF = Float.MAX_VALUE;
 	public static final double FLT_EPSILON = 1.0 / FLT_INF;
 
-	public static final int STATUS_REGIME = 0x00000180; // sum 384
 	public static final int STATUS_REGIME_FREEFLOWING = 0x00000000; // 0
 	public static final int STATUS_REGIME_CARFOLLOWING = 0x00000080; // 128
 	public static final int STATUS_REGIME_EMERGENCY = 0x00000100; // 256
@@ -189,10 +166,10 @@ public class GlobalVariables {
 	public static final float GAMMA_ACC = Float
 			.valueOf(loadConfig("GAMMA_ACC"));
 
-	public static final boolean APPROX_DYNAMIC_ROUTING = Boolean
-			.valueOf(loadConfig("APPROX_DYNAMIC_ROUTING")); // SH - created this
-															// variable to
-	// enable dynamic routing
+//	public static final boolean APPROX_DYNAMIC_ROUTING = Boolean
+//			.valueOf(loadConfig("APPROX_DYNAMIC_ROUTING")); // SH - created this
+//															// variable to
+//	// enable dynamic routing
 	public static final boolean SINGLE_SHORTEST_PATH = Boolean
 			.valueOf(loadConfig("SINGLE_SHORTEST_PATH")); // SH - created this
 															// variable to
@@ -211,31 +188,6 @@ public class GlobalVariables {
 	
 	// Number of future road segments to be considered in counting shadow vehicles
 	public static final int N_SHADOW = Integer.valueOf(loadConfig("N_SHADOW"));
-	
-	public static final double SIGNAL_STARTING_TIME = Double
-			.valueOf(loadConfig("SIGNAL_STARTING_TIME")); // when the simulation
-															// will start
-	// implementing the traffic light
-	public static final double SIGNAL_REPEATING_TIME = Double
-			.valueOf(loadConfig("SIGNAL_REPEATING_TIME"));// at which interval
-															// it will make new
-	// decisions
-	public static final double SIG_THRESHOLD = Double
-			.valueOf(loadConfig("SIG_THRESHOLD"));// where do we use it!
-	public static final boolean IMPLEMENT_SIGNAL_CONTROL = Boolean
-			.valueOf(loadConfig("IMPLEMENT_SIGNAL_CONTROL")); // Aziz- This is
-																// the switch
-																// for
-	// signal control
-
-	/***
-	 * @author Husain Add a Global variable for Distance from intersection (i.e.
-	 *         the juntion per se)
-	 */
-	public static final double DEFAULT_DisFromJunc = Double
-			.valueOf(loadConfig("DEFAULT_DisFromJunc")); /* meters */
-
-	public static final char whosRunning = loadConfig("whosRunning").charAt(0);
 
 	/*
 	 * BL: Following are parameters used in lane changing model
@@ -261,23 +213,7 @@ public class GlobalVariables {
 	public static final double minLeadDLC = 0.05;
 	public static final double minLagDLC = 0.05;
 
-	/***
-	 * HELMS 1/28/2012
-	 * 
-	 * Add Global Variables to tell ZoneContext.java and VehicleContext.java
-	 * whether to pull information from Households per zone and VehiclesPerZone
-	 * as a CSV file or from a Database
-	 */
-	public static final boolean HOUSEHOLDS_PER_ZONE_DATABASE = Boolean
-			.valueOf(loadConfig("HOUSEHOLDS_PER_ZONE_DATABASE"));
-
-	public static final boolean VEHICLES_PER_ZONE_DATABASE = Boolean
-			.valueOf(loadConfig("VEHICLES_PER_ZONE_DATABASE"));
-
 	public static final String DB_URL = String.valueOf(loadConfig("DB_URL"));
-
-	public static final boolean SET_DEMAND_FROM_BEHAVIORAL_MODELS = Boolean
-			.valueOf(loadConfig("SET_DEMAND_FROM_BEHAVIORAL_MODELS"));
 
 	public static final boolean SET_DEMAND_FROM_ACTIVITY_MODELS = Boolean
 			.valueOf(loadConfig("SET_DEMAND_FROM_ACTIVITY_MODELS"));

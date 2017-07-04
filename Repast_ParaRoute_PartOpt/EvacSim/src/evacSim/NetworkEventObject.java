@@ -13,8 +13,6 @@ public class NetworkEventObject {
 	public double value2;
 	// Field to be loaded from simulation
 	public double defaultValue;
-	// Status of the current event: true if is currently running
-	public boolean isRunning;
 	
 	public NetworkEventObject(int startTime, int endTime, int eventID, int roadID, double value1, double value2) {
 		this.startTime = startTime;
@@ -25,12 +23,5 @@ public class NetworkEventObject {
 		this.value2 = value2;
 		// Set rest of the object to default
 		this.defaultValue = -1.0;
-		this.isRunning = false;
 	}
-	
-	// Set the event if it is going to be run
-	public void setEvent() {
-		this.isRunning = true;
-	}
-	
 }

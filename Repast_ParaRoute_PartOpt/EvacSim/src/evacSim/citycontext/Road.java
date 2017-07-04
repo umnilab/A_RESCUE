@@ -98,6 +98,7 @@ public class Road {
 		this.speedProfile = new ArrayList<Double>();
 		this.identifier = " ";
 		this.curhour = -1;
+		this.travelTime = (float) this.length / this.freeSpeed_;
 		
 		// For adaptive network partitioning
 		this.nShadowVehicles = 0;
@@ -217,213 +218,6 @@ public class Road {
 		}
 
 	}
-	
-//	// @ScheduledMethod(start=1, priority=1, duration=1)
-// Old step function, the new version makes a lot of simplifications based on it.
-//	public void step_old() {
-//		// if (RepastEssentials.GetTickCount() % 10 == 0)
-//		// this.setTravelTime();
-//		double time = System.currentTimeMillis();
-//		Vehicle v;
-//		int tickcount = (int) RepastEssentials.GetTickCount();
-//		double maxHours = 0.5;
-//		double maxTicks = 3600 * maxHours // time that a path is kept in the
-//											// list
-//				/ GlobalVariables.SIMULATION_STEP_SIZE;
-//		/*
-//		 * To integrate speed profile
-//		 */
-//		// BL: the following is to delete a path that stayed in the list for an
-//		// hour.
-//		/*
-//		 * int timeperiod = (int) (tickcount -
-//		 * 3600GlobalVariables.SIMULATION_STEP_SIZE); int zone2Delete = -1; if
-//		 * (this.entryTime.containsKey(destID)) { zone2Delete =
-//		 * this.entryTime.get(timeperiod); } if (zone2Delete > -1) {
-//		 * this.pathList.remove(zone2Delete); }
-//		 */
-//
-//		try {
-//			while (this.newqueue.size() > 0) {
-//				v = this.newqueueHead(); // BL: change to use the TreeMap
-//				// BL: check if there's available shortest path from this road
-//				// to the destID
-//				// If not, then create the route and store in the path list
-//				int destID = v.getDestinationID();
-//				if (this.pathList.size() > 0) {
-//					if (this.pathList.containsKey(destID)) {
-//						if (RepastEssentials.GetTickCount()
-//								- this.entryTime.get(destID) > 0) {
-//							this.entryTime.remove(destID);
-//							this.pathList.remove(destID);
-//						}
-//					}
-//				}
-//				if (this.pathList.size() > 0) {
-//					if (v.atActivityLocation()) {
-//						if (v.getRoute() == null) {
-//							if (this.pathList.containsKey(destID)) {
-//								// List<Road> myroad_ =
-//								// this.roadList.get(destID);
-//								ArrayList<Road> myroute_ = this.pathList
-//										.get(destID);
-//								v.createRoute_update();
-//								for (Road pr : myroute_) {
-//									v.getRoute().getRoadPath().add(pr);
-//								}
-//
-//								v.setCoordMap(this.firstLane());
-//								//print path available from the list that assigned to this vehicle
-///*								if (v.getVehicleID() == GlobalVariables.Global_Vehicle_ID
-//										&& ContextCreator.debugBL) {
-//									System.out
-//											.println("I found available path from the list. I am vehicle: "
-//													+ v.getVehicleID()
-//													+ " from the origin: "
-//													+ v.getOriginZoneId()
-//													+ " has the destination: "
-//													+ destID
-//													+ " was set to the road path:");
-//									for (Road r : v.getRoute().getRoadPath()) {
-//										System.out
-//												.print("    " + r.getLinkid());
-//									}
-//									System.out.println();
-//								}*/
-//							}
-//						}
-//					}
-//				}
-//
-//				if (v.getRoute() == null) {
-//					if (v.atActivityLocation()) {
-//						v.createRoute();
-//						ArrayList<Road> mypath_ = new ArrayList<Road>();
-//						this.entryTime.put(destID, RepastEssentials
-//								.GetTickCount()
-//								+ maxTicks);
-//
-//						for (Road pr : v.getRoute().getRoadPath()) {
-//							mypath_.add(pr);
-//						}
-//						this.pathList.put(destID, mypath_);
-//						v.setCoordMap(this.firstLane());
-//						if (v.getRoute().getRoadPath().size() == 0) {
-//							v.printRoute();
-//							System.out.println("Origin "
-//									+ v.getHouse().getId()
-//									+ " Dest: "
-//									+ v.getRoute().getDestinationHouse()
-//											.getIntegerID());
-//						}
-//					}
-//					// update the path
-//					// list with the new
-//					// route found.
-//					// this.entryTime.put(tickcount, destID);//record the
-//					// time
-//					// the route has been entered to the list.
-//
-//					/*
-//					 * if (ContextCreator.debugBL && v.vehicleID() ==
-//					 * GlobalVariables.Global_Vehicle_ID) {
-//					 * System.out.print("Vehicle " + v.vehicleID() +
-//					 * " has road path as: "); for (Road r :
-//					 * v.getRoute().getRoadPath()) { System.out.print("    " +
-//					 * r.getLinkid()); } System.out.println(); }
-//					 */
-//
-//				}
-//				// }
-//
-//				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
-//					if (v.enterNetwork(this) == 0) {
-//						break;
-//					}
-//				} else {
-//					// BL: iterate all element in the TreeMap
-//					Set keys = (Set) this.newqueue.keySet();
-//					for (Iterator i = (Iterator) keys.iterator(); i.hasNext();) {
-//						Double key = (Double) i.next();
-//						ArrayList<Vehicle> temList = this.newqueue.get(key);
-//						for (Vehicle pv : temList) {
-//							if (tickcount >= pv.getDepTime()) {
-//								pv.primitiveMove();
-//							}
-//						}
-//					}
-//					/*
-//					 * for (Vehicle pv : this.queue) { if (tickcount >=
-//					 * pv.getDepTime()) { pv.primitiveMove(); // RMA change } }
-//					 */
-//					break;
-//				}
-//
-//			}
-//
-//			Vehicle pv = this.firstVehicle();
-//			while (pv != null) {
-//				pv.calcState();
-//				pv.travel();
-//
-//				/*
-//				 * if (ContextCreator.debugBL && pv.getRoad().getLinkid() ==
-//				 * GlobalVariables.Global_Road_ID &&
-//				 * GlobalVariables.Debug_On_Road) { pv.printScreenTrajectory();
-//				 * } if (ContextCreator.debugSH && pv.vehicleID() ==
-//				 * GlobalVariables.Global_Vehicle_ID &&
-//				 * !GlobalVariables.Debug_On_Road) { pv.printScreenTrajectory();
-//				 * } if (ContextCreator.debugSH && pv.vehicleID() ==
-//				 * GlobalVariables.Global_Vehicle_ID && pv.getRoad().getLinkid()
-//				 * == GlobalVariables.Global_Road_ID) {
-//				 * pv.printScreenTrajectory(); }
-//				 */
-//				pv = pv.macroTrailing();
-//			}
-//			for (Lane l : this.getLanes()) {
-//				while (true) {
-//					v = l.firstVehicle();
-//					if (v == null) {
-//						break;
-//					} else {
-//						if (GlobalVariables.APPROX_DYNAMIC_ROUTING
-//								&& this.getLength() > GlobalVariables.MIN_ROAD_LENGTH) {
-//							if (v.nextRoad() != null) {
-//								if ((v.distFraction() > 0.4 && v.distFraction() < 0.7)
-//										&& v.getRouteUpdateFlag() == false) {
-//									v.updateRoute();
-//									v.assignNextLane();
-//								}
-//							}
-//						}
-//						if (v.getMoveVehicleFlag()) {
-//							double maxMove = GlobalVariables.FREE_SPEED
-//									* GlobalVariables.SIMULATION_STEP_SIZE;
-//							//double maxMove = v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE;
-//							if (v.distance() < maxMove) {
-//								// this move exceed the available distance of
-//								// the link.
-//								if (!v.isOnLane()) {
-//									if (v.changeRoad() == 0)
-//										break;
-//								} else if (v.isOnLane()) {
-//									if (v.appendToJunction(v.getNextLane()) == 0)
-//										break;
-//								}
-//							}
-//						}
-//						break;
-//					}
-//				}
-//			}
-//		} catch (Exception e) {
-//			System.err.println("Road " + this.linkid
-//					+ " had an error while moving vehicles");
-//			e.printStackTrace();
-//			RunEnvironment.getInstance().pauseRun();
-//		}
-//
-//	}
 	
 	
 	@Override
@@ -923,31 +717,6 @@ public class Road {
 		return this.downStreamMovements;
 	}
 
-	// TODO: need to check and remove this function
-	public void addVehicleToRoad(Vehicle v) {
-		// this.vehicles.add(v);
-		this.nVehicles_++;
-	}
-
-	public void addVehicleToRoad() {
-		// this.vehicles.add(v);
-		this.nVehicles_++;
-		// v.setRoad(this);
-	}
-
-	// TODO: need to check and remove this function
-	public void removeVehicleFromRoad(Vehicle v) {
-		// this.vehicles.remove(v);
-		this.nVehicles_--;
-	}
-
-	public void removeVehicleFromRoad() {
-		this.nVehicles_--;
-		if (nVehicles_ < 0)
-			System.err.println("Road " + this.getLinkid() + " has "
-					+ this.nVehicles_ + " vehicles");
-	}
-
 	public void setNumberOfVehicles(int nVeh){
 		this.nVehicles_ = nVeh;
 	}
@@ -1123,42 +892,46 @@ public class Road {
 		System.out
 				.println("Road " + this.linkid + " has length " + this.length);
 	}
-
+	
 	/**
 	 * This function set the current travel time of the road based on the
 	 * average speed of the road.
 	 * 
-	 * @author Samiul
+	 * @author Zhan & Hemant
 	 */
 	public void setTravelTime() {
 		float averageSpeed = 0;
-		Vehicle pv = this.firstVehicle();
-		while (pv != null) {
-			if (pv.currentSpeed() < 0) {
-				System.err.println("Vehicle " + pv.getId()
-						+ " has error speed of " + pv.currentSpeed());
-			} else
-				averageSpeed = +pv.currentSpeed();
-			pv = pv.macroTrailing();
-		}
-		if (averageSpeed < 0.00001f) {
+		if (this.nVehicles_ == 0) {
 			averageSpeed = (float) this.freeSpeed_;
 		} else {
-			// averageSpeed = averageSpeed / this.vehicles.size();
-			if (this.nVehicles_ < 0) {
-				System.err.println("Road " + this.getLinkid() + " has "
-						+ this.nVehicles_ + " vehicles");
-				averageSpeed = (float) this.freeSpeed_;
-			} else
-				averageSpeed = averageSpeed / this.nVehicles_;
+			Vehicle pv = this.firstVehicle();
+			while (pv != null) {
+				if (pv.currentSpeed() < 0) {
+					System.err.println("Vehicle " + pv.getId()
+							+ " has error speed of " + pv.currentSpeed());
+				} else
+					averageSpeed = +pv.currentSpeed();
+				pv = pv.macroTrailing();
+			}
+			if (averageSpeed < 0.001f) {
+				averageSpeed = 0.001f;
+			} else {
+				if (this.nVehicles_ < 0) {
+					System.err.println("Road " + this.getLinkid() + " has "
+							+ this.nVehicles_ + " vehicles");
+					averageSpeed = (float) this.freeSpeed_;
+				} else
+					averageSpeed = averageSpeed / this.nVehicles_;
+			}
 		}
-
+		// outAverageSpeed: For output travel times
 		DecimalFormat myFormatter = new DecimalFormat("##.##");
 
 		String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
 
 		this.travelTime = (float) this.length / averageSpeed;
 	}
+	
 
 	/**
 	 * This function will initialize the dynamic travel time vector of the road.

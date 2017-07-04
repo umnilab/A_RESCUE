@@ -129,10 +129,6 @@ public class Lane {
 		return this.speed_;
 	}
 
-	// BL: calcFreeSpeed function seems to exist in Road class (check).
-	public void calcFreeSpeed() {
-	}
-
 	// BL: Reset the accumulated speed and accumulated density to recalculate in
 	// the next Sim step
 	public void resetStatistics() {
@@ -329,24 +325,4 @@ public class Lane {
 		return null;
 	}
 	
-	public float calcSpeed() {
-		if (nVehicles_ <= 0)
-			return speed_ = (float) this.road_.getFreeSpeed();
-		float sum = 0.0f;
-		/*
-		 * for (Vehicle v : this.vehicles) { if (v.currentSpeed() >
-		 * GlobalVariables.SPEED_EPSILON) { sum += 1.0 / v.currentSpeed(); }
-		 * else { sum += 1.0 / GlobalVariables.SPEED_EPSILON; } }
-		 */
-		Vehicle pv = this.firstVehicle();
-		while (pv != null) {
-			if (pv.currentSpeed() > GlobalVariables.SPEED_EPSILON) {
-				sum += 1.0 / pv.currentSpeed();
-			} else {
-				sum += 1.0 / GlobalVariables.SPEED_EPSILON;
-			}
-			pv = pv.trailing();
-		}
-		return speed_ = nVehicles_ / sum;
-	}
 }
