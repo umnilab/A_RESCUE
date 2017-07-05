@@ -39,11 +39,13 @@ public class MetisPartition {
 	private int npartition;
 	private ArrayList<ArrayList<Road>> PartitionedInRoads;
 	private ArrayList<Road> PartitionedBwRoads;
+	private ArrayList<Integer> PartitionWeights;
 	
 	public MetisPartition(int nparts) {
 		this.npartition = nparts;
 		this.PartitionedInRoads = new ArrayList<ArrayList<Road>>();
 		this.PartitionedBwRoads = new ArrayList<Road>();
+		this.PartitionWeights = new ArrayList<Integer>();
 	}
 	
 	public ArrayList<ArrayList<Road>> getPartitionedInRoads() {
@@ -85,6 +87,7 @@ public class MetisPartition {
 		// Testing retrieving the partitioned results
 		this.PartitionedInRoads = graphConverter.getPartitionedInRoads();
 		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
+		this.PartitionWeights = graphConverter.getPartitionWeights();
 		int i;
 		for (i = 0; i < this.npartition; i++){
 			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size());
@@ -155,7 +158,7 @@ public class MetisPartition {
 		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
 		int i;
 		for (i = 0; i < this.npartition; i++){
-			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size());
+			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
 			// Compute number of vehicles currently in the partition
 			int totNumVeh = 0;
 			int totShadowVeh = 0;

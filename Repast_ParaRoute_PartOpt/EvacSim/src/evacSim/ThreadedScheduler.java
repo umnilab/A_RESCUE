@@ -52,10 +52,10 @@ public class ThreadedScheduler {
 			max_para_time = max_para_time + time_result.get(1);
 			avg_para_time = avg_para_time + time_result.get(2);
 			
-			// Step over the boundary roads
-			double start_t = System.currentTimeMillis();
-			stepBwRoads();
-			seq_time = seq_time + (int)(System.currentTimeMillis() - start_t);
+//			// Step over the boundary roads
+//			double start_t = System.currentTimeMillis();
+//			stepBwRoads();
+//			seq_time = seq_time + (int)(System.currentTimeMillis() - start_t);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

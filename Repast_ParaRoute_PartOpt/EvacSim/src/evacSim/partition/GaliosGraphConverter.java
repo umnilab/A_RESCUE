@@ -35,6 +35,7 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	public ArrayList<Road> PartitionedBwRoads; // Array list for roads that lie in the boundary of two partitions
 	public ArrayList<ArrayList<Integer>> BwRoadMembership; // N_bw * 2 dimension array that holds the membership of each boundary road
 	public ArrayList<GNode<MetisNode>> nodes;
+	public ArrayList<Integer> PartitionWeights;
 	public ArrayList<Road> ResolvedRoads; // Roads that can be resolved from the graph transformation
 	public ArrayList<Road> LeftOverRoads; // Roads that are not resolvable from graph transformation
 	private int nodeNum;
@@ -183,10 +184,15 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 			GNode<MetisNode>[] nodes = new GNode[resultGraph.size()];
 			resultGraph.map(new SaveNodesToArray(nodes));
 		    
+			// Total weights of each partition
+		    PartitionWeights = new ArrayList<Integer>();
+			
 		    // Initialize the 2d arraylist to store the edges that completely lie in a partition
 		    PartitionedInRoads = new ArrayList<ArrayList<Road>>(nparts);
 		    for (i=0;i<nparts;i++){
 		    	PartitionedInRoads.add(new ArrayList<Road>());
+		    	// Initialize the total partition weights
+		    	PartitionWeights.add(0);
 		    }
 		    
 		    // Initialize the arraylist to store the edges that lie in between partitions 
@@ -207,9 +213,16 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		        GNode<MetisNode> n1 = nodes[Node2GaliosID.get(source)];
 		        GNode<MetisNode> n2 = nodes[Node2GaliosID.get(dest)];
 		        
+		        // compute the edge weight of the link
+		        int edgeWeight = 1 + road.getVehicleNum() * this.alpha  + 
+						road.getShadowVehicleNum() * this.beta + road.getFutureRoutingVehNum() * this.gamma;
+		        
 		        if(n1.getData().getPartition() == n2.getData().getPartition()){ //if road lie within a partition then add the road corresponding to that partition
 //		        	System.out.println("Road: " + road.getID() + " " + road.getIdentifier() + " " + road.getLinkid() + " " + j1.getJunctionID() + "-" + j2.getJunctionID() + " Partition: "+ n1.getData().getPartition()); //FOR DEBUGGING
 		        	PartitionedInRoads.get(n1.getData().getPartition()).add(road);
+		        	
+		        	PartitionWeights.set(n1.getData().getPartition(), PartitionWeights.get(n1.getData().getPartition()) + edgeWeight);
+		        	
 		        }else{ //if road lies between partitions then store the road along with its partition IDs
 		        	// System.out.println("Road: " + road.getID() + " " + j1.getJunctionID() + "-" + j2.getJunctionID() +" Different partitions" + " " +n1.getData().getPartition()+ " "+n2.getData().getPartition()); //FOR DEBUGGING
 		        	PartitionedBwRoads.add(road);
@@ -217,8 +230,18 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		        	tempList.add(n1.getData().getPartition());
 		        	tempList.add(n2.getData().getPartition());
 		        	BwRoadMembership.add(tempList);
+		        	
+		        	// Merging the road to neighboring partition with lower total edge weight
+		        	if (PartitionWeights.get(n1.getData().getPartition()) < PartitionWeights.get(n2.getData().getPartition())) {
+		        		PartitionedInRoads.get(n1.getData().getPartition()).add(road);
+		        		PartitionWeights.set(n1.getData().getPartition(), PartitionWeights.get(n1.getData().getPartition()) + edgeWeight);
+		        	} else {
+		        		PartitionedInRoads.get(n2.getData().getPartition()).add(road);
+		        		PartitionWeights.set(n2.getData().getPartition(), PartitionWeights.get(n2.getData().getPartition()) + edgeWeight);
+		        	}
 		        }
 		    }
+		    
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -249,6 +272,11 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	/* ZH: Get partition membership for the two end of the boundary roads */
 	public ArrayList<ArrayList<Integer>> getBwRoadMembership(){
 		return this.BwRoadMembership;
+	}
+	
+	/* ZH: Get the total edge weight for each partition */
+	public ArrayList<Integer> getPartitionWeights() {
+		return this.PartitionWeights;
 	}
 
 	@Override
