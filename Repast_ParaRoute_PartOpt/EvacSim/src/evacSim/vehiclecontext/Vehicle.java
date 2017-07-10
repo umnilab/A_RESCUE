@@ -385,6 +385,7 @@ public class Vehicle {
 	public void append(Lane plane) {
 		this.lane = plane;
 		Vehicle v = plane.lastVehicle();
+		plane.addVehicles();
 		if (v != null) {
 			this.leading(v);
 			v.trailing(this);
@@ -1129,8 +1130,8 @@ public class Vehicle {
 	public int changeRoad() {
 		// SH- check if the vehicle has reached the destination or not
 		if (this.atDestination()) {
-			this.removeFromLane();
-			this.removeFromMacroList();
+//			this.removeFromLane();
+//			this.removeFromMacroList();
 			this.clearShadowImpact(); // ZH: Clear shadow impact if already reaches destination
 			return 0; // only one will reach destination once
 		} else if (this.nextRoad_ != null) {
@@ -2220,8 +2221,8 @@ public class Vehicle {
 					+ " is appending to a junction of the final Road");
 		}
 		if (this.atDestination()) {
-			this.removeFromLane();
-			this.removeFromMacroList();
+//			this.removeFromLane();
+//			this.removeFromMacroList();
 			return 0;
 		} else if (nextlane != null) {
 			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID

@@ -242,6 +242,8 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		        }
 		    }
 		    
+		    
+		    
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -258,6 +260,19 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 	
 	/* ZH: Get the 2D array list that contains all roads that fall entirely in each partition */
 	public ArrayList<ArrayList<Road>> getPartitionedInRoads(){
+		// Value and index for the partition with minimum total edge weight
+		int minWeight= Integer.MAX_VALUE;
+		int index = 0;
+		for (int i = 0; i < this.PartitionWeights.size(); i++ ) {
+			if (minWeight > PartitionWeights.get(i)) {
+				minWeight = PartitionWeights.get(i);
+				index = i;
+			}
+		}
+		// Add leftover roads to the partition with minimum total edge weight
+		for (Road r: this.LeftOverRoads)
+			this.PartitionedInRoads.get(index).add(r);
+		
 		return this.PartitionedInRoads;
 	}
 	

@@ -269,9 +269,12 @@ public class Lane {
 	public int nVehicles() {
 		return nVehicles_;
 	}
+	
+	// For diagnosis in the final table
 	public int getNumVehicles() {
 		return nVehicles_;
 	}
+
 	// this add only the number of vehicle to lane, while addVehicle in road and
 	// a vehicle to arrayList.
 	public void addVehicles() {
