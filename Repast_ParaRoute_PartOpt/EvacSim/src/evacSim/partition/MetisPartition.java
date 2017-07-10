@@ -90,7 +90,7 @@ public class MetisPartition {
 		this.PartitionWeights = graphConverter.getPartitionWeights();
 		int i;
 		for (i = 0; i < this.npartition; i++){
-			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size());
+			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
 			// Compute number of vehicles currently in the partition
 			int totNumVeh = 0;
 			int totShadowVeh = 0;
@@ -156,6 +156,7 @@ public class MetisPartition {
 		// Testing retrieving the partitioned results
 		this.PartitionedInRoads = graphConverter.getPartitionedInRoads();
 		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
+		this.PartitionWeights = graphConverter.getPartitionWeights();
 		int i;
 		for (i = 0; i < this.npartition; i++){
 			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
