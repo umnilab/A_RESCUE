@@ -182,8 +182,20 @@ public class RandomKwayEdgeRefiner {
           MetisNode neighborData = neighbor.getData(MethodFlag.NONE, MethodFlag.NONE);
           if (neighborData.partEd == null) {
             int numEdges = neighborData.getNumEdges();
-            neighborData.partIndex = new int[numEdges];
-            neighborData.partEd = new int[numEdges];
+            
+            /* ZH: For a simple but may not correct fix for the partition error */
+            int ndegree  = neighborData.getNDegrees();
+            if (ndegree <= numEdges) {
+	            neighborData.partIndex = new int[numEdges];
+	            neighborData.partEd = new int[numEdges];
+            } else {
+            	neighborData.partIndex = new int[ndegree];
+	            neighborData.partEd = new int[ndegree];
+            }
+            
+            /* Following two lines are the original implementation*/
+//            neighborData.partIndex = new int[numEdges];
+//            neighborData.partEd = new int[numEdges];
           }
           int edgeWeight = graph.getEdgeData(node, neighbor, MethodFlag.NONE);
           if (neighborData.getPartition() == fromConst) {

@@ -332,8 +332,20 @@ public class Balancer {
 						int oldgain = neighborData.getGain();
 						if (neighborData.partEd == null) {
 							int numEdges = neighborData.getNumEdges();
-							neighborData.partIndex = new int[numEdges];
-							neighborData.partEd = new int[numEdges];
+							
+							/* ZH: For a simple but may not correct fix for the partition error */
+				            int ndegree  = neighborData.getNDegrees();
+				            if (ndegree <= numEdges) {
+					            neighborData.partIndex = new int[numEdges];
+					            neighborData.partEd = new int[numEdges];
+				            } else {
+				            	neighborData.partIndex = new int[ndegree];
+					            neighborData.partEd = new int[ndegree];
+				            }
+				            
+				            /* Following two lines are the original implementation*/
+//				            neighborData.partIndex = new int[numEdges];
+//				            neighborData.partEd = new int[numEdges];
 						}
 						int edgeWeight = (int)graph.getEdgeData(higain, neighbor);
 						if (neighborData.getPartition() == from) {
