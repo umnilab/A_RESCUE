@@ -335,12 +335,12 @@ public class Balancer {
 							
 							/* ZH: For a simple but may not correct fix for the partition error */
 				            int ndegree  = neighborData.getNDegrees();
-				            if (ndegree <= numEdges) {
+				            if (ndegree + 1 <= numEdges) {
 					            neighborData.partIndex = new int[numEdges];
 					            neighborData.partEd = new int[numEdges];
 				            } else {
-				            	neighborData.partIndex = new int[ndegree];
-					            neighborData.partEd = new int[ndegree];
+				            	neighborData.partIndex = new int[ndegree + 1];
+					            neighborData.partEd = new int[ndegree + 1];
 				            }
 				            
 				            /* Following two lines are the original implementation*/

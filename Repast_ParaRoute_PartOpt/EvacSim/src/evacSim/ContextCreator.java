@@ -97,6 +97,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 			road.addVehicleToNewQueue(v);
 
 		}
+		
 
 //		// Seting display updating interval
 //		DisplayGIS.GIS_FRAME_UPDATE_INTERVAL=1000;

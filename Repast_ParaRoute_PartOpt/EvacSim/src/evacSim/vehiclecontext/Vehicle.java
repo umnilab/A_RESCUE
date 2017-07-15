@@ -1426,6 +1426,7 @@ public class Vehicle {
 		this.tempLane_ = null;
 		this.house = null;
 		this.clearShadowImpact(); // ZH: clear any remaining shadow impact
+		// TODO: try the remove method in the vehicleContext
 	}
 
 	/*
