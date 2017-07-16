@@ -119,7 +119,7 @@ public class MetisPartition {
 	}
 	
 	
-	public void run() throws NumberFormatException, ExecutionException {
+	public void run() throws NumberFormatException, ExecutionException, ArrayIndexOutOfBoundsException{
 		GaliosGraphConverter graphConverter = new GaliosGraphConverter();
 		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(false);
 		/*System.out.println("Metis Running...");
