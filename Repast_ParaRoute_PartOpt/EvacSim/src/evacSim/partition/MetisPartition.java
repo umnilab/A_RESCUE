@@ -119,7 +119,7 @@ public class MetisPartition {
 	}
 	
 	
-	public void run() throws NumberFormatException, ExecutionException, ArrayIndexOutOfBoundsException{
+	public void run() throws NumberFormatException, ExecutionException {
 		GaliosGraphConverter graphConverter = new GaliosGraphConverter();
 		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(false);
 		/*System.out.println("Metis Running...");
@@ -190,7 +190,7 @@ public class MetisPartition {
 	/**
 	 * KMetis Algorithm 
 	 */
-	public IntGraph<MetisNode> partition(MetisGraph metisGraph, int nparts) throws ExecutionException {
+	public IntGraph<MetisNode> partition(MetisGraph metisGraph, int nparts) throws ExecutionException, ArrayIndexOutOfBoundsException {
 		IntGraph<MetisNode> graph = metisGraph.getGraph();
 		// Zhan: Number of coarsen nodes
 		int coarsenTo = (int) Math.max(graph.size() / (40 * Math.log(nparts)), 20 * (nparts));
