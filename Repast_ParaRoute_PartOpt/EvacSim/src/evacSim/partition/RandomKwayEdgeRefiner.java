@@ -31,6 +31,7 @@ import galois.runtime.GaloisRuntime;
 import galois.runtime.wl.Priority;
 import galois.runtime.wl.RandomPermutation;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -237,6 +238,12 @@ public class RandomKwayEdgeRefiner {
             }
             if (i == neighborData.getNDegrees()) {
               int nd = neighborData.getNDegrees();
+			  // ZH: If the array size is changed, we need to resize it
+              if (nd >= neighborData.partIndex.length) {
+				neighborData.partIndex = Arrays.copyOf(neighborData.partIndex, nd + 1);
+				neighborData.partEd = Arrays.copyOf(neighborData.partEd, nd + 1);
+              }
+              
               neighborData.partIndex[nd] = toConst;
               neighborData.partEd[nd++] = edgeWeight;
               neighborData.setNDegrees(nd);

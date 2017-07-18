@@ -390,6 +390,12 @@ public class Balancer {
 							}
 							if (k == neighborData.getNDegrees()) {
 								int nd = neighborData.getNDegrees();
+								// ZH: If the array size is changed, we need to resize it
+								if (nd >= neighborData.partIndex.length) {
+									neighborData.partIndex = Arrays.copyOf(neighborData.partIndex, nd + 1);
+									neighborData.partEd = Arrays.copyOf(neighborData.partEd, nd + 1);
+								}
+									
 								neighborData.partIndex[nd] = to;
 								neighborData.partEd[nd++] = edgeWeight;
 								neighborData.setNDegrees(nd);
