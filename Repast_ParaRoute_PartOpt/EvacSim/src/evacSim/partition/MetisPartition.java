@@ -21,11 +21,14 @@ File: AbstractMain.java
 
 package evacSim.partition;
 
+import evacSim.ContextCreator;
+import evacSim.GlobalVariables;
 import evacSim.citycontext.Road;
 import evacSim.partition.GrowBisection.SaveNodesToArray;
 import galois.objects.graph.GNode;
 import galois.objects.graph.IntGraph;
 import galois.runtime.GaloisRuntime;
+import repast.simphony.space.gis.Geography;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,12 +43,14 @@ public class MetisPartition {
 	private ArrayList<ArrayList<Road>> PartitionedInRoads;
 	private ArrayList<Road> PartitionedBwRoads;
 	private ArrayList<Integer> PartitionWeights;
+	private int partition_duration; // how old is the current partition when next partitioning occurs
 	
 	public MetisPartition(int nparts) {
 		this.npartition = nparts;
 		this.PartitionedInRoads = new ArrayList<ArrayList<Road>>();
 		this.PartitionedBwRoads = new ArrayList<Road>();
 		this.PartitionWeights = new ArrayList<Integer>();
+		this.partition_duration = 0;
 	}
 	
 	public ArrayList<ArrayList<Road>> getPartitionedInRoads() {
@@ -116,7 +121,28 @@ public class MetisPartition {
 			totRoutingVeh += road.getFutureRoutingVehNum();
 		}
 		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+		
+		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 	}
+	
+	
+	public void check_run() throws NumberFormatException, ExecutionException {
+		if (this.partition_duration <= GlobalVariables.SIMULATION_MAX_PARTITION_REFRESH_INTERVAL){
+			/* Get the total number of vehicles in the network */
+			int TotVehNum = 0;
+			for (Road road : ContextCreator.getRoadGeography().getAllObjects()) {
+				TotVehNum += road.getVehicleNum();
+			}
+			
+			if (TotVehNum >= GlobalVariables.THRESHOLD_VEHICLE_NUMBER) {
+				this.run();
+			} else {
+				this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;;
+			}
+		} else {
+			this.run();
+		}
+	} 
 	
 	
 	public void run() throws NumberFormatException, ExecutionException {
@@ -185,6 +211,8 @@ public class MetisPartition {
 			totRoutingVeh += road.getFutureRoutingVehNum();
 		}
 		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+		
+		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 	}
 
 	/**

@@ -86,6 +86,12 @@ public class GlobalVariables {
 	
 	public static final int SIMULATION_PARTITION_REFRESH_INTERVAL = Integer
 			.valueOf(loadConfig("SIMULATION_PARTITION_REFRESH_INTERVAL"));
+	/* Maximum network partitioning interval */
+	public static final int SIMULATION_MAX_PARTITION_REFRESH_INTERVAL = Integer
+			.valueOf(loadConfig("SIMULATION_MAX_PARTITION_REFRESH_INTERVAL"));
+	/* Threshold amount of vehicles that requires more frequent network partitioning */
+	public static final int THRESHOLD_VEHICLE_NUMBER = Integer
+			.valueOf(loadConfig("THRESHOLD_VEHICLE_NUMBER"));
 	
 	/* For global variables of the adaptive network weighting */
 	public static final int PART_ALPHA = Integer

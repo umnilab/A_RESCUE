@@ -169,7 +169,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
 		ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
 		schedule.schedule(initialPartitionParams, partitioner, "first_run");
-		schedule.schedule(partitionParams, partitioner, "run");
+		schedule.schedule(partitionParams, partitioner, "check_run");
 		
 		agentID = 0;
 		
