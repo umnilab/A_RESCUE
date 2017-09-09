@@ -59,35 +59,37 @@ public class Coarsener {
   public MetisGraph coarsen(MetisGraph metisGraph) throws ExecutionException {
     boolean notFirstTime = false; // use when the graph have all weights equal
     do {
-      MetisGraph coarseMetisGraph = new MetisGraph();
-      IntGraph<MetisNode> coarser = null;
-      if (useSerial) {
-        coarser = new MorphGraph.IntGraphBuilder().backedByVector(true).directed(true).serial(true).create();
-      } else {
-        coarser = new MorphGraph.IntGraphBuilder().backedByVector(true).directed(true).create();
+      if(metisGraph.getGraph().size() >= this.coarsenTo){
+	      MetisGraph coarseMetisGraph = new MetisGraph();
+	      IntGraph<MetisNode> coarser = null;
+	      if (useSerial) {
+	        coarser = new MorphGraph.IntGraphBuilder().backedByVector(true).directed(true).serial(true).create();
+	      } else {
+	        coarser = new MorphGraph.IntGraphBuilder().backedByVector(true).directed(true).create();
+	      }
+	      coarseMetisGraph.setGraph(coarser);
+	      this.graph = metisGraph.getGraph();
+	      if (useSerial) {
+	        notFirstTime = serialMatch(notFirstTime, coarser);
+	        serialCreateCoarserGraph(coarseMetisGraph);
+	      } else {
+	        notFirstTime = parallelMatch(notFirstTime, coarser);
+	        parallelCreateCoarserGraph(coarseMetisGraph);
+	      }
+	      // assigning id to coarseGraph
+	      coarser.map(new LambdaVoid<GNode<MetisNode>>() {
+	        int id = 0;
+	
+	        @Override
+	        public void call(GNode<MetisNode> node) {
+	          node.getData().setNodeId(id++);
+	        }
+	      });
+	      coarseMetisGraph.setNumEdges(coarseMetisGraph.getNumEdges() / 2);
+	
+	      coarseMetisGraph.setFinerGraph(metisGraph);
+	      metisGraph = coarseMetisGraph;
       }
-      coarseMetisGraph.setGraph(coarser);
-      this.graph = metisGraph.getGraph();
-      if (useSerial) {
-        notFirstTime = serialMatch(notFirstTime, coarser);
-        serialCreateCoarserGraph(coarseMetisGraph);
-      } else {
-        notFirstTime = parallelMatch(notFirstTime, coarser);
-        parallelCreateCoarserGraph(coarseMetisGraph);
-      }
-      // assigning id to coarseGraph
-      coarser.map(new LambdaVoid<GNode<MetisNode>>() {
-        int id = 0;
-
-        @Override
-        public void call(GNode<MetisNode> node) {
-          node.getData().setNodeId(id++);
-        }
-      });
-      coarseMetisGraph.setNumEdges(coarseMetisGraph.getNumEdges() / 2);
-
-      coarseMetisGraph.setFinerGraph(metisGraph);
-      metisGraph = coarseMetisGraph;
     } while (isDone(metisGraph));
     return metisGraph;
   }
@@ -137,7 +139,7 @@ public class Coarsener {
     IntGraph<MetisNode> graph = metisGraph.getGraph();
     int size = graph.size();
     return size > coarsenTo && size < COARSEN_FRACTION * metisGraph.getFinerGraph().getGraph().size()
-        && metisGraph.getNumEdges() > size / 2;
+        && metisGraph.getNumEdges() > size / 2; 
   }
 
   final private MetisGraph serialCreateCoarserGraph(final MetisGraph coarseMetisGraph) {

@@ -166,11 +166,12 @@ public class ContextCreator implements ContextBuilder<Object> {
 		//schedule.schedule(agentParams, r, "printTick");
 		
 		/* Schedule Parameters for the graph partitioning */
-		ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
-		ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
-		schedule.schedule(initialPartitionParams, partitioner, "first_run");
-		schedule.schedule(partitionParams, partitioner, "check_run");
-		
+		if (GlobalVariables.MULTI_THREADING){
+			ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
+			ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
+			schedule.schedule(initialPartitionParams, partitioner, "first_run");
+			schedule.schedule(partitionParams, partitioner, "check_run");
+		}
 		agentID = 0;
 		
 		return context;
