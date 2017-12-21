@@ -40,6 +40,7 @@ import evacSim.citycontext.Lane;
 import evacSim.citycontext.Plan;
 import evacSim.citycontext.Road;
 import evacSim.citycontext.Zone;
+import evacSim.data.DataCollector;
 import evacSim.routing.RouteV;
 
 public class Vehicle {
@@ -948,6 +949,15 @@ public class Vehicle {
 				distTravelled += distToTarget;
 //				this.lock.lock();
 				vehicleGeography.move(this, targetGeom);
+				
+				try {
+				    DataCollector.getInstance().recordSnapshot(this, target);
+				}
+				catch (Throwable t) {
+				    // could not log the vehicle's new position in data buffer!
+				    DataCollector.printDebug("ERR" + t.getMessage());
+				}
+				
 //				this.lock.unlock();
 				// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
 				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
@@ -1287,6 +1297,10 @@ public class Vehicle {
 		return this.deptime;
 	}
 
+	public int getEndTime() {
+	    return this.endTime;
+	}
+	
 	public void setRoad(Road road) {
 		this.road = road;
 		this.currentSpeed_ = (float) this.road.getFreeSpeed();
@@ -2397,5 +2411,14 @@ public class Vehicle {
 		}
 		
 		vehicleGeography.move(this, geom);
+		
+		try {
+		    Coordinate geomCoord = geom.getCoordinate();
+		    DataCollector.getInstance().recordSnapshot(this, geomCoord);
+		}
+		catch (Throwable t) {
+		    // Could not record this vehicle move in the data buffer!
+		    DataCollector.printDebug("ERR", t.getMessage());
+		}
 	}
 }

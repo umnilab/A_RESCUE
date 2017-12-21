@@ -25,7 +25,7 @@ import evacSim.citycontext.*;
 import evacSim.routing.*;
 import evacSim.vehiclecontext.*;
 import evacSim.partition.*;
-
+import evacSim.data.*;
 
 public class ContextCreator implements ContextBuilder<Object> {
 
@@ -101,6 +101,9 @@ public class ContextCreator implements ContextBuilder<Object> {
 
 		}
 		
+		DataCollectionContext dataContext = new DataCollectionContext();
+		context.addSubContext(dataContext);
+		
 
 //		// Seting display updating interval
 //		DisplayGIS.GIS_FRAME_UPDATE_INTERVAL=1000;
@@ -175,6 +178,26 @@ public class ContextCreator implements ContextBuilder<Object> {
 			schedule.schedule(initialPartitionParams, partitioner, "first_run");
 			schedule.schedule(partitionParams, partitioner, "check_run");
 		}
+		
+		// schedule the data collection framework tasks to mark the start
+				// and stop of the model and the start and stop of each sim tick
+				
+			    // TODO: figure out the double value for the tick duration
+		        double tickDuration = 1.0d;
+				
+				ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(0.0, ScheduleParameters.FIRST_PRIORITY);
+				schedule.schedule(dataStartParams, dataContext, "startCollecting");
+				
+				ScheduleParameters dataEndParams = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);
+				schedule.schedule(dataEndParams, dataContext, "stopCollecting");
+				
+				ScheduleParameters tickStartParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.FIRST_PRIORITY);
+				schedule.schedule(tickStartParams, dataContext, "startTick");
+				
+				ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
+				schedule.schedule(tickEndParams, dataContext, "stopTick");
+		
+		
 		agentID = 0;
 		
 		return context;
@@ -265,6 +288,10 @@ public class ContextCreator implements ContextBuilder<Object> {
 	public static Geography<Zone> getZoneGeography() {
 		return (Geography<Zone>) ContextCreator.getZoneContext().getProjection(
 				"ZoneGeography");
+	}
+	
+	public static DataCollectionContext getDataCollectionContext() {
+	    return (DataCollectionContext) mainContext.findContext("DataCollectionContext");
 	}
 	
 	public static double convertToMeters(double dist) {

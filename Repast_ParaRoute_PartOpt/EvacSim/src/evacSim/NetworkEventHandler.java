@@ -14,6 +14,7 @@ import repast.simphony.space.gis.Geography;
 import au.com.bytecode.opencsv.CSVReader;
 import evacSim.citycontext.CityContext;
 import evacSim.citycontext.Road;
+import evacSim.network.ConnectionManager;
 
 /* Author: Xianyuan Zhan and Hemant Gehlot
  * Schedules and handles the supplyside Events to be executed
@@ -27,6 +28,10 @@ public class NetworkEventHandler {
 	// We use a treeMap and use the end time as the key
 	// TreeMap usage see: https://docs.oracle.com/javase/7/docs/api/java/util/TreeMap.html
 	private TreeMap<Integer, ArrayList<NetworkEventObject>> runningQueue;
+	
+	// Connection manager maintains the socket server for remote programs
+	private static final ConnectionManager manager = ConnectionManager.getInstance();
+	
 	
 	// Constructor: initialize everything
 	public NetworkEventHandler() {
