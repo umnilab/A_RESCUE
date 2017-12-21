@@ -73,6 +73,9 @@ public class GlobalVariables {
 	public static final String EVENT_FILE = loadConfig("EVENT_FILE");
 	public static final int EVENT_CHECK_FREQUENCY = Integer.valueOf(loadConfig("EVENT_CHECK_FREQUENCY"));
 	
+	//path for background traffic event file by Wenbo
+	public static final String BT_EVENT_FILE=loadConfig("BT_EVENT_FILE");
+	
 	/* Simulation Setup */
 	public static final Random RandomGenerator = new Random(123456777); // 123456777
 																		// generate

@@ -47,6 +47,9 @@ public class ContextCreator implements ContextBuilder<Object> {
 	// Create the event handler object
 	public static NetworkEventHandler eventHandler = new NetworkEventHandler();
 	
+	//Hemant, Wenbo: Reading background traffic file into treemap
+	public static BackgroundTraffic backgroundtraffic = new BackgroundTraffic();
+	
 //	// Create a global lock to enforce concurrency
 //	public static ReentrantLock lock = new ReentrantLock();
 	

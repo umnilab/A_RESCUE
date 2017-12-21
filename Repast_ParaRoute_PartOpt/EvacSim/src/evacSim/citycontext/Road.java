@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -50,30 +51,7 @@ public class Road {
 	
 	private TreeMap<Double, ArrayList<Vehicle>> newqueue;
 	
-	private double freeflowSpeed01_;
-	private double freeflowSpeed02_;
-	private double freeflowSpeed03_;
-	private double freeflowSpeed04_;
-	private double freeflowSpeed05_;
-	private double freeflowSpeed06_;
-	private double freeflowSpeed07_;
-	private double freeflowSpeed08_;
-	private double freeflowSpeed09_;
-	private double freeflowSpeed10_;
-	private double freeflowSpeed11_;
-	private double freeflowSpeed12_;
-	private double freeflowSpeed13_;
-	private double freeflowSpeed14_;
-	private double freeflowSpeed15_;
-	private double freeflowSpeed16_;
-	private double freeflowSpeed17_;
-	private double freeflowSpeed18_;
-	private double freeflowSpeed19_;
-	private double freeflowSpeed20_;
-	private double freeflowSpeed21_;
-	private double freeflowSpeed22_;
-	private double freeflowSpeed23_;
-	private double freeflowSpeed24_;
+
 	private ArrayList<Double> speedProfile;
 	
 	private Vehicle lastVehicle_;
@@ -262,228 +240,10 @@ public class Road {
 		return this.freeSpeed_;
 	}
 	
-	public void setFreefl01(double freefl01) {
-		this.freeflowSpeed01_ = freefl01;
-	}
 
-	public double getFreefl01() {
-		return this.freeflowSpeed01_;
-	}
 
-	public void setFreefl02(double freefl02) {
-		this.freeflowSpeed02_ = freefl02;
-	}
+	
 
-	public double getFreefl02() {
-		return this.freeflowSpeed02_;
-	}
-
-	public void setFreefl03(double freefl03) {
-		this.freeflowSpeed03_ = freefl03;
-	}
-
-	public double getFreefl03() {
-		return this.freeflowSpeed03_;
-	}
-
-	public void setFreefl04(double freefl04) {
-		this.freeflowSpeed04_ = freefl04;
-	}
-
-	public double getFreefl04() {
-		return this.freeflowSpeed04_;
-	}
-
-	public void setFreefl05(double freefl05) {
-		this.freeflowSpeed05_ = freefl05;
-	}
-
-	public double getFreefl05() {
-		return this.freeflowSpeed05_;
-	}
-
-	public void setFreefl06(double freefl06) {
-		this.freeflowSpeed06_ = freefl06;
-	}
-
-	public double getFreefl06() {
-		return this.freeflowSpeed06_;
-	}
-
-	public void setFreefl07(double freefl07) {
-		this.freeflowSpeed07_ = freefl07;
-	}
-
-	public double getFreefl07() {
-		return this.freeflowSpeed07_;
-	}
-
-	public void setFreefl08(double freefl08) {
-		this.freeflowSpeed08_ = freefl08;
-	}
-
-	public double getFreefl08() {
-		return this.freeflowSpeed08_;
-	}
-
-	public void setFreefl09(double freefl09) {
-		this.freeflowSpeed09_ = freefl09;
-	}
-
-	public double getFreefl09() {
-		return this.freeflowSpeed09_;
-	}
-
-	public void setFreefl10(double freefl10) {
-		this.freeflowSpeed10_ = freefl10;
-	}
-
-	public double getFreefl10() {
-		return this.freeflowSpeed10_;
-	}
-
-	public void setFreefl11(double freefl11) {
-		this.freeflowSpeed11_ = freefl11;
-	}
-
-	public double getFreefl11() {
-		return this.freeflowSpeed11_;
-	}
-
-	public void setFreefl12(double freefl12) {
-		this.freeflowSpeed12_ = freefl12;
-	}
-
-	public double getFreefl12() {
-		return this.freeflowSpeed12_;
-	}
-
-	public void setFreefl13(double freefl13) {
-		this.freeflowSpeed13_ = freefl13;
-	}
-
-	public double getFreefl13() {
-		return this.freeflowSpeed13_;
-	}
-
-	public void setFreefl14(double freefl14) {
-		this.freeflowSpeed14_ = freefl14;
-	}
-
-	public double getFreefl14() {
-		return this.freeflowSpeed14_;
-	}
-
-	public void setFreefl15(double freefl15) {
-		this.freeflowSpeed15_ = freefl15;
-	}
-
-	public double getFreefl15() {
-		return this.freeflowSpeed15_;
-	}
-
-	public void setFreefl16(double freefl16) {
-		this.freeflowSpeed16_ = freefl16;
-	}
-
-	public double getFreefl16() {
-		return this.freeflowSpeed16_;
-	}
-
-	public void setFreefl17(double freefl17) {
-		this.freeflowSpeed17_ = freefl17;
-	}
-
-	public double getFreefl17() {
-		return this.freeflowSpeed17_;
-	}
-
-	public void setFreefl18(double freefl18) {
-		this.freeflowSpeed18_ = freefl18;
-	}
-
-	public double getFreefl18() {
-		return this.freeflowSpeed18_;
-	}
-
-	public void setFreefl19(double freefl19) {
-		this.freeflowSpeed19_ = freefl19;
-	}
-
-	public double getFreefl19() {
-		return this.freeflowSpeed19_;
-	}
-
-	public void setFreefl20(double freefl20) {
-		this.freeflowSpeed20_ = freefl20;
-	}
-
-	public double getFreefl20() {
-		return this.freeflowSpeed20_;
-	}
-
-	public void setFreefl21(double freefl21) {
-		this.freeflowSpeed21_ = freefl21;
-	}
-
-	public double getFreefl21() {
-		return this.freeflowSpeed21_;
-	}
-
-	public void setFreefl22(double freefl22) {
-		this.freeflowSpeed22_ = freefl22;
-	}
-
-	public double getFreefl22() {
-		return this.freeflowSpeed22_;
-	}
-
-	public void setFreefl23(double freefl23) {
-		this.freeflowSpeed23_ = freefl23;
-	}
-
-	public double getFreefl23() {
-		return this.freeflowSpeed23_;
-	}
-
-	public void setFreefl24(double freefl24) {
-		this.freeflowSpeed24_ = freefl24;
-	}
-
-	public double getFreefl24() {
-		return this.freeflowSpeed24_;
-	}
-
-	public void setSpeedProfile() {
-		this.speedProfile.add(this.getFreefl24());
-		this.speedProfile.add(this.getFreefl01());
-		this.speedProfile.add(this.getFreefl02());
-		this.speedProfile.add(this.getFreefl03());
-		this.speedProfile.add(this.getFreefl04());
-		this.speedProfile.add(this.getFreefl05());
-		this.speedProfile.add(this.getFreefl06());
-		this.speedProfile.add(this.getFreefl07());
-		this.speedProfile.add(this.getFreefl08());
-		this.speedProfile.add(this.getFreefl09());
-		this.speedProfile.add(this.getFreefl10());
-		this.speedProfile.add(this.getFreefl11());
-		this.speedProfile.add(this.getFreefl12());
-		this.speedProfile.add(this.getFreefl13());
-		this.speedProfile.add(this.getFreefl14());
-		this.speedProfile.add(this.getFreefl15());
-		this.speedProfile.add(this.getFreefl16());
-		this.speedProfile.add(this.getFreefl17());
-		this.speedProfile.add(this.getFreefl18());
-		this.speedProfile.add(this.getFreefl19());
-		this.speedProfile.add(this.getFreefl20());
-		this.speedProfile.add(this.getFreefl21());
-		this.speedProfile.add(this.getFreefl22());
-		this.speedProfile.add(this.getFreefl23());
-	}
-
-	public ArrayList<Double> getSpeedProfile() {
-		return this.speedProfile;
-	}
 
 	public void sortLanes() {
 		Collections.sort(this.lanes, new LaneComparator());
@@ -1034,29 +794,59 @@ public class Road {
 	
 	
 	/* This one uses the predefined free flow speed for each hour */
-	public void updateFreeFlowSpeed_old() {
-		int tickcount = (int) RepastEssentials.GetTickCount();
+	//public void updateFreeFlowSpeed_old() {
+	//int tickcount = (int) RepastEssentials.GetTickCount();
 		
 		/*
 		 * To integrate speed profile
 		 */
 		// double simtime = tickcount*GlobalVariables.SIMULATION_STEP_SIZE;
+	//int hour = (int) Math.floor(tickcount
+	//		* GlobalVariables.SIMULATION_STEP_SIZE / 3600);
+	//hour = hour % 24;
+	//if (hour == 0 && curhour > hour)
+	//	this.curhour = -1;
+	//if (curhour < hour) {
+		// get the free flow speed in m/s unit.b
+	//		this.freeSpeed_ = this.getSpeedProfile().get(hour) * 0.44704f; 
+	//	this.curhour = hour;
+	//}
+	//}
+	
+	/* Wenbo: update bakcground traffic through speed file. if road event flag is true, just pass to default free speed, else, update link free flow speed */
+	public void updateFreeFlowSpeed() {
+		
+		// Get current tick
+		int tickcount = (int) RepastEssentials.GetTickCount();
+		// double sim_time = tickcount*GlobalVariables.SIMULATION_STEP_SIZE;
 		int hour = (int) Math.floor(tickcount
 				* GlobalVariables.SIMULATION_STEP_SIZE / 3600);
 		hour = hour % 24;
-		if (hour == 0 && curhour > hour)
-			this.curhour = -1;
-		if (curhour < hour) {
-			// get the free flow speed in m/s unit.b
-			this.freeSpeed_ = this.getSpeedProfile().get(hour) * 0.44704f; 
-			this.curhour = hour;
+		//each hour set events
+		if (this.curhour<hour) {
+			double value=BackgroundTraffic.backgroundTraffic.get(this.linkid).get(hour);
+				  this.freeSpeed_=value;
+                  if (this.checkEventFlag()) {
+						this.setDefaultFreeSpeed();			
+					}
+			   }
+		   
+			
+		//for (int i=0; i<backgroundtraffic.backgroundTraffic.size();i++) {
+			//BackgroundTrafficObject e = backgroundtraffic.backgroundTraffic.get(i);
+			//if (this.linkid == e.roadID) {
+				// Found the road, and we do the change
+				//if (!this.checkEventFlag()) {
+					//this.freeSpeed_=e.value.get(hour);
+				//} else {
+					//this.setDefaultBackgroundSpeed(e.value.get(hour));			
+						//}
+				//}
+		//}
+		this.curhour=hour;
 		}
-	}
-	
-	/* This one uses the shapefile provided free flow speed for the entire simulation */
-	public void updateFreeFlowSpeed() {
-		// We just need to do nothing
-	}
+		
+
 	
 	/* Modify the free flow speed based on the events */
 	public void updateFreeFlowSpeed_event(double newFFSpd) {
