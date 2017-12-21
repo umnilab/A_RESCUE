@@ -169,7 +169,7 @@ public class CityContext extends DefaultContext<Object> {
 			// r.sortLanes();
 			roadMovementFromShapeFile(r);
 			laneConnectionsFromShapeFile(r);
-			r.setSpeedProfile();
+			//r.setSpeedProfile();
 		}
 	}
 

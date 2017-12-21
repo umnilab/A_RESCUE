@@ -52,7 +52,7 @@ public class Road {
 	private TreeMap<Double, ArrayList<Vehicle>> newqueue;
 	
 
-	private ArrayList<Double> speedProfile;
+	//private ArrayList<Double> speedProfile;
 	
 	private Vehicle lastVehicle_;
 	private Vehicle firstVehicle_;
@@ -73,7 +73,7 @@ public class Road {
 		this.downStreamMovements = new ArrayList<Road>();
 		this.oppositeRoad = null;
 		this.newqueue = new TreeMap<Double, ArrayList<Vehicle>>();
-		this.speedProfile = new ArrayList<Double>();
+//		this.speedProfile = new ArrayList<Double>();
 		this.identifier = " ";
 		this.curhour = -1;
 		this.travelTime = (float) this.length / this.freeSpeed_;
