@@ -185,18 +185,19 @@ public class ContextCreator implements ContextBuilder<Object> {
 			    // TODO: figure out the double value for the tick duration
 		        double tickDuration = 1.0d;
 				
-				ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(0.0, ScheduleParameters.FIRST_PRIORITY);
-				schedule.schedule(dataStartParams, dataContext, "startCollecting");
-				
-				ScheduleParameters dataEndParams = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);
-				schedule.schedule(dataEndParams, dataContext, "stopCollecting");
-				
-				ScheduleParameters tickStartParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.FIRST_PRIORITY);
-				schedule.schedule(tickStartParams, dataContext, "startTick");
-				
-				ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
-				schedule.schedule(tickEndParams, dataContext, "stopTick");
-		
+	     if(GlobalVariables.ENABLE_DATA_COLLECTION){
+			ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(0.0, ScheduleParameters.FIRST_PRIORITY);
+			schedule.schedule(dataStartParams, dataContext, "startCollecting");
+			
+			ScheduleParameters dataEndParams = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);
+			schedule.schedule(dataEndParams, dataContext, "stopCollecting");
+			
+			ScheduleParameters tickStartParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.FIRST_PRIORITY);
+			schedule.schedule(tickStartParams, dataContext, "startTick");
+			
+			ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
+			schedule.schedule(tickEndParams, dataContext, "stopTick");
+	     }
 		
 		agentID = 0;
 		
@@ -219,6 +220,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 	public static void end() {
 		System.out.println("Finished sim: "
 				+ (System.currentTimeMillis() - startTime));
+		System.out.println("Finished data collection: "
+				+ (GlobalVariables.datacollection_total));
 	}
 
 	public static void start() {

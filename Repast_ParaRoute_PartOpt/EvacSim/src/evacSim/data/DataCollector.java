@@ -125,6 +125,7 @@ public class DataCollector {
     public void startDataCollection() {
         DataCollector.printDebug("CTRL", "START COLLECTION");
         
+        
         // are we resuming a previously paused collection?
         if (!this.collecting && this.paused) {
             this.resumeDataCollection();
@@ -236,6 +237,10 @@ public class DataCollector {
      * @param tickNumber the number of the time step of the simulation tick.
      */
     public void startTickCollection(double tickNumber) {
+    	
+    	GlobalVariables.datacollection_start = System.currentTimeMillis();
+        
+    	
         if ((int)tickNumber % 100 == 0) {
             // print a periodic heart-beat debug statement from data buffer
             String message = "TICK " + tickNumber + 
@@ -250,6 +255,8 @@ public class DataCollector {
         
         // create the tick snapshot object
         this.currentSnapshot = new TickSnapshot(tickNumber);
+        
+        GlobalVariables.datacollection_total+= System.currentTimeMillis() - GlobalVariables.datacollection_start;
     }
     
     

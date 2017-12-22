@@ -242,6 +242,8 @@ private static Properties config;
 	 * NETWORK_STATUS_REFRESH is how often those status message send.  It is set to 5 seconds. NETWORK_LISTEN_PORT is the port number to use when connecting to the simulation.  As I mentioned last week, the default is 8080 but that is a very commonly used port by web servers which may already be in use or blocked by a firewall.  I’ve set it for now as 33131, which is a reference to Miami (the zipcode of the downtown area).  You can change this to any value higher than 1024 and lower than 65535.NETWORK_MAX_MESSAGE_SIZE is the size (in bytes) of the largest message to be sent over the socket.  Sockets technically have no size limitation, but some of the socket libraries have a very low default limit on what they will accept if you do not explicitly set this value.  I set it to 16MB which is multiple magnitudes higher than any sizes I’ve seen during testing, but we may need to increase it in the future if the number of vehicle movements in one tick gets very larger.The remaining three values pertain to the CSV file location.  The CSV file writer allows you to specify exactly where the file is to be placed on disk if we add a UI element to handle that or just code in a fixed location.  If you do not give it a location, though, it will do what it is doing now:  write a file with a unique filename to a default location.  It will be written to the location <CSV_DEFAULT_PATH>/<CSV_DEFAULT_FILENAME>_<current timestamp>.<CSV_DEFAULT_EXTENSION>.  If the CSV_DEFAULT_PATH value is blank (as I’ve committed it), the user’s home directory will be used.  So, as it is committed right now, every time the simulation is run, it will create something like “EvacSimOutput_2017-11-29-0255.csv” in your home directory.*/
 	
 	// Parameters for the data collection buffer
+	public static final boolean ENABLE_DATA_COLLECTION = 
+			Boolean.valueOf(loadConfig("ENABLE_DATA_COLLECTION"));
 	public static final boolean DEBUG_DATA_BUFFER =
 	        Boolean.valueOf(loadConfig("DEBUG_DATA_BUFFER"));
 	public static final int DATA_CLEANUP_REFRESH =
@@ -272,5 +274,9 @@ private static Properties config;
 	        Integer.valueOf(loadConfig("NETWORK_LISTEN_PORT"));
 	public static final int NETWORK_MAX_MESSAGE_SIZE =
 	        Integer.valueOf(loadConfig("NETWORK_MAX_MESSAGE_SIZE"));
+	
+	public static double datacollection_start = 0.0;
+	public static double datacollection_total = 0.0;
+	
 	
 }
