@@ -47,6 +47,12 @@ public class CsvOutputWriter implements DataConsumer {
     /** The writer which streams prepared CSV content to the output file. */
     private BufferedWriter writer;
     
+    /** The number of lines written to the current CSV file. */
+    private int linesWritten;
+    
+    /** The number in the output series for the current CSV file.  */
+    private int fileSeriesNumber;
+    
     /** The thread which periodically reads the buffer for data to process. */
     private Thread writingThread;
     
@@ -97,6 +103,8 @@ public class CsvOutputWriter implements DataConsumer {
         this.currentTick = -1.0;
         this.writer = null;
         this.writingThread = null;
+        this.fileSeriesNumber = 1;
+        this.linesWritten = 0;
         
         DataCollector.printDebug("CSV", "FILE: " + this.file.getAbsolutePath());
     }
@@ -147,6 +155,8 @@ public class CsvOutputWriter implements DataConsumer {
 
         // set the output file to the one given 
         this.file = file;
+        this.fileSeriesNumber = 1;
+        this.linesWritten = 0;
         
         // check if we are now to use a default filename or not 
         if (this.file == null) {
@@ -490,6 +500,70 @@ public class CsvOutputWriter implements DataConsumer {
     
     
     /**
+     * Closes the current output file and opens the next in the series of 
+     * output files for this simulation execution.  The filename will be the 
+     * same with the increment of the series counter.
+     * 
+     * @throws IOException if the new file could not be created and opened.
+     */
+    private void startNextOutputFile() throws IOException {
+        if (this.file == null ) {
+            // there is no file currently open to increment!
+            // TODO: figure out how to deal with this situation...
+            return;
+        }
+        
+        // determine the current filename being written
+        String filename = this.file.getName();
+        if (filename == null || filename.trim().length() < 1) {
+            // the filename is null (is this even possible?) or is just
+            // whitespace with no valid characters!
+            return;
+        }
+        
+        // if we are using default filenames, we know for certain the format
+        // of the series.  it should end ".1.csv", ".2.csv", etc.  we can
+        // easily create the next in the series this way.  if not, we will
+        // have to do a little extra checking to setup the next file.
+        String currentEnd = "." + this.fileSeriesNumber + "." + 
+                            GlobalVariables.CSV_DEFAULT_FILENAME;
+        String nextEnd = "." + (this.fileSeriesNumber + 1) + "." +
+                         GlobalVariables.CSV_DEFAULT_EXTENSION;
+        
+        String newFilename = filename;
+        if (newFilename.endsWith(currentEnd)) {
+            // the user is using a standard format filename so easy to update
+            newFilename = newFilename.replaceAll(currentEnd + "$", nextEnd);
+        }
+        else {
+            // the user is using a custom filename format so we need to
+            // do a little extra work to create the next filename...
+            String extEnd = "." + GlobalVariables.CSV_DEFAULT_EXTENSION;
+            if (newFilename.endsWith(extEnd)) {
+                newFilename = newFilename.replaceAll(extEnd + "$", nextEnd);
+            }
+            else {
+                // TODO: continue checking for other filename variants?
+            }
+        }
+        
+        // create the next filename in this output file series
+        File nextFile = new File(this.file.getParent(), newFilename);
+        
+        // close out the current output file
+        this.closeOutputFileWriter();
+        
+        // open the new output file for writing
+        this.file = nextFile;
+        FileWriter fw = new FileWriter(this.file);
+        this.writer = new BufferedWriter(fw);
+        
+        // finally, having successfully moved to the next file, update counter
+        this.fileSeriesNumber++;
+    }
+    
+    
+    /**
      * Writes the given tick snapshot to the output file after converting
      * it to a series of CSV lines.  The buffered writer is flushed at the
      * end so any cached content is immediately written out to disk.
@@ -514,6 +588,13 @@ public class CsvOutputWriter implements DataConsumer {
             throw new IOException("The CSV file is not open for writing.");
         }
         
+        // check if writing these lines will go over our output file limit
+        // and create the next output file in the series if necessary
+        if ((this.linesWritten + lines.length) > GlobalVariables.CSV_LINE_LIMIT) {
+            this.startNextOutputFile();
+            this.linesWritten = 0;
+        }
+        
         // write the lines to disk (including newlines)
         for (String line : lines) {
             if (line == null) {
@@ -523,6 +604,7 @@ public class CsvOutputWriter implements DataConsumer {
             this.writer.write(line);
             this.writer.newLine();
         }
+        this.linesWritten += lines.length;
         
         // flush all of our changes now so nothing waits cached in memory
         this.writer.flush();
@@ -628,8 +710,8 @@ public class CsvOutputWriter implements DataConsumer {
         String timestamp = formatter.format(new Date());
         
         // build the filename
-        String filename = defaultFilename + "_" + timestamp + "." +
-                          defaultExtension;
+        String filename = defaultFilename + "_" + timestamp + 
+                          ".1." + defaultExtension;
         
         // get the default directory for placing the file
         String defaultDir = GlobalVariables.CSV_DEFAULT_PATH;
@@ -656,7 +738,7 @@ public class CsvOutputWriter implements DataConsumer {
             // a bit of randomization and just hope that is good enough.
             int hashCode = System.identityHashCode(filename);
             filename = defaultFilename + "_" + timestamp + "_" +
-                       hashCode + "." + defaultExtension;
+                       hashCode + ".1." + defaultExtension;
             outpath = defaultDir + File.pathSeparator + filename;
             outfile = new File(outpath);
         }
@@ -672,7 +754,7 @@ public class CsvOutputWriter implements DataConsumer {
             // so we will have to fall back on saving this in the temp dir
             try {
                 outfile = 
-                    File.createTempFile(defaultFilename, defaultExtension);
+                    File.createTempFile(filename, defaultExtension);
             }
             catch (IOException ioe2) {
                 // our default filename failed, and now our temp file failed.

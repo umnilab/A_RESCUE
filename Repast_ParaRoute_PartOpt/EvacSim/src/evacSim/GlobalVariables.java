@@ -260,6 +260,8 @@ private static Properties config;
 	        loadConfig("CSV_DEFAULT_PATH");
 	public static final int CSV_BUFFER_REFRESH =
 	        Integer.valueOf(loadConfig("CSV_BUFFER_REFRESH"));
+	public static final int CSV_LINE_LIMIT =
+	        Integer.valueOf(loadConfig("CSV_LINE_LIMIT"));
 	
 	// Parameters for handling network connections to remote programs
 	public static final boolean DEBUG_NETWORK =
