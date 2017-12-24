@@ -684,7 +684,7 @@ public class Vehicle {
 			}
 		} else {
 			if (this.distFraction() > 0.75) {
-				// First 25% in the road, do discretionary LC with 50% chance
+				// First 25% in the road, do discretionary LC with 100% chance
 				double laneChangeProb1 = GlobalVariables.RandomGenerator
 						.nextDouble();
 				// The vehicle is at beginning of the lane, it is free to change lane
