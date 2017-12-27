@@ -168,7 +168,7 @@ public class Road {
 						break;
 					} else {
 						if (v.getMoveVehicleFlag()) {
-							double maxMove = GlobalVariables.FREE_SPEED
+							double maxMove = this.freeSpeed_
 									* GlobalVariables.SIMULATION_STEP_SIZE;
 							// double maxMove =
 							// v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE;
@@ -234,15 +234,7 @@ public class Road {
 	
 	public void setFreeflowsp(double freeflowsp) {
 		this.freeSpeed_ = freeflowsp * 0.44704f;
-	}
-	
-	public double getFreeflowsp() {
-		return this.freeSpeed_;
-	}
-	
-
-
-	
+	}	
 
 
 	public void sortLanes() {
