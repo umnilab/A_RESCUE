@@ -952,9 +952,9 @@ public class Vehicle {
 				
 				try {
 					//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach destination
-					if(this.nextRoad() == null){
+//					if(this.nextRoad() == null){
 						DataCollector.getInstance().recordSnapshot(this, target);
-					}
+//					}
 				}
 				catch (Throwable t) {
 				    // could not log the vehicle's new position in data buffer!
@@ -2418,9 +2418,9 @@ public class Vehicle {
 		try {
 		    Coordinate geomCoord = geom.getCoordinate();
 		  //HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach destination
-		    if(this.nextRoad() == null){
+//		    if(this.nextRoad() == null){
 		    	DataCollector.getInstance().recordSnapshot(this, geomCoord);
-		    }
+//		    }
 		}
 		catch (Throwable t) {
 		    // Could not record this vehicle move in the data buffer!
