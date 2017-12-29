@@ -98,7 +98,6 @@ public class ContextCreator implements ContextBuilder<Object> {
 					.getCoordinate();
 			Road road = cityContext.findRoadAtCoordinates(currentCoord, false); 
 			road.addVehicleToNewQueue(v);
-
 		}
 		
 		DataCollectionContext dataContext = new DataCollectionContext();
@@ -220,8 +219,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 	public static void end() {
 		System.out.println("Finished sim: "
 				+ (System.currentTimeMillis() - startTime));
-		System.out.println("Finished data collection: "
-				+ (GlobalVariables.datacollection_total));
+//		System.out.println("Finished data collection: "
+//				+ (GlobalVariables.datacollection_total));
 	}
 
 	public static void start() {

@@ -473,6 +473,7 @@ public class Vehicle {
 
 	public void calcState() {
 		double time = System.currentTimeMillis();
+			
 		// SH-- right now there is only one function we may also invoke lane
 		// changing decision here
 		// SHinvoke accelerating decision
@@ -792,6 +793,10 @@ public class Vehicle {
 	}
 
 	public void move() {
+		//HG:update current speed based on freeflow speed
+//		if(this.currentSpeed_ > this.road.getFreeSpeed())
+//			this.currentSpeed_ = (float) this.road.getFreeSpeed();
+
 		Coordinate currentCoord = null;
 		Coordinate target = null;
 		float dx = 0;
@@ -952,9 +957,9 @@ public class Vehicle {
 				
 				try {
 					//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach destination
-//					if(this.nextRoad() == null){
+					if(this.nextRoad() == null){
 						DataCollector.getInstance().recordSnapshot(this, target);
-//					}
+					}
 				}
 				catch (Throwable t) {
 				    // could not log the vehicle's new position in data buffer!
@@ -1184,6 +1189,8 @@ public class Vehicle {
 					this.assignNextLane();
 					// Reset the desired speed according to the new road
 					this.desiredSpeed_ = (float) (this.road.getFreeSpeed());
+					if(this.currentSpeed_ > (float) (this.road.getFreeSpeed())) //HG: need to update current speed according to the new free speed
+						this.currentSpeed_ = (float) (this.road.getFreeSpeed());
 					return 1;
 				}
 			}
@@ -2418,9 +2425,9 @@ public class Vehicle {
 		try {
 		    Coordinate geomCoord = geom.getCoordinate();
 		  //HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach destination
-//		    if(this.nextRoad() == null){
+		    if(this.nextRoad() == null){
 		    	DataCollector.getInstance().recordSnapshot(this, geomCoord);
-//		    }
+		    }
 		}
 		catch (Throwable t) {
 		    // Could not record this vehicle move in the data buffer!

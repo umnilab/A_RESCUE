@@ -137,8 +137,8 @@ private static Properties config;
 	// Load the number of partitions from the config file
 	public static final int N_Partition = Integer.valueOf(loadConfig("N_THREADS"));
 
-	public static final float FREE_SPEED = Float
-			.valueOf(loadConfig("FREE_SPEED"));
+//	public static final float FREE_SPEED = Float
+//			.valueOf(loadConfig("FREE_SPEED"));
 
 	public static final float MAX_ACCELERATION = Float
 			.valueOf(loadConfig("MAX_ACCELERATION")); // meter/sec2

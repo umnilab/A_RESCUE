@@ -232,9 +232,9 @@ public class Road {
 		return this.oppositeRoad;
 	}
 	
-	public void setFreeflowsp(double freeflowsp) {
-		this.freeSpeed_ = freeflowsp * 0.44704f;
-	}	
+//	public void setFreeflowsp(double freeflowsp) {
+//		this.freeSpeed_ = freeflowsp * 0.44704;
+//	}	
 
 
 	public void sortLanes() {
@@ -602,26 +602,26 @@ public class Road {
 		return this.freeSpeed_;
 	}
 
-	public double calcSpeed_old() {
-		if (nVehicles_ <= 0)
-			return speed_ = (float) freeSpeed_;
-		float sum = 0.0f;
-		/*
-		 * for (Vehicle v : this.vehicles) { if (v.currentSpeed() >
-		 * GlobalVariables.SPEED_EPSILON) { sum += 1.0 / v.currentSpeed(); }
-		 * else { sum += 1.0 / GlobalVariables.SPEED_EPSILON; } }
-		 */
-		Vehicle pv = this.firstVehicle();
-		while (pv != null) {
-			if (pv.currentSpeed() > GlobalVariables.SPEED_EPSILON) {
-				sum += 1.0 / pv.currentSpeed();
-			} else {
-				sum += 1.0 / GlobalVariables.SPEED_EPSILON;
-			}
-			pv = pv.macroTrailing();
-		}
-		return speed_ = nVehicles_ / sum;
-	}
+//	public double calcSpeed_old() {
+//		if (nVehicles_ <= 0)
+//			return speed_ = (float) freeSpeed_;
+//		float sum = 0.0f;
+//		/*
+//		 * for (Vehicle v : this.vehicles) { if (v.currentSpeed() >
+//		 * GlobalVariables.SPEED_EPSILON) { sum += 1.0 / v.currentSpeed(); }
+//		 * else { sum += 1.0 / GlobalVariables.SPEED_EPSILON; } }
+//		 */
+//		Vehicle pv = this.firstVehicle();
+//		while (pv != null) {
+//			if (pv.currentSpeed() > GlobalVariables.SPEED_EPSILON) {
+//				sum += 1.0 / pv.currentSpeed();
+//			} else {
+//				sum += 1.0 / GlobalVariables.SPEED_EPSILON;
+//			}
+//			pv = pv.macroTrailing();
+//		}
+//		return speed_ = nVehicles_ / sum;
+//	}
 
 	public float calcSpeed() {
 		if (nVehicles_ <= 0)
@@ -816,10 +816,13 @@ public class Road {
 		hour = hour % 24;
 		//each hour set events
 		if (this.curhour<hour) {
-			double value=BackgroundTraffic.backgroundTraffic.get(this.linkid).get(hour);
-				  this.freeSpeed_=value;
+			double value=BackgroundTraffic.backgroundTraffic.get(this.linkid).get(hour)* 0.44704; //HG: convert from Miles per hour to meter per second
+				  
                   if (this.checkEventFlag()) {
 						this.setDefaultFreeSpeed();			
+					}
+                  else{
+                	  this.freeSpeed_=value;
 					}
 			   }
 		   
@@ -842,7 +845,7 @@ public class Road {
 	
 	/* Modify the free flow speed based on the events */
 	public void updateFreeFlowSpeed_event(double newFFSpd) {
-		this.freeSpeed_ = newFFSpd;
+		this.freeSpeed_ = newFFSpd* 0.44704; //HG: convert from Miles per hour to meter per second
 	}
 	
 	public void printTick(){
