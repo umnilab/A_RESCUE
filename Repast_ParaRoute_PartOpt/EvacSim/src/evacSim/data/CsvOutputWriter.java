@@ -526,7 +526,7 @@ public class CsvOutputWriter implements DataConsumer {
         // easily create the next in the series this way.  if not, we will
         // have to do a little extra checking to setup the next file.
         String currentEnd = "." + this.fileSeriesNumber + "." + 
-                            GlobalVariables.CSV_DEFAULT_FILENAME;
+                            GlobalVariables.CSV_DEFAULT_EXTENSION;
         String nextEnd = "." + (this.fileSeriesNumber + 1) + "." +
                          GlobalVariables.CSV_DEFAULT_EXTENSION;
         
