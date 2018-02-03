@@ -23,7 +23,6 @@ import evacSim.network.ConnectionManager;
 public class NetworkEventHandler {
 	// Queue that store unhappened events
 	// Queue operations see https://docs.oracle.com/javase/7/docs/api/java/util/Queue.html
-	private Queue<NetworkEventObject> newEventQueue;
 	// A sorted list storing the running events, sorted following the order of the end time
 	// We use a treeMap and use the end time as the key
 	// TreeMap usage see: https://docs.oracle.com/javase/7/docs/api/java/util/TreeMap.html
@@ -35,7 +34,6 @@ public class NetworkEventHandler {
 	
 	// Constructor: initialize everything
 	public NetworkEventHandler() {
-		newEventQueue = new LinkedList<NetworkEventObject>();
 		runningQueue = new TreeMap<Integer, ArrayList<NetworkEventObject>>();
 		readEventFile();
 	}
@@ -80,7 +78,7 @@ public class NetworkEventHandler {
 					//System.out.println("starttime = "+startTime+ "endtime ="+endTime+"eventID = " + eventID+"roadID = "+ roadID+"value1 =" + value1+ "value2 =" + value2);
 					
 					NetworkEventObject EventObject = new NetworkEventObject(startTime, endTime, eventID, roadID, value1, value2); 
-					this.newEventQueue.add(EventObject);
+					GlobalVariables.newEventQueue.add(EventObject);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -104,7 +102,7 @@ public class NetworkEventHandler {
 	public void checkNewEvents(int tickcount) {
 		boolean flag = true; // identify last usable event
 		while (flag) {
-			NetworkEventObject e = this.newEventQueue.peek();
+			NetworkEventObject e = GlobalVariables.newEventQueue.peek();
 			if (e != null) {
 				if (e.startTime <= tickcount) {
 					// Make the event happen
@@ -121,7 +119,7 @@ public class NetworkEventHandler {
 							this.runningQueue.put(e.endTime, runningEvents);
 						}
 					}
-					this.newEventQueue.remove(); 
+					GlobalVariables.newEventQueue.remove(); 
 				} else {
 					// If the event has start time later than current tick, no need to check the rest
 					flag = false;

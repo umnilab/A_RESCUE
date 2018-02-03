@@ -44,6 +44,7 @@ import java.util.Random;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Properties;
 
 //
@@ -278,7 +279,9 @@ private static Properties config;
 	        Integer.valueOf(loadConfig("NETWORK_MAX_MESSAGE_SIZE"));
 	
 	public static double datacollection_start = 0.0;
-	public static double datacollection_total = 0.0;
+	public static double datacollection_total = 0.0;	
 	
+	public static final double BLOCKAGE_SPEED_FOREVENTS = 2.0; //In miles per hour
 	
+	public static LinkedList<NetworkEventObject> newEventQueue = new LinkedList<NetworkEventObject>();//Global queue for storing events
 }

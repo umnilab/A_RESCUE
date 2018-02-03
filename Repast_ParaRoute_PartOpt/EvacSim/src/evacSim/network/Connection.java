@@ -2,11 +2,12 @@ package evacSim.network;
 
 
 import evacSim.GlobalVariables;
+import evacSim.NetworkEventObject;
 import evacSim.data.DataCollector;
 import evacSim.data.DataConsumer;
 import evacSim.data.TickSnapshot;
 import evacSim.data.VehicleSnapshot;
-
+import evacSim.NetworkEventHandler;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.eclipse.jetty.websocket.api.annotations.*;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.essentials.RepastEssentials;
 
 
 /**
@@ -52,6 +54,8 @@ public class Connection implements DataConsumer {
     /** The websocket session object for the connection this object serves. */
     private Session session;
     
+    /**Prefix for event */
+    private static final String EVENT_MSG = "EVENT";
     /** The address of the remote host for this connection. */
     private InetAddress ip;
     
@@ -70,7 +74,6 @@ public class Connection implements DataConsumer {
     
     /** The current tick number being processed (or just processed). */
     private double currentTick;
-        
     
     /**
      * Performs any preparation needed for this object to be ready to
@@ -327,8 +330,26 @@ public class Connection implements DataConsumer {
      */
     @OnWebSocketMessage
     public void onMessage(String message) {
-        // TODO: processing any incoming messages from the remote listener
         ConnectionManager.printDebug(this.id + "-RECV", message);
+        
+        if(message.startsWith(EVENT_MSG)){
+        	try{
+    			insertExternalEvent(ParseString(message));
+    			System.out.println("Message has been added");
+        	}catch (NumberFormatException nfe) {
+                // one of the values is malformed during parsing
+                System.out.println(nfe);
+            }
+            catch (Throwable t) {
+                // something went wrong creating the snapshot object
+            	System.out.println(t);
+            }
+            
+        }
+        else{
+        	System.out.print("Unknown Information");
+        }
+
     }
     
     
@@ -654,4 +675,51 @@ public class Connection implements DataConsumer {
         }
     } //class HeartbeatRunnable
     
+    //This method parses the string and creates an event from it
+    private NetworkEventObject ParseString(String message){
+    	
+    	String delims = ",";
+        String[] nextLine = message.split(delims);
+
+        //** For Road closure EVENT_MSG, it has the following format: EVENT_MSG, startTime,	endTime, eventID, roadID*/
+        int startTime = Math.round(Integer.parseInt(nextLine[1])/GlobalVariables.SIMULATION_STEP_SIZE);
+		int endTime = Math.round(Integer.parseInt(nextLine[2])/GlobalVariables.SIMULATION_STEP_SIZE);
+		// Make StartTime and endTime divisible by EVENT_CHECK_FREQUENCY
+		startTime = startTime - (startTime % GlobalVariables.EVENT_CHECK_FREQUENCY);
+		endTime = endTime - (endTime % GlobalVariables.EVENT_CHECK_FREQUENCY);
+		int eventID = Integer.parseInt(nextLine[3]);
+		int roadID = Integer.parseInt(nextLine[4]);
+		double value1 = GlobalVariables.BLOCKAGE_SPEED_FOREVENTS; 
+		double value2 = -999;
+		
+		NetworkEventObject EventObject = new NetworkEventObject(startTime, endTime, eventID, roadID, value1, value2); 
+		return EventObject;
+    }
+    
+    //HG: This method inserts an event received from network communication into newEventQueue based on event's starting time 
+  	public void insertExternalEvent(NetworkEventObject event){
+  		int startTimeExternalEvent = event.startTime;
+  		if(GlobalVariables.newEventQueue.peek() == null){//If the list is empty then no need for comparison with other events
+  			if((int) RepastEssentials.GetTickCount() < event.endTime){ //Only add if the event's end time has not already passed
+  				GlobalVariables.newEventQueue.add(event);
+  			}
+  		}else{
+  			boolean flag = true; // a tag to identify the first event in newEventQueue that starts later than the external event
+  			int queueSize = GlobalVariables.newEventQueue.size();
+  			for (int index = 0; index < queueSize; index++) { //start iterating from the top of the queue
+  				if(flag == false){
+  					break;
+  				}
+  				if(startTimeExternalEvent < GlobalVariables.newEventQueue.get(index).startTime){ //add the new event 
+  					GlobalVariables.newEventQueue.add(index, event);
+  					flag = false;
+  				}
+  			}
+  			if (flag == true) {
+  			    // the new event does not start any event already in the queue, so add it to the end
+  				GlobalVariables.newEventQueue.add(event);
+  			  }
+  		}
+  		
+  	}
 }
