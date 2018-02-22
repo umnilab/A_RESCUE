@@ -334,8 +334,18 @@ public class Connection implements DataConsumer {
         
         if(message.startsWith(EVENT_MSG)){
         	try{
-    			insertExternalEvent(ParseString(message));
-    			System.out.println("Message has been added");
+        		NetworkEventObject event = ParseString(message);
+        		if(event.eventID == 2){//HG: check if the event type is external blocking of road then insert it in global event queue. 1 = Predefined blockage of road, 2 = External blocking of road
+        			insertExternalEvent(event);
+        			//HG: store event adding information in data buffer 
+    				try {
+    						DataCollector.getInstance().recordEventSnapshot(event, 3);//Here 3 value denotes adding of external event to global queue
+    				}
+    				catch (Throwable t) {
+    				    // could not log the event ending in data buffer!
+    				    DataCollector.printDebug("ERR" + t.getMessage());
+    				}
+        		}
         	}catch (NumberFormatException nfe) {
                 // one of the values is malformed during parsing
                 System.out.println(nfe);
@@ -427,6 +437,57 @@ public class Connection implements DataConsumer {
             line = "V," + line;
             lines.add(line);
         }
+
+        // HG: loop through the list of starting events and convert each to a string
+        for (NetworkEventObject event : tick.getEventList().get(0)) {
+            if (event == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createEventMessage(event);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "EVENT_START," + line;
+            lines.add(line);
+        }
+        
+     // HG: loop through the list of ending events and convert each to a string
+        for (NetworkEventObject event : tick.getEventList().get(1)) {
+            if (event == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createEventMessage(event);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "EVENT_END," + line;
+            lines.add(line);
+        }
+        
+     // HG: loop through the list of external event feedbacks being added and convert each to a string
+        for (NetworkEventObject event : tick.getEventList().get(2)) {
+            if (event == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createEventMessage(event);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "EXTERNAL_EVENT_ADDED," + line;
+            lines.add(line);
+        }
         
         // join the array of lines to one socket message to return
         return String.join("\n", lines);
@@ -464,7 +525,31 @@ public class Connection implements DataConsumer {
                distance;
     }
     
+    /**
+     * Returns the socket message representation of the given vehicle.
+     * 
+     * @param vehicle the snapshot of a vehicle to convert into a message.
+     * @return the socket message representation of the given vehicle.
+     */
+    public static String createEventMessage(NetworkEventObject event) {
+        // check if the event even exists
+        if (event == null) {
+            return null;
+        }
+        
+        // extract all the values from the event 
+        int startTime = event.startTime;
+		int endTime = event.endTime;
+		int eventID = event.eventID;
+		int roadID = event.roadID;
 
+        // put them together into a string for the socket and return it
+        return startTime + "," +
+        	endTime + "," +
+        	eventID + "," +
+        	roadID ;
+    }
+    
     /**
      * This is the control portion of the body of the thread which runs
      * periodically to pull items from the data collection buffer and
@@ -681,7 +766,7 @@ public class Connection implements DataConsumer {
     	String delims = ",";
         String[] nextLine = message.split(delims);
 
-        //** For Road closure EVENT_MSG, it has the following format: EVENT_MSG, startTime,	endTime, eventID, roadID*/
+        //** For Road closure message, it has the following format: EVENT, startTime, endTime, eventID, roadID*/
         int startTime = Math.round(Integer.parseInt(nextLine[1])/GlobalVariables.SIMULATION_STEP_SIZE);
 		int endTime = Math.round(Integer.parseInt(nextLine[2])/GlobalVariables.SIMULATION_STEP_SIZE);
 		// Make StartTime and endTime divisible by EVENT_CHECK_FREQUENCY
@@ -690,7 +775,7 @@ public class Connection implements DataConsumer {
 		int eventID = Integer.parseInt(nextLine[3]);
 		int roadID = Integer.parseInt(nextLine[4]);
 		double value1 = GlobalVariables.BLOCKAGE_SPEED_FOREVENTS; 
-		double value2 = -999;
+		double value2 = -999;//A default value being stored for some new future use
 		
 		NetworkEventObject EventObject = new NetworkEventObject(startTime, endTime, eventID, roadID, value1, value2); 
 		return EventObject;

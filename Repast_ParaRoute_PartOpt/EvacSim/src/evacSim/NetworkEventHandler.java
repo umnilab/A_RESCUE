@@ -14,6 +14,7 @@ import repast.simphony.space.gis.Geography;
 import au.com.bytecode.opencsv.CSVReader;
 import evacSim.citycontext.CityContext;
 import evacSim.citycontext.Road;
+import evacSim.data.DataCollector;
 import evacSim.network.ConnectionManager;
 
 /* Author: Xianyuan Zhan and Hemant Gehlot
@@ -107,6 +108,16 @@ public class NetworkEventHandler {
 				if (e.startTime <= tickcount) {
 					// Make the event happen
 					NetworkEventObject event = this.setEvent(e, true);
+					
+					//HG: store event information in data buffer 
+					try {
+							DataCollector.getInstance().recordEventSnapshot(e, 1);//Here 1 value denotes starting of event
+					}
+					catch (Throwable t) {
+					    // could not log the event strating in data buffer!
+					    DataCollector.printDebug("ERR" + t.getMessage());
+					}
+					
 					if (event != null) {
 						// Add it into the running queue and remove the event from the newEventQueue and 
 						if (this.runningQueue.containsKey(e.endTime)) {
@@ -138,7 +149,16 @@ public class NetworkEventHandler {
 			ArrayList<NetworkEventObject> terminateEvents = this.runningQueue.get(tickcount);
 			// We terminate every events in the set
 			for (NetworkEventObject e : terminateEvents) {
-				NetworkEventObject event = this.setEvent(e, false);
+				this.setEvent(e, false);
+				
+				//HG: store event information in data buffer 
+				try {
+						DataCollector.getInstance().recordEventSnapshot(e, 2);//Here 2 value denotes ending of event
+				}
+				catch (Throwable t) {
+				    // could not log the event ending in data buffer!
+				    DataCollector.printDebug("ERR" + t.getMessage());
+				}
 			}
 			this.runningQueue.remove(tickcount);
 			terminateEvents.clear();

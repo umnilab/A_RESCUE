@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacSim.GlobalVariables;
+import evacSim.NetworkEventObject;
 import evacSim.vehiclecontext.Vehicle;
 
 
@@ -306,6 +307,29 @@ public class DataCollector {
         this.currentSnapshot.logVehicle(vehicle, coordinate);
     }
     
+    
+    /**
+     * HG: Records starting and ending of events
+     * 
+     * @param event the event for which a snapshot is being recorded.
+     * @param type whether it is starting or end of the event. 1: starting, 2: ending
+     * @throws Throwable if an error occurs trying to record the event.
+     */
+    public void recordEventSnapshot(NetworkEventObject event,
+                               int type) throws Throwable {
+        // make sure the given event object is valid
+        if (event == null) {
+            throw new IllegalArgumentException("No event given.");
+        }
+        
+        // make sure a tick is currently being processed
+        if (this.currentSnapshot == null) {
+            throw new Exception("No tick snapshot being processed.");
+        }
+      
+        // add the event to the current snapshot
+        this.currentSnapshot.logEvent(event, type);
+    }
     
     /**
      * Adds the given data consumer to the list of registered data consumers.

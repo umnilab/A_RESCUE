@@ -1,11 +1,15 @@
 package evacSim.data;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import evacSim.NetworkEventObject;
+import evacSim.citycontext.Road;
 import evacSim.vehiclecontext.Vehicle;
 
 
@@ -34,6 +38,8 @@ public class TickSnapshot {
     /** The collection of vehicle data gathered during this time tick. */
     private HashMap<Integer, VehicleSnapshot> vehicles;
     
+    /** HG: The collection of event data gathered during this time tick. */
+    private ArrayList<ArrayList<NetworkEventObject>> events;
     
     /**
      * Creates the tick snapshot with the given simulation tick number and
@@ -52,6 +58,12 @@ public class TickSnapshot {
         
         // setup the map for holding the vehicle data
         this.vehicles = new HashMap<Integer, VehicleSnapshot>();
+        
+        // HG: setup the map for holding the event data. Two subarraylists (for starting events and ending events) is created in a large arraylist
+        this.events = new ArrayList<ArrayList<NetworkEventObject>>(3);
+        for (int i=0;i<3;i++){
+	    	this.events.add(new ArrayList<NetworkEventObject>());
+	    }
     }
     
     
@@ -96,6 +108,31 @@ public class TickSnapshot {
         this.vehicles.put(id, snapshot);
     }
     
+    /**
+     * HG: Stores the current state of the given event to the tick snapshot.
+     * 
+     * @param event the event for which a snapshot is being recorded.
+     * @param type whether it is starting or end of the event. 1: starting, 2: ending
+     * @throws Throwable if an error occurs trying to record the event.
+     */
+    public void logEvent(NetworkEventObject event,
+            int type) throws Throwable {
+    	
+    	// make sure the given event object is valid
+        if (event == null) {
+            throw new IllegalArgumentException("No event given.");
+        }
+        
+        //Add event to the arraylist
+        if(type == 1){//if it is event starting
+            this.events.get(0).add(event);
+        }else if (type == 2){//if it is event ending
+        	this.events.get(1).add(event);
+        }else{//if external event has been added to queue
+        	this.events.get(2).add(event);
+        }
+    }
+    
     
     /**
      * Returns a list of vehicle IDs stored in the tick snapshot.
@@ -110,6 +147,19 @@ public class TickSnapshot {
         return this.vehicles.keySet();
     }
     
+    
+    /**
+     * HG: Returns a list of events stored in the tick snapshot.
+     * 
+     * @return a list of events stored in the tick snapshot.
+     */
+    public ArrayList<ArrayList<NetworkEventObject>> getEventList() {
+        if (this.events == null || this.events.isEmpty()) {
+            return null;
+        }
+        
+        return this.events;
+    }
     
     /**
      * Retrieves the matching vehicle from the snapshot list or null if this
