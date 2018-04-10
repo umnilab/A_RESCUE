@@ -284,4 +284,10 @@ private static Properties config;
 	public static final double BLOCKAGE_SPEED_FOREVENTS = 2.0; //In miles per hour
 	
 	public static LinkedList<NetworkEventObject> newEventQueue = new LinkedList<NetworkEventObject>();//Global queue for storing events
+	
+	//Parameters for multiclass vehicles
+	public static final boolean ENABLE_MULTICLASS_VEHICLES =
+	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES"));
+	public static final double RATIO_OF_ORIGINALCLASS =
+	        Double.valueOf(loadConfig("RATIO_OF_ORIGINALCLASS"));
 }

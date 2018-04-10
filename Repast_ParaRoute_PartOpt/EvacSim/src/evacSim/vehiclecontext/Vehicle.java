@@ -45,17 +45,17 @@ import evacSim.routing.RouteV;
 
 public class Vehicle {
 	private int id;
-	private int vehicleID_;
+	protected int vehicleID_;
 	// private int startTime; //duplicated
 	private int deptime;
 	private int endTime;
 	private int destinationZoneId;
 	private int evactime;
-	private int destRoadID;
-	private int lastRouteTime; // The time of getting the last routing information
+	protected int destRoadID;
+	protected int lastRouteTime; // The time of getting the last routing information
 
 	private Coordinate originalCoord;
-	private Coordinate destCoord;
+	protected Coordinate destCoord;
 
 	private float length;
 	private float distance_;// distance from downstream junction
@@ -77,20 +77,20 @@ public class Vehicle {
 	private boolean moveVehicle = true;// BL: to flag a vehicle for moving in
 	// the next step
 	private boolean onlane = false;
-	private boolean atOrigin = true;
+	protected boolean atOrigin = true;
 
 	// Need to use a better way in the future: currently use the house object to
 	// load information to vehicle
 	private House house;
 
-	private Road road;
-	private Road nextRoad_;
+	protected Road road;
+	protected Road nextRoad_;
 	private Lane lane;
 	private Lane nextLane_;
 	private Zone destZone; // RMSA
 	
 	/* Zhan: For vehicle based routing */
-	private List<Road> roadPath; // The route is always started with the current road, whenever entering the next road, the current road will be popped out
+	protected List<Road> roadPath; // The route is always started with the current road, whenever entering the next road, the current road will be popped out
 
 	private List<Coordinate> coordMap;
 

@@ -41,7 +41,17 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 			Coordinate coord = hgeom.getCoordinate();
 			for (House h : z.getHouses()) {
 				GeometryFactory fac = new GeometryFactory();
-				Vehicle v = new Vehicle(h);
+				Vehicle v;
+				if (GlobalVariables.ENABLE_MULTICLASS_VEHICLES){//Gehlot: Generate multi-class vehicles
+					if((double) Math.random() < GlobalVariables.RATIO_OF_ORIGINALCLASS){
+						v = new Vehicle(h);
+					}else{
+						v = new VehicleType2(h);
+					}
+				}else{
+					v = new Vehicle(h);
+				}
+				
 				//v.setEvacuationTime(evactime);
 				this.add(v);
 				v.setOriginalCoord(coord);

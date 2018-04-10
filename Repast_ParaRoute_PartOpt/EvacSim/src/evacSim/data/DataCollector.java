@@ -11,6 +11,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import evacSim.GlobalVariables;
 import evacSim.NetworkEventObject;
 import evacSim.vehiclecontext.Vehicle;
+import repast.simphony.engine.environment.RunEnvironment;
 
 
 /**
@@ -547,19 +548,43 @@ public class DataCollector {
             return;
         }
         
-        // figure out the minimum tick number to keep in the buffer
-        double minimumTick = -1.0;
+        // figure out the minimum tick number to keep in the buffer.  we need
+        // to check the current position of each data consumer and keep track
+        // of the slowest one so we know just enough buffer data to retain.
+        Double minimumTick = null;
         for (DataConsumer dc : this.registeredConsumers) {
             if (dc == null) {
                 continue;
             }
-            
-            if ((minimumTick == -1.0) || (minimumTick > dc.getTick())) {
+           
+            if ((minimumTick == null) || (minimumTick > dc.getTick())) {
+                // this is the first consumer we have checked OR it is
+                // a consumer with a tick smaller than any tick we have
+                // seen yet in a previously checked consumer, so replace
+                // the overall minimum tick number with this new one
                 minimumTick = dc.getTick();
             }
         }
-        if (minimumTick < 0.0) {
-            // no consumers have read any data yet, so nothing to clean
+       
+        if (minimumTick == null) {
+            // if this is still null, there were no registered data users.
+            // we can safely discard anything in the buffer as we have the
+            // policy that data consumers newly registered during the model
+            // run will pick-up from the current simulation position, not
+            // the start of the simulation data.
+            minimumTick = RunEnvironment.getInstance()
+                                        .getCurrentSchedule()
+                                        .getTickCount() - 1;
+        }
+        else if (minimumTick < 0.0) {
+            // at least one of the registered data consumers in the system
+            // has not started yet, so we must keep all the data in the
+            // buffer for when it finally finishes setup and can start
+            String cleanupMsg = "Cleaning #" + ++(this.cleanupCount) +
+                    " Nothing removed.  " + this.buffer.size() +
+                    " remain in buffer.";
+            DataCollector.printDebug("CTRL", cleanupMsg);
+           
             return;
         }
         

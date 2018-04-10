@@ -485,7 +485,7 @@ public class Connection implements DataConsumer {
             }
             
             // prepend the tick number, data type token, and add to array
-            line = "EXTERNAL_EVENT_ADDED," + line;
+            line = "EVENT_FROM_REMOTE_ADDED," + line;
             lines.add(line);
         }
         
