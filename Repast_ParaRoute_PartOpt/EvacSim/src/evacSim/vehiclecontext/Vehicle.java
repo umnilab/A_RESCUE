@@ -1377,6 +1377,14 @@ public class Vehicle {
 		this.originalCoord = coord;
 	}
 
+	public boolean nearlyArrived(){
+		if(this.nextRoad_ == null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	public void setReachDest() {
 		Coordinate target = null;
 		GeometryFactory geomFac = new GeometryFactory();

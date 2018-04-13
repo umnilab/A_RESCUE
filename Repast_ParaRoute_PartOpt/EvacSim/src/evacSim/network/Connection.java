@@ -514,6 +514,7 @@ public class Connection implements DataConsumer {
         int departure = vehicle.getDeparture();
         int arrival = vehicle.getArrival();
         float distance = vehicle.getDistance();
+        boolean nearlyArrived = vehicle.getNearlyArrived();
         
         // put them together into a string for the socket and return it
         return id + "," +
@@ -522,7 +523,8 @@ public class Connection implements DataConsumer {
                speed + "," +
                departure + "," +
                arrival + "," +
-               distance;
+               distance + "," +
+               nearlyArrived;
     }
     
     /**

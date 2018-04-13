@@ -47,6 +47,8 @@ public class VehicleSnapshot {
     /** The total distance traveled by the vehicle in the simulation. */
     final public float distance;
     
+    /** Vehicle is traveling on the last segment of its path, so close to destination. */
+    final public boolean nearlyArrived;
     
     /**
      * Construct the vehicle snapshot from the given vehicle and position.
@@ -64,7 +66,8 @@ public class VehicleSnapshot {
              vehicle.currentSpeed(),
              vehicle.getDepTime(),
              vehicle.getEndTime(),
-             vehicle.accummulatedDistance_);
+             vehicle.accummulatedDistance_,
+             vehicle.nearlyArrived());
     }
     
     
@@ -88,7 +91,8 @@ public class VehicleSnapshot {
                            float speed,
                            int departure,
                            int arrival,
-                           float distance) throws Throwable {
+                           float distance,
+                           boolean nearlyArrived) throws Throwable {
         // all values are passed in as primitaves instead of objects,
         // so the compiler won't allow any to be null, no need to check
         
@@ -130,6 +134,7 @@ public class VehicleSnapshot {
         this.departure = departure;
         this.arrival = arrival;
         this.distance = distance;
+        this.nearlyArrived = nearlyArrived;
     }
     
     
@@ -195,4 +200,12 @@ public class VehicleSnapshot {
      * @return the total distance traveled by the vehicle so far on this trip.
      */
     public float getDistance() { return this.distance; }
+    
+    
+    /**
+     * Returns the total distance traveled by the vehicle so far on this trip.
+     * 
+     * @return the total distance traveled by the vehicle so far on this trip.
+     */
+    public boolean getNearlyArrived() { return this.nearlyArrived; }
 }
