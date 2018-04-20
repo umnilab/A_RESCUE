@@ -210,7 +210,7 @@ public class Vehicle {
 		}
 
 		float capspd = road.calcSpeed();// calculate the initial speed
-		System.out.println("max acceleration = "+this.maxAcceleration()+"max dec = "+this.maxDeceleration_);
+
 		currentSpeed_ = capspd; // have to change later
 		this.setRoad(road);
 		this.append(firstlane);
