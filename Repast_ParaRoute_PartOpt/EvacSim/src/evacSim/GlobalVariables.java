@@ -288,6 +288,12 @@ private static Properties config;
 	//Parameters for multiclass vehicles
 	public static final boolean ENABLE_MULTICLASS_VEHICLES =
 	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES"));
+	public static final boolean ENABLE_MULTICLASS_VEHICLES_PREDEFINEDROUTE =
+	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES_PREDEFINEDROUTE"));
 	public static final double RATIO_OF_ORIGINALCLASS =
 	        Double.valueOf(loadConfig("RATIO_OF_ORIGINALCLASS"));
+	public static final float MAX_ACCELERATION_VTYPE3 = Float
+			.valueOf(loadConfig("MAX_ACCELERATION_VTYPE3")); // meter/sec2
+	public static final float MAX_DECELERATION_VTYPE3 = Float
+			.valueOf(loadConfig("MAX_DECELERATION_VTYPE3")); // meter/sec2
 }

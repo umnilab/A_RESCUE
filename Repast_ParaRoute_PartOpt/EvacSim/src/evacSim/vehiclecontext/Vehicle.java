@@ -63,9 +63,9 @@ public class Vehicle {
 	private float accRate_;
 	private float desiredSpeed_; // in meter/sec
 	private static int regime_;
-	private float maxAcceleration_; // in meter/sec2
+	protected float maxAcceleration_; // in meter/sec2
 	private float normalDeceleration_; // in meter/sec2
-	private float maxDeceleration_; // in meter/sec2
+	protected float maxDeceleration_; // in meter/sec2
 	private float distanceToNormalStop_; // assuming normal dec is applied
 	private float lastStepMove_;
 	public float accummulatedDistance_;
@@ -210,7 +210,7 @@ public class Vehicle {
 		}
 
 		float capspd = road.calcSpeed();// calculate the initial speed
-
+		System.out.println("max acceleration = "+this.maxAcceleration()+"max dec = "+this.maxDeceleration_);
 		currentSpeed_ = capspd; // have to change later
 		this.setRoad(road);
 		this.append(firstlane);
