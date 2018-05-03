@@ -72,7 +72,11 @@ private static Properties config;
 	public static final String LANES_SHAPEFILE = loadConfig("LANES_SHAPEFILE");
 
 	public static final String ZONES_SHAPEFILE = loadConfig("ZONES_SHAPEFILE");
+	
+	public static final String ROADS_CSV = loadConfig("ROADS_CSV");
 
+	public static final String LANES_CSV = loadConfig("LANES_CSV");
+	
 	public static final String ACTIVITY_CSV = loadConfig("ACTIVITY_SEQ_CSV");
 
 	// Path for the supply side event file

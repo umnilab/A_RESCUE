@@ -168,6 +168,49 @@ public class Vehicle {
 		this.futureRoutingRoad = new ArrayList<Road>();
 	}
 
+	//Gehlot: This is a new subclass of Vehicle class that has some different parameters like max acceleration and max deceleration 
+	public Vehicle(House h, float maximumAcceleration, float maximumDeceleration) {
+		this.id = ContextCreator.generateAgentID();
+		// if (ContextCreator.debug)
+		// System.out.println("Generating vehicle Id: " + this.getId());
+		this.house = h;
+
+		this.length = GlobalVariables.DEFAULT_VEHICLE_LENGTH;
+		this.travelPerTurn = GlobalVariables.TRAVEL_PER_TURN;
+		this.maxAcceleration_ = maximumAcceleration;
+		this.maxDeceleration_ = maximumDeceleration;
+		this.normalDeceleration_ = -0.5f;
+
+		this.endTime = 0;
+		// this.atOrigin = true;
+		this.reachDest = false;
+		this.reachActLocation = true;
+		this.accRate_ = 0;
+		this.nextLane_ = null;
+		this.nosingFlag = false;
+		this.yieldingFlag = false;
+		this.macroLeading_ = null;
+		this.macroTrailing_ = null;
+		this.leading_ = null;
+		this.trailing_ = null;
+		this.nextRoad_ = null;
+		this.laneGeography = ContextCreator.getLaneGeography();
+		this.coordMap = new ArrayList<Coordinate>();
+		this.destRoadID = 0;
+		// upload the vehicle into the queue of the corresponding link
+		this.lastStepMove_ = 0;
+		this.vehicleID_ = h.getId();
+		this.accummulatedDistance_ = 0;
+		this.roadPath = null;
+		this.lastRouteTime = -1;
+//		this.lock = ContextCreator.lock;
+		this.setNextPlan();
+		
+		// For adaptive network partitioning
+		this.Nshadow = 0;
+		this.futureRoutingRoad = new ArrayList<Road>();
+	}
+	
 	public void setNextPlan() {
 		Plan current = this.house.getActivityPlan().get(0);
 

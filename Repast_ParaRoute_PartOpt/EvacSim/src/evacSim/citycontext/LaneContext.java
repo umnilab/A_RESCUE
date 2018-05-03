@@ -1,5 +1,5 @@
 /*
-©Copyright 2008 Nick Malleson
+ï¿½Copyright 2008 Nick Malleson
 
 This file is part of RepastCity.
 
@@ -15,6 +15,10 @@ import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
@@ -49,21 +53,42 @@ public class LaneContext extends DefaultContext<Lane> {
 		File laneFile = null;
 		ShapefileLoader<Lane> laneLoader = null;
 		
+		/* CSV file for data attribute */
+        String fileName = GlobalVariables.LANES_CSV;
+		
 		try {
 			laneFile = new File(GlobalVariables.LANES_SHAPEFILE);
 			URI uri=laneFile.toURI();
 			laneLoader = new ShapefileLoader<Lane>(Lane.class,
 					uri.toURL(), laneGeography, this);
 			
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			while (laneLoader.hasNext()) {
 				Lane lane = laneLoader.next();
+				String line=br.readLine();
+				String[] result=line.split(",");
+				lane=setAttribute(lane,result);
 			}
 
 		} catch (java.net.MalformedURLException e) {
 			System.out
 					.println("ContextCreator: malformed URL exception when reading roadshapefile. Check the 'roadLoc' parameter is correct");
 			e.printStackTrace();
-		}
+		} catch (FileNotFoundException e){
+			System.out
+			.println("ContextCreator: No road csv file found");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();}
 
+	}
+	
+	public Lane setAttribute(Lane l, String[] att){
+		l.setLaneid(Integer.parseInt(att[5]));
+		l.setLink(Integer.parseInt(att[1]));
+		l.setLeft(Integer.parseInt(att[2]));
+		l.setThrough(Integer.parseInt(att[3]));
+		l.setRight(Integer.parseInt(att[4]));
+		return l;
 	}
 }

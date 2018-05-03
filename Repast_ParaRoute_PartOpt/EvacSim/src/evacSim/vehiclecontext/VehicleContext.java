@@ -49,7 +49,7 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 						if(GlobalVariables.ENABLE_MULTICLASS_VEHICLES_PREDEFINEDROUTE){//Gehlot: generate a vehicle with predefined routes
 							v = new VehicleType2_predefinedroutes(h);
 						}else{ //Gehlot: generate a vehicle with different parameters
-							v = new VehicleType3_diffparameters(h);
+							v = new Vehicle(h,GlobalVariables.MAX_ACCELERATION_VTYPE3,GlobalVariables.MAX_DECELERATION_VTYPE3);
 						}
 					}
 				}else{
