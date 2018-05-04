@@ -289,15 +289,23 @@ private static Properties config;
 	
 	public static LinkedList<NetworkEventObject> newEventQueue = new LinkedList<NetworkEventObject>();//Global queue for storing events
 	
-	//Parameters for multiclass vehicles
-	public static final boolean ENABLE_MULTICLASS_VEHICLES =
+	//Parameters for handling multiclass routing. Note that the proportion of original routing vehicles being generated is equal to 1 - (PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES). 
+	public static final boolean ENABLE_MULTICLASS_ROUTING =
 	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES"));
-	public static final boolean ENABLE_MULTICLASS_VEHICLES_PREDEFINEDROUTE =
-	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES_PREDEFINEDROUTE"));
-	public static final double RATIO_OF_ORIGINALCLASS =
-	        Double.valueOf(loadConfig("RATIO_OF_ORIGINALCLASS"));
-	public static final float MAX_ACCELERATION_VTYPE3 = Float
-			.valueOf(loadConfig("MAX_ACCELERATION_VTYPE3")); // meter/sec2
-	public static final float MAX_DECELERATION_VTYPE3 = Float
-			.valueOf(loadConfig("MAX_DECELERATION_VTYPE3")); // meter/sec2
+	public static final double PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES =
+	        Double.valueOf(loadConfig("PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES"));
+	public static final double PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES =
+	        Double.valueOf(loadConfig("PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES"));
+	public static final double PROBABILITY_OF_UPDATING_ROUTING =
+	        Double.valueOf(loadConfig("PROBABILITY_OF_UPDATING_ROUTING"));
+	
+	//Parameters for multiclass vehicles (having different parameters). TODO:Code a mechanism to generate vehicles with different parameters
+	public static final boolean ENABLE_MULTICLASS_VEHICLES_DIFF_PARAMETERS =
+	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES_DIFF_PARAMETERS"));
+	public static final double RATIO_OF_ORIGINIAL_CLASS =
+	        Double.valueOf(loadConfig("RATIO_OF_ORIGINIAL_CLASS"));
+	public static final float MAX_ACCELERATION_2 = Float
+			.valueOf(loadConfig("MAX_ACCELERATION_2")); // meter/sec2
+	public static final float MAX_DECELERATION_2 = Float
+			.valueOf(loadConfig("MAX_DECELERATION_2")); // meter/sec2
 }

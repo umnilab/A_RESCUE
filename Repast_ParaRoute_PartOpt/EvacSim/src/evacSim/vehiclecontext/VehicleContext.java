@@ -42,15 +42,15 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 			for (House h : z.getHouses()) {
 				GeometryFactory fac = new GeometryFactory();
 				Vehicle v;
-				if (GlobalVariables.ENABLE_MULTICLASS_VEHICLES){//Gehlot: Generate multi-class vehicles
-					if((double) Math.random() < GlobalVariables.RATIO_OF_ORIGINALCLASS){
+				
+				//TODO: Code a mechanism to generate vehicles with different parameters (like max acceleration)
+				if (GlobalVariables.ENABLE_MULTICLASS_ROUTING){//Gehlot: Generate multi-class vehicles
+					if((double) Math.random() > GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES){
 						v = new Vehicle(h);
+					}else if((double) Math.random() < (GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES)/(GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES)){
+						v = new Vehicle_predefinedroutes(h);
 					}else{
-						if(GlobalVariables.ENABLE_MULTICLASS_VEHICLES_PREDEFINEDROUTE){//Gehlot: generate a vehicle with predefined routes
-							v = new VehicleType2_predefinedroutes(h);
-						}else{ //Gehlot: generate a vehicle with different parameters
-							v = new Vehicle(h,GlobalVariables.MAX_ACCELERATION_VTYPE3,GlobalVariables.MAX_DECELERATION_VTYPE3);
-						}
+						v = new Vehicle_less_frequent_routing(h);
 					}
 				}else{
 					v = new Vehicle(h);

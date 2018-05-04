@@ -8,12 +8,16 @@ import evacSim.routing.RouteV;
 import repast.simphony.essentials.RepastEssentials;
 
 //Gehlot: This is a subclass of Vehicle class
-public class VehicleType2_predefinedroutes extends Vehicle {
+public class Vehicle_predefinedroutes extends Vehicle {
 
-	public VehicleType2_predefinedroutes(House h) {
+	public Vehicle_predefinedroutes(House h) {
 		super(h);
 	}
 
+	public Vehicle_predefinedroutes(House h, float maximumAcceleration, float maximumDeceleration) {
+		super(h, maximumAcceleration, maximumDeceleration);
+	}
+	
 	//Gehlot: Override original setNextRoad() method to use predefined routes rather than periodically updating routes 
 	@Override
 	public void setNextRoad() {
