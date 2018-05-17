@@ -96,6 +96,7 @@ public class TickSnapshot {
         int arrival = vehicle.getEndTime();
         float distance = vehicle.accummulatedDistance_;
         boolean nearlyArrived = vehicle.nearlyArrived();
+        String vehicleClass = vehicle.getClass().getName().toString();
         
         // TODO: perform any checks on the extracted values
         
@@ -106,7 +107,8 @@ public class TickSnapshot {
                                                        departure,
                                                        arrival,
                                                        distance,
-                                                       nearlyArrived);
+                                                       nearlyArrived,
+                                                       vehicleClass);
         this.vehicles.put(id, snapshot);
     }
     

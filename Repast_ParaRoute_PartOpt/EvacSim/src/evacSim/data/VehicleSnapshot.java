@@ -50,6 +50,9 @@ public class VehicleSnapshot {
     /** Vehicle is traveling on the last segment of its path, so close to destination. */
     final public boolean nearlyArrived;
     
+    /** Vehicle routing class. */
+    final public String vehicleClass;
+    
     /**
      * Construct the vehicle snapshot from the given vehicle and position.
      * 
@@ -67,7 +70,8 @@ public class VehicleSnapshot {
              vehicle.getDepTime(),
              vehicle.getEndTime(),
              vehicle.accummulatedDistance_,
-             vehicle.nearlyArrived());
+             vehicle.nearlyArrived(),
+        	 vehicle.getClass().getName().toString());
     }
     
     
@@ -92,7 +96,8 @@ public class VehicleSnapshot {
                            int departure,
                            int arrival,
                            float distance,
-                           boolean nearlyArrived) throws Throwable {
+                           boolean nearlyArrived,
+                           String vehicleClass) throws Throwable {
         // all values are passed in as primitaves instead of objects,
         // so the compiler won't allow any to be null, no need to check
         
@@ -135,6 +140,7 @@ public class VehicleSnapshot {
         this.arrival = arrival;
         this.distance = distance;
         this.nearlyArrived = nearlyArrived;
+        this.vehicleClass = vehicleClass;
     }
     
     
@@ -208,4 +214,11 @@ public class VehicleSnapshot {
      * @return the total distance traveled by the vehicle so far on this trip.
      */
     public boolean getNearlyArrived() { return this.nearlyArrived; }
+    
+    /**
+     * Returns the routing class of the vehicle.
+     * 
+     * @return the routing class of the vehicle.
+     */
+    public String getvehicleClass() { return this.vehicleClass; }
 }

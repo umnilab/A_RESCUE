@@ -105,6 +105,8 @@ private static Properties config;
 	/* Threshold amount of vehicles that requires more frequent network partitioning */
 	public static final int THRESHOLD_VEHICLE_NUMBER = Integer
 			.valueOf(loadConfig("THRESHOLD_VEHICLE_NUMBER"));
+	public static int SIMULATION_SLEEPS = Integer
+			.valueOf(loadConfig("SIMULATION_SLEEPS"));//Gehlot and Qian: This variable decides if simulator pauses for sometime to listen visualization. If zero then it waits, else it moves forward. 
 	
 	/* For global variables of the adaptive network weighting */
 	public static final int PART_ALPHA = Integer
@@ -291,7 +293,7 @@ private static Properties config;
 	
 	//Parameters for handling multiclass routing. Note that the proportion of original routing vehicles being generated is equal to 1 - (PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES). 
 	public static final boolean ENABLE_MULTICLASS_ROUTING =
-	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_VEHICLES"));
+	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_ROUTING"));
 	public static final double PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES =
 	        Double.valueOf(loadConfig("PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES"));
 	public static final double PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES =

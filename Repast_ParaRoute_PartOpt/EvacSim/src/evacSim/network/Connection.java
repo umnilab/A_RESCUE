@@ -56,6 +56,10 @@ public class Connection implements DataConsumer {
     
     /**Prefix for event */
     private static final String EVENT_MSG = "EVENT";
+    
+    /**Prefix for event */
+    private static final String START_MSG = "START";
+    
     /** The address of the remote host for this connection. */
     private InetAddress ip;
     
@@ -332,7 +336,19 @@ public class Connection implements DataConsumer {
     public void onMessage(String message) {
         ConnectionManager.printDebug(this.id + "-RECV", message);
         
-        if(message.startsWith(EVENT_MSG)){
+        if(message.startsWith(START_MSG)){
+        	try{//HG and XQ: If you receive any message from visualization in starting, then change the sleep variable to 1.
+        		GlobalVariables.SIMULATION_SLEEPS = 1;
+        	}catch (NumberFormatException nfe) {
+                // one of the values is malformed during parsing
+                System.out.println(nfe);
+            }
+            catch (Throwable t) {
+                // something went wrong creating the snapshot object
+            	System.out.println(t);
+            }
+        }
+        else if (message.startsWith(EVENT_MSG)){
         	try{
         		NetworkEventObject event = ParseString(message);
         		if(event.eventID == 2){//HG: check if the event type is external blocking of road then insert it in global event queue. 1 = Predefined blockage of road, 2 = External blocking of road
@@ -515,6 +531,7 @@ public class Connection implements DataConsumer {
         int arrival = vehicle.getArrival();
         float distance = vehicle.getDistance();
         boolean nearlyArrived = vehicle.getNearlyArrived();
+        String vehicleClass = vehicle.getvehicleClass();
         
         // put them together into a string for the socket and return it
         return id + "," +
@@ -524,7 +541,8 @@ public class Connection implements DataConsumer {
                departure + "," +
                arrival + "," +
                distance + "," +
-               nearlyArrived;
+               nearlyArrived + "," +
+               vehicleClass;
     }
     
     /**

@@ -50,6 +50,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 	//Hemant, Wenbo: Reading background traffic file into treemap
 	public static BackgroundTraffic backgroundtraffic = new BackgroundTraffic();
 	
+	private Thread runner;
+	
 //	// Create a global lock to enforce concurrency
 //	public static ReentrantLock lock = new ReentrantLock();
 	
@@ -75,6 +77,17 @@ public class ContextCreator implements ContextBuilder<Object> {
 
 		ContextCreator.mainContext = context;
 
+		while(GlobalVariables.SIMULATION_SLEEPS == 0){
+			try {
+				runner.sleep(1000);
+				System.out.println("Waiting for visualization");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
 		/* Build all the subcontexts */
 		CityContext cityContext = new CityContext();
 		context.addSubContext(cityContext);
