@@ -680,7 +680,7 @@ public class CsvOutputWriter implements DataConsumer {
         int departure = vehicle.getDeparture();
         int arrival = vehicle.getArrival();
         float distance = vehicle.getDistance();
-        String vehicleClass = vehicle.getvehicleClass();
+        int vehicleClass = vehicle.getvehicleClass();
         
         // build the csv line and return it
         return (id + "," + x + "," + y + "," + speed + "," +

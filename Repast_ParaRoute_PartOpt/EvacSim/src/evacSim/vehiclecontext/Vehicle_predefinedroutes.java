@@ -12,6 +12,7 @@ public class Vehicle_predefinedroutes extends Vehicle {
 
 	public Vehicle_predefinedroutes(House h) {
 		super(h);
+		this.setVehicleClass(2);//HG:Set vehicleclass to 2
 	}
 
 	public Vehicle_predefinedroutes(House h, float maximumAcceleration, float maximumDeceleration) {

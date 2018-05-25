@@ -531,7 +531,7 @@ public class Connection implements DataConsumer {
         int arrival = vehicle.getArrival();
         float distance = vehicle.getDistance();
         boolean nearlyArrived = vehicle.getNearlyArrived();
-        String vehicleClass = vehicle.getvehicleClass();
+        int vehicleClass = vehicle.getvehicleClass();
         
         // put them together into a string for the socket and return it
         return id + "," +

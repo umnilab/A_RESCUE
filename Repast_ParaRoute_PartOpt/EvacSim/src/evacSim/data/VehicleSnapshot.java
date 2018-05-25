@@ -51,7 +51,7 @@ public class VehicleSnapshot {
     final public boolean nearlyArrived;
     
     /** Vehicle routing class. */
-    final public String vehicleClass;
+    final public int vehicleClass;
     
     /**
      * Construct the vehicle snapshot from the given vehicle and position.
@@ -71,7 +71,7 @@ public class VehicleSnapshot {
              vehicle.getEndTime(),
              vehicle.accummulatedDistance_,
              vehicle.nearlyArrived(),
-        	 vehicle.getClass().getName().toString());
+        	 vehicle.getVehicleClass());
     }
     
     
@@ -97,7 +97,7 @@ public class VehicleSnapshot {
                            int arrival,
                            float distance,
                            boolean nearlyArrived,
-                           String vehicleClass) throws Throwable {
+                           int vehicleClass) throws Throwable {
         // all values are passed in as primitaves instead of objects,
         // so the compiler won't allow any to be null, no need to check
         
@@ -220,5 +220,5 @@ public class VehicleSnapshot {
      * 
      * @return the routing class of the vehicle.
      */
-    public String getvehicleClass() { return this.vehicleClass; }
+    public int getvehicleClass() { return this.vehicleClass; }
 }

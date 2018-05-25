@@ -123,6 +123,8 @@ public class Vehicle {
 	private int Nshadow; // Number of current shadow roads in the path
 	private ArrayList<Road> futureRoutingRoad;
 	
+	private int vehicleClass;//HG:For distinguishing between different classes
+	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
 
@@ -166,6 +168,7 @@ public class Vehicle {
 		// For adaptive network partitioning
 		this.Nshadow = 0;
 		this.futureRoutingRoad = new ArrayList<Road>();
+		this.setVehicleClass(1);
 	}
 
 	//Gehlot: This is a new subclass of Vehicle class that has some different parameters like max acceleration and max deceleration 
@@ -209,6 +212,7 @@ public class Vehicle {
 		// For adaptive network partitioning
 		this.Nshadow = 0;
 		this.futureRoutingRoad = new ArrayList<Road>();
+		this.setVehicleClass(-1);//TODO HG:Change it later when use it
 	}
 	
 	public void setNextPlan() {
@@ -2484,5 +2488,13 @@ public class Vehicle {
 		    // Could not record this vehicle move in the data buffer!
 		    DataCollector.printDebug("ERR", t.getMessage());
 		}
+	}
+
+	public int getVehicleClass() {
+		return vehicleClass;
+	}
+
+	public void setVehicleClass(int vehicleClass) {
+		this.vehicleClass = vehicleClass;
 	}
 }

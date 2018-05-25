@@ -12,6 +12,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 
 	public Vehicle_less_frequent_routing(House h) {
 		super(h);
+		this.setVehicleClass(3);//HG:Set vehicleclass to 3
 	}
 
 	public Vehicle_less_frequent_routing(House h, float maximumAcceleration, float maximumDeceleration) {
