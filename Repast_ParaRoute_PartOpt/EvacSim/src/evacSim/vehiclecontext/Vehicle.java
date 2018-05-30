@@ -727,7 +727,8 @@ public class Vehicle {
 							+ this.road.getID() + " which has "
 							+ this.road.getnLanes()
 							+ " lane(s) and I am on lane "
-							+ this.road.getLaneIndex(this.lane));
+							+ this.road.getLaneIndex(this.lane)
+							+"with Lane ID" + this.lane.getID());
 				}
 			}
 		} else {
