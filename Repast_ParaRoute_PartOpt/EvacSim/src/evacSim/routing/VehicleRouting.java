@@ -61,6 +61,15 @@ public class VehicleRouting {
 
 		JungToJgraph<Junction> converter = new JungToJgraph<Junction>();
 		this.transformedNetwork = converter.convertToJgraph(graphA);
+//		for (Junction node: this.transformedNetwork.vertexSet()){
+//			int tempdegree=0;
+//			if(node.getRoads().size()>=5)
+//				for (Road road: node.getRoads() )
+//					if(road.getFn() == node.getJunctionID())
+//						tempdegree+=1;
+//				if(tempdegree>=4)	
+//					System.out.println("junctionid"+node.getJunctionID()+"sizeofjunction"+node.getRoads().size()+"rode_list"+node.getRoads());
+//		}
 	}
 	
 	/* Perform the routing computation */
@@ -121,6 +130,22 @@ public class VehicleRouting {
 			/* New implementation using JGraphT */
 			DijkstraShortestPath<Junction, RepastEdge<Junction>> sp = new DijkstraShortestPath<Junction, RepastEdge<Junction>>(transformedNetwork, currJunc, destJunc);
 			shortestPath = sp.getPathEdgeList();
+			
+//			/*debugging*/
+//			Junction currJunc_db = null;
+//			Junction destJunc_db = null;
+//			for (Junction node: this.transformedNetwork.vertexSet())
+//			{
+//				if(node.getJunctionID()==11010)
+//					currJunc_db = node;
+//				if(node.getJunctionID()==11073)
+//					destJunc_db = node;
+//			}
+//			DijkstraShortestPath<Junction, RepastEdge<Junction>> sp_debug = new DijkstraShortestPath<Junction, RepastEdge<Junction>>(transformedNetwork, currJunc_db, destJunc_db);
+//			for (RepastEdge<Junction> edge : sp_debug.getPathEdgeList())
+//			{
+//				System.out.println("id="+cityContext.getLinkIDFromEdge(edge));
+//			}
 		}
 
 		

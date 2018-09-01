@@ -721,14 +721,18 @@ public class Vehicle {
 				if (plane != null)
 					this.mandatoryLC(plane);
 				else {
-					System.out.println("Vehicle " + this.getId()
-							+ "has no lane to change");
-					System.out.println("this vehicle is on road "
-							+ this.road.getID() + " which has "
-							+ this.road.getnLanes()
-							+ " lane(s) and I am on lane "
-							+ this.road.getLaneIndex(this.lane)
-							+"with Lane ID" + this.lane.getID());
+					//HG and XQ: commented out this because now we are allowing forced jump in 5 leg or irregular intersections for which 
+					//it is not possible to assign lane information properly (as only left, right and through are allowed.)). Previously 5 leg intersections were
+					//converted to 4 leg intersections in the shape file and then this comment was put to check if anything goes wrong. But we leave all intersections as it they are.
+					//so, this error will get printed but forced jump will bypass blocking of vehicles.
+//					System.out.println("Vehicle " + this.getId()
+//							+ "has no lane to change");
+//					System.out.println("this vehicle is on road "
+//							+ this.road.getID() + " which has "
+//							+ this.road.getnLanes()
+//							+ " lane(s) and I am on lane "
+//							+ this.road.getLaneIndex(this.lane)
+//							+"with Lane ID" + this.lane.getID());
 				}
 			}
 		} else {
@@ -1723,6 +1727,7 @@ public class Vehicle {
 						}
 					}
 				}
+				this.nextLane_ = this.nextRoad().getLane(0);//HG and XQ: force movement at a 5 leg or irregular intersection
 			}
 
 			if (this.nextLane_ == null)
