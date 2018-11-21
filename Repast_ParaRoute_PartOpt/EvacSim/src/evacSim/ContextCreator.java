@@ -70,7 +70,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 		Properties propertyFile = new Properties();
 
 		try {
-			propertyFile.load(new FileInputStream("config/Data.properties"));
+//			propertyFile.load(new FileInputStream("config/Data.properties"));
+			propertyFile.load(new FileInputStream("data/Data.properties"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

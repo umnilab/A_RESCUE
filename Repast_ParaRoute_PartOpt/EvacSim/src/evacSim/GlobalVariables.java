@@ -56,7 +56,8 @@ private static Properties config;
 	    if (config == null) {
 	        config = new Properties();
 	        try {
-			    config.load(new FileInputStream("config/Data.properties"));
+	        	config.load(new FileInputStream("data/Data.properties"));
+//			    config.load(new FileInputStream("config/Data.properties"));
 		    } catch (IOException ex) {
 			    ex.printStackTrace();
 		    }
