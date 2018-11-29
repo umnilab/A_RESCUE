@@ -719,12 +719,12 @@ public class CsvOutputWriter implements DataConsumer {
         if (defaultDir == null || defaultDir.trim().length() < 1) {
             // there was no default dir specified in the config file
             // so we will just use the home directory of the user
-            defaultDir = System.getProperty("user.home");
+//            defaultDir = System.getProperty("user.home");
             
             // if no homedir is defined, fall back on current working dir
-            if (defaultDir == null || defaultDir.trim().length() < 1) {
+//            if (defaultDir == null || defaultDir.trim().length() < 1) {
                 defaultDir = System.getProperty("user.dir");
-            }
+//            }
         }
                 
         // build the full path to the file
