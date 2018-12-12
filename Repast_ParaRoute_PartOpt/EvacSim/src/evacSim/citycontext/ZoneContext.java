@@ -7,11 +7,13 @@ import java.util.HashMap;
 
 import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.gis.GeographyFactoryFinder;
+import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.gis.Geography;
 import repast.simphony.space.gis.GeographyParameters;
 import repast.simphony.space.gis.ShapefileLoader;
 import evacSim.GlobalVariables;
 import evacSim.demand.DatasetOfHouseholdsPerZones;
+import repast.simphony.parameter.Parameters;
 
 public class ZoneContext extends DefaultContext<Zone> {
 
@@ -52,10 +54,20 @@ public class ZoneContext extends DefaultContext<Zone> {
 		// SH - for implementing activity simulator
 		if (GlobalVariables.SET_DEMAND_FROM_ACTIVITY_MODELS) {
 			DatasetOfHouseholdsPerZones dataset;
-			//String h_filepath = GlobalVariables.HOUSES_CSV;
-			String a_filepath = GlobalVariables.ACTIVITY_CSV;
-			System.out.println("data file: "+a_filepath);
-			dataset = new DatasetOfHouseholdsPerZones(a_filepath);
+			//Gehlot and Chris: this is to be true when we plan to run multiple instances of demand simultaneously in batches. 
+			//Before setting it true, we need to have demand files numbered 1,2,.. etc. in the folder multiple_instances_of_demand 
+			//(the current demand files are copies of evacuation_only_2005_low_about200vehicles_noduplicates_sameOD_trialjacksonville.csv)
+			if(GlobalVariables.SIMULATION_MULTIPLE_DEMAND_INPUTS){
+				Parameters params = RunEnvironment.getInstance().getParameters();
+                int demandNumber = params.getInteger("demandFiles");
+                String a_filepath = "data/multiple_instances_of_demand/" + demandNumber + ".csv";
+                System.out.println("data file: "+a_filepath);
+    			dataset = new DatasetOfHouseholdsPerZones(a_filepath);
+			}else{
+				String a_filepath = GlobalVariables.ACTIVITY_CSV;
+				System.out.println("data file: "+a_filepath);
+				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
+			}
 
 			HashMap<Integer, ArrayList<House>> housesbyzone = new HashMap<Integer, ArrayList<House>>(); // turnOnAfterTest
 			housesbyzone = dataset.getHousesByZone();

@@ -118,7 +118,8 @@ private static Properties config;
 			.valueOf(loadConfig("PART_GAMMA"));
 	// Number of times that the partition interval is larger than the network refresh interval
 	public static final int PART_REFRESH_MULTIPLIER = (int) (SIMULATION_PARTITION_REFRESH_INTERVAL / SIMULATION_NETWORK_REFRESH_INTERVAL);
-	
+	public static final boolean SIMULATION_MULTIPLE_DEMAND_INPUTS = Boolean
+			.valueOf(loadConfig("SIMULATION_MULTIPLE_DEMAND_INPUTS"));//Gehlot: If this is true then we input multiple demand files for batch runs, else we run single demand file that is inputed by ACTIVITY_CSV
 	public static final int SIMULATION_INTERVAL_SIZE = Integer
 			.valueOf(loadConfig("SIMULATION_INTERVAL_SIZE"));
 	public static final int SIMULATION_STOP_TIME = Integer
