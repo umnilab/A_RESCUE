@@ -53,6 +53,12 @@ public class VehicleSnapshot {
     /** Vehicle routing class. */
     final public int vehicleClass;
     
+    /** The X-axis (longitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
+    final public double prev_x;
+    
+    /** The Y-axis (longitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
+    final public double prev_y;
+    
     /**
      * Construct the vehicle snapshot from the given vehicle and position.
      * 
@@ -71,7 +77,9 @@ public class VehicleSnapshot {
              vehicle.getEndTime(),
              vehicle.accummulatedDistance_,
              vehicle.nearlyArrived(),
-        	 vehicle.getVehicleClass());
+        	 vehicle.getVehicleClass(),
+        	 vehicle.getpreviousEpochCoord().x,
+        	 vehicle.getpreviousEpochCoord().y);
     }
     
     
@@ -97,7 +105,9 @@ public class VehicleSnapshot {
                            int arrival,
                            float distance,
                            boolean nearlyArrived,
-                           int vehicleClass) throws Throwable {
+                           int vehicleClass,
+                           double prev_x,
+                           double prev_y) throws Throwable {
         // all values are passed in as primitaves instead of objects,
         // so the compiler won't allow any to be null, no need to check
         
@@ -130,6 +140,14 @@ public class VehicleSnapshot {
         
         // TODO: check the distance traveled value is valid
         
+        //HGehlot: Not putting these conditions for previous coordinates because they will be null at time step 0.
+//        if (Double.isNaN(prev_x) || Double.isInfinite(x)) {
+//            throw new NumberFormatException("Previous X-axis value is invalid.");
+//        }
+//        if (Double.isNaN(prev_y) || Double.isInfinite(y)) {
+//            throw new NumberFormatException("Previous Y-axis value is invalid.");
+//        }
+        
         // store the values in the object
         this.id = id;
         this.x = x;
@@ -141,6 +159,8 @@ public class VehicleSnapshot {
         this.distance = distance;
         this.nearlyArrived = nearlyArrived;
         this.vehicleClass = vehicleClass;
+        this.prev_x = prev_x;
+        this.prev_y = prev_y;
     }
     
     
@@ -221,4 +241,19 @@ public class VehicleSnapshot {
      * @return the routing class of the vehicle.
      */
     public int getvehicleClass() { return this.vehicleClass; }
+    
+    /**
+     * Returns the previous X-axis (when the last epoch for visualization interpolation happened) position within the simulation.
+     * 
+     * @return the previous X-axis position within the simulation.
+     */
+    public double getPrevX() { return this.prev_x; }
+    
+    
+    /**
+     * Returns the previous Y-axis (when the last epoch for visualization interpolation happened) position within the simulation.
+     *  
+     * @return the previous Y-axis position within the simulation.
+     */
+    public double getPrevY() { return this.prev_y; }
 }

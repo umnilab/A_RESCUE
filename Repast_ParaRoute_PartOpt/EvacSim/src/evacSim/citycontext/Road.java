@@ -155,6 +155,16 @@ public class Road {
 
 			}
 
+			Vehicle v_ = this.firstVehicle();
+			//HGehlot: This loop iterates over all the vehicles on the current road to record their vehicle snapshot 
+			//if the tick corresponds to periodic time set for recording vehicle snapshot for visualization interpolation.
+			if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){
+				while (v_ != null) {
+					v_.recVehSnaphotForVisInterp();
+					v_ = v_.macroTrailing();//get the next vehicle behind the current vehicle
+				}
+			}
+			
 			Vehicle pv = this.firstVehicle();
 			while (pv != null) {
 				pv.calcState();

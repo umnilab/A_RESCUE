@@ -238,8 +238,8 @@ public class CsvOutputWriter implements DataConsumer {
                         }
                     }
                     
-                    // get the next item from the buffer
-                    double nextTick = CsvOutputWriter.this.currentTick + 1;
+                    // get the next item from the buffer. HGehlot: I have changed from 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only send the data at the new frequency for viz interpolation
+                    double nextTick = CsvOutputWriter.this.currentTick + GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
                     if (snapshot == null) {
                         // the buffer has no more items for us at this time
@@ -682,10 +682,12 @@ public class CsvOutputWriter implements DataConsumer {
         float distance = vehicle.getDistance();
         boolean nearlyArrived = vehicle.nearlyArrived;
         int vehicleClass = vehicle.getvehicleClass();
+        double prev_x = vehicle.getPrevX();
+        double prev_y = vehicle.getPrevY();
         
         // build the csv line and return it
         return (id + "," + x + "," + y + "," + speed + "," +
-                departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass);
+                departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
     }
     
     

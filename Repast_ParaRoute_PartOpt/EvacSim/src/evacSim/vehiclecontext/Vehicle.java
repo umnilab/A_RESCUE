@@ -56,6 +56,7 @@ public class Vehicle {
 
 	private Coordinate originalCoord;
 	protected Coordinate destCoord;
+	private Coordinate previousEpochCoord;//HGehlot: this variable stores the coordinates of the vehicle when last time vehicle snapshot was recorded for visualization interpolation 
 
 	private float length;
 	private float distance_;// distance from downstream junction
@@ -140,6 +141,7 @@ public class Vehicle {
 		this.maxDeceleration_ = GlobalVariables.MAX_DECELERATION;
 		this.normalDeceleration_ = -0.5f;
 
+		this.previousEpochCoord = null;
 		this.endTime = 0;
 		// this.atOrigin = true;
 		this.reachDest = false;
@@ -184,6 +186,7 @@ public class Vehicle {
 		this.maxDeceleration_ = maximumDeceleration;
 		this.normalDeceleration_ = -0.5f;
 
+		this.previousEpochCoord = null;
 		this.endTime = 0;
 		// this.atOrigin = true;
 		this.reachDest = false;
@@ -815,6 +818,31 @@ public class Vehicle {
 	
 
 	/*
+	 * HGehlot: Record the vehicle snapshot if this tick corresponds to the required epoch that is needed for visualization interpolation.
+	 * Note that this is recording is independent of snapshots of vehicles whether they move or not in the current tick. 
+	 * (So when vehicles do not move in a tick but we need to record positions for viz interpolation then recVehSnaphotForVisInterp is useful). 
+	 * Also, we update the coordinates of the previous epoch in the end of the function.
+	 */ 
+	public void recVehSnaphotForVisInterp(){
+		Coordinate currentCoord = vehicleGeography.getGeometry(this).getCoordinate();
+		try {
+			//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
+//			if(this.nextRoad() == null){
+				DataCollector.getInstance().recordSnapshot(this, currentCoord);//HGehlot: I use currentCoord rather than the targeted coordinates (as in move() function) and this is an approximation but anyway if the vehicle moves then it will get overriden.
+//			}
+		}
+		catch (Throwable t) {
+		    // could not log the vehicle's new position in data buffer!
+		    DataCollector.printDebug("ERR" + t.getMessage());
+		}
+		this.previousEpochCoord = currentCoord;//update the previous coordinate as the current coordinate
+	}
+	
+	public Coordinate getpreviousEpochCoord() {
+		return this.previousEpochCoord;
+	}
+	
+	/*
 	 * Calculate new location and speed after an iteration based on its current
 	 * location, speed and acceleration. The vehicle will be removed from the
 	 * network if it arrives its destination.
@@ -1148,6 +1176,16 @@ public class Vehicle {
 				distTravelled += distToTarget;
 //				this.lock.lock();
 				vehicleGeography.move(this, targetGeom);
+				try {
+					//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
+//					if(this.nextRoad() == null){
+						DataCollector.getInstance().recordSnapshot(this, target);
+//					}
+				}
+				catch (Throwable t) {
+				    // could not log the vehicle's new position in data buffer!
+				    DataCollector.printDebug("ERR" + t.getMessage());
+				}
 //				this.lock.unlock();
 				// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
 				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
@@ -2482,7 +2520,7 @@ public class Vehicle {
 		}
 		
 		vehicleGeography.move(this, geom);
-		
+
 		try {
 		    Coordinate geomCoord = geom.getCoordinate();
 		  //HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination

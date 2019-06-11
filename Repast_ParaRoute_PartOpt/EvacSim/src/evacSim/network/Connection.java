@@ -532,6 +532,8 @@ public class Connection implements DataConsumer {
         float distance = vehicle.getDistance();
         boolean nearlyArrived = vehicle.getNearlyArrived();
         int vehicleClass = vehicle.getvehicleClass();
+        double prev_x = vehicle.getPrevX();
+        double prev_y = vehicle.getPrevY();
         
         // put them together into a string for the socket and return it
         return id + "," +
@@ -542,7 +544,9 @@ public class Connection implements DataConsumer {
                arrival + "," +
                distance + "," +
                nearlyArrived + "," +
-               vehicleClass;
+               vehicleClass + "," +
+               prev_x + "," + 
+               prev_y;
     }
     
     /**
@@ -622,8 +626,8 @@ public class Connection implements DataConsumer {
                     }
                 }
                 
-                // get the next item from the buffer
-                double nextTick = Connection.this.currentTick + 1.0;
+                // get the next item from the buffer. HGehlot: I have changed from 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only send the data at the new frequency for viz interpolation
+                double nextTick = Connection.this.currentTick + GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                 TickSnapshot snapshot = collector.getNextTick(nextTick);
                 if (snapshot == null) {
                     // the buffer has no more items for us at this time

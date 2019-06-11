@@ -97,8 +97,18 @@ public class TickSnapshot {
         float distance = vehicle.accummulatedDistance_;
         boolean nearlyArrived = vehicle.nearlyArrived();
         int vehicleClass = vehicle.getVehicleClass();
+        double prev_x = vehicle.getpreviousEpochCoord().x;
+        double prev_y = vehicle.getpreviousEpochCoord().y;
         
         // TODO: perform any checks on the extracted values
+        
+        //HGehlot: Check if there is already a vehicleSnapshot in this tick due to visualization interpolation recording.
+        //If so, then use the previous coordinates from the recorded snapshot because we had set the previous coordinates to the current coordinates 
+        //when we ended the function recVehSnaphotForVisInterp() in vehicle class.
+        if(this.getVehicleSnapshot(id)!=null){
+        	prev_x = this.getVehicleSnapshot(id).prev_x;
+        	prev_y = this.getVehicleSnapshot(id).prev_y;
+        }
         
         // create a snapshot for the vehicle and store it in the map
         VehicleSnapshot snapshot = new VehicleSnapshot(id, 
@@ -108,7 +118,9 @@ public class TickSnapshot {
                                                        arrival,
                                                        distance,
                                                        nearlyArrived,
-                                                       vehicleClass);
+                                                       vehicleClass,
+                                                       prev_x,
+                                                       prev_y);
         this.vehicles.put(id, snapshot);
     }
     

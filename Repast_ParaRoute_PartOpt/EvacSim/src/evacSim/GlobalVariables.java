@@ -286,6 +286,14 @@ private static Properties config;
 	public static final int NETWORK_MAX_MESSAGE_SIZE =
 	        Integer.valueOf(loadConfig("NETWORK_MAX_MESSAGE_SIZE"));
 	
+	//H Gehlot: Parameter to determine how frequently (in terms of ticks) we should separately record the snapshot (for visualization interpolation purposes) of each vehicle in the network irrespective of whether it moves or not.
+	//Note that this is independent of the snapshot that is getting collected from the movement of vehicles. If a vehicle moves in a tick and it happens that in this
+	//tick we had also recorded the snapshot for visualization purposes before then finally the snapshot corresponding to the movement will have priority and it will 
+	//override the snapshot written for visualization purposes (everything will be overwritten except the coordinated for previous epoch when same recording was done).
+	//This variable is also useful for sending the data at this frequency.
+	public static final int FREQ_RECORD_VEH_SNAPSHOT_FORVIZ = 
+			Integer.valueOf(loadConfig("FREQ_RECORD_VEH_SNAPSHOT_FORVIZ"));
+	
 	public static double datacollection_start = 0.0;
 	public static double datacollection_total = 0.0;	
 	
