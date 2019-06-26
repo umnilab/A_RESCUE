@@ -26,38 +26,53 @@ public class VehicleSnapshot {
     /** The number identifying this vehicle within the simulation. */
     final public int id;
     
+    /** The X-axis (longitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
+    final public double prev_x;
+    
+    /** The Y-axis (latitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
+    final public double prev_y;
+ 
     /** The X-axis (longitude) position within the simulation. */
     final public double x;
     
     /** The Y position of the vehicle within the simulation. */
     final public double y;
-    
-    /** The Z position of the vehicle within the simulation. */
-    final public double z;
-    
+   
     /** The current speed of the vehicle with the simulation. */
     final public float speed;
     
-    /** The start time of the vehicle's current trip in the simulation. */
-    final public int departure;
+    /** The origin X-axis (longitude) position within the simulation. */      /** @author Jiawei Xue */
+    final public double originX;
     
-    /** The end time of the vehicle's current trip in the simulation. */
-    final public int arrival;
+    /** The origin Y position of the vehicle within the simulation. */
+    final public double originY;
     
-    /** The total distance traveled by the vehicle in the simulation. */
-    final public float distance;
+    /** The destination X-axis (longitude) position within the simulation. */      
+    final public double destX;
     
+    /** The destination Y position of the vehicle within the simulation. */
+    final public double destY;                                                             
+ 
     /** Vehicle is traveling on the last segment of its path, so close to destination. */
     final public boolean nearlyArrived;
     
     /** Vehicle routing class. */
     final public int vehicleClass;
     
-    /** The X-axis (longitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
-    final public double prev_x;
+    /** The road ID of the vehicle within the simulation. */
+    final public int roadID;  
+        
+    /** The Z position of the vehicle within the simulation. */
+    /** final public double z;*/
+
+    /** The start time of the vehicle's current trip in the simulation. */
+    /**final public int departure;*/
     
-    /** The Y-axis (longitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
-    final public double prev_y;
+    /** The end time of the vehicle's current trip in the simulation. */
+    /** final public int arrival;*/
+    
+    /** The total distance traveled by the vehicle in the simulation. */
+    /** final public float distance;*/
     
     /**
      * Construct the vehicle snapshot from the given vehicle and position.
@@ -69,17 +84,18 @@ public class VehicleSnapshot {
     public VehicleSnapshot(Vehicle vehicle, 
                            Coordinate coordinate) throws Throwable {
         this(vehicle.getVehicleID(),
-             coordinate.x,
-             coordinate.y,
-             coordinate.z,
-             vehicle.currentSpeed(),
-             vehicle.getDepTime(),
-             vehicle.getEndTime(),
-             vehicle.accummulatedDistance_,
-             vehicle.nearlyArrived(),
-        	 vehicle.getVehicleClass(),
         	 vehicle.getpreviousEpochCoord().x,
-        	 vehicle.getpreviousEpochCoord().y);
+           	 vehicle.getpreviousEpochCoord().y,	
+           	 coordinate.x,
+             coordinate.y,
+           	 vehicle.currentSpeed(),
+        	 vehicle.getOriginalCoord().x,                   /** @author Jiawei Xue */
+        	 vehicle.getOriginalCoord().y,
+        	 vehicle.getDestCoord().x,
+        	 vehicle.getDestCoord().y,
+        	 vehicle.nearlyArrived(),
+        	 vehicle.getVehicleClass(),
+             vehicle.getRoad().getID());
     }
     
     
@@ -97,21 +113,42 @@ public class VehicleSnapshot {
      * @throws Throwable if one of the supplied values is invalid.
      */
     public VehicleSnapshot(int id, 
-                           double x, 
+    					   double prev_x,
+                           double prev_y,
+                           double x,
                            double y,
-                           double z,
                            float speed,
-                           int departure,
-                           int arrival,
-                           float distance,
+            			   double originX,                          /** @author Jiawei Xue */
+                           double originY,
+                           double destX, 
+                           double destY,
                            boolean nearlyArrived,
                            int vehicleClass,
-                           double prev_x,
-                           double prev_y) throws Throwable {
+                           int roadID
+                           //double z,
+                           //int departure,
+                           //int arrival,
+                           //float distance,
+                           ) throws Throwable {
         // all values are passed in as primitaves instead of objects,
         // so the compiler won't allow any to be null, no need to check
         
         // do basic validity checks against the values provided
+        if (roadID < 0) {
+            throw new Exception("Road ID cannot be negative.");
+        }
+        if (Double.isNaN(originX) || Double.isInfinite(originX)) {
+            throw new NumberFormatException("Original X-axis value is invalid.");
+        }
+        if (Double.isNaN(originY) || Double.isInfinite(originY)) {
+            throw new NumberFormatException("Original Y-axis value is invalid.");
+        }
+        if (Double.isNaN(destX) || Double.isInfinite(destX)) {
+            throw new NumberFormatException("Dest X-axis value is invalid.");
+        }
+        if (Double.isNaN(destY) || Double.isInfinite(destY)) {
+            throw new NumberFormatException("Dest Y-axis value is invalid.");
+        }
         if (id < 0) {
             throw new Exception("Vehicle ID cannot be negative.");
         }
@@ -128,9 +165,9 @@ public class VehicleSnapshot {
         if (Float.isNaN(speed) || Float.isInfinite(speed)) {
             throw new NumberFormatException("Speed value is invalid.");
         }
-        if (Float.isNaN(distance) || Float.isInfinite(distance)) {
-            throw new NumberFormatException("Distance value is invalid.");
-        }
+        //if (Float.isNaN(distance) || Float.isInfinite(distance)) {
+            //throw new NumberFormatException("Distance value is invalid.");
+        //}
         
         // TODO: check the position values are within range
 
@@ -150,97 +187,32 @@ public class VehicleSnapshot {
         
         // store the values in the object
         this.id = id;
-        this.x = x;
-        this.y = y;
-        this.z = 0.0d;
-        this.speed = speed;
-        this.departure = departure;
-        this.arrival = arrival;
-        this.distance = distance;
-        this.nearlyArrived = nearlyArrived;
-        this.vehicleClass = vehicleClass;
         this.prev_x = prev_x;
         this.prev_y = prev_y;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.originX = originX;                     /** @author Jiawei Xue */
+        this.originY = originY;
+        this.destX = destX;
+        this.destY = destY;
+        this.nearlyArrived = nearlyArrived;
+        this.vehicleClass = vehicleClass;
+        this.roadID = roadID;
+        //this.z = 0.0d;
+        //this.departure = departure;
+        //this.arrival = arrival;
+        //this.distance = distance;
+
     }
     
     
     /**
-     * Returns the identify of the vehicle within the simulation.
+     * Returns the identity of the vehicle within the simulation.
      * 
-     * @return the identify of the vehicle within the simulation.
+     * @return the identity of the vehicle within the simulation.
      */
     public int getId() { return this.id; }
-    
-    
-    /**
-     * Returns the X-axis (longitude?) position within the simulation.
-     * 
-     * @return the X-axis (longitude?) position within the simulation.
-     */
-    public double getX() { return this.x; }
-    
-    
-    /**
-     * Returns the Y-axis (latitude?) position within the simulation.
-     *  
-     * @return the Y-axis (latitude?) position within the simulation.
-     */
-    public double getY() { return this.y; }
-    
-    
-    /**
-     * Returns the Z-axis (altitude) position within the simulation.
-     * 
-     * @return the Z-axis (altitude) position within the simulation.
-     */
-    public double getZ() { return this.z; }
-    
-    
-    /**
-     * Returns the current speed of the vehicle within the simulation.
-     * 
-     * @return the current speed of the vehicle within the simulation.
-     */
-    public float getSpeed() { return this.speed; }
-    
-    
-    /**
-     * Returns the time of departure of the vehicle for the current trip.
-     * 
-     * @return the time of departure of the vehicle for the current trip.
-     */
-    public int getDeparture() { return this.departure; }
-    
-    
-    /**
-     * Returns the expected arrival time of the vehicle for the current trip.
-     * 
-     * @return the expected arrival time of the vehicle for the current trip.
-     */
-    public int getArrival() { return this.arrival; }
-    
-    
-    /**
-     * Returns the total distance traveled by the vehicle so far on this trip.
-     * 
-     * @return the total distance traveled by the vehicle so far on this trip.
-     */
-    public float getDistance() { return this.distance; }
-    
-    
-    /**
-     * Returns the total distance traveled by the vehicle so far on this trip.
-     * 
-     * @return the total distance traveled by the vehicle so far on this trip.
-     */
-    public boolean getNearlyArrived() { return this.nearlyArrived; }
-    
-    /**
-     * Returns the routing class of the vehicle.
-     * 
-     * @return the routing class of the vehicle.
-     */
-    public int getvehicleClass() { return this.vehicleClass; }
     
     /**
      * Returns the previous X-axis (when the last epoch for visualization interpolation happened) position within the simulation.
@@ -256,4 +228,102 @@ public class VehicleSnapshot {
      * @return the previous Y-axis position within the simulation.
      */
     public double getPrevY() { return this.prev_y; }
+    
+    /**
+     * Returns the X-axis (longitude?) position within the simulation.
+     * 
+     * @return the X-axis (longitude?) position within the simulation.
+     */
+    public double getX() { return this.x; }
+    
+    /**
+     * Returns the Y-axis (latitude?) position within the simulation.
+     *  
+     * @return the Y-axis (latitude?) position within the simulation.
+     */
+    public double getY() { return this.y; }
+        
+    /**
+     * Returns the current speed of the vehicle within the simulation.
+     * 
+     * @return the current speed of the vehicle within the simulation.
+     */
+    public float getSpeed() { return this.speed; }   
+    
+    /**
+     * Returns the origin X-axis (longitude?) position within the simulation.
+     * 
+     * @return the origin X-axis (longitude?) position within the simulation.
+     */    
+    
+    
+    public double getOriginX() { return this.originX; }
+
+    /**
+     * Returns the origin Y-axis position within the simulation.
+     * 
+     * @return the origin Y-axis position within the simulation.
+     */
+    public double getOriginY() { return this.originY; }
+    
+
+    /**
+     * Returns the destination X-axis (longitude?) position within the simulation.
+     * 
+     * @return the destination X-axis (longitude?) position within the simulation.
+     */
+    public double getDestX() { return this.destX; }
+     
+    
+    /**
+     * Returns the destination Y-axis  position within the simulation.
+     * 
+     * @return the destination Y-axis  position within the simulation.
+     */
+    public double getDestY() { return this.destY; }
+    
+    /**
+     * Returns the whether the vehicle is near the destination.
+     *   
+     * @return Whether the vehicle is near the destination.
+     */
+    public boolean getNearlyArrived() { return this.nearlyArrived; }
+    
+    /**
+     * Returns the routing class of the vehicle.
+     * 
+     * @return the routing class of the vehicle.
+     */
+    public int getvehicleClass() { return this.vehicleClass; }    
+    
+    /**
+     * Returns the road ID of the vehicle within the simulation.
+     * 
+     * @return the road ID of the vehicle within the simulation.
+     */
+    public int getRoadID() { return this.roadID; }    
+   
+    /**
+     * Returns the time of departure of the vehicle for the current trip.
+     * 
+     * @return the time of departure of the vehicle for the current trip.
+     */
+    //public int getDeparture() { return this.departure; }
+    
+    
+    /**
+     * Returns the expected arrival time of the vehicle for the current trip.
+     * 
+     * @return the expected arrival time of the vehicle for the current trip.
+     */
+    //public int getArrival() { return this.arrival; }
+    
+    
+    /**
+     * Returns the total distance traveled by the vehicle so far on this trip.
+     * 
+     * @return the total distance traveled by the vehicle so far on this trip.
+     */
+    //public float getDistance() { return this.distance; }
+
 }

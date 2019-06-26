@@ -673,21 +673,35 @@ public class CsvOutputWriter implements DataConsumer {
         
         // extract the values from the vehicle snapshot
         int id = vehicle.getId();
+        double prev_x = vehicle.getPrevX();
+        double prev_y = vehicle.getPrevY();    
         double x = vehicle.getX();
         double y = vehicle.getY();
-        //double z = vehicle.getZ();
-        float speed = vehicle.getSpeed();
-        int departure = vehicle.getDeparture();
-        int arrival = vehicle.getArrival();
-        float distance = vehicle.getDistance();
-        boolean nearlyArrived = vehicle.nearlyArrived;
+        float speed = vehicle.getSpeed();  
+        double originalX = vehicle.getOriginX();
+        double originalY = vehicle.getOriginY();
+        double destX = vehicle.getDestX();
+        double destY = vehicle.getDestY();
+        boolean nearlyArrived = vehicle.getNearlyArrived();
         int vehicleClass = vehicle.getvehicleClass();
-        double prev_x = vehicle.getPrevX();
-        double prev_y = vehicle.getPrevY();
+        int roadID = vehicle.getRoadID();
+        //double z = vehicle.getZ();
+   
+        //int departure = vehicle.getDeparture();
+        //int arrival = vehicle.getArrival();
+        //float distance = vehicle.getDistance();
+
+
         
         // build the csv line and return it
-        return (id + "," + x + "," + y + "," + speed + "," +
-                departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
+        //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
+        //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
+        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
+        		originalX + "," + originalY + "," + destX + "," + destY + "," +
+                nearlyArrived + "," + vehicleClass + "," + roadID);
+        //departure + "," +
+        //arrival + "," +
+        //distance + "," +
     }
     
     

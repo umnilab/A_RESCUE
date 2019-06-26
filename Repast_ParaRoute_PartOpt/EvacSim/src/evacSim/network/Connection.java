@@ -524,30 +524,40 @@ public class Connection implements DataConsumer {
         
         // extract all the values from the vehicle snapshot
         int id = vehicle.getId();
+        double prev_x = vehicle.getPrevX();
+        double prev_y = vehicle.getPrevY();
         double x = vehicle.getX();
         double y = vehicle.getY();
         float speed = vehicle.getSpeed();
-        int departure = vehicle.getDeparture();
-        int arrival = vehicle.getArrival();
-        float distance = vehicle.getDistance();
+        double originalX = vehicle.getOriginX();
+        double originalY = vehicle.getOriginY();
+        double destX = vehicle.getDestX();
+        double destY = vehicle.getDestY();
         boolean nearlyArrived = vehicle.getNearlyArrived();
         int vehicleClass = vehicle.getvehicleClass();
-        double prev_x = vehicle.getPrevX();
-        double prev_y = vehicle.getPrevY();
-        
+        int roadID = vehicle.getRoadID();    
+        //int departure = vehicle.getDeparture();
+        //int arrival = vehicle.getArrival();
+        //float distance = vehicle.getDistance();
+
         // put them together into a string for the socket and return it
         return id + "," +
+        	   prev_x + "," +
+        	   prev_y + "," +
                x + "," +
                y + "," +
                speed + "," +
-               departure + "," +
-               arrival + "," +
-               distance + "," +
+               originalX + "," +
+               originalY + "," +
+               destX + "," +
+               destY + "," +
                nearlyArrived + "," +
-               vehicleClass + "," +
-               prev_x + "," + 
-               prev_y;
-    }
+               vehicleClass + "," +      
+               roadID ;
+               //departure + "," +
+               //arrival + "," +
+               //distance + "," +
+}
     
     /**
      * Returns the socket message representation of the given vehicle.
@@ -566,14 +576,14 @@ public class Connection implements DataConsumer {
 		int endTime = event.endTime;
 		int eventID = event.eventID;
 		int roadID = event.roadID;
-
+ 
         // put them together into a string for the socket and return it
         return startTime + "," +
         	endTime + "," +
         	eventID + "," +
         	roadID ;
     }
-    
+      
     /**
      * This is the control portion of the body of the thread which runs
      * periodically to pull items from the data collection buffer and

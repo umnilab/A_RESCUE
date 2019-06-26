@@ -88,17 +88,22 @@ public class TickSnapshot {
         
         // pull out values from the vehicle & coord we need to capture
         int id = vehicle.getVehicleID();
-        double x = coordinate.x;
-        double y = coordinate.y;
-        double z = coordinate.z;
-        float speed = vehicle.currentSpeed();
-        int departure = vehicle.getDepTime();
-        int arrival = vehicle.getEndTime();
-        float distance = vehicle.accummulatedDistance_;
-        boolean nearlyArrived = vehicle.nearlyArrived();
-        int vehicleClass = vehicle.getVehicleClass();
         double prev_x = vehicle.getpreviousEpochCoord().x;
         double prev_y = vehicle.getpreviousEpochCoord().y;
+        double x = coordinate.x;
+        double y = coordinate.y;
+        float speed = vehicle.currentSpeed();
+        double originalX =  vehicle.getOriginalCoord().x;
+        double originalY = vehicle.getOriginalCoord().y;
+        double destX = vehicle.getDestCoord().x;
+        double destY = vehicle.getDestCoord().y;
+        boolean nearlyArrived = vehicle.nearlyArrived();
+        int vehicleClass = vehicle.getVehicleClass();
+        int roadID = vehicle.getRoad().getID();
+        //int departure = vehicle.getDepTime();
+        //int arrival = vehicle.getEndTime();
+        //float distance = vehicle.accummulatedDistance_;
+        //double z = coordinate.z;
         
         // TODO: perform any checks on the extracted values
         
@@ -111,16 +116,17 @@ public class TickSnapshot {
         }
         
         // create a snapshot for the vehicle and store it in the map
-        VehicleSnapshot snapshot = new VehicleSnapshot(id, 
-                                                       x, y, z, 
-                                                       speed,
-                                                       departure,
-                                                       arrival,
-                                                       distance,
+        VehicleSnapshot snapshot = new VehicleSnapshot(id, prev_x, prev_y,
+        											   x, y, speed,
+        											   originalX, originalY,
+                                                       destX, destY, 
                                                        nearlyArrived,
                                                        vehicleClass,
-                                                       prev_x,
-                                                       prev_y);
+                                                       roadID            
+                                                       //departure,
+                                                       //arrival,
+                                                       //distance,    
+                                                       );
         this.vehicles.put(id, snapshot);
     }
     
@@ -141,7 +147,7 @@ public class TickSnapshot {
         
         //Add event to the arraylist
         if(type == 1){//if it is event starting
-            this.events.get(0).add(event);
+            this.events.get(0).add(event); 
         }else if (type == 2){//if it is event ending
         	this.events.get(1).add(event);
         }else{//if external event has been added to queue
@@ -149,7 +155,7 @@ public class TickSnapshot {
         }
     }
     
-    
+      
     /**
      * Returns a list of vehicle IDs stored in the tick snapshot.
      * 
