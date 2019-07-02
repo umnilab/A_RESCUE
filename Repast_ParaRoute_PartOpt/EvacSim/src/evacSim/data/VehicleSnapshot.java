@@ -54,7 +54,7 @@ public class VehicleSnapshot {
     final public double destY;                                                             
  
     /** Vehicle is traveling on the last segment of its path, so close to destination. */
-    final public boolean nearlyArrived;
+    final public int nearlyArrived;
     
     /** Vehicle routing class. */
     final public int vehicleClass;
@@ -122,7 +122,7 @@ public class VehicleSnapshot {
                            double originY,
                            double destX, 
                            double destY,
-                           boolean nearlyArrived,
+                           int nearlyArrived,
                            int vehicleClass,
                            int roadID
                            //double z,
@@ -287,7 +287,7 @@ public class VehicleSnapshot {
      *   
      * @return Whether the vehicle is near the destination.
      */
-    public boolean getNearlyArrived() { return this.nearlyArrived; }
+    public int getNearlyArrived() { return this.nearlyArrived; }
     
     /**
      * Returns the routing class of the vehicle.

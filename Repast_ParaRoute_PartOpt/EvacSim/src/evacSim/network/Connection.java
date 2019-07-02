@@ -533,7 +533,7 @@ public class Connection implements DataConsumer {
         double originalY = vehicle.getOriginY();
         double destX = vehicle.getDestX();
         double destY = vehicle.getDestY();
-        boolean nearlyArrived = vehicle.getNearlyArrived();
+        int nearlyArrived = vehicle.getNearlyArrived();
         int vehicleClass = vehicle.getvehicleClass();
         int roadID = vehicle.getRoadID();    
         //int departure = vehicle.getDeparture();

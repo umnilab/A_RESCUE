@@ -1467,11 +1467,11 @@ public class Vehicle {
 		this.originalCoord = coord;
 	}
 
-	public boolean nearlyArrived(){
+	public int nearlyArrived(){//HG: If nearly arrived then return 1 else 0
 		if(this.nextRoad_ == null){
-			return true;
+			return 1;
 		}else{
-			return false;
+			return 0;
 		}
 	}
 	

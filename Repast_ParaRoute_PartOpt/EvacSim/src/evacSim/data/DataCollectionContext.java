@@ -25,6 +25,9 @@ public class DataCollectionContext extends DefaultContext<Object> {
     /** A consumer of output data from the buffer which saves it to disk. */
     private CsvOutputWriter outputWriter;
     
+    /** A consumer of output data from the buffer which saves it to disk. */
+    private JsonOutputWriter jsonOutputWriter;
+    
     
     /**
      * Creates the data collection framework for the program and ensures
@@ -45,6 +48,14 @@ public class DataCollectionContext extends DefaultContext<Object> {
         if (GlobalVariables.ENABLE_CSV_WRITE) {
             this.outputWriter = new CsvOutputWriter();
             this.collector.registerDataConsumer(this.outputWriter);
+        }
+
+     // create the JSON output file writer.  without specifying a filename,
+        // this will generate a unique value including a current timestamp
+        // and placing it in the current jre working directory.
+        if (GlobalVariables.ENABLE_JSON_WRITE) {
+            this.jsonOutputWriter = new JsonOutputWriter();
+            this.collector.registerDataConsumer(this.jsonOutputWriter);
         }
     }
     

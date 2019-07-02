@@ -9,31 +9,35 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import evacSim.GlobalVariables;
 
 
 /**
- * evacSim.data.CsvOutputWriter
+ * evacSim.data.JsonOutputWriter
  * 
  * This data consumer writes the contents of the simulation output buffer
- * to disk in the CSV format.  If no file is specified, the output will
+ * to disk in the JSON format.  If no file is specified, the output will
  * be written to the same location as this program with a default name
- * of the format "EvacSim_Output_<timestamp>.csv".  If this is the case,
+ * of the format "EvacSim_Output_<timestamp>.json".  If this is the case,
  * a new filename with an updated timestamp will be used for each restart 
  * of the writing process.
  * 
- * The first field of each line is the simulation tick to which the data
- * of the line pertains, and the second field of each line is the type of
- * data represented by that line.  Each additional field from the third
- * column to the end of the line is specific to the type of data being
- * represented by that line.
+ * The way data is stored in this file is dependent on what format is needed 
+ * for web-interface/visualization. Each JSON file consists of two entries 
+ * for two ticksnaphots. Each ticksnapshot starts with the tick and consists 
+ * of a list of lists to stores entries for different vehicle snapshots.
  * 
- * @author Christopher Thompson (thompscs@purdue.edu)
+ * @author Christopher Thompson (thompscs@purdue.edu) and Hemant Gehlot 
  * @version 1.0
- * @date 10 August 2017
+ * @date 10 August 2017, 6 June 2019
  */
-public class CsvOutputWriter implements DataConsumer {
+public class JsonOutputWriter implements DataConsumer {
     
     /** Whether or not existing output files should be appended. */
     private boolean append;
@@ -44,13 +48,13 @@ public class CsvOutputWriter implements DataConsumer {
     /** The file to which output data will be written. */
     private File file;
     
-    /** The writer which streams prepared CSV content to the output file. */
+    /** The writer which streams prepared JSON content to the output file. */
     private BufferedWriter writer;
     
-    /** The number of lines written to the current CSV file. */
-    private int linesWritten;
+    /** HG: The number of ticks written to the current JSON file. */
+    private int ticksWritten;
     
-    /** The number in the output series for the current CSV file.  */
+    /** The number in the output series for the current JSON file.  */
     private int fileSeriesNumber;
     
     /** The thread which periodically reads the buffer for data to process. */
@@ -64,25 +68,28 @@ public class CsvOutputWriter implements DataConsumer {
     
     /** Whether or not the output writer is paused for consuming data. */
     private boolean paused;
-        
+    
+    /** HG: This HashMap stores the data of ticks for every json file. */
+    private Map<String, Object> storeJsonObjects;
+    
     
     /**
-     * Creates the CSV output writer object using a default file name and
+     * Creates the JSON output writer object using a default file name and
      * not appending the contents to 
      */
-    public CsvOutputWriter() {
-        this(new File(CsvOutputWriter.createDefaultFilePath()), false);
+    public JsonOutputWriter() {
+        this(new File(JsonOutputWriter.createDefaultFilePath()), false);
     }
     
     
     /**
-     * Creates the CSV output writer object to place output from the
+     * Creates the JSON output writer object to place output from the
      * simulation buffer into the file specified.
      * 
      * @param file the file to which output will be written.
      * @param append whether or not to append to an existing file.
      */
-    public CsvOutputWriter(File file, boolean append) {
+    public JsonOutputWriter(File file, boolean append) {
         // set whether or not we are to append to existing files
         this.append = append;
         
@@ -104,9 +111,10 @@ public class CsvOutputWriter implements DataConsumer {
         this.writer = null;
         this.writingThread = null;
         this.fileSeriesNumber = 1;
-        this.linesWritten = 0;
+        this.ticksWritten = 0;
+        this.storeJsonObjects = new HashMap<String, Object>();
         
-        DataCollector.printDebug("CSV", "FILE: " + this.file.getAbsolutePath());
+        DataCollector.printDebug("JSON", "FILE: " + this.file.getAbsolutePath());
     }
     
     
@@ -156,7 +164,6 @@ public class CsvOutputWriter implements DataConsumer {
         // set the output file to the one given 
         this.file = file;
         this.fileSeriesNumber = 1;
-        this.linesWritten = 0;
         
         // check if we are now to use a default filename or not 
         if (this.file == null) {
@@ -199,7 +206,7 @@ public class CsvOutputWriter implements DataConsumer {
         
         // create a new, unique filename if one has not been set
         if (this.defaultFilenames || this.file == null) {
-            this.file = new File(CsvOutputWriter.createDefaultFilePath());
+            this.file = new File(JsonOutputWriter.createDefaultFilePath());
         }
         
         // create the data writer
@@ -218,18 +225,18 @@ public class CsvOutputWriter implements DataConsumer {
                 boolean running = true;
                 while (running) {
                     // check if we are supposed to be done
-                    if (!CsvOutputWriter.this.consuming) {
-                        DataCollector.printDebug("CSV", "NOT CONSUMING");
+                    if (!JsonOutputWriter.this.consuming) {
+                        DataCollector.printDebug("JSON", "NOT CONSUMING");
                         break;
                     }
                     
                     // check if we are supposed to be paused
-                    if (CsvOutputWriter.this.paused) {
-                        DataCollector.printDebug("CSV", "PAUSED");
+                    if (JsonOutputWriter.this.paused) {
+                        DataCollector.printDebug("JSON", "PAUSED");
                         // we are currently paused, so we will wait our delay
                         // before performing another poll on our running state
                         try {
-                            Thread.sleep(GlobalVariables.CSV_BUFFER_REFRESH);
+                            Thread.sleep(GlobalVariables.JSON_BUFFER_REFRESH);
                             continue;
                         }
                         catch (InterruptedException ie) {
@@ -239,14 +246,14 @@ public class CsvOutputWriter implements DataConsumer {
                     }
                     
                     // get the next item from the buffer. HGehlot: I have changed from 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only send the data at the new frequency for viz interpolation
-                    double nextTick = CsvOutputWriter.this.currentTick + GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
+                    double nextTick = JsonOutputWriter.this.currentTick + GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
                     if (snapshot == null) {
                         // the buffer has no more items for us at this time
                         if (writeCount > 0) {
                             String report = "Wrote " + writeCount + 
                                 " ticks to disk (" + totalCount + " total)";
-                            DataCollector.printDebug("CSV", report);
+                            DataCollector.printDebug("JSON", report);
                             writeCount = 0;
                         }
                         
@@ -260,7 +267,7 @@ public class CsvOutputWriter implements DataConsumer {
                         // delay to give it a chance to add a few new data
                         // items before we loop around and try again...
                         try {
-                            Thread.sleep(GlobalVariables.CSV_BUFFER_REFRESH);
+                            Thread.sleep(GlobalVariables.JSON_BUFFER_REFRESH);
                             continue;
                         }
                         catch (InterruptedException ie) {
@@ -270,19 +277,19 @@ public class CsvOutputWriter implements DataConsumer {
                     }
                     
                     // update the currently processing tick index to this item
-                    CsvOutputWriter.this.currentTick = 
+                    JsonOutputWriter.this.currentTick = 
                             snapshot.getTickNumber();
                     
                     // process the current item into lines in the output file
                     try {
-                        CsvOutputWriter.this.writeTickSnapshot(snapshot);
+                        JsonOutputWriter.this.writeTickSnapshot(snapshot);
                         totalCount++;
                         writeCount++;
                     }
                     catch (IOException ioe) {
                         // TODO: Handle being unable to write output lines?
                         String errMsg = "WRITE ERROR: " + ioe.getMessage();
-                        DataCollector.printDebug("CSV" + errMsg);
+                        DataCollector.printDebug("JSON" + errMsg);
                     }
                     
                     // wait a short delay (a few ms) to give java's thread
@@ -299,15 +306,15 @@ public class CsvOutputWriter implements DataConsumer {
                 
                 // we have finished collecting data, so we will close the file
                 try {
-                    CsvOutputWriter.this.closeOutputFileWriter();
+                    JsonOutputWriter.this.closeOutputFileWriter();
                 }
                 catch (IOException ioe) {
                     // TODO: Handle not being able to close the output file?
                 }
                 
                 // set the data consumption flags as finished
-                CsvOutputWriter.this.paused = false;
-                CsvOutputWriter.this.consuming = false;
+                JsonOutputWriter.this.paused = false;
+                JsonOutputWriter.this.consuming = false;
             }
         };
         this.writingThread = new Thread(writingRunnable);
@@ -433,7 +440,7 @@ public class CsvOutputWriter implements DataConsumer {
     
     
     /**
-     * Creates a buffered writer for saving the CSV lines to disk and
+     * Creates a buffered writer for saving the JSON lines to disk and
      * opens it.  Any problem doing so will throw an IOException. 
      * 
      * @throws IOException if the file could not be opened for writing.
@@ -460,7 +467,7 @@ public class CsvOutputWriter implements DataConsumer {
                 // because we're already trapping IOException from the flush,
                 // we had to do the awkward step of throwing something else
                 // to get out of the try so we can throw a new IOException...
-                throw new IOException("CSV writer already has a file open.");
+                throw new IOException("JSON writer already has a file open.");
             }
         }
         
@@ -522,13 +529,13 @@ public class CsvOutputWriter implements DataConsumer {
         }
         
         // if we are using default filenames, we know for certain the format
-        // of the series.  it should end ".1.csv", ".2.csv", etc.  we can
+        // of the series.  it should end ".1.json", ".2.json", etc.  we can
         // easily create the next in the series this way.  if not, we will
         // have to do a little extra checking to setup the next file.
         String currentEnd = "." + this.fileSeriesNumber + "." + 
-                            GlobalVariables.CSV_DEFAULT_EXTENSION;
+                            GlobalVariables.JSON_DEFAULT_EXTENSION;
         String nextEnd = "." + (this.fileSeriesNumber + 1) + "." +
-                         GlobalVariables.CSV_DEFAULT_EXTENSION;
+                         GlobalVariables.JSON_DEFAULT_EXTENSION;
         
         String newFilename = filename;
         if (newFilename.endsWith(currentEnd)) {
@@ -538,7 +545,7 @@ public class CsvOutputWriter implements DataConsumer {
         else {
             // the user is using a custom filename format so we need to
             // do a little extra work to create the next filename...
-            String extEnd = "." + GlobalVariables.CSV_DEFAULT_EXTENSION;
+            String extEnd = "." + GlobalVariables.JSON_DEFAULT_EXTENSION;
             if (newFilename.endsWith(extEnd)) {
                 newFilename = newFilename.replaceAll(extEnd + "$", nextEnd);
             }
@@ -564,8 +571,7 @@ public class CsvOutputWriter implements DataConsumer {
     
     
     /**
-     * Writes the given tick snapshot to the output file after converting
-     * it to a series of CSV lines.  The buffered writer is flushed at the
+     * HG: Writes the given tick snapshot to the output file.  The buffered writer is flushed at the
      * end so any cached content is immediately written out to disk.
      * 
      * @param tick the tick snapshot to be written to the output file.
@@ -576,54 +582,54 @@ public class CsvOutputWriter implements DataConsumer {
             return;
         }
         
-        // get the csv representation of this tick
-        String[] lines = CsvOutputWriter.createTickLines(tick);
-        if (lines == null || lines.length < 1) {
-            // there was no csv output created by this tick
+        // get the json representation of this tick
+        ArrayList<ArrayList<Double>> tickArray = JsonOutputWriter.createTickLines(tick);
+        if (tickArray == null) {
+            // there was no json output created by this tick
             return;
         }
         
         // check the file has been opened
         if (this.writer == null) {
-            throw new IOException("The CSV file is not open for writing.");
+            throw new IOException("The JSON file is not open for writing.");
         }
         
         // check if writing these lines will go over our output file limit
         // and create the next output file in the series if necessary
-        if ((this.linesWritten + lines.length) >= GlobalVariables.CSV_LINE_LIMIT) {
+        if (this.ticksWritten >= GlobalVariables.JSON_TICK_LIMIT_PER_FILE) {
             this.startNextOutputFile();
-            this.linesWritten = 0;
+            this.ticksWritten = 0;
+            this.storeJsonObjects = new HashMap<String, Object>();
         }
         
-        // write the lines to disk (including newlines)
-        for (String line : lines) {
-            if (line == null) {
-                continue;
-            }
-            
-            this.writer.write(line);
-            this.writer.newLine();
-        }
-        this.linesWritten += lines.length;
+        //add this tick information to the HashMap
+        String tickString = String.valueOf(tick.getTickNumber());
+        this.storeJsonObjects.put(tickString, tickArray);
         
+        //write the the ticks to json file if only one more tick information needs to be added to the current file
+        if (this.ticksWritten == GlobalVariables.JSON_TICK_LIMIT_PER_FILE - 1) {
+        	JSONObject jsonObject = new JSONObject();
+            jsonObject.putAll(this.storeJsonObjects);
+        	this.writer.write(JSONObject.toJSONString(jsonObject));
+        }
+        this.ticksWritten += 1;
+        		
         // flush all of our changes now so nothing waits cached in memory
         this.writer.flush();
     }
     
     
     /**
-     * Returns the CSV representation of the given tick snapshot as
-     * an array of strings.
+     * HG: Returns the given tick snapshot as an array of arrays.
      * 
-     * @param tick the snapshot of the tick to convert to CSV.
-     * @return the array of CSV lines for the given tick snapshot.
+     * @param tick the snapshot of the tick to convert.
+     * @return the array of array for the given tick snapshot.
      */
-    public static String[] createTickLines(TickSnapshot tick) {
+    public static ArrayList<ArrayList<Double>> createTickLines(TickSnapshot tick) {
         // check the tick snapshot exists
         if (tick == null) {
             return null;
         }
-        String tickNum = "" + tick.getTickNumber();
         
         // get the list of of vehicles stored in the tick snapshot 
         Collection<Integer> vehicleIDs = tick.getVehicleList();
@@ -631,8 +637,8 @@ public class CsvOutputWriter implements DataConsumer {
             return null;
         }
         
-        // loop through the list of vehicles and convert each to a CSV line
-        ArrayList<String> lines = new ArrayList<String>();
+        // loop through the list of vehicles and convert each to a arraylist
+        ArrayList<ArrayList<Double>> tickArray = new ArrayList<ArrayList<Double>>();
         for (Integer id : vehicleIDs) {
             if (id == null) {
                 continue;
@@ -644,47 +650,49 @@ public class CsvOutputWriter implements DataConsumer {
                 continue;
             }
             
-            // get the CSV representation of this vehicle
-            String line = CsvOutputWriter.createVehicleLine(vehicle);
-            if (line == null) {
+            // get the arraylist representation of this vehicle
+            ArrayList<Double> vehicleArray = JsonOutputWriter.createVehicleLine(vehicle);
+            if (vehicleArray == null) {
                 continue;
             }
             
-            // prepend the tick number, data type token, and add to array
-            line = tickNum + ",V," + line;
-            lines.add(line);
+            //add the vehicle array to the tick arraylist
+            tickArray.add(vehicleArray);
+            
         }
         
-        // return the array of lines from this tick snapshot
-        return lines.toArray(new String[0]);
+        return tickArray;
+        
     }
     
     
     /**
-     * Returns the CSV representation of the given vehicle snapshot. 
+     * HG: Returns the arraylist representation of the given vehicle snapshot. 
      * 
-     * @param vehicle the vehicle snapshot to convert to CSV.
-     * @return the CSV representation of the given vehicle snapshot.
+     * @param vehicle the vehicle snapshot to convert to arraylist.
+     * @return the arraylist representation of the given vehicle snapshot.
      */
-    public static String createVehicleLine(VehicleSnapshot vehicle) {
+    public static ArrayList<Double> createVehicleLine(VehicleSnapshot vehicle) {
         if (vehicle == null) {
             return null;
         }
         
+        ArrayList<Double> vehicleArray = new ArrayList<Double>();
+        
         // extract the values from the vehicle snapshot
-        int id = vehicle.getId();
-        double prev_x = vehicle.getPrevX();
-        double prev_y = vehicle.getPrevY();    
-        double x = vehicle.getX();
-        double y = vehicle.getY();
-        float speed = vehicle.getSpeed();  
-        double originalX = vehicle.getOriginX();
-        double originalY = vehicle.getOriginY();
-        double destX = vehicle.getDestX();
-        double destY = vehicle.getDestY();
-        int nearlyArrived = vehicle.getNearlyArrived();
-        int vehicleClass = vehicle.getvehicleClass();
-        int roadID = vehicle.getRoadID();
+        vehicleArray.add(Double.valueOf(vehicle.getId()));
+        vehicleArray.add(vehicle.getPrevX());
+        vehicleArray.add(vehicle.getPrevY());
+        vehicleArray.add(vehicle.getX());
+        vehicleArray.add(vehicle.getY());
+        vehicleArray.add(Double.valueOf(vehicle.getSpeed()));
+        vehicleArray.add(vehicle.getOriginX());
+        vehicleArray.add(vehicle.getOriginY());
+        vehicleArray.add(vehicle.getDestX());
+        vehicleArray.add(vehicle.getDestY());
+        vehicleArray.add(Double.valueOf(vehicle.getNearlyArrived()));
+        vehicleArray.add(Double.valueOf(vehicle.getvehicleClass()));
+        vehicleArray.add(Double.valueOf(vehicle.getRoadID()));
         //double z = vehicle.getZ();
    
         //int departure = vehicle.getDeparture();
@@ -692,13 +700,13 @@ public class CsvOutputWriter implements DataConsumer {
         //float distance = vehicle.getDistance();
 
 
-        
-        // build the csv line and return it
+        return vehicleArray;
+        // build the json line and return it
         //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
         //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
-        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
-        		originalX + "," + originalY + "," + destX + "," + destY + "," +
-                nearlyArrived + "," + vehicleClass + "," + roadID);
+//        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
+//        		originalX + "," + originalY + "," + destX + "," + destY + "," +
+//                nearlyArrived + "," + vehicleClass + "," + roadID);
         //departure + "," +
         //arrival + "," +
         //distance + "," +
@@ -708,7 +716,7 @@ public class CsvOutputWriter implements DataConsumer {
     /**
      * Returns a guaranteed unique absolute path for writing output
      * from the simulation within the current working directory and
-     * using the filename format of "EvacSim_Output_<timestamp>.csv"
+     * using the filename format of "EvacSim_Output_<timestamp>.json"
      * so long as this method is not called more frequently than once
      * per second.  If there is a problem writing to this location,
      * the file will be saved to a temporary directory determined by
@@ -719,8 +727,8 @@ public class CsvOutputWriter implements DataConsumer {
      */
     public static String createDefaultFilePath() {
         // get the default pieces of the filename to assemble
-        String defaultFilename = GlobalVariables.CSV_DEFAULT_FILENAME;
-        String defaultExtension = GlobalVariables.CSV_DEFAULT_EXTENSION;
+        String defaultFilename = GlobalVariables.JSON_DEFAULT_FILENAME;
+        String defaultExtension = GlobalVariables.JSON_DEFAULT_EXTENSION;
         
         // get a timestamp to use in the filename
         SimpleDateFormat formatter = 
@@ -732,7 +740,7 @@ public class CsvOutputWriter implements DataConsumer {
                           ".1." + defaultExtension;
         
         // get the default directory for placing the file
-        String defaultDir = GlobalVariables.CSV_DEFAULT_PATH;
+        String defaultDir = GlobalVariables.JSON_DEFAULT_PATH;
         if (defaultDir == null || defaultDir.trim().length() < 1) {
             // there was no default dir specified in the config file
             // so we will just use the home directory of the user

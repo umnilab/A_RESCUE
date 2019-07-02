@@ -272,6 +272,20 @@ private static Properties config;
 	public static final int CSV_LINE_LIMIT =
 	        Integer.valueOf(loadConfig("CSV_LINE_LIMIT"));
 	
+	// Parameters for the JSON output file writer (similar to as the csv parameters except JSON_TICK_LIMIT_PER_FILE which represents the number of ticks are written in a json file)
+		public static final boolean ENABLE_JSON_WRITE =
+		        Boolean.valueOf(loadConfig("ENABLE_JSON_WRITE"));
+		public static final String JSON_DEFAULT_FILENAME =
+		        loadConfig("JSON_DEFAULT_FILENAME");
+		public static final String JSON_DEFAULT_EXTENSION =
+		        loadConfig("JSON_DEFAULT_EXTENSION");
+		public static final String JSON_DEFAULT_PATH = 
+		        loadConfig("JSON_DEFAULT_PATH");
+		public static final int JSON_BUFFER_REFRESH =
+		        Integer.valueOf(loadConfig("JSON_BUFFER_REFRESH"));
+		public static final int JSON_TICK_LIMIT_PER_FILE =
+		        Integer.valueOf(loadConfig("JSON_TICK_LIMIT_PER_FILE"));
+	
 	// Parameters for handling network connections to remote programs
 	public static final boolean DEBUG_NETWORK =
 	        Boolean.valueOf(loadConfig("DEBUG_NETWORK"));
