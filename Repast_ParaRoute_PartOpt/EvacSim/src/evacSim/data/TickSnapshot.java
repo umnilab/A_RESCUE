@@ -99,7 +99,7 @@ public class TickSnapshot {
         double destY = vehicle.getDestCoord().y;
         int nearlyArrived = vehicle.nearlyArrived();
         int vehicleClass = vehicle.getVehicleClass();
-        int roadID = vehicle.getRoad().getID();
+        int roadID = vehicle.getRoad().getLinkid();
         //int departure = vehicle.getDepTime();
         //int arrival = vehicle.getEndTime();
         //float distance = vehicle.accummulatedDistance_;
