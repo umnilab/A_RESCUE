@@ -125,7 +125,7 @@ abstract class AbstractGaloisExecutor<T> extends AbstractConcurrentExecutor<T> {
         // commitIteration only puts an iteration into ready to commit
         numCommitted++;
         recordCpuId();
-      } catch (IterationAbortException _) {
+      } catch (IterationAbortException iae) {
         // an iteration has thrown WorkNotUsefulException/WorkNotProgressiveException,
         // and tries to commit before it goes to RTC (i.e. completes), another thread
         // signals it to abort itself
@@ -200,12 +200,12 @@ abstract class AbstractGaloisExecutor<T> extends AbstractConcurrentExecutor<T> {
             try {
               body.call(item, this);
               doCommit(item);
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               readd(item);
               doAbort();
-            } catch (WorkNotProgressiveException _) {
+            } catch (WorkNotProgressiveException wpe) {
               doCommit(item);
-            } catch (WorkNotUsefulException _) {
+            } catch (WorkNotUsefulException wnue) {
               doCommit(item);
             } catch (Throwable e) {
               // Gracefully terminate processes

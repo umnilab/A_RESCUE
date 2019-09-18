@@ -42,7 +42,7 @@ public class SystemProperties {
     }
     try {
       return Enum.valueOf(enumType, value);
-    } catch (IllegalArgumentException _) {
+    } catch (IllegalArgumentException iae) {
       return def;
     }
   }
@@ -86,7 +86,7 @@ public class SystemProperties {
     }
     try {
       return Double.parseDouble(value);
-    } catch (NumberFormatException _) {
+    } catch (NumberFormatException nfe) {
       return def;
     }
   }

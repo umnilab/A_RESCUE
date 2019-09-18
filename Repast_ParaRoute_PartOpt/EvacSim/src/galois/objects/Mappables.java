@@ -115,7 +115,7 @@ public class Mappables {
                 body.call(index);
                 ctx.commit(index);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -137,7 +137,7 @@ public class Mappables {
                 body.call(index, arg1);
                 ctx.commit(index);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -159,7 +159,7 @@ public class Mappables {
                 body.call(index, arg1, arg2);
                 ctx.commit(index);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -239,7 +239,7 @@ public class Mappables {
                 body.call(item);
                 ctx.commit(item);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -262,7 +262,7 @@ public class Mappables {
                 body.call(item, arg1);
                 ctx.commit(item);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -285,7 +285,7 @@ public class Mappables {
                 body.call(item, arg1, arg2);
                 ctx.commit(item);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }

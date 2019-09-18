@@ -110,7 +110,7 @@ class LineMapper implements Mappable<String> {
             body.call(line);
             ctx.commit(line);
             break;
-          } catch (IterationAbortException _) {
+          } catch (IterationAbortException iae) {
             ctx.abort();
           }
         }
@@ -131,7 +131,7 @@ class LineMapper implements Mappable<String> {
             body.call(line, arg1);
             ctx.commit(line);
             break;
-          } catch (IterationAbortException _) {
+          } catch (IterationAbortException iae) {
             ctx.abort();
           }
         }
@@ -153,7 +153,7 @@ class LineMapper implements Mappable<String> {
             body.call(line, arg1, arg2);
             ctx.commit(line);
             break;
-          } catch (IterationAbortException _) {
+          } catch (IterationAbortException iae) {
             ctx.abort();
           }
         }

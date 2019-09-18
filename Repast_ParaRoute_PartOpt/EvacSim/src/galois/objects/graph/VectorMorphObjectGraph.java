@@ -829,7 +829,7 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
               body.call(node);
               ctx.commit(node);
               break;
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               ctx.abort();
             }
           }
@@ -854,7 +854,7 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
               body.call(node, arg1);
               ctx.commit(node);
               break;
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               ctx.abort();
             }
           }
@@ -879,7 +879,7 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
               body.call(node, arg1, arg2);
               ctx.commit(node);
               break;
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               ctx.abort();
             }
           }

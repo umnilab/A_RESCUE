@@ -730,7 +730,7 @@ public final class LocalComputationGraph<N extends GObject, E> implements Object
             body.call(item);
             ctx.commit(item);
             break;
-          } catch (IterationAbortException _) {
+          } catch (IterationAbortException iae) {
             ctx.abort();
           }
         }
@@ -755,7 +755,7 @@ public final class LocalComputationGraph<N extends GObject, E> implements Object
             body.call(item, arg1);
             ctx.commit(item);
             break;
-          } catch (IterationAbortException _) {
+          } catch (IterationAbortException iae) {
             ctx.abort();
           }
         }
@@ -780,7 +780,7 @@ public final class LocalComputationGraph<N extends GObject, E> implements Object
             body.call(item, arg1, arg2);
             ctx.commit(item);
             break;
-          } catch (IterationAbortException _) {
+          } catch (IterationAbortException iae) {
             ctx.abort();
           }
         }
@@ -909,7 +909,7 @@ public final class LocalComputationGraph<N extends GObject, E> implements Object
               body.call(item);
               ctx.commit(item);
               break;
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               ctx.abort();
             }
           }
@@ -938,7 +938,7 @@ public final class LocalComputationGraph<N extends GObject, E> implements Object
               body.call(item, arg1);
               ctx.commit(item);
               break;
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               ctx.abort();
             }
           }
@@ -967,7 +967,7 @@ public final class LocalComputationGraph<N extends GObject, E> implements Object
               body.call(item, arg1, arg2);
               ctx.commit(item);
               break;
-            } catch (IterationAbortException _) {
+            } catch (IterationAbortException iae) {
               ctx.abort();
             }
           }

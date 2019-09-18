@@ -598,7 +598,7 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
                 body.call(c);
                 ctx.commit(c);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -619,7 +619,7 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
                 body.call(c, arg1);
                 ctx.commit(c);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }
@@ -640,7 +640,7 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
                 body.call(c, arg1, arg2);
                 ctx.commit(c);
                 break;
-              } catch (IterationAbortException _) {
+              } catch (IterationAbortException iae) {
                 ctx.abort();
               }
             }

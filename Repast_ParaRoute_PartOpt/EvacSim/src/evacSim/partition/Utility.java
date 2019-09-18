@@ -58,7 +58,7 @@ public class Utility {
   private static Scanner getScanner(String filename) throws Exception {
     try {
       return new Scanner(new GZIPInputStream(new FileInputStream(filename + ".gz")));
-    } catch (FileNotFoundException _) {
+    } catch (FileNotFoundException fnfe) {
       return new Scanner(new FileInputStream(filename));
     }
   }

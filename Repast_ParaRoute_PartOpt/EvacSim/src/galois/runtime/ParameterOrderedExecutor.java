@@ -267,7 +267,7 @@ class ParameterOrderedExecutor<T> extends AbstractParameterExecutor<T, MutableRe
       executionHistory.put(it, getTimeStep());
       currStepRec.logExecuted(it, notUsefull);
 
-    } catch (IterationAbortException _) {
+    } catch (IterationAbortException iae) {
       logger.fine(String.format("%s(%s) aborted", it, cur));
       abortIteration(boxedCur, it, false);
     }
