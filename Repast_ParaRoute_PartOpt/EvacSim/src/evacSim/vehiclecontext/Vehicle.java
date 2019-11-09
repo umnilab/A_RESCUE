@@ -7,6 +7,7 @@ import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.opengis.referencing.operation.MathTransformFactory;
 import org.apache.commons.lang3.ArrayUtils;
@@ -125,6 +126,8 @@ public class Vehicle {
 	private ArrayList<Road> futureRoutingRoad;
 	
 	private int vehicleClass;//HG:For distinguishing between different classes
+	protected double travelTimeForPreviousRoute; //Xue: The travel time stored for the last time the route was updated.
+	protected int previousTick; //Xue: the tick when the last routing was updated.
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
@@ -171,6 +174,8 @@ public class Vehicle {
 		this.Nshadow = 0;
 		this.futureRoutingRoad = new ArrayList<Road>();
 		this.setVehicleClass(1);
+		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
+		this.previousTick = 0; // Xue:The previous tick is set to be 0 at the beginning.
 	}
 
 	//Gehlot: This is a new subclass of Vehicle class that has some different parameters like max acceleration and max deceleration 
@@ -216,6 +221,8 @@ public class Vehicle {
 		this.Nshadow = 0;
 		this.futureRoutingRoad = new ArrayList<Road>();
 		this.setVehicleClass(-1);//TODO HG:Change it later when use it
+		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
+		this.previousTick = 0; // Xue: The previous tick is set to be 0 at the beginning.
 	}
 	
 	public void setNextPlan() {
@@ -360,6 +367,7 @@ public class Vehicle {
 		
 	}
 	
+	
 	public void setNextRoad() {
 		try {
 			if (!this.atOrigin) {
@@ -371,7 +379,28 @@ public class Vehicle {
 				if (this.lastRouteTime < RouteV.getValidTime()) {
 					// The information are outdated, needs to be recomputed
 					// Check if the current lane connects to the next road in the new path
-					List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);
+					//List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);                 
+					Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
+					Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 
+					
+					List<Road> tempPathNew = entry.getValue();    // Calculate path 
+					double pathTimeNew = entry.getKey();           // Calculate path time
+					int currentTick = (int) RepastEssentials.GetTickCount();  //Calculate tick.
+					List<Road> tempPath = entry.getValue();
+					
+					double pathTimeOldPath = this.travelTimeForPreviousRoute - (currentTick-this.previousTick) * GlobalVariables.SIMULATION_STEP_SIZE;
+					//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
+					//, the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
+					if (pathTimeOldPath - pathTimeNew > GlobalVariables.ETA * pathTimeOldPath) {
+						//System.out.print("relativeDifference \n");
+						if (pathTimeOldPath - pathTimeNew > GlobalVariables.TAU) {
+							//System.out.print("AbsoluteDifference \n");
+							tempPath = tempPathNew;                              // Update path.
+							this.travelTimeForPreviousRoute = pathTimeNew;       // Update path time.
+							this.previousTick =  currentTick;                    // Update tick.
+						}
+					}
+					
 					if (this.checkNextLaneConnected(tempPath.get(1))){
 						// If the next road is connected to the current lane, then we assign the path, otherwise, we use the old path
 						// Clear legacy impact
@@ -387,6 +416,7 @@ public class Vehicle {
 						this.roadPath.remove(0);
 						this.nextRoad_ = this.roadPath.get(1);
 					}
+					
 //					System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				} else {
 					// Route information is still valid
@@ -416,7 +446,12 @@ public class Vehicle {
 				// Clear legacy impact
 				this.clearShadowImpact();
 				// Compute new route
-				this.roadPath = RouteV.vehicleRoute(this, this.destCoord);	
+				//this.roadPath = RouteV.vehicleRoute(this, this.destCoord); 
+				Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
+				Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 //
+				List<Road> tempPath = entry.getValue(); //get the route  
+				this.roadPath = tempPath;  //store the route
+				
 				this.setShadowImpact();
 				this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 				this.atOrigin = false;
@@ -1548,6 +1583,7 @@ public class Vehicle {
 		this.tempLane_ = null;
 		this.house = null;
 		this.clearShadowImpact(); // ZH: clear any remaining shadow impact
+		GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES = GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES + 1;//HG: Keep increasing this variable to count the number of vehicles that have reached destination.
 		// TODO: try the remove method in the vehicleContext
 	}
 

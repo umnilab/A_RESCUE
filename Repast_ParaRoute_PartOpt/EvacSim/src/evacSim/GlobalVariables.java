@@ -1,5 +1,5 @@
 /*
- ÔøΩCopyright 2008 Nick Malleson/Samiul Hasan/Xianyuan Zhan
+ ÈîüÁ¥∫opyright 2008 Nick Malleson/Samiul Hasan/Xianyuan Zhan
 
  This file is part of RepastCity.
 
@@ -241,14 +241,14 @@ private static Properties config;
 	public static final boolean SET_DEMAND_FROM_ACTIVITY_MODELS = Boolean
 			.valueOf(loadConfig("SET_DEMAND_FROM_ACTIVITY_MODELS"));
 	
-	/*Chris: DEBUG_DATA_BUFFER and DEBUG_NETWORK are the ones that determine whether or not the data collection classes or the network classes print their debugging statements to the simulationís stdout.  I checked it into the repository with them both disabled.
+	/*Chris: DEBUG_DATA_BUFFER and DEBUG_NETWORK are the ones that determine whether or not the data collection classes or the network classes print their debugging statements to the simulationÊäØ stdout.  I checked it into the repository with them both disabled.
 	 * ENABLE_CSV_WRITE and ENABLE_NETWORK set whether or not the CSV file is written to the local disk and whether or not the simulation listens for incoming connections.  I committed the file with both enabled.
 	 * DATA_CLEANUP_REFRESH is set to 30 seconds and determines how often the data buffer will delete old items that are no longer needed.  Things are only removed from the buffer once all the users of the buffer report that they are processing a tick # that is greater.  
 	 * I.e., if the CSV file writer says that it is writing tick #1500 to disk and the network says it is sending tick #1600, then everything before 1500 can be removed as already used by all but everything between 1500-1600 will remain.
 	 * The processing threads for the CSV file writing and the network sending will each read all the items in the buffer until they run to the end of the buffer.  Then they will wait a short while before checking to see if new items have arrived in the buffer.  
-	 * CSV_BUFFER_REFRESH and NETWORK_BUFFER_REFRESH determine how long that wait is.  For the CSV writing, it is 5 seconds, and for the network sending it is 2.5 seconds.  Thereís no real reason why they need to be these values.  
+	 * CSV_BUFFER_REFRESH and NETWORK_BUFFER_REFRESH determine how long that wait is.  For the CSV writing, it is 5 seconds, and for the network sending it is 2.5 seconds.  ThereÊäØ no real reason why they need to be these values.  
 	 * They just seemed like reasonable times to use.Separate from the actual data sending, the socket is also periodically reporting the status of the simulation  (not running, loading, processing tick #2345, etc.) to the remote programs that are listening.  
-	 * NETWORK_STATUS_REFRESH is how often those status message send.  It is set to 5 seconds. NETWORK_LISTEN_PORT is the port number to use when connecting to the simulation.  As I mentioned last week, the default is 8080 but that is a very commonly used port by web servers which may already be in use or blocked by a firewall.  Iíve set it for now as 33131, which is a reference to Miami (the zipcode of the downtown area).  You can change this to any value higher than 1024 and lower than 65535.NETWORK_MAX_MESSAGE_SIZE is the size (in bytes) of the largest message to be sent over the socket.  Sockets technically have no size limitation, but some of the socket libraries have a very low default limit on what they will accept if you do not explicitly set this value.  I set it to 16MB which is multiple magnitudes higher than any sizes Iíve seen during testing, but we may need to increase it in the future if the number of vehicle movements in one tick gets very larger.The remaining three values pertain to the CSV file location.  The CSV file writer allows you to specify exactly where the file is to be placed on disk if we add a UI element to handle that or just code in a fixed location.  If you do not give it a location, though, it will do what it is doing now:  write a file with a unique filename to a default location.  It will be written to the location <CSV_DEFAULT_PATH>/<CSV_DEFAULT_FILENAME>_<current timestamp>.<CSV_DEFAULT_EXTENSION>.  If the CSV_DEFAULT_PATH value is blank (as Iíve committed it), the userís home directory will be used.  So, as it is committed right now, every time the simulation is run, it will create something like ìEvacSimOutput_2017-11-29-0255.csvî in your home directory.*/
+	 * NETWORK_STATUS_REFRESH is how often those status message send.  It is set to 5 seconds. NETWORK_LISTEN_PORT is the port number to use when connecting to the simulation.  As I mentioned last week, the default is 8080 but that is a very commonly used port by web servers which may already be in use or blocked by a firewall.  IÊä≥e set it for now as 33131, which is a reference to Miami (the zipcode of the downtown area).  You can change this to any value higher than 1024 and lower than 65535.NETWORK_MAX_MESSAGE_SIZE is the size (in bytes) of the largest message to be sent over the socket.  Sockets technically have no size limitation, but some of the socket libraries have a very low default limit on what they will accept if you do not explicitly set this value.  I set it to 16MB which is multiple magnitudes higher than any sizes IÊä≥e seen during testing, but we may need to increase it in the future if the number of vehicle movements in one tick gets very larger.The remaining three values pertain to the CSV file location.  The CSV file writer allows you to specify exactly where the file is to be placed on disk if we add a UI element to handle that or just code in a fixed location.  If you do not give it a location, though, it will do what it is doing now:  write a file with a unique filename to a default location.  It will be written to the location <CSV_DEFAULT_PATH>/<CSV_DEFAULT_FILENAME>_<current timestamp>.<CSV_DEFAULT_EXTENSION>.  If the CSV_DEFAULT_PATH value is blank (as IÊä≥e committed it), the userÊäØ home directory will be used.  So, as it is committed right now, every time the simulation is run, it will create something like ÊèàvacSimOutput_2017-11-29-0255.csvÔøΩ in your home directory.*/
 	
 	// Parameters for the data collection buffer
 	public static final boolean ENABLE_DATA_COLLECTION = 
@@ -315,6 +315,8 @@ private static Properties config;
 	
 	public static LinkedList<NetworkEventObject> newEventQueue = new LinkedList<NetworkEventObject>();//Global queue for storing events
 	
+	public static int NUMBER_OF_ARRIVED_VEHICLES = 0; //Gehlot: This variable will keep track of the number of vehicles arrived at destination for visualization purposes
+	
 	//Parameters for handling multiclass routing. Note that the proportion of original routing vehicles being generated is equal to 1 - (PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES). 
 	public static final boolean ENABLE_MULTICLASS_ROUTING =
 	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_ROUTING"));
@@ -334,4 +336,8 @@ private static Properties config;
 			.valueOf(loadConfig("MAX_ACCELERATION_2")); // meter/sec2
 	public static final float MAX_DECELERATION_2 = Float
 			.valueOf(loadConfig("MAX_DECELERATION_2")); // meter/sec2
+	
+	
+	public static final double ETA = Double.valueOf(loadConfig("ETA"));   //parameter for adaptive routing
+	public static final double TAU  = Double.valueOf(loadConfig("TAU"));   //parameter for adaptive routing
 }

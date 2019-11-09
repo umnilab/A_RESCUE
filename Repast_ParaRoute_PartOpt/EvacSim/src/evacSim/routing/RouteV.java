@@ -1,6 +1,7 @@
 package evacSim.routing;
 
 import java.util.List;
+import java.util.Map;
 
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
@@ -65,8 +66,8 @@ public class RouteV {
 	}
 	
 	/* Perform vehicle routing: returns a path
-	 * The routing uses K-shortest path */
-	public static List<Road> vehicleRoute(Vehicle vehicle, Coordinate destination)
+	/* Xue: Oct 2019, the return type is the HashMap, please see the computeRoute() in the VehicleRouting class*/
+	public static Map<Double,List<Road>> vehicleRoute(Vehicle vehicle, Coordinate destination) 
 		throws Exception {
 		int time = (int) RepastEssentials.GetTickCount();
 		/* The first part resolves the origin and destination road and junctions */

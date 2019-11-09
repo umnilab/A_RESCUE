@@ -2,14 +2,15 @@ package evacSim.routing;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.GraphPath;
-
 import com.vividsolutions.jts.geom.Coordinate;
 
 import repast.simphony.context.space.graph.ContextJungNetwork;
@@ -73,8 +74,10 @@ public class VehicleRouting {
 	}
 	
 	/* Perform the routing computation */
-	public List<Road> computeRoute(Road currentRoad, Road destRoad,
+	/* Xue: Oct 2019, change the return type to HashMap, where the double value is the route time, and the list<Road> is the path */
+	public Map<Double,List<Road>> computeRoute(Road currentRoad, Road destRoad,  
 			Junction currJunc, Junction destJunc) {
+		Map<Double,List<Road>> computeRouteResult = new HashMap<Double,List<Road>>();  
 		List<Road> roadPath_;
 		List<RepastEdge<Junction>> shortestPath;
 		shortestPath = null;
@@ -120,8 +123,7 @@ public class VehicleRouting {
 				}
 			}
 			shortestPath = kshortestPath.get(k).getEdgeList();
-			
-		} else if (GlobalVariables.SINGLE_SHORTEST_PATH) {
+		}  else if (GlobalVariables.SINGLE_SHORTEST_PATH) {
 			/* Old thread unsafe implementation using shortest path algorithm from Repast library
 			ShortestPath<Junction> p = new ShortestPath<Junction>(network);
 			shortestPath = p.getPath(currJunc, destJunc);
@@ -146,9 +148,7 @@ public class VehicleRouting {
 //			{
 //				System.out.println("id="+cityContext.getLinkIDFromEdge(edge));
 //			}
-		}
-
-		
+		}	
 		// Find the roads which are associated with these edges
 		double shortestPathLength = 0.0f;
 		roadPath_ = new ArrayList<Road>();
@@ -161,9 +161,7 @@ public class VehicleRouting {
 			shortestPathLength = shortestPathLength + edge.getWeight();
 		}
 		shortestPath = null;
-		
-		return roadPath_;
+		computeRouteResult.put(shortestPathLength, roadPath_);      
+		return computeRouteResult;                                  
 	}
-	
-
 }

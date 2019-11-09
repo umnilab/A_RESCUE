@@ -1,6 +1,7 @@
 package evacSim.vehiclecontext;
 
 import java.util.List;
+import java.util.Map;
 
 import evacSim.citycontext.House;
 import evacSim.citycontext.Road;
@@ -32,7 +33,12 @@ public class Vehicle_predefinedroutes extends Vehicle {
 				if (this.lastRouteTime < RouteV.getValidTime()) {
 					// The information are outdated, needs to be recomputed
 					// Check if the current lane connects to the next road in the new path
-					List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);
+					// List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord); //
+					
+					Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
+					Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 //get the entry
+					List<Road> tempPath = entry.getValue(); //get the path
+					
 					if (this.checkNextLaneConnected(tempPath.get(1))){
 						// If the next road is connected to the current lane, then we assign the path, otherwise, we use the old path
 						// Clear legacy impact
@@ -78,7 +84,12 @@ public class Vehicle_predefinedroutes extends Vehicle {
 				// Clear legacy impact
 				this.clearShadowImpact();
 				// Compute new route
-				this.roadPath = RouteV.vehicleRoute(this, this.destCoord);	
+				// this.roadPath = RouteV.vehicleRoute(this, this.destCoord);	  //
+				Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //get the HashMap
+				Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 //get the entry
+				List<Road> tempPath = entry.getValue(); //get the value
+				this.roadPath = tempPath;  //get the path
+				
 				this.setShadowImpact();
 				this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 				this.atOrigin = false;
