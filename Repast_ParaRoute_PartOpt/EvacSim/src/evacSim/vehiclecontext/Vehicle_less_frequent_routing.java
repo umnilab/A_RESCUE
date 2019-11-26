@@ -50,7 +50,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 						double pathTimeOldPath = this.travelTimeForPreviousRoute - (currentTick-this.previousTick) * GlobalVariables.SIMULATION_STEP_SIZE;
 						//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
 						//, the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
-						if (pathTimeOldPath - pathTimeNew > GlobalVariables.ETA * pathTimeOldPath) {
+						if (pathTimeOldPath - pathTimeNew > this.indiffBand * pathTimeOldPath) { //Rajat, Xue
 							//System.out.print("relativeDifference \n");
 							if (pathTimeOldPath - pathTimeNew > GlobalVariables.TAU) {
 								//System.out.print("AbsoluteDifference \n");

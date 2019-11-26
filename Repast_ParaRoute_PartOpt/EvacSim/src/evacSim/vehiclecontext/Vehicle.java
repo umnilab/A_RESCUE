@@ -128,6 +128,7 @@ public class Vehicle {
 	private int vehicleClass;//HG:For distinguishing between different classes
 	protected double travelTimeForPreviousRoute; //Xue: The travel time stored for the last time the route was updated.
 	protected int previousTick; //Xue: the tick when the last routing was updated.
+	protected double indiffBand; //Rajat, Xue: the relative difference threshold of route time for the old route and new route.
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
@@ -176,6 +177,7 @@ public class Vehicle {
 		this.setVehicleClass(1);
 		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
 		this.previousTick = 0; // Xue:The previous tick is set to be 0 at the beginning.
+		this.indiffBand = assignIndiffBand();  //generate the parameter of route selection from a distribution.
 	}
 
 	//Gehlot: This is a new subclass of Vehicle class that has some different parameters like max acceleration and max deceleration 
@@ -223,7 +225,9 @@ public class Vehicle {
 		this.setVehicleClass(-1);//TODO HG:Change it later when use it
 		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
 		this.previousTick = 0; // Xue: The previous tick is set to be 0 at the beginning.
+		this.indiffBand = assignIndiffBand();  //generate the parameter of route selection from a distribution.
 	}
+	
 	
 	public void setNextPlan() {
 		Plan current = this.house.getActivityPlan().get(0);
@@ -391,7 +395,7 @@ public class Vehicle {
 					double pathTimeOldPath = this.travelTimeForPreviousRoute - (currentTick-this.previousTick) * GlobalVariables.SIMULATION_STEP_SIZE;
 					//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
 					//, the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
-					if (pathTimeOldPath - pathTimeNew > GlobalVariables.ETA * pathTimeOldPath) {
+					if (pathTimeOldPath - pathTimeNew > indiffBand * pathTimeOldPath) {  //Rajat, Xue
 						//System.out.print("relativeDifference \n");
 						if (pathTimeOldPath - pathTimeNew > GlobalVariables.TAU) {
 							//System.out.print("AbsoluteDifference \n");
@@ -2576,5 +2580,24 @@ public class Vehicle {
 
 	public void setVehicleClass(int vehicleClass) {
 		this.vehicleClass = vehicleClass;
+	}
+	
+	//Rajat, Xue
+	public double assignIndiffBand(){
+		// the indifference band (eta) is assumed to be distributed as an isosceles triangle  
+		// centered at the mean eta and having base width 0.5*eta (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor)
+		double mean = GlobalVariables.ETA;
+		double base = 0.5 * mean; // base width of the triangle
+		double start = mean - 0.5 * base; // starting point of the distribution
+		double end = mean + 0.5 * base; // end point ""
+		double rand = Math.random();
+		double indiffbandvalue;
+		if (rand <= 0.5) {
+			indiffbandvalue = start + base * Math.sqrt(0.5 * rand);
+		} else {
+			indiffbandvalue = end - base * Math.sqrt(0.5 * (1 - rand));
+		}
+		// System.out.println("generate parameter");
+		return indiffbandvalue;	
 	}
 }
