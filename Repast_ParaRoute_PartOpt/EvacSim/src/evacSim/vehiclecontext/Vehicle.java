@@ -231,7 +231,6 @@ public class Vehicle {
 	
 	public void setNextPlan() {
 		Plan current = this.house.getActivityPlan().get(0);
-
 		Plan next = this.house.getActivityPlan().get(1);
 		int destinationZone = next.getLocation();
 		this.destinationZoneId = destinationZone;
@@ -1493,6 +1492,11 @@ public class Vehicle {
 	public House getHouse() {
 		return this.house;
 	}
+	
+	// LZ: reset house to update plan
+	public void setHouse(House h){
+		this.house = h;
+	}
 
 	public Coordinate getOriginalCoord() {
 		return originalCoord;
@@ -1514,7 +1518,39 @@ public class Vehicle {
 		}
 	}
 	
+	// LZ: change this function for dynamic destination
 	public void setReachDest() {
+		Zone destinationZone = ContextCreator.getCityContext().findHouseWithDestID(this.getDestinationID());
+		if(destinationZone.getType()==1){
+			System.out.println("The first piece of code is working!");
+			if(destinationZone.receiveEvacuees(1)){ //LZ: one passenger per vehicle, need further concern
+				Coordinate target = null;
+				GeometryFactory geomFac = new GeometryFactory();
+				this.removeFromLane();
+				this.removeFromMacroList();
+				target = this.destCoord;
+				Geometry targetGeom = geomFac.createPoint(target);
+//				this.lock.lock();
+				vehicleGeography.move(this, targetGeom);
+//				this.lock.unlock();
+				double time = System.currentTimeMillis();
+				if (this.house.getActivityPlan().size() > 1) {
+					this.endTime = (int) RepastEssentials.GetTickCount();
+					this.reachActLocation = true;
+					this.resetVehicle();
+				} else {
+					this.endTime = (int) RepastEssentials.GetTickCount();
+					this.reachActLocation = false;
+					this.reachDest = true;
+					this.killVehicle();
+				}
+			}
+			else{
+				System.out.println("The second piece of code is working!");
+				this.findNextDestination(); // Shelter does not have space, find next one
+			}
+		}
+		else{
 		Coordinate target = null;
 		GeometryFactory geomFac = new GeometryFactory();
 		this.removeFromLane();
@@ -1534,6 +1570,7 @@ public class Vehicle {
 			this.reachActLocation = false;
 			this.reachDest = true;
 			this.killVehicle();
+		}
 		}
 	}
 	
@@ -2599,5 +2636,20 @@ public class Vehicle {
 		}
 		// System.out.println("generate parameter");
 		return indiffbandvalue;	
+	}
+	
+	// LZ: find next destination， works in the following way, create new house(Plan), find the closest shelter, set up the house and update it in the vehicle variable, then call setNextPlan to switch to new destination.
+	public void findNextDestination(){
+		House new_house = new House(this.getVehicleID(), this.getDestinationID());
+		ArrayList<Integer> locations = new ArrayList<Integer>();
+		ArrayList<Float> durations = new ArrayList<Float>();
+		locations.add(this.getDestinationID());
+		durations.add(0f);
+		locations.add(ContextCreator.getCityContext().getClosestShelter(this.destCoord).getIntegerID());
+		durations.add(0f);
+		new_house.setActivityPlan(locations, durations);
+		this.setHouse(new_house);
+		// Call setNextPlan to trigger the rerouting mechanism
+		this.setNextPlan();
 	}
 }

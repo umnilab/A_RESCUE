@@ -4,4 +4,3 @@ gradle
 groovy
 grunit
 java
-scala

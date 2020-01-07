@@ -17,10 +17,31 @@ public class Zone {
 	private ArrayList<Integer> time;
 	private int integerID;
 	private String charID;
-
-	public Zone() {
+	
+	// LZ: Dynamic destination
+	private int type; // 0 for normal zone, 1 for shelter
+	private int capacity;
+	private int occupancy;
+    
+	// LZ: this changed
+	public Zone(int integerID) {
+		System.out.println("Initializer 1 called: "+ integerID);
+		this.integerID = integerID;
 		this.id = ContextCreator.generateAgentID();
 		this.houses = new ArrayList<House>();
+		this.type = 0;
+		this.capacity = 0;
+		this.occupancy = 0;
+	}
+	
+	public Zone(int integerID, int type, int capacity) {
+		System.out.println("Initializer 2 called: "+integerID);
+		this.integerID = integerID;
+		this.id = ContextCreator.generateAgentID();
+		this.houses = new ArrayList<House>();
+		this.type = type;
+		this.capacity = capacity;
+		this.occupancy = 0;
 	}
 
 	public void setHouses(ArrayList<House> houses) {
@@ -59,12 +80,12 @@ public class Zone {
 	// /////////////////////////////////////////RODRIGO/////////////////////////////////
 
 	public int getIntegerID() {
-		return integerID;
+		return this.integerID;
 	}
 
-	public void setIntegerID(int integerID) {
-		this.integerID = integerID;
-	}
+//	public void setIntegerID(int integerID) {
+//		this.integerID = integerID;
+//	}
 
 	public String getCharID() {
 		return charID;
@@ -103,4 +124,19 @@ public class Zone {
 	public ArrayList<Integer> getEvacuationTimePerVehicle() {
 		return this.time;
 	}
+	
+	public int getType(){
+		return this.type;
+	}
+	//LZ: add this function
+	public boolean receiveEvacuees(int amount){
+		if(this.occupancy+amount<=this.capacity){
+			this.occupancy = this.occupancy + amount;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 }

@@ -36,7 +36,10 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 	
 	public void createVehicleContextFromActivityModels(
 			Geography<Zone> zoneGeography, Geography<Vehicle> vehicleGeography) {
+		int i = 0;
 		for (Zone z : zoneGeography.getAllObjects()) {
+			//System.out.println(z.getIntegerID());
+			i+=1;
 			Geometry hgeom = zoneGeography.getGeometry(z);
 			Coordinate coord = hgeom.getCoordinate();
 			for (House h : z.getHouses()) {

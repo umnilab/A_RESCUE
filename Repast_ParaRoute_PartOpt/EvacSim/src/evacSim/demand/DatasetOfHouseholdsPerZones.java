@@ -75,6 +75,7 @@ public class DatasetOfHouseholdsPerZones {
 							//House h = this.housesbyID.get(prevID);
 							zoneID = locations.get(0);
 							House h = new House (prevID, zoneID);
+							//System.out.println(locations);
 							h.setActivityPlan(locations, durations);
 							if (!housesbyzone.containsKey(zoneID)){
 								ArrayList<House> arraylistwithfirsthouse = new ArrayList<House>();

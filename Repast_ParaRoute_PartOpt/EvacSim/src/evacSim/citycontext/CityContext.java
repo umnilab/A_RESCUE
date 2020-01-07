@@ -524,7 +524,7 @@ public class CityContext extends DefaultContext<Object> {
 		System.err
 				.println("CityContext: findHouseWithID: Error, couldn't find a house with id: "
 						+ id);
-		return new Zone();
+		return null;
 	}
 
 	// /////////////////////////////////R&K////////////////////////////////////////////
@@ -539,7 +539,7 @@ public class CityContext extends DefaultContext<Object> {
 		System.err
 				.println("CityContext: findHouseWithDestID: Error, couldn't find a house with id: "
 						+ destid);
-		return new Zone();
+		return null;
 	}
 
 	// /////////////////////////////////R&K////////////////////////////////////////////
@@ -618,5 +618,40 @@ public class CityContext extends DefaultContext<Object> {
 	
 	public static double squaredEuclideanDistance(Coordinate p0, Coordinate p1){
 		return (p0.x - p1.x)*(p0.x - p1.x) + (p0.y - p1.y)*(p0.y - p1.y);
+	}
+	
+	/*
+	 * LZ: Returns the closest shelter as of current traffic conditions 
+	 * Can be extended to a more complex case, i.e. validate shelter
+	 */
+	public Zone getClosestShelter(Coordinate coord) throws NullPointerException{
+		if (coord == null){
+			throw new NullPointerException(
+					"CityContext: getClosestShelter: ERROR: the input coordinate is null");
+		}
+		GeometryFactory geomFac = new GeometryFactory();
+		Geography<?> zoneGeography = ContextCreator.getZoneGeography();
+		// Use a buffer for efficiency
+		Point point = geomFac.createPoint(coord);
+		Geometry buffer = point.buffer(GlobalVariables.XXXX_BUFFER);
+		double minDist = Double.MAX_VALUE;
+		Zone nearestShelter = null;
+		for (Zone shelter: zoneGeography.getObjectsWithin(buffer.getEnvelopeInternal(), Zone.class)){
+			DistanceOp distOp = new DistanceOp(point, zoneGeography.getGeometry(shelter));
+			if(shelter.getType() == 1){ // if shelter
+				double thisDist = distOp.distance();
+				if (thisDist < minDist) {
+					minDist = thisDist;
+					nearestShelter = shelter;
+				} // if thisDist < minDist
+			}
+		}
+		if (nearestShelter == null) {
+			System.err.println(
+					"CityContext: getClosestShelter (Coordinate coord): ERROR: couldn't find a shelter at these coordinates:\n\t"
+							+ coord.toString());
+		}
+
+		return nearestShelter;
 	}
 }

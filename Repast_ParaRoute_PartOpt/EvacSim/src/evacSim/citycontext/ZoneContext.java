@@ -34,14 +34,32 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 		/* Read in the data and add to the context and geography */
 		File zoneFile = null;
+		File shelterFile = null;
 		ShapefileLoader<Zone> zoneLoader = null;
+		ShapefileLoader<Zone> shelterLoader = null;
 		try {
 			zoneFile = new File(GlobalVariables.ZONES_SHAPEFILE);
 			URI uri=zoneFile.toURI();
 			zoneLoader = new ShapefileLoader<Zone>(Zone.class,
 					uri.toURL(), zoneGeography, this);
+			int int_id =  1;
 			while (zoneLoader.hasNext()) {
-				zoneLoader.next();
+				zoneLoader.nextWithArgs(int_id);
+				int_id += 1;
+			}
+			
+			// For test, use the same shp to generate shelters
+			System.out.println("Shelter intialization.");
+			shelterFile = new File(GlobalVariables.ZONES_SHAPEFILE);
+			uri=shelterFile.toURI();
+			shelterLoader = new ShapefileLoader<Zone>(Zone.class,
+					uri.toURL(), zoneGeography, this);
+			while (shelterLoader.hasNext()) {
+				shelterLoader.nextWithArgs(int_id, 1, 5); //LZ: for test capacity is set to 5 
+				int_id += 1;
+			}
+			for (Zone z : zoneGeography.getAllObjects()) {
+				System.out.println(z.getIntegerID());
 			}
 
 		} catch (java.net.MalformedURLException e) {
@@ -49,7 +67,6 @@ public class ZoneContext extends DefaultContext<Zone> {
 					.println("Malformed URL exception when reading housesshapefile.");
 			e.printStackTrace();
 		}
-
 
 		// SH - for implementing activity simulator
 		if (GlobalVariables.SET_DEMAND_FROM_ACTIVITY_MODELS) {
@@ -71,6 +88,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 			HashMap<Integer, ArrayList<House>> housesbyzone = new HashMap<Integer, ArrayList<House>>(); // turnOnAfterTest
 			housesbyzone = dataset.getHousesByZone();
+			System.out.println(housesbyzone);
 			for (Zone z : zoneGeography.getAllObjects()) {
 				int keyzone = z.getIntegerID();
 				if (housesbyzone.containsKey(keyzone)){
