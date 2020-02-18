@@ -340,4 +340,6 @@ private static Properties config;
 	
 	public static final double ETA = Double.valueOf(loadConfig("ETA"));   //parameter for adaptive routing
 	public static final double TAU  = Double.valueOf(loadConfig("TAU"));   //parameter for adaptive routing
+	// LZ,RV: Dynamic destination strategy. See CityContext.getClosestShelter() for details
+	public static final int DYNAMIC_DEST_STRATEGY = 1;
 }
