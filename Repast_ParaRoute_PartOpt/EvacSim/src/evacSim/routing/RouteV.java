@@ -67,59 +67,64 @@ public class RouteV {
 	
 	/* Perform vehicle routing: returns a path
 	/* Xue: Oct 2019, the return type is the HashMap, please see the computeRoute() in the VehicleRouting class*/
-	/* LZ,RV: added the parameter "checkZone" which makes the function work
-	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter() */
-	public static Map<Double,List<Road>> vehicleRoute(Vehicle veh,
-			Coordinate destCoord, boolean checkZone) throws Exception {
+	public static Map<Double,List<Road>> vehicleRoute(Vehicle vehicle, Coordinate destination) 
+		throws Exception {
+		int time = (int) RepastEssentials.GetTickCount();
+		/* The first part resolves the origin and destination road and junctions */
+		/*
+		 * See if the current position and the destination are on road segments.
+		 */
+		Coordinate currentCoord = vehicleGeography.getGeometry(vehicle)
+				.getCoordinate();
 
-		// Find origin and destination junctions & resolving their road segments
-		Coordinate currentCoord = vehicleGeography.getGeometry(veh).getCoordinate();
+		/* destination coordinate of the vehicle */
+		Coordinate destCoord = vehicle.getDestCoord();
+
+		Coordinate nearestRoadCoord;
 
 		if (!onRoad(currentCoord)) {
-			Coordinate nearestRoadCoord = getNearestRoadCoord(currentCoord);
+			nearestRoadCoord = getNearestRoadCoord(currentCoord);
 			currentCoord = nearestRoadCoord;
 		}
-		Road currentRoad = veh.getRoad();
+		Road currentRoad = vehicle.getRoad();
 		Road destRoad = cityContext.findRoadAtCoordinates(destCoord, true);
 		
-		// current downstream junction of the road the vehicle is on
-		Junction curDownJunc = veh.getRoad().getJunctions().get(1);
-		// downstream junction of the destination junction along that road
-		Junction destDownJunc = getNearestDownStreamJunction(destCoord, destRoad);
+		/* current downstream junction of the road the vehicle is on */
+		Junction curDownstreamJunc = vehicle.getRoad().getJunctions().get(1);
+		/*
+		 * current downstream junction of the destination junction the vehicle
+		 * is on
+		 */
+		Junction destDownstreamJunc = getNearestDownStreamJunction(destCoord,
+				destRoad);
 
-		if (curDownJunc.getID() == destDownJunc.getID()) {
-			/* LZ,RV: This method is called by vehicle.setNextRoad and CityContext.getClosestShelter(). For the function Vehicle.setNextRoad(), 
-			 * zone locations do not matter, thus, checkZone = false as done in the next method. In CityContext.getClosestShelter(), if the 
-			 * origin & dest zones are not same, and yet curDownstreamJunc = destDownstreamJunc (i.e., the orign and destinations are consecutive), 
-			 * then return the shortest route instead of null */
-			if (!checkZone) {
-				if (veh.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-					System.out.println("Destination road reached " + destRoad.getLinkid()
-						+ " from current road: " + currentRoad.getLinkid());
-				}
-				return null;
+		if (curDownstreamJunc.getID() == destDownstreamJunc.getID()) {
+			if (vehicle.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
+				System.out.println("Destination road reached " + destRoad.getLinkid() +" from current road: " + currentRoad.getLinkid());
 			}
+			
+			return null;
 		}
-		// Set the time that the routing is computed
-		veh.setLastRouteTime((int) RepastEssentials.GetTickCount());
 		
-		return vbr.computeRoute(currentRoad, destRoad, curDownJunc, destDownJunc);
-	}
-	
-	// LZ,RV: override vehicleRoute() signature to be used by Vehicle.setNextRoad()
-	// this is not the signature used by CityContext.getClosestShelter()
-	public static Map<Double,List<Road>> vehicleRoute(
-			Vehicle vehicle, Coordinate destCoord) throws Exception {
-		return vehicleRoute(vehicle, destCoord, false);
+		// Set the time that the routing is computed
+		vehicle.setLastRouteTime(time);
+		
+//		/* Debugging */
+//		List<Road> path = vbr.computeRoute(currentRoad, destRoad, curDownstreamJunc, destDownstreamJunc);
+//		System.out.println("Vehicle: " + vehicle.getId());
+//		printRoute(path);
+		
+		return vbr.computeRoute(currentRoad, destRoad, curDownstreamJunc, destDownstreamJunc);
 	}
 
-	public static void printRoute(List<Road> path) {
+	public static void printRoute(List<Road> path){
 		System.out.print("Route:");
 		for (Road r : path) {
 			System.out.print(" " + r.getLinkid());
 		}
 		System.out.println();
 	}
+	
 	
 	public static Coordinate getNearestRoadCoord(Coordinate coord) {
 		double time = System.currentTimeMillis();
