@@ -130,7 +130,9 @@ public class VehicleRouting {
 			p.finalize();*/
 			
 			/* New implementation using JGraphT */
-			DijkstraShortestPath<Junction, RepastEdge<Junction>> sp = new DijkstraShortestPath<Junction, RepastEdge<Junction>>(transformedNetwork, currJunc, destJunc);
+			DijkstraShortestPath<Junction, RepastEdge<Junction>> sp = new 
+				DijkstraShortestPath<Junction, RepastEdge<Junction>>
+				(transformedNetwork, currJunc, destJunc);
 			shortestPath = sp.getPathEdgeList();
 			
 //			/*debugging*/
@@ -148,7 +150,7 @@ public class VehicleRouting {
 //			{
 //				System.out.println("id="+cityContext.getLinkIDFromEdge(edge));
 //			}
-		}	
+		}
 		// Find the roads which are associated with these edges
 		double shortestPathLength = 0.0f;
 		roadPath_ = new ArrayList<Road>();
@@ -160,8 +162,8 @@ public class VehicleRouting {
 			roadPath_.add(road);
 			shortestPathLength = shortestPathLength + edge.getWeight();
 		}
-		shortestPath = null;
+//		shortestPath = null;
 		computeRouteResult.put(shortestPathLength, roadPath_);      
-		return computeRouteResult;                                  
+		return computeRouteResult;
 	}
 }

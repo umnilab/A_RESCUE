@@ -58,9 +58,9 @@ public class ZoneContext extends DefaultContext<Zone> {
 				shelterLoader.nextWithArgs(int_id, 1, 5); //LZ: for test capacity is set to 5 
 				int_id += 1;
 			}
-			for (Zone z : zoneGeography.getAllObjects()) {
-				System.out.println(z.getIntegerID());
-			}
+//			for (Zone z : zoneGeography.getAllObjects()) {
+//				System.out.println(z.getIntegerID());
+//			}
 
 		} catch (java.net.MalformedURLException e) {
 			System.err
@@ -88,7 +88,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 			HashMap<Integer, ArrayList<House>> housesbyzone = new HashMap<Integer, ArrayList<House>>(); // turnOnAfterTest
 			housesbyzone = dataset.getHousesByZone();
-			System.out.println(housesbyzone);
+//			System.out.println(housesbyzone);
 			for (Zone z : zoneGeography.getAllObjects()) {
 				int keyzone = z.getIntegerID();
 				if (housesbyzone.containsKey(keyzone)){

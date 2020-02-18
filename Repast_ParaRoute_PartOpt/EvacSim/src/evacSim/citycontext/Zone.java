@@ -25,7 +25,7 @@ public class Zone {
     
 	// LZ: this changed
 	public Zone(int integerID) {
-		System.out.println("Initializer 1 called: "+ integerID);
+//		System.out.println("Initializer 1 called: "+ integerID);
 		this.integerID = integerID;
 		this.id = ContextCreator.generateAgentID();
 		this.houses = new ArrayList<House>();
@@ -35,7 +35,7 @@ public class Zone {
 	}
 	
 	public Zone(int integerID, int type, int capacity) {
-		System.out.println("Initializer 2 called: "+integerID);
+//		System.out.println("Initializer 2 called: "+integerID);
 		this.integerID = integerID;
 		this.id = ContextCreator.generateAgentID();
 		this.houses = new ArrayList<House>();
@@ -128,15 +128,23 @@ public class Zone {
 	public int getType(){
 		return this.type;
 	}
-	//LZ: add this function
-	public boolean receiveEvacuees(int amount){
-		if(this.occupancy+amount<=this.capacity){
+	// LZ,RV: update shelter capacity when receiving evacuees
+	public boolean receiveEvacuees (int amount) {
+		if (this.occupancy + amount <= this.capacity) {
 			this.occupancy = this.occupancy + amount;
 			return true;
 		}
-		else{
+		else {
 			return false;
 		}
 	}
+	// LZ,RV: get zone capacity and occupancy
+	public int getCapacity() {
+		return this.capacity;
+	}
 	
+	public int getOccupancy() {
+		return this.occupancy;
+	}
+
 }
