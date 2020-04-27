@@ -146,5 +146,9 @@ public class Zone {
 	public int getOccupancy() {
 		return this.occupancy;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "<Zone" + this.integerID + ">";
+	}
 }

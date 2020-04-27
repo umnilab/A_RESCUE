@@ -826,10 +826,10 @@ public class Road {
 		hour = hour % 24;
 		//each hour set events
 		if (this.curhour<hour) {
-			double value=BackgroundTraffic.backgroundTraffic.get(this.linkid).get(hour)* 0.44704; //HG: convert from Miles per hour to meter per second
-				  
+			double value = BackgroundTraffic.backgroundTraffic.get(this.linkid)
+					.get(hour)* 0.44704; // HG: convert from miles per hour to meters per second
                   if (this.checkEventFlag()) {
-						this.setDefaultFreeSpeed();			
+						this.setDefaultFreeSpeed();
 					}
                   else{
                 	  this.freeSpeed_=value;

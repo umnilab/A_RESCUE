@@ -34,7 +34,6 @@ public class BackgroundTraffic{
 		CSVReader csvreader = null;
 		String[] nextLine;
 		int roadID = 0;
-		ArrayList<Double> value = new ArrayList<Double>(Collections.nCopies(24,0.0d));
 				
 		try {
 			csvreader = new CSVReader(new FileReader(bteventFile));
@@ -48,20 +47,19 @@ public class BackgroundTraffic{
 					readingheader = false;
 					
 				} else {
+					ArrayList<Double> value = new ArrayList<Double>(Collections.nCopies(24,0.0d));
 					roadID = Integer.parseInt(nextLine[0]);
 					for (int i=0 ; i<24 ; i++ ){
 						value.set(i, Double.parseDouble(nextLine[i+1]));
 					}
-					//System.out.println("roadID = "+ roadID+"value =" + value);
-					this.backgroundTraffic.put(roadID,value);
-		            }
-				
+					BackgroundTraffic.backgroundTraffic.put(roadID, value);
+	            }
 			}
 		} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//public TreeMap<Integer,ArrayList<Double>> gettreemap(){

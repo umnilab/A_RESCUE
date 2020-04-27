@@ -1,6 +1,5 @@
 package evacSim.data;
 
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,7 +10,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import evacSim.GlobalVariables;
-
 
 /**
  * evacSim.data.CsvOutputWriter
@@ -269,13 +267,22 @@ public class CsvOutputWriter implements DataConsumer {
                         }
                     }
                     
+                    // RV:DynaDestTest: print the shelter relocations when the simulation ends
+                    if (nextTick == GlobalVariables.SIMULATION_STOP_TIME - 
+                    		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ) {
+                    	System.out.println("Shelter relocations:");
+//                    	System.out.println(GlobalVariables.shelterRelocateTracker);
+                    }
+                    
                     // update the currently processing tick index to this item
                     CsvOutputWriter.this.currentTick = 
                             snapshot.getTickNumber();
                     
                     // process the current item into lines in the output file
                     try {
-                        CsvOutputWriter.this.writeTickSnapshot(snapshot);
+                    	// RV:DynaDestTest: commented `writeTickSnapshot` for only testing
+//                        CsvOutputWriter.this.writeTickSnapshot(snapshot);
+                    	CsvOutputWriter.this.testWriteTickSnapshot(snapshot);
                         totalCount++;
                         writeCount++;
                     }
@@ -578,6 +585,7 @@ public class CsvOutputWriter implements DataConsumer {
         
         // get the csv representation of this tick
         String[] lines = CsvOutputWriter.createTickLines(tick);
+        
         if (lines == null || lines.length < 1) {
             // there was no csv output created by this tick
             return;
@@ -610,6 +618,36 @@ public class CsvOutputWriter implements DataConsumer {
         this.writer.flush();
     }
     
+    /** RV:DynaDestTest: Write to CSV a different variation of the tick snapshot, specifically
+     * for getting the trajectory info as defined in TickSnapShot.storeDynamicDestTestDetails() */
+    private void testWriteTickSnapshot (TickSnapshot tick) throws IOException {
+    	// check if the file has been opened
+        if (this.writer == null) {
+            throw new IOException("The CSV file is not open for writing.");
+        }
+        // write the header row
+        if (this.linesWritten == 0) {
+        	this.writer.write("veh,x,y,dest,speed,time\n");
+        }
+        // get the lines list (excludes current time)
+        ArrayList<String> lines = tick.dynamicDestTestVehDetails;
+        
+        // check if writing these lines will go over our output file limit
+        // and create the next output file in the series if necessary
+        if ((this.linesWritten + lines.size()) >= GlobalVariables.CSV_LINE_LIMIT) {
+            this.startNextOutputFile();
+            this.linesWritten = 0;
+        }
+        // write the lines, adding current time at the end of each line
+        for (String line : lines) {
+        	if (line == null) continue;
+        	
+        	line += "," + (int) tick.getTickNumber();
+        	this.writer.write(line);
+        	this.writer.newLine();
+        }
+        this.linesWritten += lines.size();
+    }
     
     /**
      * Returns the CSV representation of the given tick snapshot as
@@ -658,7 +696,6 @@ public class CsvOutputWriter implements DataConsumer {
         // return the array of lines from this tick snapshot
         return lines.toArray(new String[0]);
     }
-    
     
     /**
      * Returns the CSV representation of the given vehicle snapshot. 
@@ -724,7 +761,7 @@ public class CsvOutputWriter implements DataConsumer {
         
         // get a timestamp to use in the filename
         SimpleDateFormat formatter = 
-                new SimpleDateFormat("YYYY-MM-dd-hhmm-ss");
+                new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss");
         String timestamp = formatter.format(new Date());
         
         // build the filename

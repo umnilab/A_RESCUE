@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacSim.NetworkEventObject;
+import evacSim.citycontext.Plan;
 import evacSim.citycontext.Road;
 import evacSim.vehiclecontext.Vehicle;
 
@@ -37,6 +38,10 @@ public class TickSnapshot {
     
     /** The collection of vehicle data gathered during this time tick. */
     private HashMap<Integer, VehicleSnapshot> vehicles;
+    
+    /** RV:DynaDestTest: String containing relevant details of vehicles 
+     * in this tick for testing purposes */
+    public ArrayList<String> dynamicDestTestVehDetails = new ArrayList<String>();
     
     /** HG: The collection of event data gathered during this time tick. */
     private ArrayList<ArrayList<NetworkEventObject>> events;
@@ -128,6 +133,21 @@ public class TickSnapshot {
                                                        //distance,    
                                                        );
         this.vehicles.put(id, snapshot);
+        // RV:DynaDestTest
+        storeDynamicDestTestDetails(vehicle, coordinate);
+    }
+    
+    /** RV:DynaDestTest: This code is only for testing the dynamic destination feature.
+     * It stores the info of a given vehicle relevant to get its trajectory. This is
+     * different from VehicleSnapShot in that it does not get a lot of other info. */
+    private void storeDynamicDestTestDetails(Vehicle veh, Coordinate coord) 
+    		throws Throwable {
+    	// resolve the current origin and destination ID
+        ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
+        int currentDestID = plans.get(plans.size() - 1).getLocation();
+        // store the vehicle ID, coordinates, speed & current destination 
+        this.dynamicDestTestVehDetails.add(String.format("%d,%f,%f,%d,%f",
+        	veh.getVehicleID(), coord.x, coord.y, currentDestID, veh.currentSpeed()));
     }
     
     /**

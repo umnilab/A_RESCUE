@@ -55,12 +55,10 @@ public class ZoneContext extends DefaultContext<Zone> {
 			shelterLoader = new ShapefileLoader<Zone>(Zone.class,
 					uri.toURL(), zoneGeography, this);
 			while (shelterLoader.hasNext()) {
-				shelterLoader.nextWithArgs(int_id, 1, 5); //LZ: for test capacity is set to 5 
-				int_id += 1;
+				// RV:DynaDestTest: Changed constant shelter capacity to now read from GlobalVariables
+				shelterLoader.nextWithArgs(int_id, 1, GlobalVariables.SHELTER_CAP);
+				int_id++;
 			}
-//			for (Zone z : zoneGeography.getAllObjects()) {
-//				System.out.println(z.getIntegerID());
-//			}
 
 		} catch (java.net.MalformedURLException e) {
 			System.err

@@ -14,4 +14,7 @@ public class Plan {
 	public Float getDuration(){
 		return duration;
 	}
+	public String toString() {
+		return "Plan(" + location + "," + duration + ")";
+	}
 }

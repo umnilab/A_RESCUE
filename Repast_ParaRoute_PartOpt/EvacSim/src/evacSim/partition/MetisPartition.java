@@ -67,12 +67,12 @@ public class MetisPartition {
 		System.out.println("Metis Running...");
 		
 		if (Launcher.getLauncher().isFirstRun()) {
-			System.err.println("Configuration");
-			System.err.println("-------------");
-			System.err.println(" Num of partitions: " + this.npartition);
-			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
-					+ " edges");
-			System.err.println();
+//			System.err.println("Configuration");
+//			System.err.println("-------------");
+//			System.err.println(" Num of partitions: " + this.npartition);
+//			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
+//					+ " edges");
+//			System.err.println();
 		}
 		
 		System.gc(); // For gabage collection
@@ -82,9 +82,8 @@ public class MetisPartition {
 		IntGraph<MetisNode> resultGraph = partition(metisGraph, npartition);
 		Launcher.getLauncher().stopTiming();
 		time = (System.nanoTime() - time) / 1000000;
-//		System.err.println("mincut: " + metisGraph.getMinCut());
-		System.err.println("runtime: " + time + " ms");
-		System.err.println();
+//		System.err.println("runtime: " + time + " ms");
+//		System.err.println();
 		
 		// Calling GaliosToRepastGraph method for testing
 		graphConverter.GaliosToRepastGraph(resultGraph, npartition);
@@ -95,7 +94,7 @@ public class MetisPartition {
 		this.PartitionWeights = graphConverter.getPartitionWeights();
 		int i;
 		for (i = 0; i < this.npartition; i++){
-			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
+//			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
 			// Compute number of vehicles currently in the partition
 			int totNumVeh = 0;
 			int totShadowVeh = 0;
@@ -106,11 +105,11 @@ public class MetisPartition {
 				totRoutingVeh += road.getFutureRoutingVehNum();
 				
 			}
-			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+//			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
 
 		}
 		
-		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
+//		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
 		// Compute number of vehicles currently in the partition
 		int totNumVeh = 0;
 		int totShadowVeh = 0;
@@ -120,7 +119,7 @@ public class MetisPartition {
 			totShadowVeh += road.getShadowVehicleNum();
 			totRoutingVeh += road.getFutureRoutingVehNum();
 		}
-		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+//		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
 		
 		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 	}
@@ -167,9 +166,9 @@ public class MetisPartition {
 		
 		Launcher.getLauncher().stopTiming();
 		time = (System.nanoTime() - time) / 1000000;
-		System.err.println("mincut: " + metisGraph.getMinCut());
-		System.err.println("runtime: " + time + " ms");
-		System.err.println();
+//		System.err.println("mincut: " + metisGraph.getMinCut());
+//		System.err.println("runtime: " + time + " ms");
+//		System.err.println();
 		
 		/*// For testing only, remove after done
 		if (Launcher.getLauncher().isFirstRun()) {
@@ -185,7 +184,7 @@ public class MetisPartition {
 		this.PartitionWeights = graphConverter.getPartitionWeights();
 		int i;
 		for (i = 0; i < this.npartition; i++){
-			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
+//			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
 			// Compute number of vehicles currently in the partition
 			int totNumVeh = 0;
 			int totShadowVeh = 0;
@@ -196,11 +195,11 @@ public class MetisPartition {
 				totRoutingVeh += road.getFutureRoutingVehNum();
 				
 			}
-			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+//			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
 
 		}
 		
-		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
+//		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
 		// Compute number of vehicles currently in the partition
 		int totNumVeh = 0;
 		int totShadowVeh = 0;
@@ -210,7 +209,7 @@ public class MetisPartition {
 			totShadowVeh += road.getShadowVehicleNum();
 			totRoutingVeh += road.getFutureRoutingVehNum();
 		}
-		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
+//		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
 		
 		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 	}
@@ -228,7 +227,7 @@ public class MetisPartition {
 		MetisGraph mcg = coarsener.coarsen(metisGraph);
 		time = (System.nanoTime() - time) / 1000000;
 		
-		System.err.println("coarsening time: " + time + " ms");
+//		System.err.println("coarsening time: " + time + " ms");
  
 		MetisGraph.nparts = 2;
 		float[] totalPartitionWeights = new float[nparts];
@@ -238,7 +237,7 @@ public class MetisPartition {
 		PMetis pmetis = new PMetis(20, maxVertexWeight);
 		pmetis.mlevelRecursiveBisection(mcg, nparts, totalPartitionWeights, 0, 0);
 		time = (System.nanoTime() - time) / 1000000;
-		System.err.println("initial partition time: " + time + " ms");
+//		System.err.println("initial partition time: " + time + " ms");
 		MetisGraph.nparts = nparts;
 		time = System.nanoTime();
 		Arrays.fill(totalPartitionWeights, 1 / (float) nparts);

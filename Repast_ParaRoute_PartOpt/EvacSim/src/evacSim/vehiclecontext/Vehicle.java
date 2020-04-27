@@ -5,13 +5,16 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
+//import cern.colt.Arrays;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.opengis.referencing.operation.MathTransformFactory;
 import org.apache.commons.lang3.ArrayUtils;
-import org.geotools.factory.FactoryFinder;
+//import org.geotools.factory.FactoryFinder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
@@ -19,15 +22,15 @@ import org.geotools.referencing.operation.matrix.GeneralMatrix;
 import org.opengis.referencing.operation.MathTransform;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.MathTransformFactory;
-import org.opengis.referencing.operation.TransformException;
+//import org.opengis.referencing.operation.MathTransform;
+//import org.opengis.referencing.operation.MathTransformFactory;
+//import org.opengis.referencing.operation.TransformException;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.lang.Math;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.io.IOException;
+//import java.util.concurrent.locks.ReentrantLock;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.essentials.RepastEssentials;
@@ -125,11 +128,16 @@ public class Vehicle {
 	private int Nshadow; // Number of current shadow roads in the path
 	private ArrayList<Road> futureRoutingRoad;
 	
-	private int vehicleClass;//HG:For distinguishing between different classes
-	protected double travelTimeForPreviousRoute; //Xue: The travel time stored for the last time the route was updated.
-	protected int previousTick; //Xue: the tick when the last routing was updated.
-	protected double indiffBand; //Rajat, Xue: the relative difference threshold of route time for the old route and new route.
-	protected ArrayList<Zone> visitedShelters; // LZ,RV: List of full shelters visited
+	// HG:For distinguishing between different classes
+	private int vehicleClass;
+	// Xue: The travel time stored for the last time the route was updated.
+	protected double travelTimeForPreviousRoute;
+	// Xue: the tick when the last routing was updated.
+	protected int previousTick;
+	// Rajat, Xue: the relative difference threshold of route time for the old route and new route.
+	protected double indiffBand; 
+	// LZ,RV:DynaDestTest: List of visited shelters along with the time of visit
+	protected HashMap<Zone, Integer> visitedShelters; 
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
@@ -176,10 +184,15 @@ public class Vehicle {
 		this.Nshadow = 0;
 		this.futureRoutingRoad = new ArrayList<Road>();
 		this.setVehicleClass(1);
-		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
-		this.previousTick = 0; // Xue:The previous tick is set to be 0 at the beginning.
-		this.indiffBand = assignIndiffBand();  //generate the parameter of route selection from a distribution.
-		this.visitedShelters = new ArrayList<>();
+		// Xue: For the first step, set the travel time for the previous route to be infinite.
+		this.travelTimeForPreviousRoute = Double.MAX_VALUE;
+		// Xue: The previous tick is set to be 0 at the beginning.
+		this.previousTick = 0;
+		
+		// Xue: Generate the parameter of route selection from a distribution.
+		this.indiffBand = assignIndiffBand();
+		// RV:DynaDestTest: List of visited shelters along with the time of visit
+		this.visitedShelters = new HashMap<Zone, Integer>();
 	}
 
 	//Gehlot: This is a new subclass of Vehicle class that has some different parameters like max acceleration and max deceleration 
@@ -228,7 +241,7 @@ public class Vehicle {
 		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
 		this.previousTick = 0; // Xue: The previous tick is set to be 0 at the beginning.
 		this.indiffBand = assignIndiffBand();  //generate the parameter of route selection from a distribution.
-		this.visitedShelters = new ArrayList<Zone>(); // LZ,RV
+		this.visitedShelters = new HashMap<Zone, Integer>(); // LZ,RV
 	}
 	
 	public void setNextPlan() {
@@ -888,7 +901,6 @@ public class Vehicle {
 	 * network if it arrives its destination.
 	 */
 	public void travel() {
-		double time = System.currentTimeMillis();
 		this.endTime++;
 		try {
 			if (!this.reachDest && !this.reachActLocation) {
@@ -1532,9 +1544,10 @@ public class Vehicle {
 	// LZ: change this function for dynamic destination
 	public void setReachDest() throws Exception {
 		Zone destinationZone = ContextCreator.getCityContext().findHouseWithDestID(this.getDestinationID());
+		boolean foundNextDestination = false; // RV:DynaDestTest
 		if(destinationZone.getType()==1){
 			if(destinationZone.receiveEvacuees(1)) {
-				// LZ,RV: when the shelter has enough capacity for current vehicle
+				// LZ,RV:DynamicDestTwst: when the shelter has enough capacity for current vehicle
 				// LZ: one passenger per vehicle, need further concern
 				Coordinate target = null;
 				GeometryFactory geomFac = new GeometryFactory();
@@ -1557,7 +1570,7 @@ public class Vehicle {
 					this.killVehicle();
 				}
 			}
-			else { // LZ,RV: when the shelter exceeds capacity
+			else { // LZ,RV:DynaDestTest: relocate when the shelter exceeds capacity
 				GeometryFactory geomFac = new GeometryFactory();
 				this.removeFromLane();
 				this.removeFromMacroList();
@@ -1569,33 +1582,41 @@ public class Vehicle {
 						.getCoordinate();
 				Road road = cityContext.findRoadAtCoordinates(currentCoord, false);
 				this.setRoad(road);
-				this.findNextDestination(); // find next shelter
-				this.resetVehicle();
-				this.visitedShelters.add(destinationZone);	
-				this.reachActLocation = true;
+				// RV:DynaDestTest: mark this shelter visited & find the next one
+				this.visitedShelters.put(destinationZone,
+						(int) RepastEssentials.GetTickCount());
+				foundNextDestination = this.findNextDestination();
+				if (foundNextDestination) {
+					this.resetVehicle();
+					this.reachActLocation = true;
+				} else {
+					// if all shelters have rejected this vehicle, kill it
+					System.out.println("Veh#" + id + ": All shelters exhausted; killing self");
+					this.killVehicle();
+				}
 			}
 		}
-		else{
-		Coordinate target = null;
-		GeometryFactory geomFac = new GeometryFactory();
-		this.removeFromLane();
-		this.removeFromMacroList();
-		target = this.destCoord;
-		Geometry targetGeom = geomFac.createPoint(target);
-//		this.lock.lock();
-		vehicleGeography.move(this, targetGeom);
-//		this.lock.unlock();
-		double time = System.currentTimeMillis();
-		if (this.house.getActivityPlan().size() > 1) {
-			this.endTime = (int) RepastEssentials.GetTickCount();
-			this.reachActLocation = true;
-			this.resetVehicle();
-		} else {
-			this.endTime = (int) RepastEssentials.GetTickCount();
-			this.reachActLocation = false;
-			this.reachDest = true;
-			this.killVehicle();
-		}
+		else {
+			Coordinate target = null;
+			GeometryFactory geomFac = new GeometryFactory();
+			this.removeFromLane();
+			this.removeFromMacroList();
+			target = this.destCoord;
+			Geometry targetGeom = geomFac.createPoint(target);
+	//		this.lock.lock();
+			vehicleGeography.move(this, targetGeom);
+	//		this.lock.unlock();
+			double time = System.currentTimeMillis();
+			if (this.house.getActivityPlan().size() > 1) {
+				this.endTime = (int) RepastEssentials.GetTickCount();
+				this.reachActLocation = true;
+				this.resetVehicle();
+			} else {
+				this.endTime = (int) RepastEssentials.GetTickCount();
+				this.reachActLocation = false;
+				this.reachDest = true;
+				this.killVehicle();
+			}
 		}
 	}
 	
@@ -2644,10 +2665,13 @@ public class Vehicle {
 		this.vehicleClass = vehicleClass;
 	}
 	
-	//Rajat, Xue
+	/** Rajat, Xue: Assign the indifference band (eta) as found in Mahmassani & 
+	 * Jayakrishnan (1991) [doi.org/10.1016/0191-2607(91)90145-G].
+	 * It is assumed to be distributed as an isosceles triangle,
+	 * centered at the mean eta and having base width 0.5*eta.
+	 * @return the eta value
+	 * */
 	public double assignIndiffBand(){
-		// the indifference band (eta) is assumed to be distributed as an isosceles triangle  
-		// centered at the mean eta and having base width 0.5*eta (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor)
 		double mean = GlobalVariables.ETA;
 		double base = 0.5 * mean; // base width of the triangle
 		double start = mean - 0.5 * base; // starting point of the distribution
@@ -2659,35 +2683,58 @@ public class Vehicle {
 		} else {
 			indiffbandvalue = end - base * Math.sqrt(0.5 * (1 - rand));
 		}
-		// System.out.println("generate parameter");
 		return indiffbandvalue;	
 	}
 	
-	/* LZ,RV: find next destination; works in the following way:
+	/** LZ,RV:DynaDestTest: find next destination; works in the following way:
 	 * 1. create new house(Plan), 
 	 * 2. find the closest shelter,
 	 * 3. set up the house and update it in the vehicle variable,
-	 * 4. call setNextPlan to switch to new destination. */
-	public void findNextDestination() throws Exception {
+	 * 4. call setNextPlan to switch to new destination.
+	 * @return true if an alternative shelter is found, else false
+	 * */
+	public boolean findNextDestination() throws Exception {
 		House new_house = new House(this.getVehicleID(), this.getDestinationID());
 		ArrayList<Integer> locations = new ArrayList<Integer>();
 		ArrayList<Float> durations = new ArrayList<Float>();
+		
 		locations.add(this.getDestinationID());
 		durations.add(0f);
-		locations.add(ContextCreator.getCityContext()
-				.getClosestShelter(this).getIntegerID());
-		durations.add(0f);
-		new_house.setActivityPlan(locations, durations);
-		this.setHouse(new_house);
-//		this.setNextPlan(); // call setNextPlan to trigger the rerouting mechanism
+		Zone shelter = ContextCreator.getCityContext().getClosestShelter(this);
+		// if no shelter found, return false
+		if (shelter == null) {
+			return false;
+		} else {
+			/* RV:DynaDestTest: Other than the trajectory, optionally also store the
+			 * relocation event details of this vehicle and display at the end of the
+			 * simulation for all relocated vehicles. This part is not necessary, though,
+			 * since we can get all relevant info from the trajectory, but is slightly
+			 * more accurate because it logs the exact time, not rounded off as is the 
+			 * case with the trajectory. */
+			ArrayList<Integer> record = new ArrayList<Integer>();
+			record.add(this.vehicleID_);
+			record.add(shelter.getIntegerID());
+			record.add((int) RepastEssentials.GetTickCount());
+			GlobalVariables.shelterRelocateTracker.add(record);
+			
+			locations.add(shelter.getIntegerID());
+			durations.add(0f);
+			new_house.setActivityPlan(locations, durations);
+			this.setHouse(new_house);
+			return true;
+		}
 	}
 	
-	// LZ,RV: additional getters required for dynamic destination
+	// LZ,RV:DynaDestTest: Additional getters required for dynamic destination
 	public Coordinate getCoord() {
 		return vehicleGeography.getGeometry(this).getCoordinate();
 	}
 	
-	public ArrayList<Zone> getVisitedShelters() {
+	public HashMap<Zone, Integer> getVisitedShelters() {
 		return visitedShelters;
+	}
+	@Override // RV:DynaDestTest: Mainly for debugging
+	public String toString() {
+		return "<Veh" + this.vehicleID_ + ">";
 	}
 }
