@@ -68,6 +68,44 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 		}
 	}
 	
+	public void createVehicleContextFromActivityModels() {
+		Geography<Zone> zoneGeography=ContextCreator.getZoneGeography();
+		Geography<Vehicle> vehicleGeography=ContextCreator.getVehicleGeography();
+		int i = 0;
+		for (Zone z : zoneGeography.getAllObjects()) {
+			//System.out.println(z.getIntegerID());
+			i+=1;
+			Geometry hgeom = zoneGeography.getGeometry(z);
+			Coordinate coord = hgeom.getCoordinate();
+			for (House h : z.getHouses()) {
+				GeometryFactory fac = new GeometryFactory();
+				Vehicle v;
+				
+				//TODO: Code a mechanism to generate vehicles with different parameters (like max acceleration)
+				if (GlobalVariables.ENABLE_MULTICLASS_ROUTING){//Gehlot: Generate multi-class vehicles
+					if((double) Math.random() > GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES){
+						v = new Vehicle(h);
+					}else if((double) Math.random() < (GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES)/(GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES)){
+						v = new Vehicle_predefinedroutes(h);
+					}else{
+						v = new Vehicle_less_frequent_routing(h);
+					}
+				}else{
+					//System.out.println(h);
+					v = new Vehicle(h);
+				}
+				
+				//v.setEvacuationTime(evactime);
+				this.add(v);
+				v.setOriginalCoord(coord);
+				Point geom = fac.createPoint(coord);
+				vehicleGeography.move(v, geom);
+				Road road = ContextCreator.getCityContext().findRoadAtCoordinates(coord, false);
+				road.addVehicleToNewQueue(v);
+			}
+		}
+	}
+	
 	
 //	public void createVehicleContextFromManualDemand(
 //			Geography<Zone> zoneGeography, Geography<Vehicle> vehicleGeography) {

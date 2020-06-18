@@ -143,16 +143,17 @@ public class ContextCreator implements ContextBuilder<Object> {
 		// K: schedule parameter for network reloading
 		ScheduleParameters agentParamsNW = ScheduleParameters.createRepeating(
 				0, duration02_, 3);
-		
+		schedule.schedule(agentParamsNW, cityContext, "modifyRoadNetwork");
 		//BL: speedProfileParams is the schedule parameter to update free flow speed for each road every hour
 		ScheduleParameters speedProfileParams = ScheduleParameters.createRepeating(0, duration_, 4);
-		
-		schedule.schedule(agentParamsNW, cityContext, "modifyRoadNetwork");
-
 		for (Road r : getRoadContext().getObjects(Road.class)) {
 			schedule.schedule(speedProfileParams, r, "updateFreeFlowSpeed");
 		}
 		
+		//LZ: schedule events for loading demand of the next hour
+		ScheduleParameters demandLoadingParams = ScheduleParameters.createRepeating(0, duration_, 5);
+		schedule.schedule(demandLoadingParams, cityContext, "loadDemandOfNextHour");
+
 		// ZH: schedule the check of the supply side events
 		ScheduleParameters supplySideEventParams = ScheduleParameters.createRepeating(0, GlobalVariables.EVENT_CHECK_FREQUENCY, 1);
 		schedule.schedule(supplySideEventParams, eventHandler, "checkEvents");

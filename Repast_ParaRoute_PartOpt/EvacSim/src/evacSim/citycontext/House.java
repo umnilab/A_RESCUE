@@ -23,10 +23,9 @@ public class House {
 		this.zoneid = 0;
 		this.evacuate = 0;
 		this.evacuationtime = 0;
-		this.destzone = 0;
+		this.destzone = 0; // Unfinished?
 
 	}
-
 
 	public House(int ID, int zone) {
 		this.id = ID;
@@ -70,6 +69,7 @@ public class House {
 			this.activityplan.add(p);
 		}
 		
+		this.destzone = locations.get(locations.size()-1); //LZ: Set the id of the destination zone.
 		//System.out.println(" Size of plan list: " +this.activityplan.size());
 	}
 

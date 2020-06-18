@@ -52,7 +52,6 @@ public class CityContext extends DefaultContext<Object> {
 		this.lane_KeyLaneID = new HashMap<Integer, Lane>();
 		this.junction_KeyJunctionID = new HashMap<Integer, Junction>();
 		this.road_KeyLinkID = new HashMap<Integer, Road>();
-
 	}
 
 	public void createSubContexts() {
@@ -675,5 +674,13 @@ public class CityContext extends DefaultContext<Object> {
 			}
 		}
 		return nearestShelter;
+	}
+	
+	public void loadDemandOfNextHour() {
+		if(ContextCreator.getZoneContext().dataset.getHousesByHour().size()>0) {
+			System.out.println("Loading demand for the next hour...");
+			ContextCreator.getZoneContext().loadDemandofNextHour();
+			ContextCreator.getVehicleContext().createVehicleContextFromActivityModels();
+		}
 	}
 }

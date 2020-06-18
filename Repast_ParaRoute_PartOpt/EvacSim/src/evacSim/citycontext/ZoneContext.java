@@ -11,11 +11,14 @@ import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.gis.Geography;
 import repast.simphony.space.gis.GeographyParameters;
 import repast.simphony.space.gis.ShapefileLoader;
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.demand.DatasetOfHouseholdsPerZones;
 import repast.simphony.parameter.Parameters;
 
 public class ZoneContext extends DefaultContext<Zone> {
+	
+	public DatasetOfHouseholdsPerZones dataset;
 
 	public ZoneContext() {
 
@@ -68,7 +71,6 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 		// SH - for implementing activity simulator
 		if (GlobalVariables.SET_DEMAND_FROM_ACTIVITY_MODELS) {
-			DatasetOfHouseholdsPerZones dataset;
 			//Gehlot and Chris: this is to be true when we plan to run multiple instances of demand simultaneously in batches. 
 			//Before setting it true, we need to have demand files numbered 1,2,.. etc. in the folder multiple_instances_of_demand 
 			//(the current demand files are copies of evacuation_only_2005_low_about200vehicles_noduplicates_sameOD_trialjacksonville.csv)
@@ -83,9 +85,9 @@ public class ZoneContext extends DefaultContext<Zone> {
 				System.out.println("data file: "+a_filepath);
 				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
 			}
-
-			HashMap<Integer, ArrayList<House>> housesbyzone = new HashMap<Integer, ArrayList<House>>(); // turnOnAfterTest
-			housesbyzone = dataset.getHousesByZone();
+			
+			//loadDemandofNextHour();
+			HashMap<Integer, ArrayList<House>> housesbyzone = dataset.getHousesByHour().pollFirstEntry().getValue(); // turnOnAfterTest
 //			System.out.println(housesbyzone);
 			for (Zone z : zoneGeography.getAllObjects()) {
 				int keyzone = z.getIntegerID();
@@ -98,6 +100,23 @@ public class ZoneContext extends DefaultContext<Zone> {
 				}
 //				// Update the total demand
 //				z.setEvacuationDemand();
+			}
+		}
+	}
+	public void loadDemandofNextHour() {
+		HashMap<Integer, ArrayList<House>> housesbyzone = dataset.getHousesByHour().pollFirstEntry().getValue(); // turnOnAfterTest
+		for (Zone z : ContextCreator.getZoneGeography().getAllObjects()) {
+			int keyzone = z.getIntegerID();
+			if (housesbyzone.containsKey(keyzone)){
+				ArrayList<House> temparraylist = housesbyzone.get(keyzone);
+				z.setHouses(temparraylist);
+				for (House hh : z.getHouses()) {
+					hh.setZone(z);
+				}
+			}
+			else {
+				ArrayList<House> temparraylist = new ArrayList<House>();
+				z.setHouses(temparraylist);
 			}
 		}
 	}

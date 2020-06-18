@@ -4,7 +4,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -49,7 +51,7 @@ public class Road {
 	private ArrayList<Junction> junctions;
 	private ArrayList<Double> dynamicTravelTime; // SH: Dynamic travel time of
 	
-	private TreeMap<Double, ArrayList<Vehicle>> newqueue;
+	private TreeMap<Double, Queue<Vehicle>> newqueue; // LZ: Use LinkedList which implement Queue for O(1) complexity of removing vehicles.
 	
 
 	//private ArrayList<Double> speedProfile;
@@ -72,7 +74,7 @@ public class Road {
 		// an attribute as input
 		this.downStreamMovements = new ArrayList<Road>();
 		this.oppositeRoad = null;
-		this.newqueue = new TreeMap<Double, ArrayList<Vehicle>>();
+		this.newqueue = new TreeMap<Double, Queue<Vehicle>>();
 //		this.speedProfile = new ArrayList<Double>();
 		this.identifier = " ";
 		this.curhour = -1;
@@ -142,7 +144,7 @@ public class Road {
 					Set keys = (Set) this.newqueue.keySet();
 					for (Iterator i = (Iterator) keys.iterator(); i.hasNext();) {
 						Double key = (Double) i.next();
-						ArrayList<Vehicle> temList = this.newqueue.get(key);
+						Queue<Vehicle> temList = this.newqueue.get(key);
 						for (Vehicle pv : temList) {
 							if (tickcount >= pv.getDepTime()) {
 								pv.primitiveMove();
@@ -563,14 +565,11 @@ public class Road {
 		double departuretime_ = 0;
 		departuretime_ = v.getDepTime();
 		if (!this.newqueue.containsKey(departuretime_)) {
-			ArrayList<Vehicle> temporalList = new ArrayList<Vehicle>();
+			Queue<Vehicle> temporalList = new LinkedList<Vehicle>();
 			temporalList.add(v);
 			this.newqueue.put(departuretime_, temporalList);
 		} else {
-			ArrayList<Vehicle> temporalList = new ArrayList<Vehicle>();
-			temporalList = this.newqueue.get(departuretime_);
-			temporalList.add(v);
-			this.newqueue.put(departuretime_, temporalList);
+			this.newqueue.get(departuretime_).add(v);
 		}
 		v.setRoad(this);
 		v.setGeography();
@@ -585,10 +584,10 @@ public class Road {
 	 */
 	public void removeVehicleFromNewQueue(Vehicle v) {
 		double departuretime_ = v.getDepTime();
-		ArrayList<Vehicle> temporalList = new ArrayList<Vehicle>();
+		Queue<Vehicle> temporalList = new LinkedList<Vehicle>();
 		temporalList = this.newqueue.get(departuretime_);
 		if (temporalList.size() > 1) {
-			this.newqueue.get(departuretime_).remove(v);
+			this.newqueue.get(departuretime_).poll();
 		} else {
 			this.newqueue.remove(departuretime_);
 		}
@@ -599,7 +598,7 @@ public class Road {
 		if (this.newqueue.size() > 0) {
 			double firstDeparture_;
 			firstDeparture_ = this.newqueue.firstKey();
-			return this.newqueue.get(firstDeparture_).get(0);
+			return this.newqueue.get(firstDeparture_).peek();
 		}
 		return null;
 	}
