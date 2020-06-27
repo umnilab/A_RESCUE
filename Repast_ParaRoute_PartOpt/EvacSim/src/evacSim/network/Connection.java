@@ -351,17 +351,17 @@ public class Connection implements DataConsumer {
         else if (message.startsWith(EVENT_MSG)){
         	try{
         		NetworkEventObject event = ParseString(message);
-        		if(event.eventID == 2){//HG: check if the event type is external blocking of road then insert it in global event queue. 1 = Predefined blockage of road, 2 = External blocking of road
-        			insertExternalEvent(event);
-        			//HG: store event adding information in data buffer 
-    				try {
-    						DataCollector.getInstance().recordEventSnapshot(event, 3);//Here 3 value denotes adding of external event to global queue
-    				}
-    				catch (Throwable t) {
-    				    // could not log the event ending in data buffer!
-    				    DataCollector.printDebug("ERR" + t.getMessage());
-    				}
-        		}
+        		
+                insertExternalEvent(event);
+                //HG: store event adding information in data buffer 
+                try {
+                    DataCollector.getInstance().recordEventSnapshot(event, 3);//Here 3 value denotes adding of external event to global queue
+                }
+                catch (Throwable t) {
+                    // could not log the event ending in data buffer!
+                    DataCollector.printDebug("ERR" + t.getMessage());
+                }
+        		
         	}catch (NumberFormatException nfe) {
                 // one of the values is malformed during parsing
                 System.out.println(nfe);
