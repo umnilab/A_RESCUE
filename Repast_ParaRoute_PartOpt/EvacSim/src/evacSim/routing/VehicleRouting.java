@@ -1,27 +1,32 @@
 package evacSim.routing;
 
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.*;
+//import org.jgrapht.graph.*;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.KShortestPaths;
+
+import com.sun.jmx.remote.internal.ArrayQueue;
+
 import org.jgrapht.GraphPath;
-import com.vividsolutions.jts.geom.Coordinate;
+//import com.vividsolutions.jts.geom.Coordinate;
 
 import repast.simphony.context.space.graph.ContextJungNetwork;
-import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.space.projection.ProjectionEvent;
-import repast.simphony.space.projection.ProjectionListener;
-import repast.simphony.space.graph.EdgeCreator;
+//import repast.simphony.essentials.RepastEssentials;
+//import repast.simphony.space.projection.ProjectionEvent;
+//import repast.simphony.space.projection.ProjectionListener;
+//import repast.simphony.space.graph.EdgeCreator;
 import repast.simphony.space.graph.JungNetwork;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.RepastEdge;
-import repast.simphony.space.graph.ShortestPath;
+//import repast.simphony.space.graph.ShortestPath;
 import edu.uci.ics.jung.graph.Graph;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
@@ -75,10 +80,10 @@ public class VehicleRouting {
 	
 	/* Perform the routing computation */
 	/* Xue: Oct 2019, change the return type to HashMap, where the double value is the route time, and the list<Road> is the path */
-	public Map<Double,List<Road>> computeRoute(Road currentRoad, Road destRoad,  
+	public Map<Double,Queue<Road>> computeRoute(Road currentRoad, Road destRoad,  
 			Junction currJunc, Junction destJunc) {
-		Map<Double,List<Road>> computeRouteResult = new HashMap<Double,List<Road>>();  
-		List<Road> roadPath_;
+		Map<Double, Queue<Road>> computeRouteResult = new HashMap<Double,Queue<Road>>();  
+		Queue<Road> roadPath_;
 		List<RepastEdge<Junction>> shortestPath;
 		shortestPath = null;
 		
@@ -153,7 +158,7 @@ public class VehicleRouting {
 		}
 		// Find the roads which are associated with these edges
 		double shortestPathLength = 0.0f;
-		roadPath_ = new ArrayList<Road>();
+		roadPath_ = new ArrayDeque<Road>(shortestPath.size()+1);
 		roadPath_.add(currentRoad);
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -635,7 +637,7 @@ public class CityContext extends DefaultContext<Object> {
 		int strategy = GlobalVariables.DYNAMIC_DEST_STRATEGY;
 		double minDist = Double.MAX_VALUE;
 		Zone nearestShelter = null;
-		Map<Double, List<Road>> currentPathPlusDist = null;
+		Map<Double, Queue<Road>> currentPathPlusDist = null;
 		
 		// prepare the list of candidate shelters depending on the strategy
 		ArrayList<Zone> shelters = new ArrayList<Zone>();
@@ -659,7 +661,7 @@ public class CityContext extends DefaultContext<Object> {
 		// perform the routing for each candidate shelter and pick the closest one
 		for (Zone shelter : shelters) {
 			// LZ,RV: get the path to this shelter acc. to (non-Euclidean) selfish routing
-			currentPathPlusDist = RouteV.vehicleRoute(vehicle, shelter.getCoord(), true);
+			currentPathPlusDist = RouteV.vehicleRoute(vehicle, shelter.getCoord());
 			try {
 				// get the cost of the shortest path (i.e. key of the single key-value-pair HashMap)
 				for (double dist : currentPathPlusDist.keySet()) {

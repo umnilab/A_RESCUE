@@ -21,11 +21,7 @@ package evacSim;
  * 
  * @author Nick Malleson
  * @author Samiul Hasan (SH)
- * @author Xianyuan Zhan
- *
- * How to use Config File (Data.properties in config folder)
- * All the values of global variables are reading from the config file (Data.properties),  
- * and all data retrieved from the config file is string type.
+ * @author Xianyuan Zhan0string type.
  * 
  * To add a new global variable: 
  * 1. Define the variable's name and value in the Data.properties

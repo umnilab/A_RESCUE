@@ -96,7 +96,7 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 				}
 				
 				//v.setEvacuationTime(evactime);
-				this.add(v);
+				this.add(v); 
 				v.setOriginalCoord(coord);
 				Point geom = fac.createPoint(coord);
 				vehicleGeography.move(v, geom);

@@ -1,7 +1,11 @@
 package evacSim.routing;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
@@ -65,40 +69,45 @@ public class RouteV {
 		return validRouteTime;
 	}
 	
-	/* Perform vehicle routing: returns a path
-	/* Xue: Oct 2019, the return type is the HashMap, please see the computeRoute() in the VehicleRouting class*/
-	/* LZ,RV: added the parameter "checkZone" which makes the function work
-	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter() */
-	public static Map<Double,List<Road>> vehicleRoute(Vehicle veh,
-			Coordinate destCoord, boolean checkZone) throws Exception {
+	/**
+	 * Perform vehicle routing: returns a path
+	 * @param veh The vehicle to be routed
+	 * @param destCoord
+	 * @param checkZone
+	 * @return
+	 * @throws Exception
+	 * @author Xue: Oct 2019, the return type is the HashMap, please see the
+	 * computeRoute() in the VehicleRouting class
+	 * @author LZ,RV: added the parameter "checkZone" which makes the function work
+	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter()
+	 * */
+	public static Map<Double,Queue<Road>> vehicleRoute(Vehicle veh,
+			Coordinate destCoord) throws Exception {
 
+//		if (veh.getVehicleID() == 10010972 & destCoord.x == -81.823542) {
+//			System.out.println("helloooo");
+//		}
+		
 		// Find origin and destination junctions & resolving their road segments
-		Coordinate currentCoord = vehicleGeography.getGeometry(veh).getCoordinate();
-
-		if (!onRoad(currentCoord)) {
-			Coordinate nearestRoadCoord = getNearestRoadCoord(currentCoord);
-			currentCoord = nearestRoadCoord;
-		}
+//		Coordinate currentCoord = vehicleGeography.getGeometry(veh).getCoordinate();
+//
+//		if (!onRoad(currentCoord)) {
+//			Coordinate nearestRoadCoord = getNearestRoadCoord(currentCoord);
+//			currentCoord = nearestRoadCoord;
+//		}
 		Road currentRoad = veh.getRoad();
 		Road destRoad = cityContext.findRoadAtCoordinates(destCoord, true);
 		
-		// current downstream junction of the road the vehicle is on
-		Junction curDownJunc = veh.getRoad().getJunctions().get(1);
+		Junction curDownJunc = currentRoad.getJunctions().get(1);
 		// downstream junction of the destination junction along that road
 		Junction destDownJunc = getNearestDownStreamJunction(destCoord, destRoad);
 
-		if (curDownJunc.getID() == destDownJunc.getID()) {
-			/* LZ,RV: This method is called by vehicle.setNextRoad and CityContext.getClosestShelter(). For the function Vehicle.setNextRoad(), 
-			 * zone locations do not matter, thus, checkZone = false as done in the next method. In CityContext.getClosestShelter(), if the 
-			 * origin & dest zones are not same, and yet curDownstreamJunc = destDownstreamJunc (i.e., the orign and destinations are consecutive), 
-			 * then return the shortest route instead of null */
-			if (!checkZone) {
-				if (veh.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-					System.out.println("Destination road reached " + destRoad.getLinkid()
-						+ " from current road: " + currentRoad.getLinkid());
-				}
-				return null;
-			}
+		if (curDownJunc.getID() == destDownJunc.getID() || (currentRoad.getLinkid()==104819 || currentRoad.getLinkid()==101235)) {
+//			System.out.println("Destination road reached " + destRoad.getLinkid()
+//					+ " from current road: " + currentRoad.getLinkid());
+			Map<Double, Queue<Road>> empty = new HashMap<Double, Queue<Road>>();
+			empty.put(0.0, new ArrayDeque<Road>());
+			return empty;
 		}
 		// Set the time that the routing is computed
 		veh.setLastRouteTime((int) RepastEssentials.GetTickCount());
@@ -106,12 +115,21 @@ public class RouteV {
 		return vbr.computeRoute(currentRoad, destRoad, curDownJunc, destDownJunc);
 	}
 	
-	// LZ,RV: override vehicleRoute() signature to be used by Vehicle.setNextRoad()
-	// this is not the signature used by CityContext.getClosestShelter()
-	public static Map<Double,List<Road>> vehicleRoute(
-			Vehicle vehicle, Coordinate destCoord) throws Exception {
-		return vehicleRoute(vehicle, destCoord, false);
+	/** 
+	 * RV: Normal shortest route between any two points at current time;
+	 * needed for shortest path between zones without involvement of any vehicle
+	 * */
+	public static Map<Double, Queue<Road>> nonVehicleRouting(
+			Coordinate origCoord, Coordinate destCoord) {
+		// resolve the nearest roads & their downstream junctions
+		Road origRoad = cityContext.findRoadAtCoordinates(origCoord);
+		Road destRoad = cityContext.findRoadAtCoordinates(destCoord);
+		Junction origDownJunc = RouteV.getNearestDownStreamJunction(origCoord, origRoad);
+		Junction destDownJunc = RouteV.getNearestDownStreamJunction(destCoord, destRoad);
+		
+		return vbr.computeRoute(origRoad, destRoad, origDownJunc, destDownJunc);
 	}
+
 
 	public static void printRoute(List<Road> path) {
 		System.out.print("Route:");

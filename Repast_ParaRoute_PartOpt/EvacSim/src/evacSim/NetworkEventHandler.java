@@ -139,7 +139,6 @@ public class NetworkEventHandler {
 				flag = false;
 			}
 		}
-		
 	}
 	
 	// Check the running events and remove it from the running queue

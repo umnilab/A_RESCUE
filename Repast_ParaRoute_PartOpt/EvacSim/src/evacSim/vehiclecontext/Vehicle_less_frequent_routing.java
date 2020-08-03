@@ -1,7 +1,9 @@
 package evacSim.vehiclecontext;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import evacSim.GlobalVariables;
 import evacSim.citycontext.House;
@@ -39,13 +41,13 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 						// The information are outdated, needs to be recomputed
 						// Check if the current lane connects to the next road in the new path
 						//List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);                 
-						Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
-						Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 
+						Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
+						Map.Entry<Double,Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 
 						
-						List<Road> tempPathNew = entry.getValue();    // Calculate path 
+						Queue<Road> tempPathNew = entry.getValue();    // Calculate path 
 						double pathTimeNew = entry.getKey();           // Calculate path time
 						int currentTick = (int) RepastEssentials.GetTickCount();  //Calculate tick.
-						List<Road> tempPath = entry.getValue();
+						Queue<Road> tempPath = entry.getValue();
 						
 						double pathTimeOldPath = this.travelTimeForPreviousRoute - (currentTick-this.previousTick) * GlobalVariables.SIMULATION_STEP_SIZE;
 						//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
@@ -59,30 +61,37 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 								this.previousTick =  currentTick;                    // Update tick.
 							}
 						}
-						
-						if (this.checkNextLaneConnected(tempPath.get(1))){
+						Iterator<Road> itr = roadPath.iterator();
+						itr.next();
+						if (this.checkNextLaneConnected(itr.next())){
 							// If the next road is connected to the current lane, then we assign the path, otherwise, we use the old path
 							// Clear legacy impact
 							this.clearShadowImpact();
-							this.roadPath = tempPath;
+							this.roadPath = (Queue<Road>) tempPath;
 							this.setShadowImpact();
 							this.lastRouteTime = (int) RepastEssentials.GetTickCount();
-							this.nextRoad_ = this.roadPath.get(1);
+							itr = this.roadPath.iterator();
+							itr.next();
+							this.nextRoad_ = itr.next();
 						} else {
 							// New Route will cause blocking, use the old path
 							// Remove the current road from the path
-							this.removeShadowCount(this.roadPath.get(0));
-							this.roadPath.remove(0);
-							this.nextRoad_ = this.roadPath.get(1);
+							this.removeShadowCount(this.roadPath.peek());
+							this.roadPath.poll();
+							itr = this.roadPath.iterator();
+							itr.next();
+							this.nextRoad_ = itr.next();
 						}
 						
 //						System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 					} else {
 						// Route information is still valid
 						// Remove the current road from the path
-						this.removeShadowCount(this.roadPath.get(0));
-						this.roadPath.remove(0);
-						this.nextRoad_ = this.roadPath.get(1);
+						this.removeShadowCount(this.roadPath.peek());
+						this.roadPath.poll();
+						Iterator<Road> itr = this.roadPath.iterator();
+						itr.next();
+						this.nextRoad_ = itr.next();
 					}	
 
 //					if (nextRoad != null)
@@ -106,15 +115,17 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 					this.clearShadowImpact();
 					// Compute new route
 					//this.roadPath = RouteV.vehicleRoute(this, this.destCoord); 
-					Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
-					Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 //
-					List<Road> tempPath = entry.getValue(); //get the route  
-					this.roadPath = tempPath;  //store the route
+					Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
+					Map.Entry<Double,Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 //
+					Queue<Road> tempPath = entry.getValue(); //get the route  
+					this.roadPath = (Queue<Road>) tempPath;  //store the route
 					
 					this.setShadowImpact();
 					this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 					this.atOrigin = false;
-					this.nextRoad_ = roadPath.get(1);
+					Iterator<Road> itr = this.roadPath.iterator();
+					itr.next();
+					this.nextRoad_ = itr.next();
 //					System.out.println("Debug 2: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				}
 			} catch (Exception e) {
