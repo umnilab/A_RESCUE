@@ -8,8 +8,11 @@ import com.vividsolutions.jts.operation.distance.DistanceOp;
 //import cern.colt.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 
 import org.opengis.referencing.operation.MathTransformFactory;
 import org.apache.commons.lang3.ArrayUtils;
@@ -30,7 +33,7 @@ import java.awt.geom.Point2D;
 import java.lang.Math;
 //import java.io.IOException;
 //import java.util.concurrent.locks.ReentrantLock;
-
+ 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.space.gis.Geography;
@@ -95,10 +98,9 @@ public class Vehicle {
 	private Lane nextLane_;
 	private Zone destZone; // RMSA
 	
-	/* Zhan: For vehicle based routing
-	 * The route is always started with the current road, whenever entering 
-	 * the next road, the current road will be popped out */
-	protected List<Road> roadPath; 
+	/* Zhan: For vehicle based routing */
+	/* ZL: Update this from list to queue */
+	protected Queue<Road> roadPath; // The route is always started with the current road, whenever entering the next road, the current road will be popped out
 
 	private List<Coordinate> coordMap;
 
@@ -129,7 +131,7 @@ public class Vehicle {
 	
 	// For adaptive network partitioning
 	private int Nshadow; // Number of current shadow roads in the path
-	private ArrayList<Road> futureRoutingRoad;
+	private ArrayList<Road> futureRoutingRoad; // Can be slow
 	
 	// HG:For distinguishing between different classes
 	private int vehicleClass;
@@ -296,13 +298,13 @@ public class Vehicle {
 		float capspd = road.calcSpeed();// calculate the initial speed
 
 		currentSpeed_ = capspd; // have to change later
+		this.road.removeVehicleFromNewQueue(this);
 		this.setRoad(road);
 		this.append(firstlane);
 		this.setCoordMap(firstlane);
 		this.appendToRoad(this.road);
 		this.setNextRoad();
 		this.assignNextLane();
-		this.road.removeVehicleFromNewQueue(this);
 		return (1);
 	}
 
@@ -317,8 +319,9 @@ public class Vehicle {
 			if (this.Nshadow > this.roadPath.size())
 				this.Nshadow = this.roadPath.size();
 			if (this.Nshadow > 0) {
+				Iterator<Road> itr = this.roadPath.iterator();
 				for (int i = 0; i < this.Nshadow; i++) {
-					Road r = this.roadPath.get(i);
+					Road r = itr.next();
 					r.decreaseShadowVehicleNum();
 				}
 			}
@@ -355,8 +358,9 @@ public class Vehicle {
 			double cumlativeTT_Nshadow = 0.0; // Cumulative TT for Nshadow allocation
 			double cumulativeTT = 0.0;
 			int foundFutureRoutingRoad = 0; // Future routing road count: number of road found in shadow roads
+			Iterator<Road> itr = this.roadPath.iterator();
 			for (int i=0; i < this.Nshadow; i++) {
-				Road r = this.roadPath.get(i);
+				Road r = itr.next();
 				// Increase the shadow vehicle count: include current road
 				if (i < 1) {
 					// Current vehicle will always be added by default
@@ -407,18 +411,16 @@ public class Vehicle {
 				if (this.lastRouteTime < RouteV.getValidTime()) { // Path does not valid
 					// The information are outdated, needs to be recomputed
 					// Check if the current lane connects to the next road in the new path
-					//List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);             
 					//Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
-					Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);
-					
-					for (Map.Entry<Double,List<Road>> entry : tempPathMap.entrySet()) {
+                                        Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
+					for (Entry<Double, Queue<Road>> entry : tempPathMap.entrySet()) { // Only one element
 						double pathTimeNew = entry.getKey();           // Calculate path time
-						List<Road> tempPathNew = entry.getValue();    // Calculate path
+						Queue<Road> tempPathNew = entry.getValue();    // Calculate path
 						if (pathTimeNew == 0.0) {
 							break;
 						}
 						int currentTick = (int) RepastEssentials.GetTickCount();  //Calculate tick.
-						List<Road> tempPath = entry.getValue();
+						Queue<Road> tempPath = entry.getValue();
 						
 						double pathTimeOldPath = this.travelTimeForPreviousRoute - (currentTick-this.previousTick) * GlobalVariables.SIMULATION_STEP_SIZE;
 						//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
@@ -432,15 +434,18 @@ public class Vehicle {
 								this.previousTick =  currentTick;                    // Update tick.
 							}
 						}
-						
-						if (this.checkNextLaneConnected(tempPath.get(1))){
+						Iterator<Road> iter = tempPath.iterator();
+						iter.next();
+						if (this.checkNextLaneConnected(iter.next())){
 							// If the next road is connected to the current lane, then we assign the path, otherwise, we use the old path
 							// Clear legacy impact
 							this.clearShadowImpact();
 							this.roadPath = tempPath;
 							this.setShadowImpact();
 							this.lastRouteTime = (int) RepastEssentials.GetTickCount();
-							this.nextRoad_ = this.roadPath.get(1);
+							Iterator<Road> itr = this.roadPath.iterator();
+							itr.next();
+							this.nextRoad_ = itr.next();
 							flag = true;
 						}
 					}
@@ -448,13 +453,15 @@ public class Vehicle {
                 if (!flag) {
 					// Route information is still valid
 					// Remove the current road from the path
-					this.removeShadowCount(this.roadPath.get(0));
-					this.roadPath.remove(0);
+					this.removeShadowCount(this.roadPath.poll());
+//					this.roadPath.remove(0);
 					if(this.roadPath.size()==1) {
 						this.nextRoad_ = null; // the other way to indicate vehicle has arrived
 						return;
 					}
-					this.nextRoad_ = this.roadPath.get(1); 
+					Iterator<Road> itr = this.roadPath.iterator();
+					itr.next();
+					this.nextRoad_ = itr.next();
 				}	
 
 //				if (nextRoad != null)
@@ -475,18 +482,20 @@ public class Vehicle {
 				// Clear legacy impact
 				this.clearShadowImpact();
 				// Compute new route
-				//this.roadPath = RouteV.vehicleRoute(this, this.destCoord);
-				Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
-				for (Map.Entry<Double,List<Road>> entry : tempPathMap.entrySet()) {
+
+				//this.roadPath = RouteV.vehicleRoute(this, this.destCoord); 
+				Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
+				for (Entry<Double, Queue<Road>> entry : tempPathMap.entrySet()) {
 					double dist = entry.getKey();
-					List<Road> path = entry.getValue(); //get the route  
-					this.roadPath = path;  //store the route
-					
+					Queue<Road> path = entry.getValue(); //get the route  
+					this.roadPath = (Queue<Road>) path;  //store the route					
 					this.setShadowImpact();
 					this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 					this.atOrigin = false;
 					if (dist != 0.0) {
-						this.nextRoad_ = roadPath.get(1); // RV: null
+						Iterator<Road> itr = roadPath.iterator();
+						itr.next();
+						this.nextRoad_ = itr.next(); // RV: null
 					} else {
 						System.out.println(this + " same road" + this.road.getID() + " for next dest");
 						this.nextRoad_ = null;
@@ -1256,6 +1265,7 @@ public class Vehicle {
 				// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
 				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
 				// System.out.println("distToTarget= "+ContextCreator.convertToMeters(distToTarget));
+//				System.out.println(this.coordMap.size());
 				this.coordMap.remove(0);
 				// this.route.remove();
 			}
@@ -2743,5 +2753,9 @@ public class Vehicle {
 	@Override // RV:DynaDestTest: Mainly for debugging
 	public String toString() {
 		return "<Veh" + this.vehicleID_ + ">";
+	}
+	
+	public boolean isAtOrigin(){ //LZ: whether this vehicle is at origin
+		return this.atOrigin;
 	}
 }

@@ -48,6 +48,9 @@ public class JsonOutputWriter implements DataConsumer {
     /** The file to which output data will be written. */
     private File file;
     
+    /** Previous FileName. */
+    private int previousFileName = 1;
+    
     /** The writer which streams prepared JSON content to the output file. */
     private BufferedWriter writer;
     
@@ -207,6 +210,7 @@ public class JsonOutputWriter implements DataConsumer {
         // create a new, unique filename if one has not been set
         if (this.defaultFilenames || this.file == null) {
             this.file = new File(JsonOutputWriter.createDefaultFilePath());
+            this.previousFileName = 1;
         }
         
         // create the data writer
@@ -510,10 +514,12 @@ public class JsonOutputWriter implements DataConsumer {
      * Closes the current output file and opens the next in the series of 
      * output files for this simulation execution.  The filename will be the 
      * same with the increment of the series counter.
+     * 6/28/2020 LZ: modify this to use time tick information
      * 
      * @throws IOException if the new file could not be created and opened.
      */
-    private void startNextOutputFile() throws IOException {
+    
+    private void startNextOutputFile(int current_time) throws IOException {
         if (this.file == null ) {
             // there is no file currently open to increment!
             // TODO: figure out how to deal with this situation...
@@ -530,32 +536,40 @@ public class JsonOutputWriter implements DataConsumer {
         
         // if we are using default filenames, we know for certain the format
         // of the series.  it should end ".1.json", ".2.json", etc.  we can
-        // easily create the next in the series this way.  if not, we will
+        // easily create the next in the series this way.  if no t, we will
         // have to do a little extra checking to setup the next file.
-        String currentEnd = "." + this.fileSeriesNumber + "." + 
-                            GlobalVariables.JSON_DEFAULT_EXTENSION;
-        String nextEnd = "." + (this.fileSeriesNumber + 1) + "." +
+//        String currentEnd = "." + this.fileSeriesNumber + "." + 
+//                            GlobalVariables.JSON_DEFAULT_EXTENSION;
+        String currentEnd = "." + this.previousFileName + "." +
+                GlobalVariables.JSON_DEFAULT_EXTENSION;
+        String nextEnd = "." + (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2) + "." +
                          GlobalVariables.JSON_DEFAULT_EXTENSION;
         
+        //System.out.println("filename" + currentEnd + ", "+ nextEnd);
+        
         String newFilename = filename;
-        if (newFilename.endsWith(currentEnd)) {
-            // the user is using a standard format filename so easy to update
-            newFilename = newFilename.replaceAll(currentEnd + "$", nextEnd);
-        }
-        else {
-            // the user is using a custom filename format so we need to
-            // do a little extra work to create the next filename...
-            String extEnd = "." + GlobalVariables.JSON_DEFAULT_EXTENSION;
-            if (newFilename.endsWith(extEnd)) {
-                newFilename = newFilename.replaceAll(extEnd + "$", nextEnd);
-            }
-            else {
-                // TODO: continue checking for other filename variants?
-            }
-        }
+        
+        newFilename = newFilename.replaceAll(currentEnd + "$", nextEnd);
+        
+//        if (newFilename.endsWith(currentEnd)) {
+//            // the user is using a standard format filename so easy to update
+//            newFilename = newFilename.replaceAll(currentEnd + "$", nextEnd);
+//        }
+//        else {
+//            // the user is using a custom filename format so we need to
+//            // do a little extra work to create the next filename...
+//            String extEnd = "." + GlobalVariables.JSON_DEFAULT_EXTENSION;
+//            if (newFilename.endsWith(extEnd)) {
+//                newFilename = newFilename.replaceAll(extEnd + "$", nextEnd);
+//            }
+//            else {
+//                // TODO: continue checking for other filename variants?
+//            }
+//        }
         
         // create the next filename in this output file series
         File nextFile = new File(this.file.getParent(), newFilename);
+        
         
         // close out the current output file
         this.closeOutputFileWriter();
@@ -567,6 +581,7 @@ public class JsonOutputWriter implements DataConsumer {
         
         // finally, having successfully moved to the next file, update counter
         this.fileSeriesNumber++;
+        this.previousFileName = (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2);
     }
     
     
@@ -597,7 +612,7 @@ public class JsonOutputWriter implements DataConsumer {
         // check if writing these lines will go over our output file limit
         // and create the next output file in the series if necessary
         if (this.ticksWritten >= GlobalVariables.JSON_TICK_LIMIT_PER_FILE) {
-            this.startNextOutputFile();
+            this.startNextOutputFile((int) tick.getTickNumber());
             this.ticksWritten = 0;
             this.storeJsonObjects = new HashMap<String, Object>();
         }

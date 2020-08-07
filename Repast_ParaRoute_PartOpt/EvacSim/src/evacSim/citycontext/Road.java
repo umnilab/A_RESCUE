@@ -53,7 +53,6 @@ public class Road {
 	
 	private TreeMap<Double, Queue<Vehicle>> newqueue; // LZ: Use LinkedList which implement Queue for O(1) complexity of removing vehicles.
 	
-
 	//private ArrayList<Double> speedProfile;
 	
 	private Vehicle lastVehicle_;
@@ -148,6 +147,9 @@ public class Road {
 						for (Vehicle pv : temList) {
 							if (tickcount >= pv.getDepTime()) {
 								pv.primitiveMove();
+							}
+							else{
+								break;
 							}
 						}
 					}
@@ -596,8 +598,7 @@ public class Road {
 
 	public Vehicle newqueueHead() {
 		if (this.newqueue.size() > 0) {
-			double firstDeparture_;
-			firstDeparture_ = this.newqueue.firstKey();
+			double firstDeparture_ = this.newqueue.firstKey();
 			return this.newqueue.get(firstDeparture_).peek();
 		}
 		return null;

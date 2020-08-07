@@ -1,16 +1,19 @@
 package evacSim.routing;
 
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Queue;
 
 import org.jgrapht.*;
 //import org.jgrapht.graph.*;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.KShortestPaths;
+
 import org.jgrapht.GraphPath;
 //import com.vividsolutions.jts.geom.Coordinate;
 
@@ -76,10 +79,10 @@ public class VehicleRouting {
 	
 	/* Perform the routing computation */
 	/* Xue: Oct 2019, change the return type to HashMap, where the double value is the route time, and the list<Road> is the path */
-	public Map<Double,List<Road>> computeRoute(Road currentRoad, Road destRoad,  
+	public Map<Double,Queue<Road>> computeRoute(Road currentRoad, Road destRoad,  
 			Junction currJunc, Junction destJunc) {
-		Map<Double,List<Road>> computeRouteResult = new HashMap<Double,List<Road>>();  
-		List<Road> roadPath_;
+		Map<Double, Queue<Road>> computeRouteResult = new HashMap<Double,Queue<Road>>();  
+		Queue<Road> roadPath_;
 		List<RepastEdge<Junction>> shortestPath;
 		shortestPath = null;
 		
@@ -154,13 +157,13 @@ public class VehicleRouting {
 		}
 		// Find the roads which are associated with these edges
 		double shortestPathLength = 0.0f;
-		roadPath_ = new ArrayList<Road>();
+		roadPath_ = new ArrayDeque<Road>();
 		roadPath_.add(currentRoad);
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);
 			Road road = cityContext.findRoadWithLinkID(linkID);
 //			System.out.println("linkID: " + linkID + " Path-" + road.getID());
-			roadPath_.add(road);
+			roadPath_.offer(road);
 			shortestPathLength = shortestPathLength + edge.getWeight();
 		}
 //		shortestPath = null;
