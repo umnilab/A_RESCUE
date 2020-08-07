@@ -3,7 +3,7 @@ package evacSim.routing;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import repast.simphony.space.graph.RepastEdge;
-import evacSim.ContextCreator;
+//import evacSim.ContextCreator;
 
 public class evacSimWeightedGraph<V, E> extends SimpleDirectedWeightedGraph<V, E>
 {

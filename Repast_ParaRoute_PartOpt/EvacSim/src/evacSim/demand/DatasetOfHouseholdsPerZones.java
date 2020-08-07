@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 import au.com.bytecode.opencsv.CSVReader;
-
 import evacSim.GlobalVariables;
 import evacSim.citycontext.House;
 
@@ -22,7 +21,6 @@ public class DatasetOfHouseholdsPerZones {
 		if (GlobalVariables.SET_DEMAND_FROM_ACTIVITY_MODELS){
 			this.readActivityPlans(filepath);
 		}
-
 	}
 
 	public void readActivityPlans(String filepath) {
@@ -45,15 +43,12 @@ public class DatasetOfHouseholdsPerZones {
 
 			// This while loop is used to read the CSV iterating through the row
 			int ID = 0;
-			int loc = 0;
-			float dur = 0.0f;
-			int zoneID =0;
-			int departureTime =0;
-			//int prevID = 1; // Has to be the ID of first person not so good
-			// appraoch			
+			int zoneID = 0;
+			int departureTime = 0;
+			// appraoch
 			int prevID = 0; // assign to the first row			
 			ArrayList<Integer> locations = new ArrayList<Integer>();
-			ArrayList<Float> durations = new ArrayList<Float>();
+			ArrayList<Integer> durations = new ArrayList<Integer>();
 
 			while ((nextLine = csvreader.readNext()) != null) {
 				// Do not read the first row (header)
@@ -62,6 +57,7 @@ public class DatasetOfHouseholdsPerZones {
 				} else {
 					// Sets the number of columns in the CSV
 					int length = nextLine.length;
+					//System.out.println(Arrays.toString(nextLine));
 					//System.out.println(" Size of the first list: " + length);
 					// for loop that iterates through the columns
 					for (int j = 0; j < length; j++) {
@@ -75,17 +71,15 @@ public class DatasetOfHouseholdsPerZones {
 						}
 						if (ID != prevID) {
 							// input the arrays to the house's plan
-							//House h = this.housesbyID.get(prevID);
 							zoneID = locations.get(0);
 							departureTime =  (int) Math.floor(durations.get(0));
-							House h = new House (prevID, zoneID);
-							//System.out.println(locations);
+							House h = new House(prevID, zoneID);
 							h.setActivityPlan(locations, durations);
-							if(!housesbyhour.containsKey(departureTime)) {
+							if (!housesbyhour.containsKey(departureTime)) {
 								HashMap<Integer, ArrayList<House>> housebyzone = new HashMap<Integer, ArrayList<House>>();
 								housesbyhour.put(departureTime, housebyzone);
 							}
-							if(!housesbyhour.get(departureTime).containsKey(zoneID)){
+							if (!housesbyhour.get(departureTime).containsKey(zoneID)) {
 								ArrayList<House> arraylistwithfirsthouse = new ArrayList<House>();
 								arraylistwithfirsthouse.add(h);
 								housesbyhour.get(departureTime).put(zoneID, arraylistwithfirsthouse);
@@ -103,27 +97,23 @@ public class DatasetOfHouseholdsPerZones {
 //								//housesbyID.put(ID, h);
 //								housesbyzone.get(zoneID).add(h);
 //							}
-			
+							// clear the arrays
 							locations.clear();
 							durations.clear();
-							// clear the location and duration arrays
 						}
 						prevID = ID;
 						// location ID
 						if (j == 1) {
-							loc = Integer.parseInt(nextLine[j]);
-							locations.add(loc);
+							locations.add(Integer.parseInt(nextLine[j]));
 						}
 						// duration
 						if (j == 2) {
-							dur = Float.parseFloat(nextLine[j]);
-							durations.add(dur);
+							durations.add(Integer.parseInt(nextLine[j]));
 						}
 					}
-					//System.out.println("ID " + ID + " location " + loc
-					//		+ " duration " + dur);
 				}
 			}
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

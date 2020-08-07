@@ -1,7 +1,5 @@
 package evacSim.vehiclecontext;
 
-import java.util.ArrayList;
-
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -36,10 +34,10 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 	
 	public void createVehicleContextFromActivityModels(
 			Geography<Zone> zoneGeography, Geography<Vehicle> vehicleGeography) {
-		int i = 0;
+		double propPreDetermined = GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES;
+		double propLessFreq = GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES;
+		
 		for (Zone z : zoneGeography.getAllObjects()) {
-			//System.out.println(z.getIntegerID());
-			i+=1;
 			Geometry hgeom = zoneGeography.getGeometry(z);
 			Coordinate coord = hgeom.getCoordinate();
 			for (House h : z.getHouses()) {
@@ -48,18 +46,18 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 				
 				//TODO: Code a mechanism to generate vehicles with different parameters (like max acceleration)
 				if (GlobalVariables.ENABLE_MULTICLASS_ROUTING){//Gehlot: Generate multi-class vehicles
-					if((double) Math.random() > GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES){
+					if ((double) Math.random() > propPreDetermined + propLessFreq) {
 						v = new Vehicle(h);
-					}else if((double) Math.random() < (GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES)/(GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES)){
+					} else if ((double) Math.random() < propPreDetermined/(propPreDetermined + propLessFreq)) {
 						v = new Vehicle_predefinedroutes(h);
-					}else{
+					} else {
 						v = new Vehicle_less_frequent_routing(h);
 					}
-				}else{
+				} else {
 					v = new Vehicle(h);
 				}
+//				System.out.println(v + "_" + v.getHouse().getActivityPlan());
 				
-				//v.setEvacuationTime(evactime);
 				this.add(v);
 				v.setOriginalCoord(coord);
 				Point geom = fac.createPoint(coord);
@@ -71,10 +69,9 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 	public void createVehicleContextFromActivityModels() {
 		Geography<Zone> zoneGeography=ContextCreator.getZoneGeography();
 		Geography<Vehicle> vehicleGeography=ContextCreator.getVehicleGeography();
-		int i = 0;
+		double propPreDetermined = GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES;
+		double propLessFreq = GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES;
 		for (Zone z : zoneGeography.getAllObjects()) {
-			//System.out.println(z.getIntegerID());
-			i+=1;
 			Geometry hgeom = zoneGeography.getGeometry(z);
 			Coordinate coord = hgeom.getCoordinate();
 			for (House h : z.getHouses()) {
@@ -83,15 +80,14 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 				
 				//TODO: Code a mechanism to generate vehicles with different parameters (like max acceleration)
 				if (GlobalVariables.ENABLE_MULTICLASS_ROUTING){//Gehlot: Generate multi-class vehicles
-					if((double) Math.random() > GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES){
+					if ((double) Math.random() > (propPreDetermined + propLessFreq)) {
 						v = new Vehicle(h);
-					}else if((double) Math.random() < (GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES)/(GlobalVariables.PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + GlobalVariables.PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES)){
+					} else if ((double) Math.random() < propPreDetermined/(propPreDetermined + propLessFreq)) {
 						v = new Vehicle_predefinedroutes(h);
-					}else{
+					} else {
 						v = new Vehicle_less_frequent_routing(h);
 					}
-				}else{
-					//System.out.println(h);
+				} else {
 					v = new Vehicle(h);
 				}
 				

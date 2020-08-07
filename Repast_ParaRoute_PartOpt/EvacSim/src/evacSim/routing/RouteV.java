@@ -1,5 +1,7 @@
 package evacSim.routing;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +9,6 @@ import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.*;
 import evacSim.vehiclecontext.Vehicle;
-import cern.colt.Arrays;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -27,20 +28,21 @@ public class RouteV {
 	public static Geography<Road> roadGeography;
 	public static CityContext cityContext;
 
-	public static GeometryFactory geomFac; // Used for creating Geometries
+	// geometry factory used for creating Geometries
+	public static GeometryFactory geomFac;
 	public static VehicleRouting vbr;
-	public static int validRouteTime; // The time that the routing information will stay valid
+	// time that the routing information will stay valid
+	public static int validRouteTime;
 
-	// Buffers used for efficiency (so don't have to search for objects in
-	// entire space), not sure if these values are any good
-	public static double little_buffer_distance; // Used when searching for a
-													// point on a road
-	public static double big_buffer_distance; // Used when searching nearby
-												// objects
+	/* buffers used for efficiency (so don't have to search for objects in
+	 * entire space), not sure if these values are any good */
+	// used when searching for a point on a road
+	public static double little_buffer_distance;
+	// used when searching nearby objects
+	public static double big_buffer_distance; 
 
 	/* Initialize route object */
 	public static void createRoute() throws Exception {
-	//	System.out.println("Creating Vehicle-based routing");
 		vehicleGeography = ContextCreator.getVehicleGeography();
 		junctionGeography = ContextCreator.getJunctionGeography();
 		roadNetwork = ContextCreator.getRoadNetwork();
@@ -53,25 +55,37 @@ public class RouteV {
 		validRouteTime = (int) RepastEssentials.GetTickCount();
 	}
 
-	/* Update the node based routing object, update the next nearest node matrix */
+	/**
+	 * Update the node based routing object, update the next nearest node matrix
+	 * */
 	public static void updateRoute() throws Exception {
-//		System.out.println("Update Route");
 		vbr.calcRoute();
 		validRouteTime = (int) RepastEssentials.GetTickCount();
-//		System.out.println("Finish update Route");
 	}
 	
 	public static int getValidTime(){
 		return validRouteTime;
 	}
 	
-	/* Perform vehicle routing: returns a path
-	/* Xue: Oct 2019, the return type is the HashMap, please see the computeRoute() in the VehicleRouting class*/
-	/* LZ,RV: added the parameter "checkZone" which makes the function work
-	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter() */
+	/**
+	 * Perform vehicle routing: returns a path
+	 * @param veh The vehicle to be routed
+	 * @param destCoord
+	 * @param checkZone
+	 * @return
+	 * @throws Exception
+	 * @author Xue: Oct 2019, the return type is the HashMap, please see the
+	 * computeRoute() in the VehicleRouting class
+	 * @author LZ,RV: added the parameter "checkZone" which makes the function work
+	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter()
+	 * */
 	public static Map<Double,List<Road>> vehicleRoute(Vehicle veh,
-			Coordinate destCoord, boolean checkZone) throws Exception {
+			Coordinate destCoord) throws Exception {
 
+		if (veh.getVehicleID() == 10010972 & destCoord.x == -81.823542) {
+			System.out.println("helloooo");
+		}
+		
 		// Find origin and destination junctions & resolving their road segments
 		Coordinate currentCoord = vehicleGeography.getGeometry(veh).getCoordinate();
 
@@ -88,17 +102,13 @@ public class RouteV {
 		Junction destDownJunc = getNearestDownStreamJunction(destCoord, destRoad);
 
 		if (curDownJunc.getID() == destDownJunc.getID()) {
-			/* LZ,RV: This method is called by vehicle.setNextRoad and CityContext.getClosestShelter(). For the function Vehicle.setNextRoad(), 
-			 * zone locations do not matter, thus, checkZone = false as done in the next method. In CityContext.getClosestShelter(), if the 
-			 * origin & dest zones are not same, and yet curDownstreamJunc = destDownstreamJunc (i.e., the orign and destinations are consecutive), 
-			 * then return the shortest route instead of null */
-			if (!checkZone) {
-				if (veh.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-					System.out.println("Destination road reached " + destRoad.getLinkid()
-						+ " from current road: " + currentRoad.getLinkid());
-				}
-				return null;
+			if (veh.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
+				System.out.println("Destination road reached " + destRoad.getLinkid()
+					+ " from current road: " + currentRoad.getLinkid());
 			}
+			Map<Double, List<Road>> empty = new HashMap<Double, List<Road>>();
+			empty.put(0.0, new ArrayList<Road>());
+			return empty;
 		}
 		// Set the time that the routing is computed
 		veh.setLastRouteTime((int) RepastEssentials.GetTickCount());
@@ -106,13 +116,21 @@ public class RouteV {
 		return vbr.computeRoute(currentRoad, destRoad, curDownJunc, destDownJunc);
 	}
 	
-	// LZ,RV: override vehicleRoute() signature to be used by Vehicle.setNextRoad()
-	// this is not the signature used by CityContext.getClosestShelter()
-	public static Map<Double,List<Road>> vehicleRoute(
-			Vehicle vehicle, Coordinate destCoord) throws Exception {
-		return vehicleRoute(vehicle, destCoord, false);
+	/** 
+	 * RV: Normal shortest route between any two points at current time;
+	 * needed for shortest path between zones without involvement of any vehicle
+	 * */
+	public static Map<Double,List<Road>> nonVehicleRouting(
+			Coordinate origCoord, Coordinate destCoord) {
+		// resolve the nearest roads & their downstream junctions
+		Road origRoad = cityContext.findRoadAtCoordinates(origCoord);
+		Road destRoad = cityContext.findRoadAtCoordinates(destCoord);
+		Junction origDownJunc = RouteV.getNearestDownStreamJunction(origCoord, origRoad);
+		Junction destDownJunc = RouteV.getNearestDownStreamJunction(destCoord, destRoad);
+		
+		return vbr.computeRoute(origRoad, destRoad, origDownJunc, destDownJunc);
 	}
-
+	
 	public static void printRoute(List<Road> path) {
 		System.out.print("Route:");
 		for (Road r : path) {
@@ -121,10 +139,11 @@ public class RouteV {
 		System.out.println();
 	}
 	
+	/**
+	 * Search all roads in the vicinity, looking for the point which is
+	 * nearest the person
+	 * */
 	public static Coordinate getNearestRoadCoord(Coordinate coord) {
-		double time = System.currentTimeMillis();
-		// Search all roads in the vicinity, looking for the point which is
-		// nearest the person
 		double minDist = Double.MAX_VALUE;
 		// Road nearestRoad = null;
 		Coordinate nearestPoint = null;
@@ -143,15 +162,14 @@ public class RouteV {
 				// Two coordinates returned by closestPoints(), need to find the
 				// one which isn''t the
 				// coord parameter
-				for (Coordinate c : distOp.closestPoints()) {
+				for (Coordinate c : distOp.nearestPoints()) {
 					if (!c.equals(coord)) {
 						nearestPoint = c;
 						break;
 					}
 				}
-			} // end if
-
-		} // for nearRoads
+			}
+		}
 
 		return nearestPoint;
 	}
@@ -159,15 +177,11 @@ public class RouteV {
 	/**
 	 * Gets the nearest junction to the current coordinate on the road that the
 	 * coordinate lies on.
-	 * 
-	 * @param coord
-	 *            The coordinate we are interested in
-	 * @param road
-	 *            The road which this coordinate is situated on
-	 * @return the Junction which is closest to the coordinate.
+	 * @param coord: the coordinate we are interested in
+	 * @param road: the road which this coordinate is situated on
+	 * @return the junction which is closest to the coordinate
 	 */
 	public static Junction getNearestJunction(Coordinate coord, Road road) {
-		double time = System.currentTimeMillis();
 		// Find the associated edge in road network
 		RepastEdge<?> edge;
 		Junction j1 = null;
@@ -192,8 +206,7 @@ public class RouteV {
 			return j2;
 	}
 
-	private static Junction getNearestUpStreamJunction(Coordinate coord, Road road) {
-		double time = System.currentTimeMillis();
+	public static Junction getNearestUpStreamJunction(Coordinate coord, Road road) {
 
 		// Find the associated edge in road network
 		RepastEdge<?> edge;
@@ -205,10 +218,8 @@ public class RouteV {
 		return j1;
 	}
 
-	private static Junction getNearestDownStreamJunction(Coordinate coord,
+	public static Junction getNearestDownStreamJunction(Coordinate coord,
 			Road road) {
-		double time = System.currentTimeMillis();
-
 		// Find the associated edge in road network
 		RepastEdge<?> edge;
 		Junction j1 = null;
@@ -219,13 +230,11 @@ public class RouteV {
 
 		return j1;
 	}
-
+	
 	/**
 	 * Test if a coordinate is part of a road segment.
-	 * 
-	 * @param coord
-	 *            The coordinate which we want to test
-	 * @return True if the coordinate is part of a road segment
+	 * @param coord: the coordinate which we want to test
+	 * @return true if the coordinate is part of a road segment
 	 */
 	private static boolean onRoad(Coordinate coord) {
 		return RoadContext.onRoad(coord);

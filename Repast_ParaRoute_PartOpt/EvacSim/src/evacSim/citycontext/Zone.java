@@ -1,16 +1,18 @@
 package evacSim.citycontext;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacSim.ContextCreator;
+import evacSim.vehiclecontext.Vehicle;
+import repast.simphony.space.gis.Geography;
 
 public class Zone {
-	private int id;
-	private Coordinate coord;
-
 	// /////////////////////////////////////////RODRIGO/////////////////////////////////
+	private int id;
 	private int totalevacuationvehicles;
 	private ArrayList<House> houses;
 	private ArrayList<Integer> destination;
@@ -18,74 +20,56 @@ public class Zone {
 	private int integerID;
 	private String charID;
 	
-	// LZ: Dynamic destination
+	// LZ,RV: Dynamic destination
 	private int type; // 0 for normal zone, 1 for shelter
-	private int capacity;
-	private int occupancy;
-    
+	private int capacity; // how many people can this shelter hold
+	private int occupancy; // how many people are currently in this shelter
+	// RV: map of excess vehicles waiting to be sheltered along with their occupancy
+	private Queue<Vehicle> waiting;
+	private Coordinate coord;
+	private Road road; // road closest to this zone (used in route calculations)
+//	private Coordinate nearestCoord; // nearest point on the nearest road
+	private Junction downJunc; // downstream junction of its road
+
+	// RV: Constructor for shelters only (after reading shape file)
+	public Zone() {
+		id = ContextCreator.generateAgentID();
+		type = 1;
+		houses = new ArrayList<House>();
+	}
+	
 	// LZ: this changed
 	public Zone(int integerID) {
-//		System.out.println("Initializer 1 called: "+ integerID);
 		this.integerID = integerID;
-		this.id = ContextCreator.generateAgentID();
-		this.houses = new ArrayList<House>();
-		this.type = 0;
-		this.capacity = 0;
-		this.occupancy = 0;
+		id = ContextCreator.generateAgentID();
+		houses = new ArrayList<House>();
+		type = 0;
+		occupancy = 0;
+		capacity = 0;
+		waiting = new LinkedList<Vehicle>();
+		System.out.print(".");
 	}
 	
 	public Zone(int integerID, int type, int capacity) {
-//		System.out.println("Initializer 2 called: "+integerID);
-		this.integerID = integerID;
-		this.id = ContextCreator.generateAgentID();
-		this.houses = new ArrayList<House>();
+		this(integerID);
 		this.type = type;
 		this.capacity = capacity;
-		this.occupancy = 0;
 	}
 
-	public void setHouses(ArrayList<House> houses) {
-		this.houses = houses;
+	@Override
+	public String toString() {
+		return "<Zone" + this.integerID + ">";
 	}
 
-	public ArrayList<House> getHouses() {
-		return this.houses;
-	}
-
-	public void printHouses() {
-		System.out.println("Zone number of houses in zone "
-				+ this.houses.size());
-		for (int i = 0; i < this.houses.size(); i++) {
-			House h = this.houses.get(i);
-			System.out.println("Zone House " + h.getId() + ": is in Zone = "
-					+ h.getZoneId() + ", Evacuates? " + h.getEvacuate()
-					+ ", at evacuation time = " + h.getEvacuationTime()
-					+ ", to destZone: " + h.getDestZone());
-		}
-	}
-
+	// getters & setters
+	
 	public int getId() {
 		return id;
-	}
-
-	public Coordinate getCoord() {
-		return ContextCreator.getZoneGeography().getGeometry(this)
-				.getCentroid().getCoordinate();
 	}
 
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	// /////////////////////////////////////////RODRIGO/////////////////////////////////
-
-	public int getIntegerID() {
-		return this.integerID;
-	}
-
-//	public void setIntegerID(int integerID) {
-//		this.integerID = integerID;
-//	}
 
 	public String getCharID() {
 		return charID;
@@ -94,8 +78,67 @@ public class Zone {
 	public void setCharID(String charID) {
 		this.charID = charID;
 	}
+	
+	public int getIntegerId() {
+		return this.integerID;
+	}
+	
+	public void setIntegerId(int id) {
+		this.integerID = id;
+	}
+	
+	public int getType(){
+		return this.type;
+	}
+	
+	// geometric properties
+	
+	/**
+	 * RV: Set the coordinate, closest road & its downstream junction
+	 * (used in routing functions)
+	 * */
+	public void setGeometry(Geography<Zone> zoneGeography) {
+		coord = zoneGeography.getGeometry(this).getCentroid().getCoordinate();
+		CityContext cityContext = ContextCreator.getCityContext();
+		road = cityContext.findRoadAtCoordinates(coord);
+//		RepastEdge<?> edge = cityContext.getEdgeFromIDNum(road.getID());
+//		downJunc = (Junction) edge.getTarget();
+	}
+	
+	public Coordinate getCoord() {
+		return coord;
+	}
+	
+	public Road getRoad() {
+		return road;
+	}
+	
+//	public Coordinate getNearestCoord() {
+//		return nearestCoord;
+//	}
+	
+	public Junction getDownJunc() {
+		return downJunc;
+	}
+	
+	public void setDownJunc(Junction junc) {
+		this.downJunc = junc;
+	}
 
-	// SPECIFIC FUNCTIONS FOR ZONES
+	/* Rodrigo: Specific for evacuation zones */
+	
+	public int getEvacuatingDemand() {
+		return this.totalevacuationvehicles;
+	}
+
+	public ArrayList<Integer> getDestinationPerVehicle() {
+		return this.destination;
+	}
+
+	public ArrayList<Integer> getEvacuationTimePerVehicle() {
+		return this.time;
+	}
+	
 	public void setEvacuationDemand() {
 		this.destination = new ArrayList<Integer>();
 		this.time = new ArrayList<Integer>();
@@ -112,43 +155,79 @@ public class Zone {
 
 		this.totalevacuationvehicles = this.destination.size();
 	}
-
-	public int getEvacuatingDemand() {
-		return this.totalevacuationvehicles;
-	}
-
-	public ArrayList<Integer> getDestinationPerVehicle() {
-		return this.destination;
-	}
-
-	public ArrayList<Integer> getEvacuationTimePerVehicle() {
-		return this.time;
+	
+	public ArrayList<House> getHouses() {
+		return this.houses;
 	}
 	
-	public int getType(){
-		return this.type;
+	public void setHouses(ArrayList<House> houses) {
+		this.houses = houses;
 	}
-	// LZ,RV: update shelter capacity when receiving evacuees
-	public boolean receiveEvacuees (int amount) {
-		if (this.occupancy + amount <= this.capacity) {
-			this.occupancy = this.occupancy + amount;
+
+	public void printHouses() {
+		System.out.println("Zone number of houses in zone "
+				+ this.houses.size());
+		for (int i = 0; i < this.houses.size(); i++) {
+			House h = this.houses.get(i);
+			System.out.println("Zone House " + h.getId() + ": is in Zone = "
+					+ h.getZoneId() + ", Evacuates? " + h.getEvacuate()
+					+ ", at evacuation time = " + h.getEvacuationTime()
+					+ ", to destZone: " + h.getDestZone());
+		}
+	}
+	
+	/* LZ,RV: Specific for shelters */
+	
+	public int getCapacity() {
+		return capacity;
+	}
+	
+	public void setCapacity(int cap) {
+		capacity = cap;
+	}
+	
+	public int getOccupancy() {
+		return occupancy;
+	}
+	
+	public void setOccupancy(int occupied) {
+		occupancy = occupied;
+	}
+	
+	public Queue<Vehicle> getWaiting() {
+		if (waiting == null) {
+			waiting = new LinkedList<Vehicle>();
+		}
+		return waiting;
+	}
+	
+	public void addWaiting(Vehicle veh) {
+		if (waiting == null) {
+			waiting = new LinkedList<Vehicle>();
+		}
+		waiting.add(veh);
+	}
+	
+	/** 
+	 * Update shelter capacity when receiving evacuees. In the case of SO
+	 * shelter routing, add the vehicle to the queue of vehicles waiting to be
+	 * relocated when the shelter does not have enough space.
+	 * */
+	public boolean receiveEvacuee() {
+		if (getType() != 1) { // if this is not a shelter
+			try {
+				throw new NoSuchMethodException(
+						"Only shelters can receive evacuees!");
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		}
+		if (occupancy < capacity) {
+			occupancy++;
 			return true;
 		}
 		else {
 			return false;
 		}
-	}
-	// LZ,RV: get zone capacity and occupancy
-	public int getCapacity() {
-		return this.capacity;
-	}
-	
-	public int getOccupancy() {
-		return this.occupancy;
-	}
-	
-	@Override
-	public String toString() {
-		return "<Zone" + this.integerID + ">";
 	}
 }

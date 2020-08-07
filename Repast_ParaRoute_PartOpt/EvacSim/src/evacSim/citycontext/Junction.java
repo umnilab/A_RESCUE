@@ -4,13 +4,13 @@
 package evacSim.citycontext;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
-import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.space.gis.Geography;
+//import repast.simphony.essentials.RepastEssentials;
+//import repast.simphony.space.gis.Geography;
 import evacSim.ContextCreator;
 
 public class Junction {

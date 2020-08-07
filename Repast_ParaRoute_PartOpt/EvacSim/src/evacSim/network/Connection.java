@@ -351,7 +351,7 @@ public class Connection implements DataConsumer {
         else if (message.startsWith(EVENT_MSG)){
         	try{
         		NetworkEventObject event = ParseString(message);
-        		
+                
                 insertExternalEvent(event);
                 //HG: store event adding information in data buffer 
                 try {

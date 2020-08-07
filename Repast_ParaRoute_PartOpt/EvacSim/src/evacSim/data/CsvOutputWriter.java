@@ -627,7 +627,7 @@ public class CsvOutputWriter implements DataConsumer {
         }
         // write the header row
         if (this.linesWritten == 0) {
-        	this.writer.write("veh,x,y,dest,speed,time\n");
+        		this.writer.write("veh,orig,dest,x,y,speed,time\n");
         }
         // get the lines list (excludes current time)
         ArrayList<String> lines = tick.dynamicDestTestVehDetails;
@@ -640,11 +640,11 @@ public class CsvOutputWriter implements DataConsumer {
         }
         // write the lines, adding current time at the end of each line
         for (String line : lines) {
-        	if (line == null) continue;
-        	
-        	line += "," + (int) tick.getTickNumber();
-        	this.writer.write(line);
-        	this.writer.newLine();
+	        	if (line == null) continue;
+	        	
+	        	line += "," + (int) tick.getTickNumber();
+	        	this.writer.write(line);
+	        	this.writer.newLine();
         }
         this.linesWritten += lines.size();
     }

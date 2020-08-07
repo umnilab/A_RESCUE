@@ -2,27 +2,18 @@ package evacSim;
 
 import java.io.FileInputStream;
 import java.util.Properties;
-import java.util.concurrent.locks.ReentrantLock;
-
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
-
 import com.vividsolutions.jts.geom.Coordinate;
-
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
-import repast.simphony.engine.environment.ControllerAction;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
-import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.space.gis.Geography;
 import repast.simphony.space.graph.Network;
-import repast.simphony.util.collections.Tree;
-import repast.simphony.visualization.gis.DisplayGIS;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.*;
-import evacSim.routing.*;
 import evacSim.vehiclecontext.*;
 import evacSim.partition.*;
 import evacSim.data.*;
@@ -47,13 +38,11 @@ public class ContextCreator implements ContextBuilder<Object> {
 	// Create the event handler object
 	public static NetworkEventHandler eventHandler = new NetworkEventHandler();
 	
-	//Hemant, Wenbo: Reading background traffic file into treemap
+	// Hemant, Wenbo: Reading background traffic file into treemap
 	public static BackgroundTraffic backgroundtraffic = new BackgroundTraffic();
 	
-	private Thread runner;
-	
-//	// Create a global lock to enforce concurrency
-//	public static ReentrantLock lock = new ReentrantLock();
+	// Create a global lock to enforce concurrency
+	// public static ReentrantLock lock = new ReentrantLock();
 	
 	/**
 	 * The citycontext will create its own subcontexts (RoadContext,
@@ -80,13 +69,11 @@ public class ContextCreator implements ContextBuilder<Object> {
 
 		while(GlobalVariables.SIMULATION_SLEEPS == 0){
 			try {
-				runner.sleep(1000);
+				Thread.sleep(1000);
 				System.out.println("Waiting for visualization");
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
 		
 		/* Build all the subcontexts */
@@ -122,8 +109,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 //		DisplayGIS.GIS_FRAME_UPDATE_INTERVAL=1000;
 		
 		// debug here
-		for (Context con : context.getSubContexts()) {
-			System.out.println("SubContext typeIDs: "+con.getTypeID());
+		for (Context<?> con : context.getSubContexts()) {
+			System.out.println("SubContext typeIDs: " + con.getTypeID());
 		}
 		// debug ends
 		
@@ -150,13 +137,20 @@ public class ContextCreator implements ContextBuilder<Object> {
 			schedule.schedule(speedProfileParams, r, "updateFreeFlowSpeed");
 		}
 		
-		//LZ: schedule events for loading demand of the next hour
+		// LZ: schedule events for loading demand of the next hour
 		ScheduleParameters demandLoadingParams = ScheduleParameters.createRepeating(0, duration_, 5);
 		schedule.schedule(demandLoadingParams, cityContext, "loadDemandOfNextHour");
 
 		// ZH: schedule the check of the supply side events
 		ScheduleParameters supplySideEventParams = ScheduleParameters.createRepeating(0, GlobalVariables.EVENT_CHECK_FREQUENCY, 1);
 		schedule.schedule(supplySideEventParams, eventHandler, "checkEvents");
+		
+		// RV: schedule SO shelter routing
+		if (GlobalVariables.DYNAMIC_DEST_STRATEGY == 3) {
+			ScheduleParameters soShelterRoutingParams = ScheduleParameters.createRepeating(
+					1, GlobalVariables.SO_SHELTER_MATCHING_INTERVAL, 6);
+			schedule.schedule(soShelterRoutingParams, cityContext, "soShelterRoutingSchedule");
+		}
 		
 		// Schedule parameters for both serial and parallel road updates
 		if (GlobalVariables.MULTI_THREADING){

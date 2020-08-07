@@ -6,7 +6,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 //import cern.colt.Arrays;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +45,8 @@ import evacSim.citycontext.Road;
 import evacSim.citycontext.Zone;
 import evacSim.data.DataCollector;
 import evacSim.routing.RouteV;
+//import evacSim.citycontext.ZoneContext;
+//import evacSim.routing.SOShelterRouting;
 
 public class Vehicle {
 	private int id;
@@ -54,7 +55,7 @@ public class Vehicle {
 	private int deptime;
 	private int endTime;
 	private int destinationZoneId;
-	private int evactime;
+	// private int evactime;
 	protected int destRoadID;
 	protected int lastRouteTime; // The time of getting the last routing information
 
@@ -67,7 +68,7 @@ public class Vehicle {
 	private float currentSpeed_;
 	private float accRate_;
 	private float desiredSpeed_; // in meter/sec
-	private static int regime_;
+	private  int regime_;
 	protected float maxAcceleration_; // in meter/sec2
 	private float normalDeceleration_; // in meter/sec2
 	protected float maxDeceleration_; // in meter/sec2
@@ -94,8 +95,10 @@ public class Vehicle {
 	private Lane nextLane_;
 	private Zone destZone; // RMSA
 	
-	/* Zhan: For vehicle based routing */
-	protected List<Road> roadPath; // The route is always started with the current road, whenever entering the next road, the current road will be popped out
+	/* Zhan: For vehicle based routing
+	 * The route is always started with the current road, whenever entering 
+	 * the next road, the current road will be popped out */
+	protected List<Road> roadPath; 
 
 	private List<Coordinate> coordMap;
 
@@ -112,7 +115,7 @@ public class Vehicle {
 	// BL: Variables for lane changing model
 	private Lane targetLane_; // BL: this is the correct lane that vehicle
 	// should change to.
-	private Lane tempLane_;// BL: this is the adjection lane toward the target
+//	private Lane tempLane_;// BL: this is the adjection lane toward the target
 	// lane direction
 	private boolean correctLane; // BL: to check if the vehicle is in the
 	// correct lane
@@ -137,15 +140,13 @@ public class Vehicle {
 	// Rajat, Xue: the relative difference threshold of route time for the old route and new route.
 	protected double indiffBand; 
 	// LZ,RV:DynaDestTest: List of visited shelters along with the time of visit
-	protected HashMap<Zone, Integer> visitedShelters; 
+	protected HashMap<Integer, Integer> visitedShelters; 
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
 
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
-		// if (ContextCreator.debug)
-		// System.out.println("Generating vehicle Id: " + this.getId());
 		this.house = h;
 
 		this.length = GlobalVariables.DEFAULT_VEHICLE_LENGTH;
@@ -192,14 +193,15 @@ public class Vehicle {
 		// Xue: Generate the parameter of route selection from a distribution.
 		this.indiffBand = assignIndiffBand();
 		// RV:DynaDestTest: List of visited shelters along with the time of visit
-		this.visitedShelters = new HashMap<Zone, Integer>();
+		this.visitedShelters = new HashMap<Integer, Integer>();
+		Plan startPlan = house.getActivityPlan().get(0);
+		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
 	}
 
-	//Gehlot: This is a new subclass of Vehicle class that has some different parameters like max acceleration and max deceleration 
+	/* HG: This is a new subclass of Vehicle class that has some different 
+	 * parameters like max acceleration and max deceleration */ 
 	public Vehicle(House h, float maximumAcceleration, float maximumDeceleration) {
 		this.id = ContextCreator.generateAgentID();
-		// if (ContextCreator.debug)
-		// System.out.println("Generating vehicle Id: " + this.getId());
 		this.house = h;
 
 		this.length = GlobalVariables.DEFAULT_VEHICLE_LENGTH;
@@ -237,16 +239,23 @@ public class Vehicle {
 		// For adaptive network partitioning
 		this.Nshadow = 0;
 		this.futureRoutingRoad = new ArrayList<Road>();
-		this.setVehicleClass(-1);//TODO HG:Change it later when use it
-		this.travelTimeForPreviousRoute = Double.MAX_VALUE;  //Xue: For the first step, set the travel time for the previous route to be infinite.
-		this.previousTick = 0; // Xue: The previous tick is set to be 0 at the beginning.
-		this.indiffBand = assignIndiffBand();  //generate the parameter of route selection from a distribution.
-		this.visitedShelters = new HashMap<Zone, Integer>(); // LZ,RV
+		this.setVehicleClass(-1); // TODO HG: Change it later when use it
+		// Xue: For the first step, set the travel time for the previous route to be infinite.
+		this.travelTimeForPreviousRoute = Double.MAX_VALUE;
+		// Xue: The previous tick is set to be 0 at the beginning.
+		this.previousTick = 0;
+		// Xue: generate the parameter of route selection from a distribution.
+		this.indiffBand = assignIndiffBand();
+		// LZ,RV: record the shelters visited by this
+		this.visitedShelters = new HashMap<Integer, Integer>();
+		Plan startPlan = house.getActivityPlan().get(0);
+		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
 	}
 	
 	public void setNextPlan() {
-		Plan current = this.house.getActivityPlan().get(0);
-		Plan next = this.house.getActivityPlan().get(1);
+		ArrayList<Plan> plans = this.house.getActivityPlan();
+		Plan current = plans.get(plans.size() - 2); // 2nd last plan
+		Plan next = plans.get(plans.size() - 1); // last plan
 		int destinationZone = next.getLocation();
 		this.destinationZoneId = destinationZone;
 		float duration = current.getDuration();
@@ -255,14 +264,14 @@ public class Vehicle {
 				.GetTickCount());
 		this.setDepTime(deptime);
 		CityContext cityContext = (CityContext) ContextCreator.getCityContext();
-		this.destZone = cityContext.findHouseWithDestID(destinationZone);
+		this.destZone = cityContext.findHouseWithDestID(destinationZoneId);
 		this.destCoord = this.destZone.getCoord();
 		this.originalCoord = cityContext.findHouseWithDestID(
 				current.getLocation()).getCoord();
 		this.destRoadID = cityContext.findRoadAtCoordinates(this.destCoord,
 				true).getLinkid();
 		this.atOrigin = true;
-		this.house.removePlan(current);
+//		this.house.removePlan(current);
 	}
 
 	/**
@@ -398,19 +407,22 @@ public class Vehicle {
 				if (this.lastRouteTime < RouteV.getValidTime()) { // Path does not valid
 					// The information are outdated, needs to be recomputed
 					// Check if the current lane connects to the next road in the new path
-					//List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);                 
-					Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
-					if(!(tempPathMap == null)) { //Find a path
-						Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 //LZ: this can be NULL sometimes...
-						
-						List<Road> tempPathNew = entry.getValue();    // Calculate path 
+					//List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);             
+					//Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
+					Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);
+					
+					for (Map.Entry<Double,List<Road>> entry : tempPathMap.entrySet()) {
 						double pathTimeNew = entry.getKey();           // Calculate path time
+						List<Road> tempPathNew = entry.getValue();    // Calculate path
+						if (pathTimeNew == 0.0) {
+							break;
+						}
 						int currentTick = (int) RepastEssentials.GetTickCount();  //Calculate tick.
 						List<Road> tempPath = entry.getValue();
 						
 						double pathTimeOldPath = this.travelTimeForPreviousRoute - (currentTick-this.previousTick) * GlobalVariables.SIMULATION_STEP_SIZE;
 						//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
-						//, the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
+						//the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
 						if (pathTimeOldPath - pathTimeNew > indiffBand * pathTimeOldPath) {  //Rajat, Xue
 							//System.out.print("relativeDifference \n");
 							if (pathTimeOldPath - pathTimeNew > GlobalVariables.TAU) {
@@ -432,17 +444,14 @@ public class Vehicle {
 							flag = true;
 						}
 					}
-//					System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				} 
-                if(!flag) {
+                if (!flag) {
 					// Route information is still valid
 					// Remove the current road from the path
 					this.removeShadowCount(this.roadPath.get(0));
 					this.roadPath.remove(0);
 					if(this.roadPath.size()==1) {
-//						System.out.println("CurrentLink "+this.road.getLinkid()+" Destination Link"+ this.destRoadID +" Next link" + this.roadPath.get(0));
-//						System.out.println("House "+this.house.getZone().getIntegerID()+" -> "+this.house.getDestZone());
-						this.nextRoad_ = null; // The other way to indicate vehicle has arrived
+						this.nextRoad_ = null; // the other way to indicate vehicle has arrived
 						return;
 					}
 					this.nextRoad_ = this.roadPath.get(1); 
@@ -453,32 +462,36 @@ public class Vehicle {
 //						System.out.println("Next Road ID for Vehicle: "
 //								+ t his.getVehicleID() + " is "
 //								+ nextRoad.getLinkid());
-				
-				/*
-				 * if (nextRoad.getLinkid() != this.road.getLinkid()) {
-				 * System.out.println("Next Road ID for Vehicle: " +
-				 * this.getVehicleID() + " is " + nextRoad.getLinkid());
-				 * this.nextRoad_ = nextRoad; } else {
-				 * System.out.println("No next road found for Vehicle " +
-				 * this.vehicleID_ + " on Road " + this.road.getLinkid());
-				 * this.nextRoad_ = null; }
-				 */
+//				 if (nextRoad.getLinkid() != this.road.getLinkid()) {
+//				 System.out.println("Next Road ID for Vehicle: " +
+//				 this.getVehicleID() + " is " + nextRoad.getLinkid());
+//				 this.nextRoad_ = nextRoad; } else {
+//				 System.out.println("No next road found for Vehicle " +
+//				 this.vehicleID_ + " on Road " + this.road.getLinkid());
+//				 this.nextRoad_ = null;
+//                }
 
 			} else {
 				// Clear legacy impact
 				this.clearShadowImpact();
 				// Compute new route
-				//this.roadPath = RouteV.vehicleRoute(this, this.destCoord); 
+				//this.roadPath = RouteV.vehicleRoute(this, this.destCoord);
 				Map<Double,List<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
-				Map.Entry<Double,List<Road>> entry = tempPathMap.entrySet().iterator().next();	 //Can return null
-				List<Road> tempPath = entry.getValue(); //get the route  
-				this.roadPath = tempPath;  //store the route
-				
-				this.setShadowImpact();
-				this.lastRouteTime = (int) RepastEssentials.GetTickCount();
-				this.atOrigin = false;
-				this.nextRoad_ = roadPath.get(1);
-//				System.out.println("Debug 2: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
+				for (Map.Entry<Double,List<Road>> entry : tempPathMap.entrySet()) {
+					double dist = entry.getKey();
+					List<Road> path = entry.getValue(); //get the route  
+					this.roadPath = path;  //store the route
+					
+					this.setShadowImpact();
+					this.lastRouteTime = (int) RepastEssentials.GetTickCount();
+					this.atOrigin = false;
+					if (dist != 0.0) {
+						this.nextRoad_ = roadPath.get(1); // RV: null
+					} else {
+						System.out.println(this + " same road" + this.road.getID() + " for next dest");
+						this.nextRoad_ = null;
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -486,7 +499,6 @@ public class Vehicle {
 					+ this.vehicleID_ + " on Road " + this.road.getLinkid());
 			this.nextRoad_ = null;
 		}
-		
 	}
 
 	// BL: Append a vehicle to vehicle list in plane
@@ -579,14 +591,10 @@ public class Vehicle {
 	}
 
 	public void calcState() {
-		double time = System.currentTimeMillis();
-			
 		// SH-- right now there is only one function we may also invoke lane
 		// changing decision here
 		// SHinvoke accelerating decision
 		this.makeAcceleratingDecision();
-
-		double time2 = System.currentTimeMillis();
 
 		if (this.road.getnLanes() > 1 && this.onlane) {
 			this.makeLaneChangingDecision();
@@ -634,7 +642,7 @@ public class Vehicle {
 		// and have max acceleration
 
 		if (front == null) {
-			regime_ = GlobalVariables.STATUS_REGIME_FREEFLOWING;
+			this.regime_ = GlobalVariables.STATUS_REGIME_FREEFLOWING;
 			return (this.maxAcceleration_);
 		}
 
@@ -831,7 +839,7 @@ public class Vehicle {
 			// lane
 			Lane tarLane = this.findBetterLane();
 			if (tarLane != null) {
-				// TODO: input a PDF of normal distribution
+				// TODO input a PDF of normal distribution
 				if (laneChangeProb > 0.5)
 					this.discretionaryLC(tarLane);
 			}
@@ -948,9 +956,6 @@ public class Vehicle {
 		double maxMove = this.road.getFreeSpeed()
 				* GlobalVariables.SIMULATION_STEP_SIZE;
 		boolean travelledMaxDist = false; // True when traveled maximum dist
-		// this iteration
-		double time = System.currentTimeMillis(); // used for debugging
-		double duration = 0.0f;
 		
 		/*
 		 * For debuging: print out the current road and next junction ID of the
@@ -965,14 +970,14 @@ public class Vehicle {
 		 */
 		while (!travelledMaxDist) {
 			GeometryFactory geomFac = new GeometryFactory();
-			float oldpos = distance(); // have to check
+			// float oldpos = distance(); // have to check
 			float step = GlobalVariables.SIMULATION_STEP_SIZE;
 			if (currentSpeed_ < GlobalVariables.SPEED_EPSILON
 					&& accRate_ < GlobalVariables.ACC_EPSILON) {
 				return; // does not move
 			}
 			float oldv = currentSpeed_; // Velocity at the beginning
-			float oldd = distance_; // Position at the beginning
+			// float oldd = distance_; // Position at the beginning
 			// distance can be traveled in last time interval based on
 			// the speed and the acceleration rate calculated earlier.
 
@@ -1080,16 +1085,14 @@ public class Vehicle {
 
 			target = this.coordMap.get(0);
 
-			Geometry currentGeom = geomFac.createPoint(currentCoord);
+			// Geometry currentGeom = geomFac.createPoint(currentCoord);
 			Geometry targetGeom = geomFac.createPoint(target);
 
 			// SH
 			// new block of code for using new distance
 			double[] distAndAngle = new double[2];
 
-			time = System.currentTimeMillis();
 			this.distance(currentCoord, target, distAndAngle);
-			duration = System.currentTimeMillis() - time;
 
 			double distToTarget = distAndAngle[0];
 
@@ -1097,21 +1100,22 @@ public class Vehicle {
 			// just go there
 			if (distTravelled + distToTarget < dx) {
 				distTravelled += distToTarget;
-//				this.lock.lock();
 				vehicleGeography.move(this, targetGeom);
 				
 				try {
-					//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
-//					if(this.nextRoad() == null){
+					// HG: the following condition can be put to reduce the 
+					// data when the output of interest is the final case when
+					// vehicles reach close to destination
+					// if(this.nextRoad() == null) {
 						DataCollector.getInstance().recordSnapshot(this, target);
-//					}
+					// }
 				}
 				catch (Throwable t) {
 				    // could not log the vehicle's new position in data buffer!
 				    DataCollector.printDebug("ERR" + t.getMessage());
 				}
 				
-//				this.lock.unlock();
+				// this.lock.unlock();
 				// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
 				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
 				// System.out.println("distToTarget(move)= "+ContextCreator.convertToMeters(distToTarget));
@@ -1163,8 +1167,6 @@ public class Vehicle {
 				// but moveByVector wants range 0->2PI
 				// vehicleGeography.moveByVector(this, dx, angle);
 
-				time = System.currentTimeMillis();
-
 //				// Old implementation: This approach seems to be fast but still have some issues.
 //				vehicleGeography.moveByVector(this, dx, distAndAngle[1]);
 				
@@ -1207,7 +1209,6 @@ public class Vehicle {
 		}
 		boolean travelledMaxDist = false; // True when traveled max dist this
 		// iteration
-		double time = System.currentTimeMillis(); // used for debugging
 
 		while (!travelledMaxDist) {
 			// SH Temp
@@ -1227,7 +1228,7 @@ public class Vehicle {
 
 			// target = this.route.routeMap().get(0);
 
-			Geometry currentGeom = geomFac.createPoint(currentCoord);
+//			Geometry currentGeom = geomFac.createPoint(currentCoord);
 			Geometry targetGeom = geomFac.createPoint(target);
 
 			// double distToTarget = DistanceOp.distance(currentGeom,
@@ -1358,10 +1359,12 @@ public class Vehicle {
 		Coordinate currentCoord = vehicleGeography.getGeometry(this)
 				.getCoordinate();
 		GeometryFactory geomFac = new GeometryFactory();
-		Coordinate nextCoord;
+		Coordinate nextCoord = null;
 
 		if (this.coordMap == null)
 			return 0;
+		else if (this.coordMap.size() == 0)
+			System.out.println("Zero size coordMap for " + this);
 		else
 			nextCoord = this.coordMap.get(0);
 
@@ -1513,7 +1516,7 @@ public class Vehicle {
 	}
 
 	public int getDestinationID() {
-		return this.destZone.getIntegerID();
+		return this.destZone.getIntegerId();
 	}
 
 	public House getHouse() {
@@ -1545,89 +1548,34 @@ public class Vehicle {
 		}
 	}
 	
-	// LZ: change this function for dynamic destination
 	public void setReachDest() throws Exception {
-		Zone destinationZone = ContextCreator.getCityContext().findHouseWithDestID(this.getDestinationID());
-		boolean foundNextDestination = false; // RV:DynaDestTest
-		if(destinationZone.getType()==1){
-			if(destinationZone.receiveEvacuees(1)) {
-				// LZ,RV:DynamicDestTwst: when the shelter has enough capacity for current vehicle
-				// LZ: one passenger per vehicle, need further concern
-				Coordinate target = null;
-				GeometryFactory geomFac = new GeometryFactory();
-				this.removeFromLane();
-				this.removeFromMacroList();
-				target = this.destCoord;
-				Geometry targetGeom = geomFac.createPoint(target);
-//				this.lock.lock();
-				vehicleGeography.move(this, targetGeom);
-//				this.lock.unlock();
-//				double time = System.currentTimeMillis();
-				if (this.house.getActivityPlan().size() > 1) {
-					this.endTime = (int) RepastEssentials.GetTickCount();
-					this.reachActLocation = true;
-					this.resetVehicle();
-				} else {
-					this.endTime = (int) RepastEssentials.GetTickCount();
-					this.reachActLocation = false;
-					this.reachDest = true;
-					this.killVehicle();
-				}
-			}
-			else { // LZ,RV:DynaDestTest: relocate when the shelter exceeds capacity
-				GeometryFactory geomFac = new GeometryFactory();
-				this.removeFromLane();
-				this.removeFromMacroList();
-				Coordinate target = this.destCoord;
-				Geometry targetGeom = geomFac.createPoint(target);
-				vehicleGeography.move(this, targetGeom);
-				CityContext cityContext = (CityContext) ContextCreator.getCityContext();
-				Coordinate currentCoord = vehicleGeography.getGeometry(this)
-						.getCoordinate();
-				Road road = cityContext.findRoadAtCoordinates(currentCoord, false);
-				this.setRoad(road);
-				// RV:DynaDestTest: mark this shelter visited & find the next one
-				this.visitedShelters.put(destinationZone,
-						(int) RepastEssentials.GetTickCount());
-				foundNextDestination = this.findNextDestination();
-				if (foundNextDestination) {
-					this.resetVehicle();
-					this.reachActLocation = true;
-				} else {
-					// if all shelters have rejected this vehicle, kill it
-					System.out.println("Veh#" + id + ": All shelters exhausted; killing self");
-					this.killVehicle();
-				}
-			}
+		// get the current zone (i.e., destination zone prior to relocation)
+		Zone destinationZone = ContextCreator.getCityContext().findHouseWithDestID(
+				this.getDestinationID());
+		// if the destination is a shelter
+		if (destinationZone.getType() == 1) {
+			this.findNextShelter(destinationZone);
 		}
+		// if the current destination is not a shelter but a regular CBG zone
 		else {
+			// remove the vehicle
 			Coordinate target = null;
 			GeometryFactory geomFac = new GeometryFactory();
 			this.removeFromLane();
 			this.removeFromMacroList();
 			target = this.destCoord;
 			Geometry targetGeom = geomFac.createPoint(target);
-	//		this.lock.lock();
 			vehicleGeography.move(this, targetGeom);
-	//		this.lock.unlock();
-			double time = System.currentTimeMillis();
-			if (this.house.getActivityPlan().size() > 1) {
-				this.endTime = (int) RepastEssentials.GetTickCount();
-				this.reachActLocation = true;
-				this.resetVehicle();
-			} else {
-				this.endTime = (int) RepastEssentials.GetTickCount();
-				this.reachActLocation = false;
-				this.reachDest = true;
-				this.killVehicle();
-			}
+			this.endTime = (int) RepastEssentials.GetTickCount();
+			this.reachActLocation = false;
+			this.reachDest = true;
+			this.killVehicle();
 		}
 	}
 	
 	public void setLastRouteTime(int routeTime) {
 		this.lastRouteTime= routeTime;
 	}
-	
 
 	public float currentSpeed() {
 		return currentSpeed_;
@@ -1671,7 +1619,7 @@ public class Vehicle {
 		this.destCoord = null;
 		this.destZone = null;
 		this.targetLane_ = null;
-		this.tempLane_ = null;
+//		this.tempLane_ = null;
 		this.house = null;
 		this.clearShadowImpact(); // ZH: clear any remaining shadow impact
 		GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES = GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES + 1;//HG: Keep increasing this variable to count the number of vehicles that have reached destination.
@@ -1827,7 +1775,7 @@ public class Vehicle {
 	public boolean checkNextLaneConnected(Road nextRoad) {
 		boolean connected = false;
 		Lane curLane = this.lane;
-		Road curRoad = this.getRoad();
+//		Road curRoad = this.getRoad();
 		
 		if (nextRoad != null) {
 			for (Lane dl : curLane.getDnLanes()) {
@@ -1849,8 +1797,6 @@ public class Vehicle {
 		Lane curLane = this.lane;
 		Road curRoad = this.getRoad();
 
-		Junction curUpJunc, curDownJunc, nextUpJunc, nextDownJunc;
-
 		if (this.nextRoad() == null) {
 			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
 				System.out.println("Assign next lane: current link ID= "
@@ -1860,10 +1806,10 @@ public class Vehicle {
 			this.nextLane_=null;
 			return;
 		} else {
-			curUpJunc = this.road.getJunctions().get(0);
-			curDownJunc = this.road.getJunctions().get(1);
-			nextUpJunc = this.nextRoad_.getJunctions().get(0);
-			nextDownJunc = this.nextRoad_.getJunctions().get(1);
+//			Junction curUpJunc = this.road.getJunctions().get(0);
+//			Junction curDownJunc = this.road.getJunctions().get(1);
+//			Junction nextUpJunc = this.nextRoad_.getJunctions().get(0);
+//			Junction nextDownJunc = this.nextRoad_.getJunctions().get(1);
 //			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
 //				System.out.println("Assign next lane for Vehicle: "
 //						+ this.getVehicleID() + " --current link ID= "
@@ -2557,7 +2503,6 @@ public class Vehicle {
 	}
 
 	private double distance(Coordinate c1, Coordinate c2, double[] returnVals) {
-		double time = System.currentTimeMillis(); // used for debugging
 		calculator.setStartingGeographicPoint(c1.x, c1.y);
 		calculator.setDestinationGeographicPoint(c2.x, c2.y);
 		double distance;
@@ -2680,7 +2625,7 @@ public class Vehicle {
 		double base = 0.5 * mean; // base width of the triangle
 		double start = mean - 0.5 * base; // starting point of the distribution
 		double end = mean + 0.5 * base; // end point ""
-		double rand = Math.random();
+		double rand = GlobalVariables.RandomGenerator.nextDouble();
 		double indiffbandvalue;
 		if (rand <= 0.5) {
 			indiffbandvalue = start + base * Math.sqrt(0.5 * rand);
@@ -2690,53 +2635,111 @@ public class Vehicle {
 		return indiffbandvalue;	
 	}
 	
-	/** LZ,RV:DynaDestTest: find next destination; works in the following way:
-	 * 1. create new house(Plan), 
-	 * 2. find the closest shelter,
-	 * 3. set up the house and update it in the vehicle variable,
-	 * 4. call setNextPlan to switch to new destination.
-	 * @return true if an alternative shelter is found, else false
-	 * */
-	public boolean findNextDestination() throws Exception {
-		House new_house = new House(this.getVehicleID(), this.getDestinationID());
-		ArrayList<Integer> locations = new ArrayList<Integer>();
-		ArrayList<Float> durations = new ArrayList<Float>();
+	/** LZ,RV:DynaDestTest: find next shelter destination */
+	public void findNextShelter(Zone curDest) throws Exception {
+		// get the current plans
+		ArrayList<Plan> plans = house.getActivityPlan();
 		
-		locations.add(this.getDestinationID());
-		durations.add(0f);
-		Zone shelter = ContextCreator.getCityContext().getClosestShelter(this);
-		// if no shelter found, return false
-		if (shelter == null) {
-			return false;
-		} else {
-			/* RV:DynaDestTest: Other than the trajectory, optionally also store the
-			 * relocation event details of this vehicle and display at the end of the
-			 * simulation for all relocated vehicles. This part is not necessary, though,
-			 * since we can get all relevant info from the trajectory, but is slightly
-			 * more accurate because it logs the exact time, not rounded off as is the 
-			 * case with the trajectory. */
-			ArrayList<Integer> record = new ArrayList<Integer>();
-			record.add(this.vehicleID_);
-			record.add(shelter.getIntegerID());
-			record.add((int) RepastEssentials.GetTickCount());
-			GlobalVariables.shelterRelocateTracker.add(record);
+		// if the shelter has enough capacity for this vehicle
+		// (currently only supports one person per vehicle)
+		if (curDest.receiveEvacuee() == true) {
+			// modify the departure time of the last plan
+			int curTime = (int) RepastEssentials.GetTickCount();
+			plans.get(plans.size() - 1).setDuration(curTime);
 			
-			locations.add(shelter.getIntegerID());
-			durations.add(0f);
-			new_house.setActivityPlan(locations, durations);
-			this.setHouse(new_house);
-			return true;
+			// remove it from the simulator
+			Coordinate target = this.destCoord;
+			GeometryFactory geomFac = new GeometryFactory();
+			this.removeFromLane();
+			this.removeFromMacroList();
+			Geometry targetGeom = geomFac.createPoint(target);
+			vehicleGeography.move(this, targetGeom);
+			this.endTime = (int) RepastEssentials.GetTickCount();
+			this.reachActLocation = false;
+			this.reachDest = true;
+			this.killVehicle();
+		}
+		// else if current shelter is not available, reroute this to next shelter
+		else {
+			// reset the location & geometry
+			GeometryFactory geomFac = new GeometryFactory();
+			this.removeFromLane();
+			this.removeFromMacroList();
+			Coordinate target = this.destCoord;
+			Geometry targetGeom = geomFac.createPoint(target);
+			vehicleGeography.move(this, targetGeom);
+			CityContext cityContext = (CityContext) ContextCreator.getCityContext();
+			Coordinate currentCoord = vehicleGeography.getGeometry(this).getCoordinate();
+			Road road = cityContext.findRoadAtCoordinates(currentCoord, false);
+			this.setRoad(road);
+			
+			// mark this shelter visited
+			visitedShelters.put(curDest.getIntegerId(), (int) RepastEssentials.GetTickCount());
+			
+			// if 3rd shelter routing strategy (SO matching) is used,
+			// update the number of people waiting at this shelter & return
+			if (GlobalVariables.DYNAMIC_DEST_STRATEGY == 3) {
+				curDest.addWaiting(this);
+				return;
+			}
+			
+			// find the next shelter
+			Zone nextShelter = ContextCreator.getCityContext().getClosestShelter(this);
+			
+			// process if next shelter is not null
+			if (nextShelter != null) {
+				// create & activate the new plan
+				setNewHouse(nextShelter.getIntegerId());
+//				this.resetVehicle();
+			}
+			// if all shelters have rejected this vehicle, kill it
+			else {
+				System.out.println("Veh#" + id + ": All shelters exhausted; killing self");
+				this.killVehicle();
+			}
 		}
 	}
 	
-	// LZ,RV:DynaDestTest: Additional getters required for dynamic destination
+	/** RV:DynaDestTest: Set new plan for a vehicle by creating a new house */ 
+	public void setNewHouse(int nextDestID) {
+		// create the inputs for setting up a new house
+		ArrayList<Integer> locations = new ArrayList<Integer>();
+		ArrayList<Integer> durations = new ArrayList<Integer>();
+		int curDestID = getDestinationID();
+		locations.add(curDestID);
+		locations.add(nextDestID);
+		durations.add(0);
+		durations.add(0);
+
+		// set up a new house
+		House new_house = new House(getVehicleID(), getDestinationID());
+		new_house.setActivityPlan(locations, durations);
+		this.setHouse(new_house);
+		
+		int tick = (int) RepastEssentials.GetTickCount();
+//		// record this data in the global trajectory recorder
+//		ArrayList<Integer> record = new ArrayList<Integer>();
+//		record.add(this.vehicleID_);
+//		record.add(curDestID);
+//		record.add(nextDestID);
+//		record.add(tick);
+		System.out.println(String.format("Rerouting %s [%d -> %d] at t=%d",
+				this, locations.get(0), locations.get(1), tick));
+	}
+	
+	/** LZ,RV:DynaDestTest: Additional getters required for dynamic destination */
 	public Coordinate getCoord() {
 		return vehicleGeography.getGeometry(this).getCoordinate();
 	}
 	
-	public HashMap<Zone, Integer> getVisitedShelters() {
+	public HashMap<Integer, Integer> getVisitedShelters() {
 		return visitedShelters;
 	}
+	
+	public int getRegime() {
+		return regime_;
+	}
+	
 	@Override // RV:DynaDestTest: Mainly for debugging
 	public String toString() {
 		return "<Veh" + this.vehicleID_ + ">";

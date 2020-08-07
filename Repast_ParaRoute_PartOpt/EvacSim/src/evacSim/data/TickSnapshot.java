@@ -4,13 +4,13 @@ package evacSim.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
+//import java.util.LinkedList;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacSim.NetworkEventObject;
 import evacSim.citycontext.Plan;
-import evacSim.citycontext.Road;
+//import evacSim.citycontext.Road;
 import evacSim.vehiclecontext.Vehicle;
 
 
@@ -144,10 +144,11 @@ public class TickSnapshot {
     		throws Throwable {
     	// resolve the current origin and destination ID
         ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
-        int currentDestID = plans.get(plans.size() - 1).getLocation();
+        	int origID = plans.get(0).getLocation();
+        	int destID = plans.get(1).getLocation();
         // store the vehicle ID, coordinates, speed & current destination 
-        this.dynamicDestTestVehDetails.add(String.format("%d,%f,%f,%d,%f",
-        	veh.getVehicleID(), coord.x, coord.y, currentDestID, veh.currentSpeed()));
+        this.dynamicDestTestVehDetails.add(String.format("%d,%d,%d,%f,%f,%f",
+        		veh.getVehicleID(), origID, destID, coord.x, coord.y, veh.currentSpeed()));
     }
     
     /**
@@ -166,12 +167,12 @@ public class TickSnapshot {
         }
         
         //Add event to the arraylist
-        if(type == 1){//if it is event starting
+        if (type == 1) {//if it is event starting
             this.events.get(0).add(event); 
-        }else if (type == 2){//if it is event ending
-        	this.events.get(1).add(event);
-        }else{//if external event has been added to queue
-        	this.events.get(2).add(event);
+        } else if (type == 2) {//if it is event ending
+        		this.events.get(1).add(event);
+        } else {//if external event has been added to queue
+        		this.events.get(2).add(event);
         }
     }
     

@@ -31,23 +31,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 
-import org.jgrapht.WeightedGraph;
+//import org.jgrapht.WeightedGraph;
 
-import repast.simphony.context.space.graph.ContextJungNetwork;
-import repast.simphony.space.projection.ProjectionEvent;
-import repast.simphony.space.projection.ProjectionListener;
-import repast.simphony.space.graph.EdgeCreator;
-import repast.simphony.space.graph.JungNetwork;
-import repast.simphony.space.graph.Network;
-import repast.simphony.space.graph.RepastEdge;
-import edu.uci.ics.jung.graph.Graph;
+//import repast.simphony.context.space.graph.ContextJungNetwork;
+//import repast.simphony.space.projection.ProjectionEvent;
+//import repast.simphony.space.projection.ProjectionListener;
+//import repast.simphony.space.graph.EdgeCreator;
+//import repast.simphony.space.graph.JungNetwork;
+//import repast.simphony.space.graph.Network;
+//import repast.simphony.space.graph.RepastEdge;
+//import edu.uci.ics.jung.graph.Graph;
 
-import evacSim.citycontext.Junction;
-import evacSim.ContextCreator;
+//import evacSim.citycontext.Junction;
+//import evacSim.ContextCreator;
 
 public class Utility {
 
@@ -101,7 +101,7 @@ public class Utility {
       MetisGraph metisGraph = new MetisGraph();
       metisGraph.setNumEdges(numEdges / 2); // Convert to an undirected graph
       metisGraph.setGraph(graph);
-      System.out.println("finshied reading graph " + graph.size() + " " + metisGraph.getNumEdges());
+      System.out.println("finished reading graph " + graph.size() + " " + metisGraph.getNumEdges());
       scanner.close();
       return metisGraph;
 

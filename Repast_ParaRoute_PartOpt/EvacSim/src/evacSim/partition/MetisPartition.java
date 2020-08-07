@@ -24,16 +24,16 @@ package evacSim.partition;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.Road;
-import evacSim.partition.GrowBisection.SaveNodesToArray;
-import galois.objects.graph.GNode;
+//import evacSim.partition.GrowBisection.SaveNodesToArray;
+//import galois.objects.graph.GNode;
 import galois.objects.graph.IntGraph;
-import galois.runtime.GaloisRuntime;
-import repast.simphony.space.gis.Geography;
+//import galois.runtime.GaloisRuntime;
+//import repast.simphony.space.gis.Geography;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Set;
+//import java.util.Iterator;
+//import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import util.Launcher;

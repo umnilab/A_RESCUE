@@ -527,7 +527,7 @@ public class CityContext extends DefaultContext<Object> {
 		Geography<Zone> zoneGeography = ContextCreator.getZoneGeography();
 		for (Zone house : zoneGeography.getAllObjects()) {
 			// if (house.getId()%GlobalVariables.Total_Person_Number==id)
-			if (house.getIntegerID() == destid)
+			if (house.getIntegerId() == destid)
 				return house;
 		}
 		System.err
@@ -613,7 +613,8 @@ public class CityContext extends DefaultContext<Object> {
 		return (p0.x - p1.x)*(p0.x - p1.x) + (p0.y - p1.y)*(p0.y - p1.y);
 	}
 	
-	/* LZ,RV: Returns the closest shelter for the driver upon reaching a full shelter
+	/**
+	 * LZ,RV: Returns the closest shelter for the driver upon reaching a full shelter
 	 * according to current traffic conditions & strategy used (as follows):
 	 * 1: driver looks for the closest shelter without knowing its availability
 	 * 2: driver only looks for the closest available shelter
@@ -624,42 +625,53 @@ public class CityContext extends DefaultContext<Object> {
 	 * - fixed the code for calculating the minimum distance (earlier, the distance was
 	 * not getting updated because of a missing line),
 	 * - removed the Euclidean distance calculation code
-	 * */
-	public Zone getClosestShelter(Vehicle vehicle) throws Exception{
-
-		GeometryFactory geomFac = new GeometryFactory();
-		Geography<?> zoneGeography = ContextCreator.getZoneGeography();
-		Point point = geomFac.createPoint(vehicle.getCoord());
-		Geometry buffer = point.buffer(GlobalVariables.XXXX_BUFFER); // use a buffer for efficiency
-		
+	 * 
+	 * @param vehicle: vehicle to be routed
+	 */
+	public Zone getClosestShelter(Vehicle vehicle) throws Exception {
+		// initialize
 		int strategy = GlobalVariables.DYNAMIC_DEST_STRATEGY;
 		double minDist = Double.MAX_VALUE;
 		Zone nearestShelter = null;
 		Map<Double, List<Road>> currentPathPlusDist = null;
+		ArrayList<Integer> visitedShelterIds = new ArrayList<Integer>();
+		ArrayList<Zone> eligibleShelters = new ArrayList<Zone>();
+		
+		// get the shelter zones
+		GeometryFactory geomFac = new GeometryFactory();
+		Geography<?> zoneGeography = ContextCreator.getZoneGeography();
+		Point point = geomFac.createPoint(vehicle.getCoord());
+		Geometry buffer = point.buffer(GlobalVariables.XXXX_BUFFER); // use a buffer for efficiency
+		Iterable<Zone> zones = zoneGeography.getObjectsWithin(buffer.getEnvelopeInternal(), Zone.class);
+
+		// get the zones that have been previously visited
+		ArrayList<Plan> plans = vehicle.getHouse().getActivityPlan();
+		for (int i = 0; i < plans.size(); i++) { // includes the current destination
+			visitedShelterIds.add(plans.get(i).getLocation());
+		}
 		
 		// prepare the list of candidate shelters depending on the strategy
-		ArrayList<Zone> shelters = new ArrayList<Zone>();
-		for (Zone zone : zoneGeography.getObjectsWithin(buffer.getEnvelopeInternal(), Zone.class)) {
+		for (Zone zone : zones) {
 			// consider only unvisited shelters
-			if (zone.getType() == 1 && !vehicle.getVisitedShelters().containsKey(zone)) {
+			if (zone.getType() == 1 && !visitedShelterIds.contains(zone.getIntegerId())) {
 				if (strategy == 1) { // include all shelters, irrespective of occupancy
-					shelters.add(zone);
+					eligibleShelters.add(zone);
 				}
 				// else if strategy is 2 or 3, include only shelters with available capacity
 				else if (zone.getOccupancy() < zone.getCapacity()) {
-					shelters.add(zone);
+					eligibleShelters.add(zone);
 				}
 			}
 		}
 		// if there is no candidate shelter, return null
 		// TODO: find a proper solution here; null can also be returned otherwise in a bad code
-		if (shelters.size() == 0) {
+		if (eligibleShelters.size() == 0) {
 			return null;
 		}
 		// perform the routing for each candidate shelter and pick the closest one
-		for (Zone shelter : shelters) {
+		for (Zone shelter : eligibleShelters) {
 			// LZ,RV: get the path to this shelter acc. to (non-Euclidean) selfish routing
-			currentPathPlusDist = RouteV.vehicleRoute(vehicle, shelter.getCoord(), true);
+			currentPathPlusDist = RouteV.vehicleRoute(vehicle, shelter.getCoord());
 			try {
 				// get the cost of the shortest path (i.e. key of the single key-value-pair HashMap)
 				for (double dist : currentPathPlusDist.keySet()) {
@@ -682,5 +694,13 @@ public class CityContext extends DefaultContext<Object> {
 			ContextCreator.getZoneContext().loadDemandofNextHour();
 			ContextCreator.getVehicleContext().createVehicleContextFromActivityModels();
 		}
+	}
+	
+	/**
+	 * RV:DynamicDest: Main caller of the SO routing scheduling (shelter matching)
+	 * */
+	public void soShelterRoutingSchedule() {
+		ContextCreator.getZoneContext().soShelterMatcher.
+			assignMatching(GlobalVariables.SO_SHELTER_MATCHING_ALGO);
 	}
 }

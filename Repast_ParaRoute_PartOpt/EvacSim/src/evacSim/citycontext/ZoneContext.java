@@ -1,10 +1,15 @@
 package evacSim.citycontext;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import evacSim.routing.SOShelterRouting;
 import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.gis.GeographyFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
@@ -19,6 +24,8 @@ import repast.simphony.parameter.Parameters;
 public class ZoneContext extends DefaultContext<Zone> {
 	
 	public DatasetOfHouseholdsPerZones dataset;
+	
+	public SOShelterRouting soShelterMatcher;
 
 	public ZoneContext() {
 
@@ -34,63 +41,104 @@ public class ZoneContext extends DefaultContext<Zone> {
 		Geography<Zone> zoneGeography = GeographyFactoryFinder
 				.createGeographyFactory(null).createGeography("ZoneGeography",
 						this, geoParams);
+//		CityContext cityContext = ContextCreator.getCityContext();
 
 		/* Read in the data and add to the context and geography */
-		File zoneFile = null;
-		File shelterFile = null;
-		ShapefileLoader<Zone> zoneLoader = null;
-		ShapefileLoader<Zone> shelterLoader = null;
 		try {
-			zoneFile = new File(GlobalVariables.ZONES_SHAPEFILE);
-			URI uri=zoneFile.toURI();
-			zoneLoader = new ShapefileLoader<Zone>(Zone.class,
-					uri.toURL(), zoneGeography, this);
-			int int_id =  1;
-			while (zoneLoader.hasNext()) {
-				zoneLoader.nextWithArgs(int_id);
-				int_id += 1;
-			}
+			/* Load the demand zones (census block groups) */
+//			System.out.println("Initializing demand zones only");
+//			File zoneFile = null;
+//			ShapefileLoader<Zone> zoneLoader = null;
+//			zoneFile = new File(GlobalVariables.ZONES_SHAPEFILE);
+//			URI uri=zoneFile.toURI();
+//			zoneLoader = new ShapefileLoader<Zone>(Zone.class,
+//					uri.toURL(), zoneGeography, this);
+//			int int_id =  1;
+//			while (zoneLoader.hasNext()) {
+//				zoneLoader.nextWithArgs(int_id);
+//				int_id += 1;
+//			}
 			
-			// For test, use the same shp to generate shelters
-			System.out.println("Shelter intialization.");
-			shelterFile = new File(GlobalVariables.ZONES_SHAPEFILE);
-			uri=shelterFile.toURI();
+			/* Load the emergency shelters (as zones) */
+			File shelterFile = null;
+			String shelterCsvName = null;
+			ShapefileLoader<Zone> shelterLoader = null;
+			ArrayList<Zone> shelters = new ArrayList<Zone>();
+			System.out.println("Initializing shelters");
+
+			// read the shelters shape-file
+			shelterFile = new File(GlobalVariables.SHELTERS_SHAPEFILE);
+			URI uri = shelterFile.toURI();
 			shelterLoader = new ShapefileLoader<Zone>(Zone.class,
 					uri.toURL(), zoneGeography, this);
+			
+			// read the shelter attributes CSV file
+			shelterCsvName = GlobalVariables.SHELTERS_CSV;
+			BufferedReader br = new BufferedReader(new FileReader(shelterCsvName));
+			int lineNum = 0;
 			while (shelterLoader.hasNext()) {
-				// RV:DynaDestTest: Changed constant shelter capacity to now read from GlobalVariables
-				shelterLoader.nextWithArgs(int_id, 1, GlobalVariables.SHELTER_CAP);
-				int_id++;
+				lineNum++;
+				String line = br.readLine();
+				if (lineNum == 1) continue;
+				Zone shelter = shelterLoader.next();
+				String[] result = line.split(",");
+				// set the fields
+				shelter.setIntegerId(Integer.parseInt(result[0]));
+				shelter.setCapacity(Integer.parseInt(result[9]));
+				shelter.setOccupancy(0);
+				shelter.setGeometry(zoneGeography);
+				shelters.add(shelter);
 			}
+			br.close();
+			
+			// create the SO routing scheduler
+			this.soShelterMatcher = new SOShelterRouting(shelters);
+			System.out.println("Created SO shelter matcher: " + this.soShelterMatcher.toString());
 
 		} catch (java.net.MalformedURLException e) {
 			System.err
 					.println("Malformed URL exception when reading housesshapefile.");
 			e.printStackTrace();
-		}
+		} catch (FileNotFoundException e){
+			System.out
+			.println("ContextCreator: No road csv file found");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+		// RV: Shelter matching for excess shelter seekers
+		if (GlobalVariables.DYNAMIC_DEST_STRATEGY == 3) {
+			System.out.println("Trying shelter matching!");
+		}
+		
 		// SH - for implementing activity simulator
 		if (GlobalVariables.SET_DEMAND_FROM_ACTIVITY_MODELS) {
-			//Gehlot and Chris: this is to be true when we plan to run multiple instances of demand simultaneously in batches. 
-			//Before setting it true, we need to have demand files numbered 1,2,.. etc. in the folder multiple_instances_of_demand 
-			//(the current demand files are copies of evacuation_only_2005_low_about200vehicles_noduplicates_sameOD_trialjacksonville.csv)
-			if(GlobalVariables.SIMULATION_MULTIPLE_DEMAND_INPUTS){
+			/* Gehlot and Chris: this is to be true when we plan to run 
+			 * multiple instances of demand simultaneously in batches. 
+			 * Before setting it true, we need to have demand files numbered
+			 * 1,2,.. etc. in the folder multiple_instances_of_demand
+			 * (the current demand files are copies of
+			 * evacuation_only_2005_low_about200vehicles_noduplicates_sameOD_trialjacksonville.csv)
+			 * */
+			if (GlobalVariables.SIMULATION_MULTIPLE_DEMAND_INPUTS) {
 				Parameters params = RunEnvironment.getInstance().getParameters();
                 int demandNumber = params.getInteger("demandFiles");
                 String a_filepath = "data/multiple_instances_of_demand/" + demandNumber + ".csv";
                 System.out.println("data file: "+a_filepath);
     			dataset = new DatasetOfHouseholdsPerZones(a_filepath);
-			}else{
+			} else {
 				String a_filepath = GlobalVariables.ACTIVITY_CSV;
 				System.out.println("data file: "+a_filepath);
 				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
 			}
 			
 			//loadDemandofNextHour();
-			HashMap<Integer, ArrayList<House>> housesbyzone = dataset.getHousesByHour().pollFirstEntry().getValue(); // turnOnAfterTest
-//			System.out.println(housesbyzone);
+			// turnOnAfterTest
+			HashMap<Integer, ArrayList<House>> housesbyzone = dataset.
+					getHousesByHour().pollFirstEntry().getValue();
 			for (Zone z : zoneGeography.getAllObjects()) {
-				int keyzone = z.getIntegerID();
+				int keyzone = z.getIntegerId();
 				if (housesbyzone.containsKey(keyzone)){
 					ArrayList<House> temparraylist = housesbyzone.get(keyzone);
 					z.setHouses(temparraylist);
@@ -103,10 +151,12 @@ public class ZoneContext extends DefaultContext<Zone> {
 			}
 		}
 	}
+	
 	public void loadDemandofNextHour() {
-		HashMap<Integer, ArrayList<House>> housesbyzone = dataset.getHousesByHour().pollFirstEntry().getValue(); // turnOnAfterTest
+		HashMap<Integer, ArrayList<House>> housesbyzone = dataset.
+				getHousesByHour().pollFirstEntry().getValue(); // turnOnAfterTest
 		for (Zone z : ContextCreator.getZoneGeography().getAllObjects()) {
-			int keyzone = z.getIntegerID();
+			int keyzone = z.getIntegerId();
 			if (housesbyzone.containsKey(keyzone)){
 				ArrayList<House> temparraylist = housesbyzone.get(keyzone);
 				z.setHouses(temparraylist);
@@ -120,4 +170,6 @@ public class ZoneContext extends DefaultContext<Zone> {
 			}
 		}
 	}
+	
+	
 }

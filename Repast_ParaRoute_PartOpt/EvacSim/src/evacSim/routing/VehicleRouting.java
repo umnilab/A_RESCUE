@@ -5,23 +5,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.*;
+//import org.jgrapht.graph.*;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.GraphPath;
-import com.vividsolutions.jts.geom.Coordinate;
+//import com.vividsolutions.jts.geom.Coordinate;
 
 import repast.simphony.context.space.graph.ContextJungNetwork;
-import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.space.projection.ProjectionEvent;
-import repast.simphony.space.projection.ProjectionListener;
-import repast.simphony.space.graph.EdgeCreator;
+//import repast.simphony.essentials.RepastEssentials;
+//import repast.simphony.space.projection.ProjectionEvent;
+//import repast.simphony.space.projection.ProjectionListener;
+//import repast.simphony.space.graph.EdgeCreator;
 import repast.simphony.space.graph.JungNetwork;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.RepastEdge;
-import repast.simphony.space.graph.ShortestPath;
+//import repast.simphony.space.graph.ShortestPath;
 import edu.uci.ics.jung.graph.Graph;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
@@ -115,7 +116,7 @@ public class VehicleRouting {
 
 			// find the path to go
 			int k = 0;
-			double random = Math.random();
+			double random = GlobalVariables.RandomGenerator.nextDouble();
 			for (int i = 0; i < kshortestPath.size(); i++) {
 				if (random < cumProb.get(i)) {
 					k = i;

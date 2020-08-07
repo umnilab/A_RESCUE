@@ -30,7 +30,7 @@ package evacSim;
  * To add a new global variable: 
  * 1. Define the variable's name and value in the Data.properties
  * 2. Adding corresponding global variable in the GlobalVariables.java
- * e.g.: To add int type new variable "test", first give value for test in Data.properties, as
+ * e.g.: To add int type new variable "test", first give value for test i	n Data.properties, as
  * 		 test = 0.5
  * 		 Then, create corresponding declaration for variable test, as
  * 		 public static final int test = Integer.valueOf(loadConfig("test"))
@@ -64,6 +64,7 @@ private static Properties config;
 	        config = new Properties();
 	        try {
 			    config.load(new FileInputStream("data/Data.properties"));
+//			    config.load(new FileInputStream("dynamic_dest_test/properties/case_1-2.properties"));
 //			    config.load(new FileInputStream("config/Data.properties"));
 		    } catch (IOException ex) {
 			    ex.printStackTrace();
@@ -80,9 +81,13 @@ private static Properties config;
 
 	public static final String ZONES_SHAPEFILE = loadConfig("ZONES_SHAPEFILE");
 	
+	public static final String SHELTERS_SHAPEFILE = loadConfig("SHELTERS_SHAPEFILE");
+	
 	public static final String ROADS_CSV = loadConfig("ROADS_CSV");
 
 	public static final String LANES_CSV = loadConfig("LANES_CSV");
+
+	public static final String SHELTERS_CSV = loadConfig("SHELTERS_CSV");
 	
 	public static final String ACTIVITY_CSV = loadConfig("ACTIVITY_SEQ_CSV");
 
@@ -404,11 +409,16 @@ private static Properties config;
 	public static final double ETA = Double.valueOf(loadConfig("ETA"));
 	public static final double TAU  = Double.valueOf(loadConfig("TAU"));
 	
-	/* LZ,RV: Dynamic destination strategy. See CityContext.getClosestShelter() for details */
+	/* LZ,RV: Dynamic destination strategy.
+	 * See CityContext.getClosestShelter() for details */
 	public static final int DYNAMIC_DEST_STRATEGY = Integer
 			.valueOf(loadConfig("DYNAMIC_DEST_STRATEGY"));
-	public static final int SHELTER_CAP = Integer.
-			valueOf(loadConfig("SHELTER_CAP")); // same capacity of each shelter
+//	public static final int SHELTER_CAP = Integer.
+//			valueOf(loadConfig("SHELTER_CAP")); // same capacity of each shelter
+	public static final String SO_SHELTER_MATCHING_ALGO = 
+			String.valueOf(loadConfig("SO_SHELTER_MATCHING_ALGO"));
+	public static final int SO_SHELTER_MATCHING_INTERVAL =
+			Integer.valueOf(loadConfig("SO_SHELTER_MATCHING_INTERVAL"));
 	public static ArrayList<ArrayList<Integer>> shelterRelocateTracker = 
 			new ArrayList<ArrayList<Integer>>();
 }

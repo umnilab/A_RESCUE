@@ -1,21 +1,19 @@
 package evacSim.routing;
 
-import java.util.*;
 
+import org.jgrapht.WeightedGraph;
 //import org.jgrapht.EdgeFactory;
-import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import edu.uci.ics.jung.graph.Graph;
 import repast.simphony.space.graph.RepastEdge;
-import evacSim.ContextCreator;
 
 /**
  * A Converter class that converts a Jung graph to that used in the Jgraph library.
  * 
  * @author Samiul Hasan
  */
-@SuppressWarnings("serial")
+//@SuppressWarnings("serial")
 public class JungToJgraph<T>
 {
 
@@ -53,6 +51,6 @@ public class JungToJgraph<T>
          jGraph.addEdge(source, target, edge);
          jGraph.setEdgeWeight(edge, weight);
       }
-      return jGraph;
+      return (WeightedGraph<T, RepastEdge<T>>) jGraph;
    }
 }

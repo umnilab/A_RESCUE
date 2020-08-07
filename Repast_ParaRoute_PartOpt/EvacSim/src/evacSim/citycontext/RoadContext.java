@@ -67,15 +67,15 @@ public class RoadContext extends DefaultContext<Road> {
 				String[] result=line.split(",");
 				
 				//Update road information
-				road=setAttribute(road,result);						
+				road=setAttribute(road,result);
 
 				// SH: Create lanes for this road
 				Geometry roadGeom = roadGeography.getGeometry(road);
 				for (Coordinate c : roadGeom.getCoordinates()) {
 					coordCache.put(c, null);
 				}
-				
 			}
+			br.close();
 			
 
 		} catch (java.net.MalformedURLException e) {
