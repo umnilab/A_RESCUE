@@ -448,8 +448,8 @@ public class Vehicle {
                 if(!flag) {
 					// Route information is still valid
 					// Remove the current road from the path
-					this.removeShadowCount(this.roadPath.peek());
-					this.roadPath.remove(0);
+					this.removeShadowCount(this.roadPath.poll());
+//					this.roadPath.remove(0);
 					if(this.roadPath.size()==1) {
 //						System.out.println("CurrentLink "+this.road.getLinkid()+" Destination Link"+ this.destRoadID +" Next link" + this.roadPath.get(0));
 //						System.out.println("House "+this.house.getZone().getIntegerID()+" -> "+this.house.getDestZone());
@@ -1275,6 +1275,7 @@ public class Vehicle {
 				// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
 				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
 				// System.out.println("distToTarget= "+ContextCreator.convertToMeters(distToTarget));
+//				System.out.println(this.coordMap.size());
 				this.coordMap.remove(0);
 				// this.route.remove();
 			}

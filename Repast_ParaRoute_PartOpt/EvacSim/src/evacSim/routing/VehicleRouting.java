@@ -13,8 +13,6 @@ import org.jgrapht.*;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.KShortestPaths;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-
 import org.jgrapht.GraphPath;
 //import com.vividsolutions.jts.geom.Coordinate;
 
@@ -158,13 +156,13 @@ public class VehicleRouting {
 		}
 		// Find the roads which are associated with these edges
 		double shortestPathLength = 0.0f;
-		roadPath_ = new ArrayDeque<Road>(shortestPath.size()+1);
+		roadPath_ = new ArrayDeque<Road>();
 		roadPath_.add(currentRoad);
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);
 			Road road = cityContext.findRoadWithLinkID(linkID);
 //			System.out.println("linkID: " + linkID + " Path-" + road.getID());
-			roadPath_.add(road);
+			roadPath_.offer(road);
 			shortestPathLength = shortestPathLength + edge.getWeight();
 		}
 //		shortestPath = null;
