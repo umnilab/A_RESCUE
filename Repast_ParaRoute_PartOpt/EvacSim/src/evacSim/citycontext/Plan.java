@@ -4,7 +4,7 @@ public class Plan {
 	private int location;
 	private int duration;
 
-	public Plan(int loc, int dur) {
+	public Plan(Integer loc, Integer dur) {
 		this.location = loc;
 		this.duration = dur;
 	}

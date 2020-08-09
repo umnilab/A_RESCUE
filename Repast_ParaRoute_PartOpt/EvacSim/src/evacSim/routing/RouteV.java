@@ -105,7 +105,7 @@ public class RouteV {
 					+ " from current road: " + currentRoad.getLinkid());
 			}
 			Map<Double, Queue<Road>> empty = new HashMap<Double, Queue<Road>>();
-			empty.put(0.0, new ArrayList<Road>());
+			empty.put(0.0, new ArrayDeque<Road>());
 // =======
 // 		if (curDownJunc.getID() == destDownJunc.getID() || (currentRoad.getLinkid()==104819 || currentRoad.getLinkid()==101235)) {
 // //			System.out.println("Destination road reached " + destRoad.getLinkid()

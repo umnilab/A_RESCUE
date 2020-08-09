@@ -416,5 +416,5 @@ private static Properties config;
 	public static final int SO_SHELTER_MATCHING_INTERVAL =
 			Integer.valueOf(loadConfig("SO_SHELTER_MATCHING_INTERVAL"));
 	public static ArrayList<ArrayList<Integer>> shelterRelocateTracker = 
-			new ArrayList<ArrayList<Integer>>();
+			new ArrayList<ArrayList<Integer>>();	
 }

@@ -635,7 +635,7 @@ public class CityContext extends DefaultContext<Object> {
 		int strategy = GlobalVariables.DYNAMIC_DEST_STRATEGY;
 		double minDist = Double.MAX_VALUE;
 		Zone nearestShelter = null;
-		Map<Double, List<Road>> currentPathPlusDist = null;
+		Map<Double, Queue<Road>> currentPathPlusDist = null;
 		ArrayList<Integer> visitedShelterIds = new ArrayList<Integer>();
 		ArrayList<Zone> eligibleShelters = new ArrayList<Zone>();
 		
@@ -702,7 +702,7 @@ public class CityContext extends DefaultContext<Object> {
 	 * RV:DynamicDest: Main caller of the SO routing scheduling (shelter matching)
 	 * */
 	public void soShelterRoutingSchedule() {
-		ContextCreator.getZoneContext().soShelterMatcher.
-			assignMatching(GlobalVariables.SO_SHELTER_MATCHING_ALGO);
+//		ContextCreator.getZoneContext().soShelterMatcher.
+//			assignMatching(GlobalVariables.SO_SHELTER_MATCHING_ALGO);
 	}
 }

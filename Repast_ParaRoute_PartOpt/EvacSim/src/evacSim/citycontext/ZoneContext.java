@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import evacSim.routing.SOShelterRouting;
+//import evacSim.routing.SOShelterRouting;
 import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.gis.GeographyFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
@@ -25,7 +25,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 	
 	public DatasetOfHouseholdsPerZones dataset;
 	
-	public SOShelterRouting soShelterMatcher;
+//	public SOShelterRouting soShelterMatcher;
 
 	public ZoneContext() {
 
@@ -92,8 +92,8 @@ public class ZoneContext extends DefaultContext<Zone> {
 			br.close();
 			
 			// create the SO routing scheduler
-			this.soShelterMatcher = new SOShelterRouting(shelters);
-			System.out.println("Created SO shelter matcher: " + this.soShelterMatcher.toString());
+//			this.soShelterMatcher = new SOShelterRouting(shelters);
+//			System.out.println("Created SO shelter matcher: " + this.soShelterMatcher.toString());
 
 		} catch (java.net.MalformedURLException e) {
 			System.err
