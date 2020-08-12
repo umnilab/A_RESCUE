@@ -22,6 +22,7 @@ public class Zone {
 	
 	// LZ,RV: Dynamic destination
 	private int type; // 0 for normal zone, 1 for shelter
+	private String name;
 	private int capacity; // how many people can this shelter hold
 	private int occupancy; // how many people are currently in this shelter
 	// RV: map of excess vehicles waiting to be sheltered along with their occupancy
@@ -44,6 +45,7 @@ public class Zone {
 		id = ContextCreator.generateAgentID();
 		houses = new ArrayList<House>();
 		type = 0;
+		name = null;
 		occupancy = 0;
 		capacity = 0;
 		waiting = new LinkedList<Vehicle>();
@@ -89,6 +91,14 @@ public class Zone {
 	
 	public int getType(){
 		return this.type;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	// geometric properties

@@ -255,9 +255,8 @@ public class Vehicle {
 	}
 	
 	public void setNextPlan() {
-		ArrayList<Plan> plans = this.house.getActivityPlan();
-		Plan current = plans.get(plans.size() - 2); // 2nd last plan
-		Plan next = plans.get(plans.size() - 1); // last plan
+		Plan current = house.getActivityPlan().get(0);
+		Plan next = house.getActivityPlan().get(1);
 		int destinationZone = next.getLocation();
 		this.destinationZoneId = destinationZone;
 		float duration = current.getDuration();
@@ -1559,6 +1558,9 @@ public class Vehicle {
 	}
 	
 	public void setReachDest() throws Exception {
+		if (this.vehicleID_ == 10007267) {
+			System.out.println('h');
+		}
 		// get the current zone (i.e., destination zone prior to relocation)
 		Zone destinationZone = ContextCreator.getCityContext().findHouseWithDestID(
 				this.getDestinationID());
@@ -2667,6 +2669,7 @@ public class Vehicle {
 			this.endTime = (int) RepastEssentials.GetTickCount();
 			this.reachActLocation = false;
 			this.reachDest = true;
+			System.out.println(this + " reached dest shelter " + curDest);
 			this.killVehicle();
 		}
 		// else if current shelter is not available, reroute this to next shelter
@@ -2727,21 +2730,16 @@ public class Vehicle {
 		this.setHouse(new_house);
 		
 		int tick = (int) RepastEssentials.GetTickCount();
-//		// record this data in the global trajectory recorder
-//		ArrayList<Integer> record = new ArrayList<Integer>();
-//		record.add(this.vehicleID_);
-//		record.add(curDestID);
-//		record.add(nextDestID);
-//		record.add(tick);
-		System.out.println(String.format("Rerouting %s [%d -> %d] at t=%d",
-				this, locations.get(0), locations.get(1), tick));
+		System.out.println(String.format("Rerouting %s [%d->%d] at t=%d: %s",
+				this, locations.get(0), locations.get(1), tick, visitedShelters));
+		this.resetVehicle();
 	}
 	
 	/** LZ,RV:DynaDestTest: Additional getters required for dynamic destination */
 	public Coordinate getCoord() {
 		return vehicleGeography.getGeometry(this).getCoordinate();
 	}
-	
+
 	public HashMap<Integer, Integer> getVisitedShelters() {
 		return visitedShelters;
 	}

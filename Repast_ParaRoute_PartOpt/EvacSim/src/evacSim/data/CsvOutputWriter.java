@@ -578,7 +578,8 @@ public class CsvOutputWriter implements DataConsumer {
      * @param tick the tick snapshot to be written to the output file.
      * @throws IOException if any error occurred writing the lines to disk.
      */
-    private void writeTickSnapshot(TickSnapshot tick) throws IOException {
+    @SuppressWarnings("unused")
+	private void writeTickSnapshot(TickSnapshot tick) throws IOException {
         if (tick == null) {
             return;
         }

@@ -60,7 +60,7 @@ private static Properties config;
 	        config = new Properties();
 	        try {
 			    config.load(new FileInputStream("data/Data.properties"));
-//			    config.load(new FileInputStream("dynamic_dest_test/properties/case_1-2.properties"));
+//			    config.load(new FileInputStream("dynamic_dest_test/properties/case_3-1.properties"));
 //			    config.load(new FileInputStream("config/Data.properties"));
 		    } catch (IOException ex) {
 			    ex.printStackTrace();

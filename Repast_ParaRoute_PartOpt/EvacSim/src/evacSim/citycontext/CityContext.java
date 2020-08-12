@@ -3,7 +3,6 @@ package evacSim.citycontext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -702,7 +701,7 @@ public class CityContext extends DefaultContext<Object> {
 	 * RV:DynamicDest: Main caller of the SO routing scheduling (shelter matching)
 	 * */
 	public void soShelterRoutingSchedule() {
-//		ContextCreator.getZoneContext().soShelterMatcher.
-//			assignMatching(GlobalVariables.SO_SHELTER_MATCHING_ALGO);
+		ContextCreator.getZoneContext().soShelterMatcher.
+			assignMatching(GlobalVariables.SO_SHELTER_MATCHING_ALGO);
 	}
 }
