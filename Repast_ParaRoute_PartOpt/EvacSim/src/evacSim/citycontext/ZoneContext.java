@@ -46,18 +46,19 @@ public class ZoneContext extends DefaultContext<Zone> {
 		/* Read in the data and add to the context and geography */
 		try {
 			/* Load the demand zones (census block groups) */
-//			System.out.println("Initializing demand zones only");
-//			File zoneFile = null;
-//			ShapefileLoader<Zone> zoneLoader = null;
-//			zoneFile = new File(GlobalVariables.ZONES_SHAPEFILE);
-//			URI uri=zoneFile.toURI();
-//			zoneLoader = new ShapefileLoader<Zone>(Zone.class,
-//					uri.toURL(), zoneGeography, this);
-//			int int_id =  1;
-//			while (zoneLoader.hasNext()) {
-//				zoneLoader.nextWithArgs(int_id);
-//				int_id += 1;
-//			}
+			System.out.println("Initializing demand zones only");
+			File zoneFile = null;
+			ShapefileLoader<Zone> zoneLoader = null;
+			zoneFile = new File(GlobalVariables.ZONES_SHAPEFILE);
+			URI uri=zoneFile.toURI();
+			zoneLoader = new ShapefileLoader<Zone>(Zone.class,
+					uri.toURL(), zoneGeography, this);
+			int int_id =  1;
+			while (zoneLoader.hasNext()) {
+				Zone zone = zoneLoader.nextWithArgs(int_id);
+				zone.setGeometry(zoneGeography);
+				int_id += 1;
+			}
 			
 			/* Load the emergency shelters (as zones) */
 			File shelterFile = null;
@@ -68,7 +69,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 			// read the shelters shape-file
 			shelterFile = new File(GlobalVariables.SHELTERS_SHAPEFILE);
-			URI uri = shelterFile.toURI();
+			uri = shelterFile.toURI();
 			shelterLoader = new ShapefileLoader<Zone>(Zone.class,
 					uri.toURL(), zoneGeography, this);
 			
@@ -80,10 +81,10 @@ public class ZoneContext extends DefaultContext<Zone> {
 				lineNum++;
 				String line = br.readLine();
 				if (lineNum == 1) continue;
-				Zone shelter = shelterLoader.next();
 				String[] result = line.split(",");
+				Zone shelter = shelterLoader.nextWithArgs(-Integer.parseInt(result[0]));
 				// set the fields
-				shelter.setIntegerId(Integer.parseInt(result[0]));
+//				shelter.setIntegerId(-Integer.parseInt(result[0]));
 				shelter.setName(result[2]);
 				shelter.setCapacity(Integer.parseInt(result[9]));
 				shelter.setOccupancy(0);

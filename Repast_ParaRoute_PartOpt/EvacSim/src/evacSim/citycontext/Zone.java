@@ -108,7 +108,7 @@ public class Zone {
 	 * (used in routing functions)
 	 * */
 	public void setGeometry(Geography<Zone> zoneGeography) {
-		coord = zoneGeography.getGeometry(this).getCentroid().getCoordinate();
+		this.coord = zoneGeography.getGeometry(this).getCentroid().getCoordinate();
 		CityContext cityContext = ContextCreator.getCityContext();
 		road = cityContext.findRoadAtCoordinates(coord);
 //		RepastEdge<?> edge = cityContext.getEdgeFromIDNum(road.getID());
