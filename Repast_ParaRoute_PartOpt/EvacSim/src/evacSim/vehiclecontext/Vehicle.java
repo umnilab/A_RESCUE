@@ -1098,12 +1098,21 @@ public class Vehicle {
 
 			// SH
 			// new block of code for using new distance
+//			double[] distAndAngle = new double[2];
+//			double distToTarget =  this.distance(currentCoord, target, distAndAngle);
+			
+			// LZ
+			double[] deltaXY = new double[2];
 			double[] distAndAngle = new double[2];
-
-			this.distance(currentCoord, target, distAndAngle);
-
-			double distToTarget = distAndAngle[0];
-
+			double distToTarget;
+			if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
+				distToTarget = this.distance2(currentCoord, target, deltaXY);
+			}
+			else{
+				distToTarget =  this.distance(currentCoord, target, distAndAngle);
+			}
+			
+			
 			// If we can get all the way to the next coords on the route then
 			// just go there
 			if (distTravelled + distToTarget < dx) {
@@ -1173,7 +1182,9 @@ public class Vehicle {
 				// double angle = angle(target, currentCoord) + Math.PI;
 				// angle() returns range from -PI->PI,
 				// but moveByVector wants range 0->2PI
-				// vehicleGeography.moveByVector(this, dx, angle);
+//				vehicleGeography.moveByVector(this, dx, angle);
+				
+//				System.out.println("dx: "+ dx + " angle: " + distAndAngle[1]);
 
 //				// Old implementation: This approach seems to be fast but still have some issues.
 //				vehicleGeography.moveByVector(this, dx, distAndAngle[1]);
@@ -1184,7 +1195,17 @@ public class Vehicle {
 				this.lock.unlock();*/
 				
 				// Zhan: implementation 2: thread safe version of the moveByVector
-				this.moveVehicleByVector(dx, distAndAngle[1]);
+//				 this.moveVehicleByVector(dx, distAndAngle[1]);
+				
+				// LZ
+				if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
+					double alpha = dx/distToTarget;
+					vehicleGeography.moveByDisplacement(this, alpha*deltaXY[0], alpha*deltaXY[1]);
+				}
+				else{
+					this.moveVehicleByVector(dx, distAndAngle[1]);
+				}
+				
 				
 				this.accummulatedDistance_ += dx;
 				// SH: Trying to remove this function context creator but this
@@ -1242,9 +1263,18 @@ public class Vehicle {
 			// double distToTarget = DistanceOp.distance(currentGeom,
 			// targetGeom);
 
+//			double[] distAndAngle = new double[2];
+//			double distToTarget = this.distance(currentCoord, target, distAndAngle);
+			
+			double[] deltaXY = new double[2];
 			double[] distAndAngle = new double[2];
-			this.distance(currentCoord, target, distAndAngle);
-			double distToTarget = distAndAngle[0];
+			double distToTarget;
+			if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
+				distToTarget = this.distance2(currentCoord, target, deltaXY);
+			}
+			else{
+				distToTarget =  this.distance(currentCoord, target, distAndAngle);
+			}
 
 			if (distTravelled + distToTarget < travelPerTurn) {
 				distTravelled += distToTarget;
@@ -1293,10 +1323,19 @@ public class Vehicle {
 				vehicleGeography.moveByVector(this, distToTravelM,
 						distAndAngle[1]);
 				this.lock.unlock();*/
-				
+//				 vehicleGeography.moveByVector(this, distToTravelM,distAndAngle[1]);
 				// Zhan: implementation 2: thread safe version of the moveByVector
-				this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
+//				this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
 				
+				// LZ: 
+				if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
+					double alpha = distToTravelM/distToTarget;
+					vehicleGeography.moveByDisplacement(this, alpha*deltaXY[0], alpha*deltaXY[1]);
+				}
+				else{
+					this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
+				}
+				 
 				travelledMaxDist = true;
 			}
 		}
@@ -2546,6 +2585,24 @@ public class Vehicle {
 		return distance;
 	}
 	
+	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
+		calculator.setStartingGeographicPoint(c1.x, c1.y);
+		calculator.setDestinationGeographicPoint(c2.x, c2.y);
+		double distance;
+		try {
+			distance = calculator.getOrthodromicDistance();
+
+		} catch (AssertionError ex) {
+			System.err.println("Error with finding distance");
+			distance = 0.0;
+		}
+		if (returnVals != null && returnVals.length == 2) {
+			returnVals[0] = c2.x - c1.x;
+			returnVals[1] = c2.y - c1.y;
+		}
+		return distance;
+	}
+	
 	/* *
 	 * Thread safe version of the moveByVector, replace the one in the DefaultGeography class
 	 * Creating a new Geometry point given the current location of the vehicle as well as the distance and angle.
@@ -2576,12 +2633,14 @@ public class Vehicle {
 		
 		try {
 			if (!this.vehicleGeography.getCRS().equals(DefaultGeographicCRS.WGS84)) {
+				// System.out.println("Here 1");
 				MathTransform crsTrans = CRS.findMathTransform(this.vehicleGeography.getCRS(),
 						DefaultGeographicCRS.WGS84);
 				Coordinate tmp = new Coordinate();
 				JTS.transform(coord, tmp, crsTrans);
 				this.calculator.setStartingGeographicPoint(tmp.x, tmp.y);
 			} else {
+				// System.out.println("Here 2");
 				this.calculator.setStartingGeographicPoint(coord.x, coord.y);
 			}
 			this.calculator.setDirection(angleInDegrees, distance);

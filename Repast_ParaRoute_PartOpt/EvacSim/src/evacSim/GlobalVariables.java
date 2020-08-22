@@ -417,4 +417,6 @@ private static Properties config;
 			Integer.valueOf(loadConfig("SO_SHELTER_MATCHING_INTERVAL"));
 	public static ArrayList<ArrayList<Integer>> shelterRelocateTracker = 
 			new ArrayList<ArrayList<Integer>>();	
+	public static final Boolean ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION = 
+			Boolean.valueOf(loadConfig("ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION"));
 }

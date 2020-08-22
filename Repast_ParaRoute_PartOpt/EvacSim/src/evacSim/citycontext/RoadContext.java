@@ -23,8 +23,7 @@ import evacSim.GlobalVariables;
 
 public class RoadContext extends DefaultContext<Road> {
 
-	// NM: Cache every coordinate which forms a road so that Route.onRoad() is
-	// quicker.
+	// NM: Cache every coordinate which forms a road so that Route.onRoad() is quicker.
 	private static Map<Coordinate, ?> coordCache;
 
 	public RoadContext() {
