@@ -84,8 +84,8 @@ public class ZoneContext extends DefaultContext<Zone> {
 				String[] result = line.split(",");
 				Zone shelter = shelterLoader.nextWithArgs(-Integer.parseInt(result[0]));
 				// set the fields
-//				shelter.setIntegerId(-Integer.parseInt(result[0]));
 				shelter.setName(result[2]);
+				shelter.setType(1);
 				shelter.setCapacity(Integer.parseInt(result[9]));
 				shelter.setOccupancy(0);
 				shelter.setGeometry(zoneGeography);
