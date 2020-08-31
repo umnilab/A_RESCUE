@@ -98,6 +98,12 @@ public class ContextCreator implements ContextBuilder<Object> {
 			Coordinate currentCoord = vehicleGeography.getGeometry(v)
 					.getCoordinate();
 			Road road = cityContext.findRoadAtCoordinates(currentCoord, false); 
+			if(road.getLinkid() == 104819){
+				road =  ContextCreator.getCityContext().findRoadWithLinkID(104818);
+			}
+			if(road.getLinkid() == 101235){
+				road =  ContextCreator.getCityContext().findRoadWithLinkID(101236);
+			}
 			road.addVehicleToNewQueue(v);
 		}
 		
