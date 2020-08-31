@@ -150,6 +150,9 @@ public class Vehicle {
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
 		this.house = h;
+		ArrayList<Plan> p = h.getActivityPlan();
+		System.out.println("Veh" + this.id + " from " + p.get(0).getLocation() +
+				" to " + p.get(1).getLocation() + " at t=" + p.get(0).getDuration() * 12000);
 
 		this.length = GlobalVariables.DEFAULT_VEHICLE_LENGTH;
 		this.travelPerTurn = GlobalVariables.TRAVEL_PER_TURN;
@@ -1597,14 +1600,12 @@ public class Vehicle {
 	}
 	
 	public void setReachDest() throws Exception {
-		if (this.vehicleID_ == 10007267) {
-			System.out.println('h');
-		}
 		// get the current zone (i.e., destination zone prior to relocation)
 		Zone destinationZone = ContextCreator.getCityContext().findHouseWithDestID(
 				this.getDestinationID());
 		// if the destination is a shelter
 		if (destinationZone.getType() == 1) {
+			System.out.println(this + " reached shelter " + destinationZone);
 			this.findNextShelter(destinationZone);
 		}
 		// if the current destination is not a shelter but a regular CBG zone
@@ -1620,6 +1621,7 @@ public class Vehicle {
 			this.endTime = (int) RepastEssentials.GetTickCount();
 			this.reachActLocation = false;
 			this.reachDest = true;
+			System.out.println(this + " reached dest zone " + destinationZone);
 			this.killVehicle();
 		}
 	}

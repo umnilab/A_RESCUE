@@ -105,23 +105,29 @@ public class SOShelterRouting {
 			for (int j = i+1; j < shelters.size(); j++) {
 				Zone orig = shelters.get(i);
 				Zone dest = shelters.get(j);
-				if (orig.getDownJunc() == null) {
-					orig.setDownJunc(RouteV.getNearestDownStreamJunction(
-							null, orig.getRoad()));
-				}
-				if (dest.getDownJunc() == null) {
-					dest.setDownJunc(RouteV.getNearestDownStreamJunction(
-							null, dest.getRoad()));
-				}
-				Map<Double,Queue<Road>> shortPath = RouteV.vbr.computeRoute(
-						orig.getRoad(), dest.getRoad(),
-						orig.getDownJunc(), dest.getDownJunc());
-				// get the distance of this path
-				// (by iterating over the only key-value-pair)
-				for (double dist : shortPath.keySet()) {
-					dMatrix.get(i).set(j, dist);
-					dMatrix.get(j).set(i, dist);
-					if (dist > maxDist) maxDist = dist;
+				try {
+					if (orig.getDownJunc() == null) {
+						orig.setDownJunc(RouteV.getNearestDownStreamJunction(
+								null, orig.getRoad()));
+					}
+					if (dest.getDownJunc() == null) {
+						dest.setDownJunc(RouteV.getNearestDownStreamJunction(
+								null, dest.getRoad()));
+					}
+					Map<Double,Queue<Road>> shortPath = RouteV.vbr.computeRoute(
+							orig.getRoad(), dest.getRoad(),
+							orig.getDownJunc(), dest.getDownJunc());
+					// get the distance of this path
+					// (by iterating over the only key-value-pair)
+					for (double dist : shortPath.keySet()) {
+						dMatrix.get(i).set(j, dist);
+						dMatrix.get(j).set(i, dist);
+						if (dist > maxDist) maxDist = dist;
+					}
+				} catch (NullPointerException e) {
+					// TODO: RV: Check the exact cause of this error & fix it
+					System.out.println("Error in calc. dist. b/w " + orig + " & " + dest);
+//					dMatrix.get(i).set(j, maxDist);
 				}
 			}
 		}	
