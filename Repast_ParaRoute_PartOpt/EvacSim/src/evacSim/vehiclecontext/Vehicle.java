@@ -151,8 +151,8 @@ public class Vehicle {
 		this.id = ContextCreator.generateAgentID();
 		this.house = h;
 		ArrayList<Plan> p = h.getActivityPlan();
-		System.out.println("Veh" + this.id + " from " + p.get(0).getLocation() +
-				" to " + p.get(1).getLocation() + " at t=" + p.get(0).getDuration() * 12000);
+//		System.out.println("Veh" + this.id + " from " + p.get(0).getLocation() +
+//				" to " + p.get(1).getLocation() + " at t=" + p.get(0).getDuration() * 12000);
 
 		this.length = GlobalVariables.DEFAULT_VEHICLE_LENGTH;
 		this.travelPerTurn = GlobalVariables.TRAVEL_PER_TURN;
@@ -1621,7 +1621,7 @@ public class Vehicle {
 			this.endTime = (int) RepastEssentials.GetTickCount();
 			this.reachActLocation = false;
 			this.reachDest = true;
-			System.out.println(this + " reached dest zone " + destinationZone);
+//			System.out.println(this + " reached dest zone " + destinationZone);
 			this.killVehicle();
 		}
 	}
