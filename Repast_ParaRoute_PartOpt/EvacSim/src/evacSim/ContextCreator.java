@@ -90,22 +90,23 @@ public class ContextCreator implements ContextBuilder<Object> {
 		context.addSubContext(vehicleContext);
 		System.out.println("Adding vehicleContext");
 		
-		Geography<Vehicle> vehicleGeography = ContextCreator.getVehicleGeography();
+//		Geography<Vehicle> vehicleGeography = ContextCreator.getVehicleGeography();
 
 
 		// Load the initial vehicles into the queue of each road
-		for (Vehicle v : getVehicleContext().getObjects(Vehicle.class)) {
-			Coordinate currentCoord = vehicleGeography.getGeometry(v)
-					.getCoordinate();
-			Road road = cityContext.findRoadAtCoordinates(currentCoord, false); 
-			if(road.getLinkid() == 104819){
-				road =  ContextCreator.getCityContext().findRoadWithLinkID(104818);
-			}
-			if(road.getLinkid() == 101235){
-				road =  ContextCreator.getCityContext().findRoadWithLinkID(101236);
-			}
-			road.addVehicleToNewQueue(v);
-		}
+//		for (Vehicle v : getVehicleContext().getObjects(Vehicle.class)) {
+////			Coordinate currentCoord = vehicleGeography.getGeometry(v)
+////					.getCoordinate();
+////			v.setCurrentCoord(currentCoord);
+//			Road road = cityContext.findRoadAtCoordinates(v.getCurrentCoord(), false); 
+//			if(road.getLinkid() == 104819){
+//				road =  ContextCreator.getCityContext().findRoadWithLinkID(104818);
+//			}
+//			if(road.getLinkid() == 101235){
+//				road =  ContextCreator.getCityContext().findRoadWithLinkID(101236);
+//			}
+//			road.addVehicleToNewQueue(v);
+//		}
 		
 		DataCollectionContext dataContext = new DataCollectionContext();
 		context.addSubContext(dataContext);

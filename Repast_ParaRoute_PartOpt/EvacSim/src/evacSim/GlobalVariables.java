@@ -419,6 +419,5 @@ private static Properties config;
 			new ArrayList<ArrayList<Integer>>();	
 	public static final Boolean ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION = 
 			Boolean.valueOf(loadConfig("ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION"));
-	public static final Boolean ENABLE_RANDOM_VEHICLE_INITIALIZATION = 
-			Boolean.valueOf(loadConfig("ENABLE_RANDOM_VEHICLE_INITIALIZATION"));
+	public static final Boolean DISABLE_GEOMETRY = Boolean.valueOf(loadConfig("DISABLE_GEOMETRY"));
 }

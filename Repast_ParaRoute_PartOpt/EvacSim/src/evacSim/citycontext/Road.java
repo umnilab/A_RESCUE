@@ -131,6 +131,7 @@ public class Road {
 				v = this.newqueueHead(); // BL: change to use the TreeMap
 
 				if (v.atActivityLocation()) {
+//					System.out.println(v.getCurrentCoord());
 					v.setCoordMap(this.firstLane());
 				}
 
@@ -574,7 +575,7 @@ public class Road {
 			this.newqueue.get(departuretime_).add(v);
 		}
 		v.setRoad(this);
-		v.setGeography();
+//		v.setGeography();
 	}
 
 
