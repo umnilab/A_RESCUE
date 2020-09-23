@@ -1408,3 +1408,23 @@ Caused by: java.lang.NullPointerException
 	at evacSim.routing.SOShelterRouting.assignMatching(SOShelterRouting.java:176)
 	at evacSim.citycontext.CityContext.soShelterRoutingSchedule(CityContext.java:705)
 	... 9 more
+ERROR [main] 2020-08-31 15:52:54,053 saf.core.runtime.Boot - null
+java.lang.NullPointerException
+	at saf.core.runtime.Boot.init(Boot.java:79)
+	at saf.core.runtime.Boot.main(Boot.java:246)
+	at repast.simphony.runtime.RepastMain.main(RepastMain.java:43)
+ERROR [main] 2020-08-31 15:52:54,056 saf.core.runtime.Boot - null
+java.lang.NullPointerException
+	at saf.core.runtime.Boot.run(Boot.java:101)
+	at saf.core.runtime.Boot.main(Boot.java:247)
+	at repast.simphony.runtime.RepastMain.main(RepastMain.java:43)
+ERROR [main] 2020-08-31 15:54:48,997 saf.core.runtime.Boot - null
+java.lang.NullPointerException
+	at saf.core.runtime.Boot.init(Boot.java:79)
+	at saf.core.runtime.Boot.main(Boot.java:246)
+	at repast.simphony.runtime.RepastMain.main(RepastMain.java:43)
+ERROR [main] 2020-08-31 15:54:48,999 saf.core.runtime.Boot - null
+java.lang.NullPointerException
+	at saf.core.runtime.Boot.run(Boot.java:101)
+	at saf.core.runtime.Boot.main(Boot.java:247)
+	at repast.simphony.runtime.RepastMain.main(RepastMain.java:43)

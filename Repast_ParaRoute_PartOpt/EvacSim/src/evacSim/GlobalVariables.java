@@ -430,11 +430,12 @@ private static Properties config;
 			new ArrayList<ArrayList<Integer>>();	
 	public static final Boolean ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION = 
 			Boolean.valueOf(loadConfig("ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION"));
-	
 	/* RV: Record the runtime spent in each 1000 ticks for performance analysis */
 	public static final boolean ENABLE_RUNTIME_RECORD =
 			Boolean.valueOf(loadConfig("ENABLE_RUNTIME_RECORD"));
 	public static final int RUNTIME_RECORD_INTERVAL =
 			Integer.valueOf(loadConfig("RUNTIME_RECORDER_INTERVAL"));
 	public static ArrayList<Double> RUNTIME_RECORD_LIST = new ArrayList<Double>();
+	// LZ
+	public static final Boolean DISABLE_GEOMETRY = Boolean.valueOf(loadConfig("DISABLE_GEOMETRY"));
 }

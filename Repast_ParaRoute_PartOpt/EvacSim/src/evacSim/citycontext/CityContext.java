@@ -641,7 +641,14 @@ public class CityContext extends DefaultContext<Object> {
 		// get the shelter zones
 		GeometryFactory geomFac = new GeometryFactory();
 		Geography<?> zoneGeography = ContextCreator.getZoneGeography();
-		Point point = geomFac.createPoint(vehicle.getCoord());
+		Point point = null;
+		
+		if(GlobalVariables.DISABLE_GEOMETRY){
+			point = geomFac.createPoint(vehicle.getCurrentCoord());
+		}
+		else{
+			point = geomFac.createPoint(vehicle.getCoord());
+		}
 		Geometry buffer = point.buffer(GlobalVariables.XXXX_BUFFER); // use a buffer for efficiency
 		Iterable<Zone> zones = zoneGeography.getObjectsWithin(buffer.getEnvelopeInternal(), Zone.class);
 
