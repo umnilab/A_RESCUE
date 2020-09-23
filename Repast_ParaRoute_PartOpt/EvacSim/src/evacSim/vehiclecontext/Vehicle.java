@@ -142,7 +142,8 @@ public class Vehicle {
 	// Rajat, Xue: the relative difference threshold of route time for the old route and new route.
 	protected double indiffBand; 
 	// LZ,RV:DynaDestTest: List of visited shelters along with the time of visit
-	protected HashMap<Integer, Integer> visitedShelters; 
+	protected HashMap<Integer, Integer> visitedShelters;
+	// RV
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
@@ -201,6 +202,8 @@ public class Vehicle {
 		this.visitedShelters = new HashMap<Integer, Integer>();
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
+		// RV
+		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
 
 	/* HG: This is a new subclass of Vehicle class that has some different 
@@ -255,8 +258,10 @@ public class Vehicle {
 		this.visitedShelters = new HashMap<Integer, Integer>();
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
+		// RV
+		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
-	
+	 
 	public void setNextPlan() {
 		Plan current = house.getActivityPlan().get(0);
 		Plan next = house.getActivityPlan().get(1);
@@ -269,6 +274,9 @@ public class Vehicle {
 		this.setDepTime(deptime);
 		CityContext cityContext = (CityContext) ContextCreator.getCityContext();
 		this.destZone = cityContext.findHouseWithDestID(destinationZoneId);
+		if (destZone == null) {
+			System.out.println("helloooo");
+		}
 		this.destCoord = this.destZone.getCoord();
 		this.originalCoord = cityContext.findHouseWithDestID(
 				current.getLocation()).getCoord();
@@ -750,14 +758,18 @@ public class Vehicle {
 	}
 
 	public Vehicle vehicleAhead() {
-		if (leading_ != null) {
-			return leading_;
-		} else if (nextLane_ != null) {
-			if (nextLane_.lastVehicle() != null)
-				return nextLane_.lastVehicle();
-			else
+		try {
+			if (leading_ != null) {
+				return leading_;
+			} else if (nextLane_ != null) {
+				if (nextLane_.lastVehicle() != null)
+					return nextLane_.lastVehicle();
+				else
+					return null;
+			} else {
 				return null;
-		} else {
+			}
+		} catch (NullPointerException e) {
 			return null;
 		}
 	}
@@ -777,13 +789,18 @@ public class Vehicle {
 	public float gapDistance(Vehicle front) {
 		float headwayDistance;
 		if (front != null) { /* vehicle ahead */
-			if (this.lane.getID() == front.lane.getID()) { /* same lane */
-				headwayDistance = this.distance_ - front.distance()
-						- front.length();
-			} else { /* different lane */
-				headwayDistance = this.distance_
-						+ ((float) front.lane.length() - front.distance() - front
-								.length());
+			try {
+				if (this.lane.getID() == front.lane.getID()) { /* same lane */
+					headwayDistance = this.distance_ - front.distance()
+							- front.length();
+				} else { /* different lane */
+					headwayDistance = this.distance_
+							+ ((float) front.lane.length() - front.distance() - front
+									.length());
+				}
+			} catch (NullPointerException e) {
+				System.out.println(e);
+				return 0f;
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
@@ -1112,7 +1129,12 @@ public class Vehicle {
 				distToTarget = this.distance2(currentCoord, target, deltaXY);
 			}
 			else{
-				distToTarget =  this.distance(currentCoord, target, distAndAngle);
+				try {
+					distToTarget =  this.distance(currentCoord, target, distAndAngle);
+				} catch (NullPointerException e) {
+					System.out.println("Null coordinate");
+					distToTarget = 0;
+				}
 			}
 			
 			
@@ -1140,40 +1162,44 @@ public class Vehicle {
 				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
 				// System.out.println("distToTarget(move)= "+ContextCreator.convertToMeters(distToTarget));
 				// this.route.remove();
-				Coordinate coor = this.coordMap.get(0);
-				this.coordMap.remove(0);
-				if (this.coordMap.isEmpty()) {
-					if (this.nextRoad() != null) {
-						if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-							System.out
-									.println("+++++++++ I am moving but coordinate map is empty+++++++++++++");
-							System.out.println("My next road is: "
-									+ this.nextRoad().getLinkid());
-						}
-						if (this.onlane) {
-							this.coordMap.add(coor);
+				try {
+					Coordinate coor = this.coordMap.get(0);
+					this.coordMap.remove(0);
+					if (this.coordMap.isEmpty()) {					
+						if (this.nextRoad() != null) {
 							if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-								System.out.println("Vehicle: "
-										+ this.getVehicleID()
-										+ " is at the end of the road "
-										+ this.getRoad().getLinkid()
-										+ " and appending to a junction");
+								System.out.println("+++++++++ I am moving but " +
+										"coordinate map is empty+++++++++++++");
+								System.out.println("My next road is: "
+										+ this.nextRoad().getLinkid());
 							}
-							if (this.appendToJunction(nextLane_) == 0)
-								break;
+							if (this.onlane) {
+								this.coordMap.add(coor);
+								if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
+									System.out.println("Vehicle: "
+											+ this.getVehicleID()
+											+ " is at the end of the road "
+											+ this.getRoad().getLinkid()
+											+ " and appending to a junction");
+								}
+								if (this.appendToJunction(nextLane_) == 0)
+									break;
+							} else {
+								if (this.changeRoad() == 0)
+									break;
+							}
+	
 						} else {
-							if (this.changeRoad() == 0)
-								break;
+							// Lane nextLane = null;
+							if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
+								System.out.println("+++++++++ I am moving but coordinate " +
+										"map is empty and no next lane found +++++++++++++");
+							}
+							this.setCoordMap(this.lane);
 						}
-
-					} else {
-						// Lane nextLane = null;
-						if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-							System.out
-									.println("+++++++++ I am moving but coordinate map is empty and no next lane found +++++++++++++");
-						}
-						this.setCoordMap(this.lane);
 					}
+				} catch (NullPointerException e) {
+					System.out.println("Empty coordMap!!!");
 				}
 			}
 
@@ -1675,8 +1701,8 @@ public class Vehicle {
 //		this.tempLane_ = null;
 		this.house = null;
 		this.clearShadowImpact(); // ZH: clear any remaining shadow impact
-		GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES = GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES + 1;//HG: Keep increasing this variable to count the number of vehicles that have reached destination.
-		// TODO: try the remove method in the vehicleContext
+		GlobalVariables.NUM_KILLED_VEHICLES++; //HG: Keep increasing this variable to count the number of vehicles that have reached destination.
+		ContextCreator.getVehicleContext().remove(this); // RV: Remove the vehicle from the quadtree structure
 	}
 
 	/*

@@ -90,8 +90,7 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 				} else {
 					v = new Vehicle(h);
 				}
-				
-				//v.setEvacuationTime(evactime);
+//				GlobalVariables.NUM_GENERATED_VEHICLES++;
 				this.add(v); 
 				v.setOriginalCoord(coord);
 				Point geom = fac.createPoint(coord);

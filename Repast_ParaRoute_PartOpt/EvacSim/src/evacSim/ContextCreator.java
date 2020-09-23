@@ -126,6 +126,13 @@ public class ContextCreator implements ContextBuilder<Object> {
 		schedule.schedule(endParams, this, "end");
 		ScheduleParameters startParams = ScheduleParameters.createOneTime(1);
 		schedule.schedule(startParams, this, "start");
+		// RV: Stop the simulation if all vehicles have been killed 
+		if (GlobalVariables.ENABLE_SIMULATION_STOP_IF_NO_VEHICLE) {
+			ScheduleParameters endIfNoVehicleParams = ScheduleParameters.createRepeating(
+					0, GlobalVariables.SIMULATION_STOP_IF_NO_VEHICLE_CHECK_INTERVAL,
+					ScheduleParameters.LAST_PRIORITY);
+			schedule.schedule(endIfNoVehicleParams, this, "endIfNoVehicle");
+		}
 		
 		// K: schedule parameter for network reloading
 		ScheduleParameters agentParamsNW = ScheduleParameters.createRepeating(
@@ -205,6 +212,11 @@ public class ContextCreator implements ContextBuilder<Object> {
 			
 			ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
 			schedule.schedule(tickEndParams, dataContext, "stopTick");
+			
+			// RV: For recording the actual system time spent per few ticks
+			ScheduleParameters recordRuntimeParams = ScheduleParameters.createRepeating(
+					0, GlobalVariables.RUNTIME_RECORD_INTERVAL, 6);
+			schedule.schedule(recordRuntimeParams, dataContext, "recordRuntime");
 	     }
 		
 		agentID = 0;
@@ -232,6 +244,26 @@ public class ContextCreator implements ContextBuilder<Object> {
 //				+ (GlobalVariables.datacollection_total));
 	}
 
+	/** RV: Prematurely end the simulation if there is no vehicle on the road network or
+	 *  in the queue of loaded vehicles. This is achieved with a proxy and is not fool proof.
+	 *  IF the no. of vehicles generated so far is the same as (or fewer in the pathological
+	 *  case) the no. of vehicles destroyed so far (after they reach the destination).
+	 *  This excludes the case in the beginning when both of these terms are zero.
+	 *  This may not work in the special case when there
+	 *  is a gap in the demand file so large that all vehicles reach their destination in that
+	 *  time and there is no vehicle on the network.
+	 *  */
+	public static void endIfNoVehicle() {
+		int nGenerated = GlobalVariables.NUM_GENERATED_VEHICLES;
+		int nDestroyed = GlobalVariables.NUM_KILLED_VEHICLES;
+		int nHouses = GlobalVariables.NUM_HOUSES;
+		if ((nGenerated >= nHouses-1) & (nGenerated <= nDestroyed)) {
+			ISchedule sched = RunEnvironment.getInstance().getCurrentSchedule();
+			sched.setFinishing(true);
+			sched.executeEndActions();
+		}
+	}
+	
 	public static void start() {
 		startTime = System.currentTimeMillis();
 	}

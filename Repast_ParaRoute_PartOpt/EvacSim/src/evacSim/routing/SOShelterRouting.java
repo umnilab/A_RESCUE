@@ -2,6 +2,7 @@ package evacSim.routing;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -46,9 +47,13 @@ public class SOShelterRouting {
 	// the maximal value of dMatrix
 	private Double maxDistance;
 
-	public SOShelterRouting(ArrayList<Zone> shelters) {
-		this.shelters = shelters;
-		int nShelters = shelters.size();
+	public SOShelterRouting(ArrayList<Zone> allshelters) {
+		// for testing with 180 vehicles & 26 shelters
+		// TODO delete this after testing
+//		shelters = new ArrayList<Zone>(allshelters.subList(0, 20));
+		
+		this.shelters = allshelters;
+		int nShelters = this.shelters.size();
 		demandSum = 0;
 		maxDistance = 0.0;
 		shelterCapacity = new ArrayList<Integer>(nShelters);
@@ -137,58 +142,43 @@ public class SOShelterRouting {
 	
 	/**
 	 * Get the matching with the updated data of this object at the current 
-	 * time's shelter values.
+	 * time's shelter values & assign it to the vehicles.
 	 * @param algo:
 	 * 		routing algorithm to be used: one of ['hungarian','leda','greedy']
 	 */
-	public ArrayList<ArrayList<Integer>> getMatching(String algorithm) {
-		ArrayList<ArrayList<Integer>> plan = null;
+	public void assignMatching(String algorithm) {
 		
-		// update the shelter info
+		// update the shelters status
 		updateRemaining();
 		updateRelocateDemand();
-		updateDistMatrix();
 		
-//		System.out.println("Remaining capacities: " + shelterRemaining);
-//		int remainingSum = 0;
-//		for (int i = 0; i < shelterRemaining.size(); i++) {
-//			remainingSum += shelterRemaining.get(i);
-//		}
-//		System.out.println("Total remaining cap: " + remainingSum);
-//		System.out.println("Relocation demands: " + relocateDemand);
-//		System.out.println("Total relocation demand: " + demandSum);
-		
-		// get the plan if there's any demand
-		if (demandSum > 0) {
-			if (algorithm.equals("hungarian")) {
-				plan = hungarianRouting();
-			} else if (algorithm.equals("leda")) {
-				plan = ledaRouting();
-			} else if (algorithm.equals("greedy")) {
-				plan = greedyRouting();
-			} else {
-				throw new IllegalArgumentException("Algorithm should be one" + 
-						" of 'hungarian', 'leda', 'greedy'");
-			}
-		}
-		return plan;
-	}
-	
-	/**
-	 * Get the matching & distribute it to the vehicles
-	 */
-	public void assignMatching(String algorithm) {
-		// first get the matching matrix
-		ArrayList<ArrayList<Integer>> matching = getMatching(algorithm);
 		if (demandSum == 0) {
 //			System.out.println("Zero relocation demand.");
 			return;
 		}
+		
+		// update the distances
+		updateDistMatrix();
+		
+		// get the matching plan		
+		ArrayList<ArrayList<Integer>> matching = null;
+		if (algorithm.equals("hungarian")) {
+			matching = hungarianRouting();
+		} else if (algorithm.equals("leda")) {
+			matching = ledaRouting();
+		} else if (algorithm.equals("greedy")) {
+			matching = greedyRouting();
+		} else if (algorithm.equals("hungarian_aalmi")) {
+			matching = hungarianAlgorithm_AALMI();
+		} else {
+			throw new IllegalArgumentException("Algorithm should be one" + 
+					" of 'hungarian', 'leda', 'greedy'");
+		}
+		
 		if (matching == null) {
 			System.err.println("Null matching in shelter relocation for non-zero demand.");
 			return;
 		}
-//		System.out.println("Matching: " + matching);
 		
 		// for each row in matching (i.e. shelter whose demand is to be relocated elsewhere)
 		for (int i = 0; i < matching.size(); i++) {
@@ -395,6 +385,91 @@ public class SOShelterRouting {
 		MatchingAlgorithm.Matching<String, DefaultWeightedEdge> matching = Gmacthing.getMatching();
 		ArrayList<ArrayList<Integer>> plan = returnPlan(matchingGraph, matching);
 		return plan;
+	}
+	
+	// ----------------------------------------------------------------------
+	// August, 2020, Jiawei Xue
+	// ALGORITHM 2: Hungarian algorithm_aalmi
+	public ArrayList<ArrayList<Integer>> hungarianAlgorithm_AALMI(){
+		// step 1: initialize the distance matrix
+		int n_dimension = getSum(shelterRemaining);
+		int[][] dataMatrix = new int[n_dimension][n_dimension];
+		for (int i = 0; i < n_dimension; i++){
+			int [] row = new int[n_dimension];
+			for (int j = 0; j < n_dimension; j++){ 
+				row[j] = 0;
+			}
+			dataMatrix[i] = row; 
+		}
+		// step 2: update the matrix information
+		for (int i = 0; i < demandSum; i++) {
+			for (int j = 0; j < n_dimension; j++) {
+				int locationI = getLocation(relocateDemand, i+1);  // locationI: start form 0
+				int locationJ = getLocation(shelterRemaining,j+1);  // locationJ: start from 0.
+				dataMatrix[i][j] = (int) Math.round(dMatrix.get(locationI).get(locationJ));
+			}
+		}
+		// step 3: call the Hungarian algorithm aalmi method
+		HungarianAlgorithm_AALMI ha = new HungarianAlgorithm_AALMI(dataMatrix);
+		int[][] assignment = ha.findOptimalAssignment();
+		if (assignment.length > 0) {
+			for (int i = 0; i < assignment.length; i++) {
+				//System.out.print("Col" + assignment[i][0] + " => Row" + assignment[i][1] + " (" + dataMatrix[assignment[i][0]][assignment[i][1]] + ")");
+			    //System.out.println();
+			}
+		}
+		
+		// step 4: System.out.println(assignment);
+		ArrayList<ArrayList<Integer>> AALMI_assignment = new ArrayList<ArrayList<Integer>>();
+		if (assignment.length > 0){
+			System.out.println(assignment.length);
+			for (int i = 0; i < assignment.length; i++){
+				ArrayList<Integer> row = new ArrayList<Integer>();
+				for(int j = 0; j < 2; j++){
+					row.add(assignment[i][j]);
+					//if (i<5){
+					//System.out.println("assignment[i][0]");
+					//	System.out.println(assignment[i][0]);
+					//  	System.out.println("assignment[i][1]");
+					//	System.out.println(assignment[i][1]);
+					//	System.out.println("------------------------------------------");
+					//}
+				}
+				AALMI_assignment.add(row);
+			}	
+		}
+		System.out.println("hungarian_aalmi algorithm");
+		return returnPlan_AALMI(AALMI_assignment);
+	};
+	
+	public ArrayList<ArrayList<Integer>> returnPlan_AALMI(ArrayList<ArrayList<Integer>> AALMI_assignment){
+		// for instance, result is a 5 by 5 matrix. There are {i,j} people relocating from i to j.
+		// initialize result.
+		ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < shelterRemaining.size(); i++) {
+			ArrayList<Integer> row = new ArrayList<Integer>();
+			for (int j = 0; j< shelterRemaining.size(); j++) {
+				row.add(0);
+			}
+			result.add(row);
+		}
+		int count = 0;
+		for (int i = 0; i < AALMI_assignment.size(); i++){
+			ArrayList<Integer> assignment = AALMI_assignment.get(i);
+			int assignment_demand = assignment.get(1);
+			int assignment_supply = assignment.get(0);
+			
+			if (assignment_demand < demandSum){
+				//count += 1;
+				//System.out.println(count);
+				int locationI = getLocation(relocateDemand, assignment_demand+1);
+				int locationJ = getLocation(shelterRemaining, assignment_supply+1);
+				count = count + 1;
+				result.get(locationI).set(locationJ, result.get(locationI).get(locationJ)+1);
+				//System.out.println(count);
+			}
+		}
+		return result;
 	}
 
 	/** 
