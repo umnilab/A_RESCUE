@@ -1,36 +1,31 @@
 package evacSim.vehiclecontext;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-
 import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.gis.GeographyFactoryFinder;
 import repast.simphony.space.gis.Geography;
-import repast.simphony.space.gis.GeographyParameters; //import repast.simphony.space.gis.House; //From Rodrigo
+import repast.simphony.space.gis.GeographyParameters;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.vehiclecontext.Vehicle;
 import evacSim.citycontext.*;
 
 public class VehicleContext extends DefaultContext<Vehicle> {
-	private Random rd = new Random(); // creating Random object
-	
+
 	public VehicleContext() {
 		super("VehicleContext");
 		System.out.println("VehicleContext creation");
-		
 		GeographyParameters<Vehicle> geoParams = new GeographyParameters<Vehicle>();
-		// geoParams.setCrs("EPSG:32618");
+		 geoParams.setCrs("EPSG:32618");
 		Geography<Vehicle> vehicleGeography = GeographyFactoryFinder
 				.createGeographyFactory(null).createGeography(
 						"VehicleGeography", this, geoParams);
 //		Geography<Zone> zoneGeography;
 //		zoneGeography = ContextCreator.getZoneGeography();
-
 		//createVehicleContextFromManualDemand(zoneGeography,vehicleGeography);
 		createVehicleContextFromActivityModels();
 		}

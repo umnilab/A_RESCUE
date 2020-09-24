@@ -131,7 +131,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		ScheduleParameters endParams = ScheduleParameters
 				.createAtEnd(ScheduleParameters.LAST_PRIORITY);
 		schedule.schedule(endParams, this, "end");
-		ScheduleParameters startParams = ScheduleParameters.createOneTime(1);
+		ScheduleParameters startParams = ScheduleParameters.createOneTime(1); //When reaching the end, end the simulation, priority 1
 		schedule.schedule(startParams, this, "start");
 		
 		// K: schedule parameter for network reloading
@@ -176,7 +176,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 			ScheduleParameters agentParams = ScheduleParameters.createRepeating(1, 1, 0);
 			double delay = agentParams.getDuration();
 			System.out.println("TIME BETWEEN TWO TICKS " + delay);
-			
+			schedule.schedule(agentParams, vehicleContext, "refreshAllVehicles");
 			for (Road r : getRoadContext().getObjects(Road.class)) {
 				schedule.schedule(agentParams, r, "step");
 			}
@@ -189,7 +189,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		/* Schedule Parameters for the graph partitioning */
 		if (GlobalVariables.MULTI_THREADING){
 			ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
-			ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
+			ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2); //Network partitioning, priority 2
 			schedule.schedule(initialPartitionParams, partitioner, "first_run");
 			schedule.schedule(partitionParams, partitioner, "check_run");
 		}
@@ -201,7 +201,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		        double tickDuration = 1.0d;
 				
 	     if(GlobalVariables.ENABLE_DATA_COLLECTION){
-			ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(0.0, ScheduleParameters.FIRST_PRIORITY);
+			ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(0.0, ScheduleParameters.FIRST_PRIORITY); //Data collection, priority infinity
 			schedule.schedule(dataStartParams, dataContext, "startCollecting");
 			
 			ScheduleParameters dataEndParams = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);

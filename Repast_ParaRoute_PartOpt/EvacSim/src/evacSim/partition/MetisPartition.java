@@ -42,14 +42,13 @@ public class MetisPartition {
 	private int npartition;
 	private ArrayList<ArrayList<Road>> PartitionedInRoads;
 	private ArrayList<Road> PartitionedBwRoads;
-	private ArrayList<Integer> PartitionWeights;
 	private int partition_duration; // how old is the current partition when next partitioning occurs
 	
 	public MetisPartition(int nparts) {
 		this.npartition = nparts;
 		this.PartitionedInRoads = new ArrayList<ArrayList<Road>>();
 		this.PartitionedBwRoads = new ArrayList<Road>();
-		this.PartitionWeights = new ArrayList<Integer>();
+		new ArrayList<Integer>();
 		this.partition_duration = 0;
 	}
 	
@@ -62,17 +61,17 @@ public class MetisPartition {
 	}
 	
 	public void first_run() throws NumberFormatException, ExecutionException {
-		GaliosGraphConverter graphConverter = new GaliosGraphConverter();
+		GaliosGraphConverter<ArrayList<ArrayList<Road>>> graphConverter = new GaliosGraphConverter<ArrayList<ArrayList<Road>>>();
 		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(true);
 		System.out.println("Metis Running...");
 		
 		if (Launcher.getLauncher().isFirstRun()) {
-//			System.err.println("Configuration");
-//			System.err.println("-------------");
-//			System.err.println(" Num of partitions: " + this.npartition);
-//			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
-//					+ " edges");
-//			System.err.println();
+			System.err.println("Configuration");
+			System.err.println("-------------");
+			System.err.println(" Num of partitions: " + this.npartition);
+			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
+					+ " edges");
+			System.err.println();
 		}
 		
 		System.gc(); // For gabage collection
@@ -82,7 +81,7 @@ public class MetisPartition {
 		IntGraph<MetisNode> resultGraph = partition(metisGraph, npartition);
 		Launcher.getLauncher().stopTiming();
 		time = (System.nanoTime() - time) / 1000000;
-//		System.err.println("runtime: " + time + " ms");
+		System.err.println("runtime: " + time + " ms");
 //		System.err.println();
 		
 		// Calling GaliosToRepastGraph method for testing
@@ -91,37 +90,36 @@ public class MetisPartition {
 		// Testing retrieving the partitioned results
 		this.PartitionedInRoads = graphConverter.getPartitionedInRoads();
 		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
-		this.PartitionWeights = graphConverter.getPartitionWeights();
-		int i;
-		for (i = 0; i < this.npartition; i++){
-//			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
-			// Compute number of vehicles currently in the partition
-			int totNumVeh = 0;
-			int totShadowVeh = 0;
-			int totRoutingVeh = 0;
-			for (Road road : PartitionedInRoads.get(i)){
-				totNumVeh += road.getVehicleNum();
-				totShadowVeh += road.getShadowVehicleNum();
-				totRoutingVeh += road.getFutureRoutingVehNum();
-				
-			}
+		graphConverter.getPartitionWeights();
+//		int i;
+//		for (i = 0; i < this.npartition; i++){
+////			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
+//			// Compute number of vehicles currently in the partition
+//			int totNumVeh = 0;
+//			int totShadowVeh = 0;
+//			int totRoutingVeh = 0;
+//			for (Road road : PartitionedInRoads.get(i)){
+//				totNumVeh += road.getVehicleNum();
+//				totShadowVeh += road.getShadowVehicleNum();
+//				totRoutingVeh += road.getFutureRoutingVehNum();
+//				
+//			}
 //			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
-
-		}
+//
+//		}
 		
 //		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
 		// Compute number of vehicles currently in the partition
-		int totNumVeh = 0;
-		int totShadowVeh = 0;
-		int totRoutingVeh = 0;
-		for (Road road : PartitionedBwRoads){
-			totNumVeh += road.getVehicleNum();
-			totShadowVeh += road.getShadowVehicleNum();
-			totRoutingVeh += road.getFutureRoutingVehNum();
-		}
+//		int totNumVeh = 0;
+//		int totShadowVeh = 0;
+//		int totRoutingVeh = 0;
+//		for (Road road : PartitionedBwRoads){
+//			totNumVeh += road.getVehicleNum();
+//			totShadowVeh += road.getShadowVehicleNum();
+//			totRoutingVeh += road.getFutureRoutingVehNum();
+//		}
 //		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
-		
-		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
+//		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 	}
 	
 	
@@ -145,7 +143,7 @@ public class MetisPartition {
 	
 	
 	public void run() throws NumberFormatException, ExecutionException {
-		GaliosGraphConverter graphConverter = new GaliosGraphConverter();
+		GaliosGraphConverter<ArrayList<ArrayList<Road>>> graphConverter = new GaliosGraphConverter<ArrayList<ArrayList<Road>>>();
 		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(false);
 		/*System.out.println("Metis Running...");
 		
@@ -181,37 +179,37 @@ public class MetisPartition {
 		// Testing retrieving the partitioned results
 		this.PartitionedInRoads = graphConverter.getPartitionedInRoads();
 		this.PartitionedBwRoads = graphConverter.getPartitionedBwRoads();
-		this.PartitionWeights = graphConverter.getPartitionWeights();
-		int i;
-		for (i = 0; i < this.npartition; i++){
-//			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
-			// Compute number of vehicles currently in the partition
-			int totNumVeh = 0;
-			int totShadowVeh = 0;
-			int totRoutingVeh = 0;
-			for (Road road : PartitionedInRoads.get(i)){
-				totNumVeh += road.getVehicleNum();
-				totShadowVeh += road.getShadowVehicleNum();
-				totRoutingVeh += road.getFutureRoutingVehNum();
-				
-			}
+		graphConverter.getPartitionWeights();
+//		int i;
+//		for (i = 0; i < this.npartition; i++){
+////			System.err.print("Partition:\t" + i + "\tNumber of element=\t" + PartitionedInRoads.get(i).size() + "\tTotal edge weight=\t" + PartitionWeights.get(i));
+//			// Compute number of vehicles currently in the partition
+//			int totNumVeh = 0;
+//			int totShadowVeh = 0;
+//			int totRoutingVeh = 0;
+//			for (Road road : PartitionedInRoads.get(i)){
+//				totNumVeh += road.getVehicleNum();
+//				totShadowVeh += road.getShadowVehicleNum();
+//				totRoutingVeh += road.getFutureRoutingVehNum();
+//				
+//			}
 //			System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
 
-		}
-		
-//		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
-		// Compute number of vehicles currently in the partition
-		int totNumVeh = 0;
-		int totShadowVeh = 0;
-		int totRoutingVeh = 0;
-		for (Road road : PartitionedBwRoads){
-			totNumVeh += road.getVehicleNum();
-			totShadowVeh += road.getShadowVehicleNum();
-			totRoutingVeh += road.getFutureRoutingVehNum();
-		}
+//		}
+//		
+////		System.err.print("Boundary Roads: Number of element=\t" + PartitionedBwRoads.size());
+//		// Compute number of vehicles currently in the partition
+//		int totNumVeh = 0;
+//		int totShadowVeh = 0;
+//		int totRoutingVeh = 0;
+//		for (Road road : PartitionedBwRoads){
+//			totNumVeh += road.getVehicleNum();
+//			totShadowVeh += road.getShadowVehicleNum();
+//			totRoutingVeh += road.getFutureRoutingVehNum();
+//		}
 //		System.err.println("\t#vehicles=\t" + totNumVeh+"\t#shadow vehciles=\t"+totShadowVeh+"\t#future routing vehicles\t"+totRoutingVeh);
-		
-		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
+//		
+//		this.partition_duration = GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 	}
 
 	/**

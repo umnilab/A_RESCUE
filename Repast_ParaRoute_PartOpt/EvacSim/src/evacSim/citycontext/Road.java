@@ -55,8 +55,8 @@ public class Road {
 	
 	//private ArrayList<Double> speedProfile;
 	
-	private Vehicle lastVehicle_;
-	private Vehicle firstVehicle_;
+	private Vehicle lastVehicle_ = null; //LZ: Can be null when no vehicle is was on the road
+	private Vehicle firstVehicle_ = null;
 	
 	private boolean eventFlag; // Indicator whether there is an event happening on the road
 	
@@ -116,7 +116,7 @@ public class Road {
 	// TODO: write Step 
 	/* New step function using node based routing */
 	// @ScheduledMethod(start=1, priority=1, duration=1)
-	public void step() {		
+	public void step() {	
 		// if (RepastEssentials.GetTickCount() % 10 == 0)
 		// this.setTravelTime();
 		double time = System.currentTimeMillis();
@@ -134,7 +134,6 @@ public class Road {
 //					System.out.println(v.getCurrentCoord());
 					v.setCoordMap(this.firstLane());
 				}
-
 				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
 					if (v.enterNetwork(this) == 0) {
 						break;
@@ -159,7 +158,6 @@ public class Road {
 				}
 
 			}
-
 			Vehicle v_ = this.firstVehicle();
 			//HGehlot: This loop iterates over all the vehicles on the current road to record their vehicle snapshot 
 			//if the tick corresponds to periodic time set for recording vehicle snapshot for visualization interpolation.
@@ -169,9 +167,13 @@ public class Road {
 					v_ = v_.macroTrailing();//get the next vehicle behind the current vehicle
 				}
 			}
-			
 			Vehicle pv = this.firstVehicle();
 			while (pv != null) {
+				if(tickcount<=pv.getLastMoveTick()){
+					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
+					break;
+				}
+				pv.updateLastMoveTick(tickcount);
 				pv.calcState();
 				pv.travel();
 				pv = pv.macroTrailing();
@@ -182,11 +184,11 @@ public class Road {
 					if (v == null) {
 						break;
 					} else {
-						if (v.getMoveVehicleFlag()) {
-							double maxMove = this.freeSpeed_
-									* GlobalVariables.SIMULATION_STEP_SIZE;
-							// double maxMove =
-							// v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE;
+						if (v.getMoveVehicleFlag()) { //For those vehicles who has been moved
+//							double maxMove = this.freeSpeed_
+//									* GlobalVariables.SIMULATION_STEP_SIZE;
+							double maxMove =
+							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
 							if (v.distance() < maxMove) {
 								// this move exceed the available distance of
 								// the link.
@@ -209,7 +211,6 @@ public class Road {
 			e.printStackTrace();
 			RunEnvironment.getInstance().pauseRun();
 		}
-
 	}
 	
 	
@@ -587,8 +588,7 @@ public class Road {
 	 */
 	public void removeVehicleFromNewQueue(Vehicle v) {
 		double departuretime_ = v.getDepTime();
-		Queue<Vehicle> temporalList = new LinkedList<Vehicle>();
-		temporalList = this.newqueue.get(departuretime_);
+		Queue<Vehicle> temporalList = this.newqueue.get(departuretime_);
 		if (temporalList.size() > 1) {
 			this.newqueue.get(departuretime_).poll();
 		} else {

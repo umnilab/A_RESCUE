@@ -24,7 +24,7 @@ import evacSim.vehiclecontext.Vehicle;
 public class VehicleSnapshot {
     
     /** The number identifying this vehicle within the simulation. */
-    final public int id;
+    final public int id;  
     
     /** The X-axis (longitude) position of the vehicle in the previous epoch when snapshot was recorded for visualization interpolation. */
     final public double prev_x;
@@ -84,8 +84,8 @@ public class VehicleSnapshot {
     public VehicleSnapshot(Vehicle vehicle, 
                            Coordinate coordinate) throws Throwable {
         this(vehicle.getVehicleID(),
-        	 vehicle.getpreviousEpochCoord().x,
-           	 vehicle.getpreviousEpochCoord().y,	
+        	 vehicle.getPreviousEpochCoord().x,
+           	 vehicle.getPreviousEpochCoord().y,	
            	 coordinate.x,
              coordinate.y,
            	 vehicle.currentSpeed(),

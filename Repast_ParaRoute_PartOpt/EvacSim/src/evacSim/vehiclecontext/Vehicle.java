@@ -3,7 +3,6 @@ package evacSim.vehiclecontext;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 //import cern.colt.Arrays;
@@ -17,20 +16,8 @@ import java.util.Queue;
 
 import org.opengis.referencing.operation.MathTransformFactory;
 import org.apache.commons.lang3.ArrayUtils;
-//import org.geotools.factory.FactoryFinder;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
-import org.geotools.referencing.operation.matrix.GeneralMatrix;
-import org.opengis.referencing.operation.MathTransform;
-import org.geotools.referencing.CRS;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-//import org.opengis.referencing.operation.MathTransform;
-//import org.opengis.referencing.operation.MathTransformFactory;
-//import org.opengis.referencing.operation.TransformException;
-
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.lang.Math;
 //import java.io.IOException;
 //import java.util.concurrent.locks.ReentrantLock;
@@ -86,7 +73,8 @@ public class Vehicle {
 
 	private boolean reachDest;
 	private boolean reachActLocation;
-	private boolean moveVehicle = true;// BL: to flag a vehicle for moving in
+	private boolean moveVehicle = false;// LZ: Vehicle is moved or not
+	private int lastMoveTick = -1; // LZ: A better solution to avoid double modification in single tick
 	// the next step
 	private boolean onlane = false;
 	protected boolean atOrigin = true;
@@ -153,7 +141,7 @@ public class Vehicle {
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
 		this.house = h;
-		ArrayList<Plan> p = h.getActivityPlan();
+		this.currentCoord_ = new Coordinate();
 //		System.out.println("Veh" + this.id + " from " + p.get(0).getLocation() +
 //				" to " + p.get(1).getLocation() + " at t=" + p.get(0).getDuration() * 12000);
 
@@ -163,7 +151,7 @@ public class Vehicle {
 		this.maxDeceleration_ = GlobalVariables.MAX_DECELERATION;
 		this.normalDeceleration_ = -0.5f;
 
-		this.previousEpochCoord = null;
+		this.previousEpochCoord = new Coordinate();
 		this.endTime = 0;
 		// this.atOrigin = true;
 		this.reachDest = false;
@@ -211,6 +199,7 @@ public class Vehicle {
 	public Vehicle(House h, float maximumAcceleration, float maximumDeceleration) {
 		this.id = ContextCreator.generateAgentID();
 		this.house = h;
+		this.currentCoord_ = new Coordinate();
 
 		this.length = GlobalVariables.DEFAULT_VEHICLE_LENGTH;
 		this.travelPerTurn = GlobalVariables.TRAVEL_PER_TURN;
@@ -218,7 +207,7 @@ public class Vehicle {
 		this.maxDeceleration_ = maximumDeceleration;
 		this.normalDeceleration_ = -0.5f;
 
-		this.previousEpochCoord = null;
+		this.previousEpochCoord = new Coordinate();
 		this.endTime = 0;
 		// this.atOrigin = true;
 		this.reachDest = false;
@@ -300,17 +289,8 @@ public class Vehicle {
 			}
 		}
 		
-		// Initialize geometry here
-//		Geography<Vehicle> vehicleGeography=ContextCreator.getVehicleGeography();
-		if(!GlobalVariables.DISABLE_GEOMETRY){
-			ContextCreator.getVehicleContext().add(this);
-		}
-		
-		if(!GlobalVariables.DISABLE_GEOMETRY){
-			GeometryFactory fac = new GeometryFactory();
-			Point geom = fac.createPoint(this.getCurrentCoord());
-			ContextCreator.getVehicleGeography().move(this, geom); // Might have thread safety issue
-		}
+//		// Add vehicle to vehicle context
+//		ContextCreator.getVehicleContext().add(this);
 	
 		float capspd = road.calcSpeed();// calculate the initial speed
 
@@ -361,7 +341,7 @@ public class Vehicle {
 		// Remove the future routing road impact
 		if (this.futureRoutingRoad.contains(r)){
 			r.decreaseFutureRoutingVehNum();
-			this.futureRoutingRoad.remove(r);
+		    this.futureRoutingRoad.remove(r);
 		}
 	}
 	
@@ -546,15 +526,9 @@ public class Vehicle {
 
 	public void setCoordMap(Lane plane) {
 		Coordinate lastCoordinate;
-		Geometry vg = ContextCreator.getVehicleGeography().getGeometry(this);
-		if(vg == null){ // Vehicle does not enter the network yet
-			lastCoordinate = this.getCurrentCoord();
-		}
-		else{
-			lastCoordinate = vg.getCoordinate();
-		}
+		lastCoordinate = this.getCurrentCoord();
+		
 		if (plane != null) {
-			coordMap.clear();
 			Coordinate[] coords = laneGeography.getGeometry(plane)
 					.getCoordinates();
 			Coordinate start, end;
@@ -567,6 +541,7 @@ public class Vehicle {
 					System.out
 							.println("Reversed the coordinates for this vehicle's coordinate map");
 			}
+			coordMap.clear();
 			for (Coordinate coord : coords) {
 				this.coordMap.add(coord);
 			}
@@ -587,7 +562,6 @@ public class Vehicle {
 	private void updateCoordMap(Lane lane) {
 		double adjustdist_ = 0;
 		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
-		coordMap.clear();
 
 		Coordinate juncCoordinate, nextLaneCoordinate, closeVehCoordinate;
 		juncCoordinate = coords[coords.length - 1];
@@ -595,15 +569,8 @@ public class Vehicle {
 		// SH Temp
 		// Geography<Vehicle> vehicleGeography;
 		// vehicleGeography = ContextCreator.getVehicleGeography();
-		Coordinate vcoordinate;
-		if(GlobalVariables.DISABLE_GEOMETRY){
-			vcoordinate = this.getCurrentCoord();
-		}
-		else{
-			vcoordinate = ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate();
-		}
-				
-
+		Coordinate vcoordinate = this.getCurrentCoord();
+		coordMap.clear();
 		for (int i = 0; i < coords.length - 1; i++) {
 			nextLaneCoordinate = getNearestCoordinate(juncCoordinate,
 					coords[i], coords[i + 1]);
@@ -928,17 +895,8 @@ public class Vehicle {
 	 * Also, we update the coordinates of the previous epoch in the end of the function.
 	 */ 
 	public void recVehSnaphotForVisInterp(){
-		Coordinate currentCoord = null;
-		Geometry vg;
-		if(GlobalVariables.DISABLE_GEOMETRY){
-			currentCoord = this.getCurrentCoord();
-		}
-		else{
-			vg = ContextCreator.getVehicleGeography().getGeometry(this);
-			if(vg != null){
-				currentCoord = vg.getCoordinate();
-			}
-		}
+//		Coordinate currentCoord = null;
+		Coordinate currentCoord = this.getCurrentCoord();
 		if( currentCoord != null){
 			try {
 				//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
@@ -950,12 +908,17 @@ public class Vehicle {
 			    // could not log the vehicle's new position in data buffer!
 			    DataCollector.printDebug("ERR" + t.getMessage());
 			}
-			this.previousEpochCoord = currentCoord;//update the previous coordinate as the current coordinate
+			setPreviousEpochCoord(currentCoord);//update the previous coordinate as the current coordinate, the same pointer...
 		}
 	}
 	
-	public Coordinate getpreviousEpochCoord() {
+	public Coordinate getPreviousEpochCoord() {
 		return this.previousEpochCoord;
+	}
+	
+	private void setPreviousEpochCoord(Coordinate newCoord){
+		this.previousEpochCoord.x = newCoord.x;
+		this.previousEpochCoord.y = newCoord.y;
 	}
 	
 	/*
@@ -1020,7 +983,6 @@ public class Vehicle {
 		 * line it would be just vehicle movement without signals
 		 */
 		while (!travelledMaxDist) {
-			GeometryFactory geomFac = new GeometryFactory();
 			// float oldpos = distance(); // have to check
 			float step = GlobalVariables.SIMULATION_STEP_SIZE;
 			if (currentSpeed_ < GlobalVariables.SPEED_EPSILON
@@ -1080,7 +1042,6 @@ public class Vehicle {
 			 */
 			// Hack for intersection
 			if (distance_ < maxMove && !onlane) {
-				this.moveVehicle = true;
 				/*
 				 * System.out.println(this.id + " " + this.road.getIdentifier()
 				 * + " " + this.distance_ + " " + moveVehicle);
@@ -1116,22 +1077,21 @@ public class Vehicle {
 					}
 				}
 			}
-
-			if (this.moveVehicle == false) {
+			
+			if (!this.moveVehicle) {
 				lastStepMove_ = 0;
 				return;
 			}
+			// update the vehicle move flag
+			this.moveVehicle = true;
+			
 			// update position
 			distance_ -= dx;
 
 			double distTravelled = 0; // The distance traveled so far
 
 			// Current location
-			Geometry vg = ContextCreator.getVehicleGeography().getGeometry(this);
-			if(vg == null || vg.getCoordinate()==null){
-				return;
-			}
-			currentCoord = vg.getCoordinate(); //vehicleGeography.getGeometry(this).getCoordinate();
+			currentCoord = this.getCurrentCoord();
 
 			/*
 			 * TODO: Solve the no coordinate problem (10/23/2012) need to recall
@@ -1149,27 +1109,15 @@ public class Vehicle {
 			
 			// LZ
 			double[] deltaXY = new double[2];
-			double[] distAndAngle = new double[2];
 			double distToTarget;
-			if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
-				distToTarget = this.distance2(currentCoord, target, deltaXY);
-			}
-			else{
-				distToTarget =  this.distance(currentCoord, target, distAndAngle);
-			}
+			distToTarget = this.distance2(currentCoord, target, deltaXY);
 			
 			
 			// If we can get all the way to the next coords on the route then
 			// just go there
 			if (distTravelled + distToTarget < dx) {
 				distTravelled += distToTarget;
-				if(GlobalVariables.DISABLE_GEOMETRY){
-					this.setCurrentCoord(target);
-				}
-				else{
-					Geometry targetGeom = geomFac.createPoint(target);
-					ContextCreator.getVehicleGeography().move(this, targetGeom);
-				}
+				this.setCurrentCoord(target);
 				
 				try {
 					// HG: the following condition can be put to reduce the 
@@ -1250,22 +1198,11 @@ public class Vehicle {
 //				 this.moveVehicleByVector(dx, distAndAngle[1]);
 				
 				// LZ
-				if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
-					double alpha = dx/distToTarget;
-					if(GlobalVariables.DISABLE_GEOMETRY){
-//						vehicleGeography.moveByDisplacement(this, alpha*deltaXY[0], alpha*deltaXY[1]);
-						currentCoord.x += alpha*deltaXY[0];
-						currentCoord.y += alpha*deltaXY[1];
-						this.setCurrentCoord(currentCoord);
-					}
-					else{
-						ContextCreator.getVehicleGeography().moveByDisplacement(this, alpha*deltaXY[0], alpha*deltaXY[1]);
-					}
-				}
-				else{
-					this.moveVehicleByVector(dx, distAndAngle[1]);
-				}
-				
+				double alpha = dx/distToTarget;
+				move2(alpha*deltaXY[0], alpha*deltaXY[1]);
+//				currentCoord.x += alpha*deltaXY[0];
+//				currentCoord.y += alpha*deltaXY[1];
+//				this.setCurrentCoord(currentCoord);
 				
 				this.accummulatedDistance_ += dx;
 				// SH: Trying to remove this function context creator but this
@@ -1327,14 +1264,8 @@ public class Vehicle {
 //			double distToTarget = this.distance(currentCoord, target, distAndAngle);
 			
 			double[] deltaXY = new double[2];
-			double[] distAndAngle = new double[2];
 			double distToTarget;
-			if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
-				distToTarget = this.distance2(currentCoord, target, deltaXY);
-			}
-			else{
-				distToTarget =  this.distance(currentCoord, target, distAndAngle);
-			}
+			distToTarget = this.distance2(currentCoord, target, deltaXY);
 
 			if (distTravelled + distToTarget < travelPerTurn) {
 				distTravelled += distToTarget;
@@ -1389,23 +1320,12 @@ public class Vehicle {
 //				this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
 				
 				// LZ: 
-				if(GlobalVariables.ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION){
-					double alpha = distToTravelM/distToTarget;
-//					vehicleGeography.moveByDisplacement(this, alpha*deltaXY[0], alpha*deltaXY[1]);
-					currentCoord.x += alpha*deltaXY[0];
-					currentCoord.y += alpha*deltaXY[1];
-					this.setCurrentCoord(currentCoord);
-				}
-				else{
-//					this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
-					double alpha = distToTravelM/distToTarget;
-//					vehicleGeography.moveByDisplacement(this, alpha*deltaXY[0], alpha*deltaXY[1]);
-					currentCoord.x += alpha*deltaXY[0];
-					currentCoord.y += alpha*deltaXY[1];
-					this.setCurrentCoord(currentCoord);
-				}
+				double alpha = distToTravelM/distToTarget;
+				move2(alpha*deltaXY[0], alpha*deltaXY[1]);
+//				currentCoord.x += alpha*deltaXY[0];
+//				currentCoord.y += alpha*deltaXY[1];
+//				this.setCurrentCoord(currentCoord);
 				
-				 
 				travelledMaxDist = true;
 			}
 		}
@@ -1437,12 +1357,7 @@ public class Vehicle {
 					// SH Temp
 					// Geography<Vehicle> vehicleGeography;
 					// vehicleGeography = ContextCreator.getVehicleGeography();
-					if(GlobalVariables.DISABLE_GEOMETRY){
-						lastCoordinate = this.getCurrentCoord();
-					}
-					else{
-						lastCoordinate = ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate();
-					}
+					lastCoordinate = this.getCurrentCoord();
 					start = coords[0];
 					end = coords[coords.length - 1];
 					coor = this
@@ -1456,7 +1371,6 @@ public class Vehicle {
 				// if (distance_ < maxMove && !onlane) {
 				if (!onlane) {
 					this.setCoordMap(nextLane_);
-					this.moveVehicle = true;
 					this.removeFromLane();
 					this.removeFromMacroList();
 //					this.lock.lock();
@@ -1666,7 +1580,9 @@ public class Vehicle {
 	}
 	
 	public void setCurrentCoord(Coordinate coord) {
-		this.currentCoord_ = coord;
+		this.currentCoord_.x = coord.x;
+		this.currentCoord_.y = coord.y;
+		this.currentCoord_.z = coord.z;
 	}
 
 	public int nearlyArrived(){//HG: If nearly arrived then return 1 else 0
@@ -1689,13 +1605,9 @@ public class Vehicle {
 		// if the current destination is not a shelter but a regular CBG zone
 		else {
 			// remove the vehicle
-			Coordinate target = null;
-//			GeometryFactory geomFac = new GeometryFactory();
 			this.removeFromLane();
 			this.removeFromMacroList();
-			target = this.destCoord;
-//			Geometry targetGeom = geomFac.createPoint(target);
-//			ContextCreator.getVehicleGeography().move(this, targetGeom);
+			this.setCurrentCoord(this.destCoord);
 			this.endTime = (int) RepastEssentials.GetTickCount();
 			this.reachActLocation = false;
 			this.reachDest = true;
@@ -1715,13 +1627,7 @@ public class Vehicle {
 	public void resetVehicle() {
 		this.setNextPlan();
 		CityContext cityContext = (CityContext) ContextCreator.getCityContext();
-		Coordinate currentCoord;
-		if(!GlobalVariables.DISABLE_GEOMETRY){
-			currentCoord = this.getCurrentCoord();
-		}
-		else{
-			currentCoord = ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate(); //vehicleGeography.getGeometry(this).getCoordinate();
-		}
+		Coordinate currentCoord = this.getCurrentCoord();
 		Road road = cityContext.findRoadAtCoordinates(currentCoord, false); // todest=false
 		// TODO: Remove one of the two add queue functions after finish
 		// debugging
@@ -1759,9 +1665,6 @@ public class Vehicle {
 //		this.tempLane_ = null;
 		this.house = null;
 		this.clearShadowImpact(); // ZH: clear any remaining shadow impact
-		if(!GlobalVariables.DISABLE_GEOMETRY){
-			ContextCreator.getVehicleContext().remove(this);
-		}
 		GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES = GlobalVariables.NUMBER_OF_ARRIVED_VEHICLES + 1;//HG: Keep increasing this variable to count the number of vehicles that have reached destination.
 	}
 
@@ -1791,6 +1694,15 @@ public class Vehicle {
 			this.lane.lastVehicle(null);
 		}
 	}
+	
+	
+	public void updateLastMoveTick(int current_tick){
+		this.lastMoveTick = current_tick;
+	}
+	
+	public int getLastMoveTick(){
+		return this.lastMoveTick;
+	}
 
 	public boolean getMoveVehicleFlag() {
 		return this.moveVehicle;
@@ -1812,9 +1724,6 @@ public class Vehicle {
 		} else {
 			pr.lastVehicle(macroLeading_);
 		}
-		// pr.removeVehicleFromRoad(this);
-		// TODO: need to change the above line by following line later
-		// pr.removeVehicleFromRoad();
 		Vehicle pv = pr.firstVehicle();
 		int nVehicles_ = 0;
 		while (pv != null) {
@@ -2502,11 +2411,7 @@ public class Vehicle {
 			// SH Temp
 			// Geography<Vehicle> vehicleGeography;
 			// vehicleGeography = ContextCreator.getVehicleGeography();
-			if(GlobalVariables.DISABLE_GEOMETRY){
-				coor1 = this.getCurrentCoord();
-			}else{
-				coor1 = ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate();
-			}
+			coor1 = this.getCurrentCoord();
 		}
 		if (this.nextLane_ != null) {
 			Lane plane = this.nextLane_;
@@ -2551,14 +2456,7 @@ public class Vehicle {
 	 * BL: when vehicle approach junction, need new coordinate and distance
 	 */
 	public int appendToJunction(Lane nextlane) {
-		Coordinate lastCoordinate = null, start, end;
-		if(GlobalVariables.DISABLE_GEOMETRY){
-			lastCoordinate = this.getCurrentCoord();
-		}
-		else{
-			lastCoordinate = ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate(); //vehicleGeography.getGeometry(this).getCoordinate();
-		}
-
+		Coordinate lastCoordinate = this.getCurrentCoord();
 //		coordMap.clear();
 		if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID
 				&& this.nextRoad().getLinkid() == this.destRoadID) {
@@ -2574,13 +2472,12 @@ public class Vehicle {
 					&& this.nextRoad().getLinkid() == this.destRoadID)
 				System.out.println("Vehicle " + this.getVehicleID()
 						+ " has final next lane " + nextlane.getLaneid());
-			Coordinate coor = null;
 			Coordinate[] coords = laneGeography.getGeometry(nextlane)
 					.getCoordinates();
 
-			start = coords[0];
-			end = coords[coords.length - 1];
-			coor = this.getNearestCoordinate(lastCoordinate, start, end);
+			Coordinate start = coords[0];
+			Coordinate end = coords[coords.length - 1];
+			Coordinate coor = this.getNearestCoordinate(lastCoordinate, start, end);
 			coordMap.clear();
 			coordMap.add(coor);
 		} else {
@@ -2652,37 +2549,37 @@ public class Vehicle {
 		return distance;
 	}
 
-	private double distance(Coordinate c1, Coordinate c2, double[] returnVals) {
-		calculator.setStartingGeographicPoint(c1.x, c1.y);
-		calculator.setDestinationGeographicPoint(c2.x, c2.y);
-		double distance;
-		try {
-			distance = calculator.getOrthodromicDistance();
-
-		} catch (AssertionError ex) {
-			System.err.println("Error with finding distance");
-			distance = 0.0;
-		}
-		if (returnVals != null && returnVals.length == 2) {
-			returnVals[0] = distance;
-			double angle = Math.toRadians(calculator.getAzimuth()); // Angle in
-			// range -PI to PI
-			// Need to transform azimuth
-			// (in range -180 -> 180 and where 0 points north)
-			// to standard mathematical (range 0 -> 360 and 90 points north)
-			if (angle > 0 && angle < 0.5 * Math.PI) { // NE Quadrant
-				angle = 0.5 * Math.PI - angle;
-			} else if (angle >= 0.5 * Math.PI) { // SE Quadrant
-				angle = (-angle) + 2.5 * Math.PI;
-			} else if (angle < 0 && angle > -0.5 * Math.PI) { // NW Quadrant
-				angle = (-1 * angle) + 0.5 * Math.PI;
-			} else { // SW Quadrant
-				angle = -angle + 0.5 * Math.PI;
-			}
-			returnVals[1] = angle;
-		}
-		return distance;
-	}
+//	private double distance(Coordinate c1, Coordinate c2, double[] returnVals) {
+//		calculator.setStartingGeographicPoint(c1.x, c1.y);
+//		calculator.setDestinationGeographicPoint(c2.x, c2.y);
+//		double distance;
+//		try {
+//			distance = calculator.getOrthodromicDistance();
+//
+//		} catch (AssertionError ex) {
+//			System.err.println("Error with finding distance");
+//			distance = 0.0;
+//		}
+//		if (returnVals != null && returnVals.length == 2) {
+//			returnVals[0] = distance;
+//			double angle = Math.toRadians(calculator.getAzimuth()); // Angle in
+//			// range -PI to PI
+//			// Need to transform azimuth
+//			// (in range -180 -> 180 and where 0 points north)
+//			// to standard mathematical (range 0 -> 360 and 90 points north)
+//			if (angle > 0 && angle < 0.5 * Math.PI) { // NE Quadrant
+//				angle = 0.5 * Math.PI - angle;
+//			} else if (angle >= 0.5 * Math.PI) { // SE Quadrant
+//				angle = (-angle) + 2.5 * Math.PI;
+//			} else if (angle < 0 && angle > -0.5 * Math.PI) { // NW Quadrant
+//				angle = (-1 * angle) + 0.5 * Math.PI;
+//			} else { // SW Quadrant
+//				angle = -angle + 0.5 * Math.PI;
+//			}
+//			returnVals[1] = angle;
+//		}
+//		return distance;
+//	}
 	
 	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
 		calculator.setStartingGeographicPoint(c1.x, c1.y);
@@ -2702,6 +2599,11 @@ public class Vehicle {
 		return distance;
 	}
 	
+	private void move2(double dx, double dy){
+		this.currentCoord_.x+=dx;
+		this.currentCoord_.y+=dy;
+	}
+	
 	/* *
 	 * Thread safe version of the moveByVector, replace the one in the DefaultGeography class
 	 * Creating a new Geometry point given the current location of the vehicle as well as the distance and angle.
@@ -2709,72 +2611,72 @@ public class Vehicle {
 	 * @return the new Geometry point
 	 */
 	
-	public void moveVehicleByVector(double distance, double angleInRadians) {
-		Geometry geom = ContextCreator.getVehicleGeography().getGeometry(this);
-		if (geom == null) {
-			System.err.println("Error moving object by vector");
-		}
-
-		if (angleInRadians > 2 * Math.PI || angleInRadians < 0) {
-			throw new IllegalArgumentException(
-					"Direction cannot be > PI (360) or less than 0");
-		}
-		double angleInDegrees = Math.toDegrees(angleInRadians);
-		angleInDegrees = angleInDegrees % 360;
-		angleInDegrees = 360 - angleInDegrees;
-		angleInDegrees = angleInDegrees + 90;
-		angleInDegrees = angleInDegrees % 360;
-		if (angleInDegrees > 180) {
-			angleInDegrees = angleInDegrees - 360;
-		}
-		Coordinate coord = geom.getCoordinate();
-		AffineTransform transform;
-		
-		try {
-			if (!ContextCreator.getVehicleGeography().getCRS().equals(DefaultGeographicCRS.WGS84)) {
-				// System.out.println("Here 1");
-				MathTransform crsTrans = CRS.findMathTransform(ContextCreator.getVehicleGeography().getCRS(),
-						DefaultGeographicCRS.WGS84);
-				Coordinate tmp = new Coordinate();
-				JTS.transform(coord, tmp, crsTrans);
-				this.calculator.setStartingGeographicPoint(tmp.x, tmp.y);
-			} else {
-				// System.out.println("Here 2");
-				this.calculator.setStartingGeographicPoint(coord.x, coord.y);
-			}
-			this.calculator.setDirection(angleInDegrees, distance);
-			Point2D p = this.calculator.getDestinationGeographicPoint();
-			if (!ContextCreator.getVehicleGeography().getCRS().equals(DefaultGeographicCRS.WGS84)) {
-				MathTransform crsTrans = CRS.findMathTransform(
-						DefaultGeographicCRS.WGS84, ContextCreator.getVehicleGeography().getCRS());
-				JTS.transform(new Coordinate(p.getX(), p.getY()), coord,
-						crsTrans);
-			}
-
-			transform = AffineTransform.getTranslateInstance(
-					p.getX() - coord.x, p.getY() - coord.y);
-
-			MathTransform mt = mtFactory
-					.createAffineTransform(new GeneralMatrix(transform));
-			geom = JTS.transform(geom, mt);
-		} catch (Exception ex) {
-			System.err.println("Error moving object by vector");
-		}
-//		this.setCurrentCoord(geom.getCoordinate());
-		ContextCreator.getVehicleGeography().move(this, geom);
-
-		try {
-		    Coordinate geomCoord = geom.getCoordinate();
-		  //HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
-//		    if(this.nextRoad() == null){
-		    	DataCollector.getInstance().recordSnapshot(this, geomCoord);
-//		    }
-		}
-		catch (Throwable t) {
-		    // Could not record this vehicle move in the data buffer!
-		    DataCollector.printDebug("ERR", t.getMessage());
-		}
-	}
+//	public void moveVehicleByVector(double distance, double angleInRadians) {
+//		Geometry geom = ContextCreator.getVehicleGeography().getGeometry(this);
+//		if (geom == null) {
+//			System.err.println("Error moving object by vector");
+//		}
+//
+//		if (angleInRadians > 2 * Math.PI || angleInRadians < 0) {
+//			throw new IllegalArgumentException(
+//					"Direction cannot be > PI (360) or less than 0");
+//		}
+//		double angleInDegrees = Math.toDegrees(angleInRadians);
+//		angleInDegrees = angleInDegrees % 360;
+//		angleInDegrees = 360 - angleInDegrees;
+//		angleInDegrees = angleInDegrees + 90;
+//		angleInDegrees = angleInDegrees % 360;
+//		if (angleInDegrees > 180) {
+//			angleInDegrees = angleInDegrees - 360;
+//		}
+//		Coordinate coord = geom.getCoordinate();
+//		AffineTransform transform;
+//		
+//		try {
+//			if (!ContextCreator.getVehicleGeography().getCRS().equals(DefaultGeographicCRS.WGS84)) {
+//				// System.out.println("Here 1");
+//				MathTransform crsTrans = CRS.findMathTransform(ContextCreator.getVehicleGeography().getCRS(),
+//						DefaultGeographicCRS.WGS84);
+//				Coordinate tmp = new Coordinate();
+//				JTS.transform(coord, tmp, crsTrans);
+//				this.calculator.setStartingGeographicPoint(tmp.x, tmp.y);
+//			} else {
+//				// System.out.println("Here 2");
+//				this.calculator.setStartingGeographicPoint(coord.x, coord.y);
+//			}
+//			this.calculator.setDirection(angleInDegrees, distance);
+//			Point2D p = this.calculator.getDestinationGeographicPoint();
+//			if (!ContextCreator.getVehicleGeography().getCRS().equals(DefaultGeographicCRS.WGS84)) {
+//				MathTransform crsTrans = CRS.findMathTransform(
+//						DefaultGeographicCRS.WGS84, ContextCreator.getVehicleGeography().getCRS());
+//				JTS.transform(new Coordinate(p.getX(), p.getY()), coord,
+//						crsTrans);
+//			}
+//
+//			transform = AffineTransform.getTranslateInstance(
+//					p.getX() - coord.x, p.getY() - coord.y);
+//
+//			MathTransform mt = mtFactory
+//					.createAffineTransform(new GeneralMatrix(transform));
+//			geom = JTS.transform(geom, mt);
+//		} catch (Exception ex) {
+//			System.err.println("Error moving object by vector");
+//		}
+////		this.setCurrentCoord(geom.getCoordinate());
+//		ContextCreator.getVehicleGeography().move(this, geom);
+//
+//		try {
+//		    Coordinate geomCoord = geom.getCoordinate();
+//		  //HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
+////		    if(this.nextRoad() == null){
+//		    	DataCollector.getInstance().recordSnapshot(this, geomCoord);
+////		    }
+//		}
+//		catch (Throwable t) {
+//		    // Could not record this vehicle move in the data buffer!
+//		    DataCollector.printDebug("ERR", t.getMessage());
+//		}
+//	}
 
 	public int getVehicleClass() {
 		return vehicleClass;
@@ -2819,16 +2721,9 @@ public class Vehicle {
 			
 			// remove it from the simulator
 			Coordinate target = this.destCoord;
-			GeometryFactory geomFac = new GeometryFactory();
 			this.removeFromLane();
 			this.removeFromMacroList();
-			if(GlobalVariables.DISABLE_GEOMETRY){
-				this.setCurrentCoord(target);
-			}
-			else{
-				Geometry targetGeom = geomFac.createPoint(target);
-				ContextCreator.getVehicleGeography().move(this, targetGeom);
-			}
+			this.setCurrentCoord(target);
 			this.endTime = (int) RepastEssentials.GetTickCount();
 			this.reachActLocation = false;
 			this.reachDest = true;
@@ -2838,19 +2733,12 @@ public class Vehicle {
 		// else if current shelter is not available, reroute this to next shelter
 		else {
 			// reset the location & geometry
-			GeometryFactory geomFac = new GeometryFactory();
 			this.removeFromLane();
 			this.removeFromMacroList();
 			Coordinate target = this.destCoord;
-			if(GlobalVariables.DISABLE_GEOMETRY){
-				this.setCurrentCoord(target);
-			}
-			else{
-				Geometry targetGeom = geomFac.createPoint(target);
-				ContextCreator.getVehicleGeography().move(this, targetGeom);
-			}
+			this.setCurrentCoord(target);
 			CityContext cityContext = (CityContext) ContextCreator.getCityContext();
-			Coordinate currentCoord = ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate();
+			Coordinate currentCoord = this.getCurrentCoord();
 			Road road = cityContext.findRoadAtCoordinates(currentCoord, false);
 			this.setRoad(road);
 			
@@ -2905,7 +2793,7 @@ public class Vehicle {
 	
 	/** LZ,RV:DynaDestTest: Additional getters required for dynamic destination */
 	public Coordinate getCoord() {
-		return ContextCreator.getVehicleGeography().getGeometry(this).getCoordinate();
+		return this.getCurrentCoord();
 	}
 
 	public HashMap<Integer, Integer> getVisitedShelters() {

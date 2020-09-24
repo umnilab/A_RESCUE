@@ -93,8 +93,8 @@ public class TickSnapshot {
         
         // pull out values from the vehicle & coord we need to capture
         int id = vehicle.getVehicleID();
-        double prev_x = vehicle.getpreviousEpochCoord().x;
-        double prev_y = vehicle.getpreviousEpochCoord().y;
+        double prev_x = vehicle.getPreviousEpochCoord().x;
+        double prev_y = vehicle.getPreviousEpochCoord().y;
         double x = coordinate.x;
         double y = coordinate.y;
         float speed = vehicle.currentSpeed();
