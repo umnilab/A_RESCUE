@@ -73,7 +73,7 @@ public class Vehicle {
 
 	private boolean reachDest;
 	private boolean reachActLocation;
-	private boolean moveVehicle = false;// LZ: Vehicle is moved or not
+	private boolean moveVehicle = true;// LZ: Vehicle is moved or not, initial value is true to let vehicle enter the network
 	private int lastMoveTick = -1; // LZ: A better solution to avoid double modification in single tick
 	// the next step
 	private boolean onlane = false;
@@ -983,6 +983,8 @@ public class Vehicle {
 		 * line it would be just vehicle movement without signals
 		 */
 		while (!travelledMaxDist) {
+			
+			double distTravelled = 0; // LZ: The distance traveled so far, should outside the loop, but in the code it is within the loop
 			// float oldpos = distance(); // have to check
 			float step = GlobalVariables.SIMULATION_STEP_SIZE;
 			if (currentSpeed_ < GlobalVariables.SPEED_EPSILON
@@ -1087,8 +1089,6 @@ public class Vehicle {
 			
 			// update position
 			distance_ -= dx;
-
-			double distTravelled = 0; // The distance traveled so far
 
 			// Current location
 			currentCoord = this.getCurrentCoord();
@@ -1235,99 +1235,100 @@ public class Vehicle {
 		}
 		boolean travelledMaxDist = false; // True when traveled max dist this
 		// iteration
+		
+		
+		// SH Temp
+		// Geography<Vehicle> vehicleGeography = ContextCreator
+		// .getVehicleGeography();
+		// GeometryFactory geomFac = new GeometryFactory();
+		currentCoord = this.getCurrentCoord();
+		// The first list of coordinates for the vehicle to follow
+		if (this.coordMap.size() > 0) {
+			target = this.coordMap.get(0);
+		} else {
+			lane = this.road.firstLane();
+			this.setCoordMap(lane);
+			target = this.coordMap.get(0);
+		}
 
-		while (!travelledMaxDist) {
-			// SH Temp
-			// Geography<Vehicle> vehicleGeography = ContextCreator
-			// .getVehicleGeography();
-//			GeometryFactory geomFac = new GeometryFactory();
-			double distTravelled = 0.0f;
-			currentCoord = this.getCurrentCoord();
-			// The first list of coordinates for the vehicle to follow
-			if (this.coordMap.size() > 0) {
-				target = this.coordMap.get(0);
-			} else {
-				lane = this.road.firstLane();
-				this.setCoordMap(lane); 
-				target = this.coordMap.get(0);
-			}
+		// target = this.route.routeMap().get(0);
 
-			// target = this.route.routeMap().get(0);
+		// Geometry currentGeom = geomFac.createPoint(currentCoord);
+		// Geometry targetGeom = geomFac.createPoint(target);
 
-//			Geometry currentGeom = geomFac.createPoint(currentCoord);
-//			Geometry targetGeom = geomFac.createPoint(target);
+		// double distToTarget = DistanceOp.distance(currentGeom,
+		// targetGeom);
 
-			// double distToTarget = DistanceOp.distance(currentGeom,
-			// targetGeom);
+		// double[] distAndAngle = new double[2];
+		// double distToTarget = this.distance(currentCoord, target,
+		// distAndAngle);
 
-//			double[] distAndAngle = new double[2];
-//			double distToTarget = this.distance(currentCoord, target, distAndAngle);
-			
-			double[] deltaXY = new double[2];
-			double distToTarget;
-			distToTarget = this.distance2(currentCoord, target, deltaXY);
+		double[] deltaXY = new double[2];
+		double distToTarget;
+		distToTarget = this.distance2(currentCoord, target, deltaXY);
+		
+		if (distToTarget < travelPerTurn) {
+			// this.lock.lock();
+			// vehicleGeography.move(this, targetGeom);
+			this.setCurrentCoord(target);
+			// try {
+			// //HG: the following condition can be put to reduce the data when
+			// the output of interest is the final case when vehicles reach
+			// close to destination
+			//// if(this.nextRoad() == null){
+			// DataCollector.getInstance().recordSnapshot(this, target);
+			//// }
+			// }
+			// catch (Throwable t) {
+			// // could not log the vehicle's new position in data buffer!
+			// DataCollector.printDebug("ERR" + t.getMessage());
+			// }
+			// this.lock.unlock();
+			// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
+			// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
+			// System.out.println("distToTarget=
+			// "+ContextCreator.convertToMeters(distToTarget));
+			// System.out.println(this.coordMap.size());
+			this.coordMap.remove(0);
+			// this.route.remove();
+		}
+		// Otherwise move as far as we can towards the target along the road
+		// we're on
+		// Get the angle between the two points (current and target)
+		// (http://forum.java.sun.com/thread.jspa?threadID=438608&messageID=1973655)
 
-			if (distTravelled + distToTarget < travelPerTurn) {
-				distTravelled += distToTarget;
-//				this.lock.lock();
-//				vehicleGeography.move(this, targetGeom);
-				this.setCurrentCoord(target);
-//				try {
-//					//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
-////					if(this.nextRoad() == null){
-//						DataCollector.getInstance().recordSnapshot(this, target);
-////					}
-//				}
-//				catch (Throwable t) {
-//				    // could not log the vehicle's new position in data buffer!
-//				    DataCollector.printDebug("ERR" + t.getMessage());
-//				}
-//				this.lock.unlock();
-				// this.accummulatedDistance_+=ContextCreator.convertToMeters(distToTarget);
-				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
-				// System.out.println("distToTarget= "+ContextCreator.convertToMeters(distToTarget));
-//				System.out.println(this.coordMap.size());
-				this.coordMap.remove(0);
-				// this.route.remove();
-			}
-			// Otherwise move as far as we can towards the target along the road
-			// we're on
-			// Get the angle between the two points (current and target)
-			// (http://forum.java.sun.com/thread.jspa?threadID=438608&messageID=1973655)
+		else {
+			// double angle = angle(target, currentCoord) + Math.PI; //
+			// angle()
+			// returns range from -PI->PI, but moveByVector wants range
+			// 0->2PI
+			double distToTravel = travelPerTurn;
+			// Need to convert distance from long/lat degrees to meters
+			double distToTravelM = ContextCreator.convertToMeters(distToTravel);
+			// System.out.println("Angle: "+angle);
+			this.accummulatedDistance_ += distToTravelM;
+			// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
+			// System.out.println("Vehicle ID: " + this.getVehicleID()
+			// +" disToTravelM= "+distToTravelM);
 
-			else {
-				// double angle = angle(target, currentCoord) + Math.PI; //
-				// angle()
-				// returns range from -PI->PI, but moveByVector wants range
-				// 0->2PI
-				double distToTravel = travelPerTurn - distTravelled;
-				// Need to convert distance from long/lat degrees to meters
-				double distToTravelM = ContextCreator
-						.convertToMeters(distToTravel);
-				// System.out.println("Angle: "+angle);
-				this.accummulatedDistance_ += distToTravelM;
-				// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
-				// System.out.println("Vehicle ID: " + this.getVehicleID()
-				// +" disToTravelM= "+distToTravelM);
-				
-				// Zhan: implementation 1: add locks to enforce concurrency
-				/*this.lock.lock();
-				vehicleGeography.moveByVector(this, distToTravelM,
-						distAndAngle[1]);
-				this.lock.unlock();*/
-//				 vehicleGeography.moveByVector(this, distToTravelM,distAndAngle[1]);
-				// Zhan: implementation 2: thread safe version of the moveByVector
-//				this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
-				
-				// LZ: 
-				double alpha = distToTravelM/distToTarget;
-				move2(alpha*deltaXY[0], alpha*deltaXY[1]);
-//				currentCoord.x += alpha*deltaXY[0];
-//				currentCoord.y += alpha*deltaXY[1];
-//				this.setCurrentCoord(currentCoord);
-				
-				travelledMaxDist = true;
-			}
+			// Zhan: implementation 1: add locks to enforce concurrency
+			/*
+			 * this.lock.lock(); vehicleGeography.moveByVector(this,
+			 * distToTravelM, distAndAngle[1]); this.lock.unlock();
+			 */
+			// vehicleGeography.moveByVector(this,
+			// distToTravelM,distAndAngle[1]);
+			// Zhan: implementation 2: thread safe version of the moveByVector
+			// this.moveVehicleByVector(distToTravelM, distAndAngle[1]);
+
+			// LZ:
+			double alpha = distToTravelM / distToTarget;
+			move2(alpha * deltaXY[0], alpha * deltaXY[1]);
+			// currentCoord.x += alpha*deltaXY[0];
+			// currentCoord.y += alpha*deltaXY[1];
+			// this.setCurrentCoord(currentCoord);
+
+			travelledMaxDist = true;
 		}
 		return;
 	}

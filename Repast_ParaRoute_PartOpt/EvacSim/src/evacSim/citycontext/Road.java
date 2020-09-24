@@ -170,7 +170,7 @@ public class Road {
 			Vehicle pv = this.firstVehicle();
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
-					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
+//					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
 					break;
 				}
 				pv.updateLastMoveTick(tickcount);
@@ -184,6 +184,7 @@ public class Road {
 					if (v == null) {
 						break;
 					} else {
+//						System.out.println(v.getMoveVehicleFlag());
 						if (v.getMoveVehicleFlag()) { //For those vehicles who has been moved
 //							double maxMove = this.freeSpeed_
 //									* GlobalVariables.SIMULATION_STEP_SIZE;
