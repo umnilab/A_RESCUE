@@ -96,6 +96,8 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 				} else {
 					v = new Vehicle(h);
 				}
+//				GlobalVariables.NUM_GENERATED_VEHICLES++;
+				// this.add(v);
 				
 				//v.setEvacuationTime(evactime);
 //				this.add(v); 

@@ -1,5 +1,8 @@
 package evacSim.data;
 
+import java.util.ArrayList;
+
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 
 import repast.simphony.context.DefaultContext;
@@ -28,7 +31,6 @@ public class DataCollectionContext extends DefaultContext<Object> {
     /** A consumer of output data from the buffer which saves it to disk. */
     private JsonOutputWriter jsonOutputWriter;
     
-    
     /**
      * Creates the data collection framework for the program and ensures
      * it is ready to start receiving data when the simulation starts.
@@ -50,13 +52,18 @@ public class DataCollectionContext extends DefaultContext<Object> {
             this.collector.registerDataConsumer(this.outputWriter);
         }
 
-     // create the JSON output file writer.  without specifying a filename,
+        // create the JSON output file writer.  without specifying a filename,
         // this will generate a unique value including a current timestamp
         // and placing it in the current jre working directory.
         if (GlobalVariables.ENABLE_JSON_WRITE) {
             this.jsonOutputWriter = new JsonOutputWriter();
             this.collector.registerDataConsumer(this.jsonOutputWriter);
         }
+        
+        	// RV: Initialize the runtime recorder
+        	if (GlobalVariables.ENABLE_RUNTIME_RECORD) {
+        		GlobalVariables.RUNTIME_RECORD_LIST.add((double) System.currentTimeMillis());
+        	}
     }
     
     
@@ -83,5 +90,21 @@ public class DataCollectionContext extends DefaultContext<Object> {
     
     public void stopTick() {
         this.collector.stopTickCollection();
+    }
+    
+    
+    /** RV: Record runtime per few ticks for performance analysis (in seconds) */
+    public void recordRuntime() {
+    	if (GlobalVariables.ENABLE_RUNTIME_RECORD) {
+    		ArrayList<Double> runtimeRecorder = GlobalVariables.RUNTIME_RECORD_LIST;
+    		runtimeRecorder.add((System.currentTimeMillis() - runtimeRecorder.get(0))/1000);
+    		
+    		// print the total no. of vehicles generated and destroyed so far,
+    		// along with runtime since the last call of this function
+    		System.out.println("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
+    				+ ", nVehDestroyed=" + GlobalVariables.NUM_KILLED_VEHICLES
+    				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount()
+    				+ ", cumRuntime=" + runtimeRecorder.get(runtimeRecorder.size() - 1));
+    	}
     }
 }
