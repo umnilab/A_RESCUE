@@ -181,12 +181,14 @@ public class ContextCreator implements ContextBuilder<Object> {
 			schedule.schedule(timerParaParams, s, "reportTime");
 		} else {
 			ScheduleParameters agentParams = ScheduleParameters.createRepeating(1, 1, 0);
+			ThreadedScheduler s = new ThreadedScheduler(GlobalVariables.N_Partition);
+			schedule.schedule(agentParams, s, "step");
 			double delay = agentParams.getDuration();
 			System.out.println("TIME BETWEEN TWO TICKS " + delay);
-			schedule.schedule(agentParams, vehicleContext, "refreshAllVehicles");
-			for (Road r : getRoadContext().getObjects(Road.class)) {
-				schedule.schedule(agentParams, r, "step");
-			}
+//			schedule.schedule(agentParams, vehicleContext, "refreshAllVehicles");
+//			for (Road r : getRoadContext().getObjects(Road.class)) {
+//				schedule.schedule(agentParams, r, "step");
+//			}
 		}
 		
 //		ScheduleParameters printParams = ScheduleParameters.createRepeating(1,1,0);

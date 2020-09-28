@@ -177,7 +177,9 @@ public class Road {
 				pv.updateLastMoveTick(tickcount);
 				pv.calcState();
 				pv.travel();
-//				pv.recVehSnaphotForVisInterp(); // LZ: still cause deadlock, so I move it outside the multitasks
+				if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){
+					pv.recVehSnaphotForVisInterp(); // LZ: record vehicle location here!
+				}
 				pv = pv.macroTrailing();
 			}
 //			for (Lane l : this.getLanes()) {

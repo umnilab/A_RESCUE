@@ -37,13 +37,13 @@ public class ThreadedScheduler {
 			   r.step();
 		   }
         // Record vehicle trajectories
-		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
-			   Vehicle pv = r.firstVehicle();
-			   while(pv!=null){
-				   pv.recVehSnaphotForVisInterp();
-				   pv = pv.macroTrailing();
-			   }
-		   }
+//		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
+//			   Vehicle pv = r.firstVehicle();
+//			   while(pv!=null){
+//				   pv.recVehSnaphotForVisInterp();
+//				   pv = pv.macroTrailing();
+//			   }
+//		   }
 	}
 	
 	public void paraStep() {
@@ -67,13 +67,13 @@ public class ThreadedScheduler {
 			max_para_time = max_para_time + time_result.get(1);
 			avg_para_time = avg_para_time + time_result.get(2);
 			// Record vehicle trajectories
-		   for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
-			   Vehicle pv = r.firstVehicle();
-			   while(pv!=null){
-				   pv.recVehSnaphotForVisInterp();
-				   pv = pv.macroTrailing();
-			   }
-		   }
+//		   for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
+//			   Vehicle pv = r.firstVehicle();
+//			   while(pv!=null){
+//				   pv.recVehSnaphotForVisInterp();
+//				   pv = pv.macroTrailing();
+//			   }
+//		   }
 			
 			// Step over the boundary roads
 //			double start_t = System.currentTimeMillis();

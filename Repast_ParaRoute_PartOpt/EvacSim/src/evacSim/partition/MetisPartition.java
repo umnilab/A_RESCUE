@@ -74,7 +74,7 @@ public class MetisPartition {
 			System.err.println();
 		}
 		
-//		System.gc(); // For gabage collection
+		System.gc(); // For gabage collection
 		
 		long time = System.nanoTime();
 		Launcher.getLauncher().startTiming();
@@ -156,7 +156,7 @@ public class MetisPartition {
 			System.err.println();
 		}*/
 		
-//		System.gc(); // For gabage collection
+		System.gc(); // For gabage collection
 		
 		long time = System.nanoTime();
 		Launcher.getLauncher().startTiming();
