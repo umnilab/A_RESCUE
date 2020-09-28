@@ -24,8 +24,6 @@ public class DatasetOfHouseholdsPerZones {
 	}
 
 	public void readActivityPlans(String filepath) {
-		//if (ContextCreator.debug)
-		//	System.out.println("Reading Activity Plans Data");
 		
 		CSVReader csvreader = null;
 		String[] nextLine;
@@ -57,8 +55,6 @@ public class DatasetOfHouseholdsPerZones {
 				} else {
 					// Sets the number of columns in the CSV
 					int length = nextLine.length;
-					//System.out.println(Arrays.toString(nextLine));
-					//System.out.println(" Size of the first list: " + length);
 					// for loop that iterates through the columns
 					for (int j = 0; j < length; j++) {
 						// USer ID
@@ -75,6 +71,10 @@ public class DatasetOfHouseholdsPerZones {
 							departureTime =  (int) Math.floor(durations.get(0));
 							House h = new House(prevID, zoneID);
 							h.setActivityPlan(locations, durations);
+							
+							// RV: count the total no. of houses created so far
+							GlobalVariables.NUM_HOUSES++;
+							
 							if (!housesbyhour.containsKey(departureTime)) {
 								HashMap<Integer, ArrayList<House>> housebyzone = new HashMap<Integer, ArrayList<House>>();
 								housesbyhour.put(departureTime, housebyzone);
@@ -113,6 +113,7 @@ public class DatasetOfHouseholdsPerZones {
 					}
 				}
 			}
+			System.out.println("Total houses generated: " + GlobalVariables.NUM_HOUSES);
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

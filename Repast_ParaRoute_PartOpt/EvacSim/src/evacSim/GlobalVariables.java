@@ -139,6 +139,14 @@ private static Properties config;
 			.valueOf(loadConfig("SIMULATION_STOP_TIME"));
 	public static final double TRAVEL_PER_TURN = Double
 			.valueOf(loadConfig("TRAVEL_PER_TURN"));
+	
+	// RV: Stop the simulation if all vehicles have been killed
+	public static final boolean ENABLE_SIMULATION_STOP_IF_NO_VEHICLE =
+			Boolean.valueOf(loadConfig("ENABLE_SIMULATION_STOP_IF_NO_VEHICLE"));
+	public static final int SIMULATION_STOP_IF_NO_VEHICLE_CHECK_INTERVAL =
+			Integer.valueOf(loadConfig("SIMULATION_STOP_IF_NO_VEHICLE_CHECK_INTERVAL"));
+	// RV: no. of houses in the demand file; used to check when to stop the simulation
+	public static int NUM_HOUSES = 0;
 
 	public static final int Global_Vehicle_ID = Integer
 			.valueOf(loadConfig("Global_Vehicle_ID"));
@@ -374,9 +382,12 @@ private static Properties config;
 	public static LinkedList<NetworkEventObject> newEventQueue = new
 			LinkedList<NetworkEventObject>();//Global queue for storing events
 	
+	/* RV: This variable tracks the no. of generated vehicles (loaded from demand) so far 
+	 * This is useful to let the simulator know when to stop */
+	public static int NUM_GENERATED_VEHICLES = 0;
 	/* Gehlot: This variable will keep track of the number of vehicles arrived 
 	 * at destination for visualization purposes*/
-	public static int NUMBER_OF_ARRIVED_VEHICLES = 0;
+	public static int NUM_KILLED_VEHICLES = 0;	
 	
 	/* Parameters for handling multiclass routing.
 	 * Note that the proportion of original routing vehicles being generated is equal to
@@ -417,4 +428,14 @@ private static Properties config;
 			Integer.valueOf(loadConfig("SO_SHELTER_MATCHING_INTERVAL"));
 	public static ArrayList<ArrayList<Integer>> shelterRelocateTracker = 
 			new ArrayList<ArrayList<Integer>>();	
+	public static final Boolean ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION = 
+			Boolean.valueOf(loadConfig("ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION"));
+	/* RV: Record the runtime spent in each 1000 ticks for performance analysis */
+	public static final boolean ENABLE_RUNTIME_RECORD =
+			Boolean.valueOf(loadConfig("ENABLE_RUNTIME_RECORD"));
+	public static final int RUNTIME_RECORD_INTERVAL =
+			Integer.valueOf(loadConfig("RUNTIME_RECORDER_INTERVAL"));
+	public static ArrayList<Double> RUNTIME_RECORD_LIST = new ArrayList<Double>();
+	// LZ
+	public static final Boolean DISABLE_GEOMETRY = Boolean.valueOf(loadConfig("DISABLE_GEOMETRY"));
 }
