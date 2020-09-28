@@ -598,7 +598,7 @@ public class JsonOutputWriter implements DataConsumer {
         }
         
         // get the json representation of this tick
-        ArrayList<ArrayList<Double>> tickArray = JsonOutputWriter.createTickLines(tick);
+        ArrayList<ArrayList<String>> tickArray = JsonOutputWriter.createTickLines(tick);
         if (tickArray == null) {
             // there was no json output created by this tick
             return;
@@ -640,7 +640,7 @@ public class JsonOutputWriter implements DataConsumer {
      * @param tick the snapshot of the tick to convert.
      * @return the array of array for the given tick snapshot.
      */
-    public static ArrayList<ArrayList<Double>> createTickLines(TickSnapshot tick) {
+    public static ArrayList<ArrayList<String>> createTickLines(TickSnapshot tick) {
         // check the tick snapshot exists
         if (tick == null) {
             return null;
@@ -653,7 +653,7 @@ public class JsonOutputWriter implements DataConsumer {
         }
         
         // loop through the list of vehicles and convert each to a arraylist
-        ArrayList<ArrayList<Double>> tickArray = new ArrayList<ArrayList<Double>>();
+        ArrayList<ArrayList<String>> tickArray = new ArrayList<ArrayList<String>>();
         for (Integer id : vehicleIDs) {
             if (id == null) {
                 continue;
@@ -666,7 +666,7 @@ public class JsonOutputWriter implements DataConsumer {
             }
             
             // get the arraylist representation of this vehicle
-            ArrayList<Double> vehicleArray = JsonOutputWriter.createVehicleLine(vehicle);
+            ArrayList<String> vehicleArray = JsonOutputWriter.createVehicleLine(vehicle);
             if (vehicleArray == null) {
                 continue;
             }
@@ -687,27 +687,27 @@ public class JsonOutputWriter implements DataConsumer {
      * @param vehicle the vehicle snapshot to convert to arraylist.
      * @return the arraylist representation of the given vehicle snapshot.
      */
-    public static ArrayList<Double> createVehicleLine(VehicleSnapshot vehicle) {
+    public static ArrayList<String> createVehicleLine(VehicleSnapshot vehicle) {
         if (vehicle == null) {
             return null;
         }
         
-        ArrayList<Double> vehicleArray = new ArrayList<Double>();
+        ArrayList<String> vehicleArray = new ArrayList<String>();
         
         // extract the values from the vehicle snapshot
-        vehicleArray.add(Double.valueOf(vehicle.getId()));
-        vehicleArray.add(vehicle.getPrevX());
-        vehicleArray.add(vehicle.getPrevY());
-        vehicleArray.add(vehicle.getX());
-        vehicleArray.add(vehicle.getY());
-        vehicleArray.add(Double.valueOf(vehicle.getSpeed()));
-        vehicleArray.add(vehicle.getOriginX());
-        vehicleArray.add(vehicle.getOriginY());
-        vehicleArray.add(vehicle.getDestX());
-        vehicleArray.add(vehicle.getDestY());
-        vehicleArray.add(Double.valueOf(vehicle.getNearlyArrived()));
-        vehicleArray.add(Double.valueOf(vehicle.getvehicleClass()));
-        vehicleArray.add(Double.valueOf(vehicle.getRoadID()));
+        vehicleArray.add(Integer.toString(vehicle.getId()));
+        vehicleArray.add(vehicle.getPrevXString());
+        vehicleArray.add(vehicle.getPrevYString());
+        vehicleArray.add(vehicle.getXString());
+        vehicleArray.add(vehicle.getYString());
+        vehicleArray.add(vehicle.getSpeedString());
+        vehicleArray.add(vehicle.getOriginXString());
+        vehicleArray.add(vehicle.getOriginYString());
+        vehicleArray.add(vehicle.getDestXString());
+        vehicleArray.add(vehicle.getDestYString());
+        vehicleArray.add(Integer.toString(vehicle.getNearlyArrived()));
+        vehicleArray.add(Integer.toString(vehicle.getvehicleClass()));
+        vehicleArray.add(Integer.toString(vehicle.getRoadID()));
         //double z = vehicle.getZ();
    
         //int departure = vehicle.getDeparture();

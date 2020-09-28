@@ -7,6 +7,7 @@ import java.util.*;
 import evacSim.ContextCreator;
 import evacSim.citycontext.Road;
 //import evacSim.partition.MetisPartition;
+import evacSim.vehiclecontext.Vehicle;
 
 
 public class ThreadedScheduler {
@@ -31,10 +32,24 @@ public class ThreadedScheduler {
 		this.seq_time = 0;
 	}
 	
+	public void step(){
+		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
+			   r.step();
+		   }
+        // Record vehicle trajectories
+		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
+			   Vehicle pv = r.firstVehicle();
+			   while(pv!=null){
+				   pv.recVehSnaphotForVisInterp();
+				   pv = pv.macroTrailing();
+			   }
+		   }
+	}
+	
 	public void paraStep() {
 		// Load the road partitions
 		ArrayList<ArrayList<Road>> PartitionedInRoads = ContextCreator.partitioner.getPartitionedInRoads();
-		ArrayList<Road> PartitionedBwRoads = ContextCreator.partitioner.getPartitionedBwRoads();
+		// ArrayList<Road> PartitionedBwRoads = ContextCreator.partitioner.getPartitionedBwRoads();
 		
 		// Creates an list of tasks
 		List<PartitionThread> tasks = new ArrayList<PartitionThread>();
@@ -51,6 +66,14 @@ public class ThreadedScheduler {
 			min_para_time = min_para_time + time_result.get(0);
 			max_para_time = max_para_time + time_result.get(1);
 			avg_para_time = avg_para_time + time_result.get(2);
+			// Record vehicle trajectories
+		   for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
+			   Vehicle pv = r.firstVehicle();
+			   while(pv!=null){
+				   pv.recVehSnaphotForVisInterp();
+				   pv = pv.macroTrailing();
+			   }
+		   }
 			
 			// Step over the boundary roads
 //			double start_t = System.currentTimeMillis();

@@ -908,7 +908,7 @@ public class Vehicle {
 			    // could not log the vehicle's new position in data buffer!
 			    DataCollector.printDebug("ERR" + t.getMessage());
 			}
-			setPreviousEpochCoord(currentCoord);//update the previous coordinate as the current coordinate, the same pointer...
+			setPreviousEpochCoord(currentCoord);//update the previous coordinate as the current coordinate
 		}
 	}
 	

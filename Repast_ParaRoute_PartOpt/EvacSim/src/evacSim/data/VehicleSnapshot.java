@@ -192,7 +192,7 @@ public class VehicleSnapshot {
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.originX = originX;                     /** @author Jiawei Xue */
+        this.originX = originX; // Keep five digits, 1 degree < 120 km, 0.00001 the display error would less than 1.2 m
         this.originY = originY;
         this.destX = destX;
         this.destY = destY;
@@ -221,6 +221,8 @@ public class VehicleSnapshot {
      */
     public double getPrevX() { return this.prev_x; }
     
+    public String getPrevXString(){ return String.format("%5f", this.prev_x); }
+    
     
     /**
      * Returns the previous Y-axis (when the last epoch for visualization interpolation happened) position within the simulation.
@@ -229,6 +231,8 @@ public class VehicleSnapshot {
      */
     public double getPrevY() { return this.prev_y; }
     
+    public String getPrevYString(){ return String.format("%5f", this.prev_y); }
+    
     /**
      * Returns the X-axis (longitude?) position within the simulation.
      * 
@@ -236,19 +240,25 @@ public class VehicleSnapshot {
      */
     public double getX() { return this.x; }
     
+    public String getXString(){ return String.format("%5f", this.x); }
+    
     /**
      * Returns the Y-axis (latitude?) position within the simulation.
      *  
      * @return the Y-axis (latitude?) position within the simulation.
      */
     public double getY() { return this.y; }
+    
+    public String getYString(){ return String.format("%5f", this.y); }
         
     /**
      * Returns the current speed of the vehicle within the simulation.
      * 
      * @return the current speed of the vehicle within the simulation.
      */
-    public float getSpeed() { return this.speed; }   
+    public float getSpeed() { return this.speed; } 
+    
+    public String getSpeedString(){ return String.format("%1f", this.speed); }
     
     /**
      * Returns the origin X-axis (longitude?) position within the simulation.
@@ -258,6 +268,8 @@ public class VehicleSnapshot {
     
     
     public double getOriginX() { return this.originX; }
+    
+    public String getOriginXString(){ return String.format("%5f", this.originX); }
 
     /**
      * Returns the origin Y-axis position within the simulation.
@@ -266,6 +278,8 @@ public class VehicleSnapshot {
      */
     public double getOriginY() { return this.originY; }
     
+    public String getOriginYString(){ return String.format("%1f", this.originY); }
+    
 
     /**
      * Returns the destination X-axis (longitude?) position within the simulation.
@@ -273,7 +287,8 @@ public class VehicleSnapshot {
      * @return the destination X-axis (longitude?) position within the simulation.
      */
     public double getDestX() { return this.destX; }
-     
+    
+    public String getDestXString(){ return String.format("%5f", this.destX); }
     
     /**
      * Returns the destination Y-axis  position within the simulation.
@@ -281,6 +296,8 @@ public class VehicleSnapshot {
      * @return the destination Y-axis  position within the simulation.
      */
     public double getDestY() { return this.destY; }
+    
+    public String getDestYString(){ return String.format("%5f", this.destY); }
     
     /**
      * Returns the whether the vehicle is near the destination.
