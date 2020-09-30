@@ -182,34 +182,34 @@ public class Road {
 				}
 				pv = pv.macroTrailing();
 			}
-//			for (Lane l : this.getLanes()) {
-//				while (true) {
-//					v = l.firstVehicle();
-//					if (v == null) {
-//						break;
-//					} else {
-////						System.out.println(v.getMoveVehicleFlag());
-//						if (v.getMoveVehicleFlag()) { //For those vehicles who has been moved
-//							double maxMove = this.freeSpeed_
-//									* GlobalVariables.SIMULATION_STEP_SIZE;
-////							double maxMove =
-////							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
-//							if (v.distance() < maxMove) {
-//								// this move exceed the available distance of
-//								// the link.
-//								if (!v.isOnLane()) {
-//									if (v.changeRoad() == 0)
-//										break;
-//								} else if (v.isOnLane()) {
-//									if (v.appendToJunction(v.getNextLane()) == 0)
-//										break;
-//								}
-//							}
-//						}
-//						break;
-//					}
-//				}
-//			}
+			for (Lane l : this.getLanes()) {
+				while (true) {
+					v = l.firstVehicle();
+					if (v == null) {
+						break;
+					} else {
+//						System.out.println(v.getMoveVehicleFlag());
+						if (v.getMoveVehicleFlag()) {
+							double maxMove = this.freeSpeed_
+									* GlobalVariables.SIMULATION_STEP_SIZE;
+//							double maxMove =
+//							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
+							if (v.distance() < maxMove) {
+								// this move exceed the available distance of
+								// the link.
+								if (!v.isOnLane()) {
+									if (v.changeRoad() == 0)
+										break;
+								} else if (v.isOnLane()) {
+									if (v.appendToJunction(v.getNextLane()) == 0)
+										break;
+								}
+							}
+						}
+						break;
+					}
+				}
+			}
 		} catch (Exception e) {
 			System.err.println("Road " + this.linkid
 					+ " had an error while moving vehicles");
