@@ -168,6 +168,10 @@ public class CityContext extends DefaultContext<Object> {
 			laneConnectionsFromShapeFile(r);
 			//r.setSpeedProfile();
 		}
+		
+		for (Zone z : ContextCreator.getZoneGeography().getAllObjects()){
+			z.setRoad();
+		}
 	}
 
 	/*
@@ -391,7 +395,7 @@ public class CityContext extends DefaultContext<Object> {
 
 	/*
 	 * Returns the road which is crosses the given coordinates (Actually it just
-	 * returns thenearest road to the coords)
+	 * returns the nearest road to the coords)
 	 */
 	public Road findRoadAtCoordinates(Coordinate coord)
 			throws NullPointerException {
@@ -673,7 +677,7 @@ public class CityContext extends DefaultContext<Object> {
 		// perform the routing for each candidate shelter and pick the closest one
 		for (Zone shelter : eligibleShelters) {
 			// LZ,RV: get the path to this shelter acc. to (non-Euclidean) selfish routing
-			currentPathPlusDist = RouteV.vehicleRoute(vehicle, shelter.getCoord());
+			currentPathPlusDist = RouteV.vehicleRoute(vehicle, shelter);
 			try {
 				// get the cost of the shortest path (i.e. key of the single key-value-pair HashMap)
 				for (double dist : currentPathPlusDist.keySet()) {

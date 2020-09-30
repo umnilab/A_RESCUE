@@ -113,11 +113,11 @@ public class SOShelterRouting {
 				try {
 					if (orig.getDownJunc() == null) {
 						orig.setDownJunc(RouteV.getNearestDownStreamJunction(
-								null, orig.getRoad()));
+								orig.getRoad()));
 					}
 					if (dest.getDownJunc() == null) {
 						dest.setDownJunc(RouteV.getNearestDownStreamJunction(
-								null, dest.getRoad()));
+								dest.getRoad()));
 					}
 					Map<Double,Queue<Road>> shortPath = RouteV.vbr.computeRoute(
 							orig.getRoad(), dest.getRoad(),

@@ -115,10 +115,11 @@ public class TickSnapshot {
         //HGehlot: Check if there is already a vehicleSnapshot in this tick due to visualization interpolation recording.
         //If so, then use the previous coordinates from the recorded snapshot because we had set the previous coordinates to the current coordinates 
         //when we ended the function recVehSnaphotForVisInterp() in vehicle class.
-        if(this.getVehicleSnapshot(id)!=null){
-        	prev_x = this.getVehicleSnapshot(id).prev_x;
-        	prev_y = this.getVehicleSnapshot(id).prev_y;
-        }
+        //LZ: Not sure why this is necessary, this may require a lock of vehicles
+//        if(this.getVehicleSnapshot(id)!=null){
+//        	prev_x = this.getVehicleSnapshot(id).prev_x;
+//        	prev_y = this.getVehicleSnapshot(id).prev_y;
+//        }
         
         // create a snapshot for the vehicle and store it in the map
         VehicleSnapshot snapshot = new VehicleSnapshot(id, prev_x, prev_y,

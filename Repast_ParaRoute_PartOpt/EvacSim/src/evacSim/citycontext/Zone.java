@@ -29,6 +29,7 @@ public class Zone {
 	private Queue<Vehicle> waiting;
 	private Coordinate coord;
 	private Road road; // road closest to this zone (used in route calculations)
+	private Road departureRoad; //road with the starting point closest to the zone (used in route calculations)
 //	private Coordinate nearestCoord; // nearest point on the nearest road
 	private Junction downJunc; // downstream junction of its road
 
@@ -113,10 +114,14 @@ public class Zone {
 	 * */
 	public void setGeometry(Geography<Zone> zoneGeography) {
 		this.coord = zoneGeography.getGeometry(this).getCentroid().getCoordinate();
-		CityContext cityContext = ContextCreator.getCityContext();
-		road = cityContext.findRoadAtCoordinates(coord);
 //		RepastEdge<?> edge = cityContext.getEdgeFromIDNum(road.getID());
 //		downJunc = (Junction) edge.getTarget();
+	}
+	
+	public void setRoad(){
+		CityContext cityContext = ContextCreator.getCityContext();
+		road = cityContext.findRoadAtCoordinates(coord, true); //destRoad
+		departureRoad = cityContext.findRoadAtCoordinates(coord, false); //departureRoad
 	}
 	
 	public Coordinate getCoord() {
@@ -125,6 +130,10 @@ public class Zone {
 	
 	public Road getRoad() {
 		return road;
+	}
+	
+	public Road getdepartureRoad() {
+		return departureRoad;
 	}
 	
 //	public Coordinate getNearestCoord() {

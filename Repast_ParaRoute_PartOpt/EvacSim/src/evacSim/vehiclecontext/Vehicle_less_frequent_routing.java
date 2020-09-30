@@ -41,7 +41,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 						// The information are outdated, needs to be recomputed
 						// Check if the current lane connects to the next road in the new path
 						//List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord);                 
-						Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
+						Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
 						Map.Entry<Double,Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 
 						
 						Queue<Road> tempPathNew = entry.getValue();    // Calculate path 
@@ -115,7 +115,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 					this.clearShadowImpact();
 					// Compute new route
 					//this.roadPath = RouteV.vehicleRoute(this, this.destCoord); 
-					Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
+					Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);  //return the HashMap
 					Map.Entry<Double,Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 //
 					Queue<Road> tempPath = entry.getValue(); //get the route  
 					this.roadPath = (Queue<Road>) tempPath;  //store the route

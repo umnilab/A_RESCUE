@@ -87,7 +87,7 @@ public class Vehicle {
 	protected Road nextRoad_;
 	private Lane lane;
 	private Lane nextLane_;
-	private Zone destZone; // RMSA
+	protected Zone destZone; // RMSA
 	
 	/* Zhan: For vehicle based routing */
 	/* ZL: Update this from list to queue */
@@ -417,7 +417,7 @@ public class Vehicle {
 					// The information are outdated, needs to be recomputed
 					// Check if the current lane connects to the next road in the new path
 					//Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
-                                        Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
+                                        Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);   //Xue, Oct 2019: change the return type of RouteV.vehicleRoute to be a HashMap, and get the tempPathNew and pathTimeNew.
 					for (Entry<Double, Queue<Road>> entry : tempPathMap.entrySet()) { // Only one element
 						double pathTimeNew = entry.getKey();           // Calculate path time
 						Queue<Road> tempPathNew = entry.getValue();    // Calculate path
@@ -489,7 +489,7 @@ public class Vehicle {
 				// Compute new route
 
 				//this.roadPath = RouteV.vehicleRoute(this, this.destCoord); 
-				Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destCoord);  //return the HashMap
+				Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);  //return the HashMap
 				for (Entry<Double, Queue<Road>> entry : tempPathMap.entrySet()) {
 					double dist = entry.getKey();
 					Queue<Road> path = entry.getValue(); //get the route  

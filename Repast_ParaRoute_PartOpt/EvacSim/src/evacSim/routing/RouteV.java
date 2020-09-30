@@ -82,7 +82,7 @@ public class RouteV {
 	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter()
 	 * */
 	public static Map<Double,Queue<Road>> vehicleRoute(Vehicle veh,
-			Coordinate destCoord) throws Exception {
+			Zone destZone) throws Exception {
 
 		// Find origin and destination junctions & resolving their road segments
 //		Coordinate currentCoord = vehicleGeography.getGeometry(veh).getCoordinate();
@@ -92,11 +92,11 @@ public class RouteV {
 //			currentCoord = nearestRoadCoord;
 //		}
 		Road currentRoad = veh.getRoad();
-		Road destRoad = cityContext.findRoadAtCoordinates(destCoord, true);
+		Road destRoad = destZone.getRoad(); //cityContext.findRoadAtCoordinates(destCoord, true);
 		
 		Junction curDownJunc = currentRoad.getJunctions().get(1);
 		// downstream junction of the destination junction along that road
-		Junction destDownJunc = getNearestDownStreamJunction(destCoord, destRoad);
+		Junction destDownJunc = getNearestDownStreamJunction(destRoad);
 
 // <<<<<<< HEAD
 		if (curDownJunc.getID() == destDownJunc.getID()) {
@@ -130,8 +130,8 @@ public class RouteV {
 		// resolve the nearest roads & their downstream junctions
 		Road origRoad = cityContext.findRoadAtCoordinates(origCoord);
 		Road destRoad = cityContext.findRoadAtCoordinates(destCoord);
-		Junction origDownJunc = RouteV.getNearestDownStreamJunction(origCoord, origRoad);
-		Junction destDownJunc = RouteV.getNearestDownStreamJunction(destCoord, destRoad);
+		Junction origDownJunc = RouteV.getNearestDownStreamJunction(origRoad);
+		Junction destDownJunc = RouteV.getNearestDownStreamJunction(destRoad);
 		
 		return vbr.computeRoute(origRoad, destRoad, origDownJunc, destDownJunc);
 	}
@@ -211,7 +211,7 @@ public class RouteV {
 			return j2;
 	}
 
-	public static Junction getNearestUpStreamJunction(Coordinate coord, Road road) {
+	public static Junction getNearestUpStreamJunction(Road road) {
 
 		// Find the associated edge in road network
 		RepastEdge<?> edge;
@@ -223,7 +223,7 @@ public class RouteV {
 		return j1;
 	}
 
-	public static Junction getNearestDownStreamJunction(Coordinate coord,
+	public static Junction getNearestDownStreamJunction(
 			Road road) {
 		// Find the associated edge in road network
 		RepastEdge<?> edge;

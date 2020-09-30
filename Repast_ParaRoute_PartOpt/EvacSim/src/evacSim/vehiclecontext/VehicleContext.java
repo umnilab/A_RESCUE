@@ -111,7 +111,7 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 				v.setCurrentCoord(coord); // LZ: instead of creating geometry, just storing the coordinates
 //				Point geom = fac.createPoint(coord);
 //				vehicleGeography.move(v, geom); //This is time consuming
-				Road road = ContextCreator.getCityContext().findRoadAtCoordinates(coord, false);
+				Road road = z.getdepartureRoad();
 				if(road.getLinkid() == 104819){
 					road =  ContextCreator.getCityContext().findRoadWithLinkID(104818);
 				}
