@@ -68,7 +68,7 @@ public class DatasetOfHouseholdsPerZones {
 						if (ID != prevID) {
 							// input the arrays to the house's plan
 							zoneID = locations.get(0);
-							departureTime =  (int) Math.floor(durations.get(0));
+							departureTime =  (int) Math.floor(durations.get(0)/60);
 							House h = new House(prevID, zoneID);
 							h.setActivityPlan(locations, durations);
 							

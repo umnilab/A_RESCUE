@@ -194,7 +194,7 @@ public class Vehicle {
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
 		// RV
-		GlobalVariables.NUM_GENERATED_VEHICLES++;
+//		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
 
 	/* HG: This is a new subclass of Vehicle class that has some different 
@@ -251,7 +251,7 @@ public class Vehicle {
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
 		// RV
-		GlobalVariables.NUM_GENERATED_VEHICLES++;
+//		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
 	 
 	public void setNextPlan() {
@@ -260,9 +260,8 @@ public class Vehicle {
 		int destinationZone = next.getLocation();
 		this.destinationZoneId = destinationZone;
 		float duration = current.getDuration();
-		int deptime = (int) ((duration * 3600)
-				/ GlobalVariables.SIMULATION_STEP_SIZE + RepastEssentials
-				.GetTickCount());
+		int deptime = (int) ((duration * 60)
+				/ GlobalVariables.SIMULATION_STEP_SIZE);
 		this.setDepTime(deptime);
 		CityContext cityContext = (CityContext) ContextCreator.getCityContext();
 		this.destZone = cityContext.findHouseWithDestID(destinationZoneId);
@@ -310,6 +309,7 @@ public class Vehicle {
 		this.appendToRoad(this.road);
 		this.setNextRoad();
 		this.assignNextLane();
+		GlobalVariables.NUM_GENERATED_VEHICLES++;
 		return (1);
 	}
 
@@ -1694,10 +1694,10 @@ public class Vehicle {
 		this.house = null;
 		this.clearShadowImpact(); // ZH: clear any remaining shadow impact
 		GlobalVariables.NUM_KILLED_VEHICLES++; //HG: Keep increasing this variable to count the number of vehicles that have reached destination.
-		ContextCreator.getVehicleContext().remove(this); // RV: Remove the vehicle from the quadtree structure
-		if(!GlobalVariables.DISABLE_GEOMETRY){
-			ContextCreator.getVehicleContext().remove(this);
-		}
+//		ContextCreator.getVehicleContext().remove(this); // RV: Remove the vehicle from the quadtree structure
+//		if(!GlobalVariables.DISABLE_GEOMETRY){
+//			ContextCreator.getVehicleContext().remove(this);
+//		}
 	}
 
 	/*
