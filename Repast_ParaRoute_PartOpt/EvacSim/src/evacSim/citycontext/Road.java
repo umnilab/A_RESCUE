@@ -158,7 +158,7 @@ public class Road {
 				}
 
 			}
-			Vehicle v_ = this.firstVehicle();
+//			Vehicle v_ = this.firstVehicle();
 			//HGehlot: This loop iterates over all the vehicles on the current road to record their vehicle snapshot 
 			//if the tick corresponds to periodic time set for recording vehicle snapshot for visualization interpolation.
 			//LZ: this can also cause thread deadlock, since two thread can modify the same vehicleSnapshot in the same time!! I move this to the next bracket
@@ -182,34 +182,34 @@ public class Road {
 				}
 				pv = pv.macroTrailing();
 			}
-			for (Lane l : this.getLanes()) {
-				while (true) {
-					v = l.firstVehicle();
-					if (v == null) {
-						break;
-					} else {
-//						System.out.println(v.getMoveVehicleFlag());
-						if (v.getMoveVehicleFlag()) {
-							double maxMove = this.freeSpeed_
-									* GlobalVariables.SIMULATION_STEP_SIZE;
-//							double maxMove =
-//							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
-							if (v.distance() < maxMove) {
-								// this move exceed the available distance of
-								// the link.
-								if (!v.isOnLane()) {
-									if (v.changeRoad() == 0)
-										break;
-								} else if (v.isOnLane()) {
-									if (v.appendToJunction(v.getNextLane()) == 0)
-										break;
-								}
-							}
-						}
-						break;
-					}
-				}
-			}
+//			for (Lane l : this.getLanes()) {
+//				while (true) {
+//					v = l.firstVehicle();
+//					if (v == null) {
+//						break;
+//					} else {
+////						System.out.println(v.getMoveVehicleFlag());
+//						if (v.getMoveVehicleFlag()) {
+//							double maxMove = this.freeSpeed_
+//									* GlobalVariables.SIMULATION_STEP_SIZE;
+////							double maxMove =
+////							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
+//							if (v.distance() < maxMove) {
+//								// this move exceed the available distance of
+//								// the link.
+//								if (!v.isOnLane()) {
+//									if (v.changeRoad() == 0)
+//										break;
+//								} else if (v.isOnLane()) {
+//									if (v.appendToJunction(v.getNextLane()) == 0)
+//										break;
+//								}
+//							}
+//						}
+//						break;
+//					}
+//				}
+//			}
 		} catch (Exception e) {
 			System.err.println("Road " + this.linkid
 					+ " had an error while moving vehicles");
