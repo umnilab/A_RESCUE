@@ -145,10 +145,10 @@ public class TickSnapshot {
     		throws Throwable {
     	// resolve the current origin and destination ID
         ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
-        	int origID = plans.get(0).getLocation();
-        	int destID = plans.get(1).getLocation();
-        // store the vehicle ID, coordinates, speed & current destination 
-        this.dynamicDestTestVehDetails.add(String.format("%d,%d,%d,%f,%f,%f",
+        int origID = plans.get(0).getLocation();
+        int destID = plans.get(1).getLocation();
+        // store the vehicle ID, coordinates, speed & current destination
+        this.dynamicDestTestVehDetails.add(String.format("%d,%d,%d,%.6f,%.6f,%.3f",
         		veh.getVehicleID(), origID, destID, coord.x, coord.y, veh.currentSpeed()));
     }
     

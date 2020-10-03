@@ -1157,10 +1157,10 @@ public class Vehicle {
 					if (this.nextRoad() != null) {
 						if (this.isOnLane()) {
 							this.coordMap.add(coor); // Stop and wait
-							this.appendToJunction(nextLane_); //Successfully enter the junction
+							this.appendToJunction(nextLane_); // enter the junction
 							break;
 						} else {
-							this.changeRoad(); //Successfully enter the next road
+							this.changeRoad(); // enter the next road
 							break;
 						}
 					} else {
@@ -2615,21 +2615,41 @@ public class Vehicle {
 //	}
 	
 	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
-		calculator.setStartingGeographicPoint(c1.x, c1.y);
-		calculator.setDestinationGeographicPoint(c2.x, c2.y);
-		double distance;
+		if (Double.isNaN(c1.x) || Double.isNaN(c1.y) || Double.isNaN(c2.x) || Double.isNaN(c2.y)) {
+			System.err.println("NaN coordinate component of " + this);
+			return 0.0;
+		}
 		try {
-			distance = calculator.getOrthodromicDistance();
-
-		} catch (AssertionError ex) {
-			System.err.println("Error with finding distance");
-			distance = 0.0;
+			double distance;
+			double dx = c2.x - c1.x;
+			double dy = c2.y - c1.y;
+			if (dx < 1e-10) c1.x = c2.x;
+			if (dy < 1e-10) c1.y = c2.y;
+			calculator.setStartingGeographicPoint(c1.x, c1.y);
+			calculator.setDestinationGeographicPoint(c2.x, c2.y);
+			try {
+				distance = calculator.getOrthodromicDistance();
+			} catch (AssertionError e) {
+				System.err.println("Error with finding distance: " + e);
+				distance = 0.0;
+			}
+			if (returnVals != null && returnVals.length == 2) {
+				returnVals[0] = c2.x - c1.x;
+				returnVals[1] = c2.y - c1.y;
+			}
+			if (Double.isNaN(distance)) {
+				/* RV: TODO: Fix this part. This likely occurs when dx or dy is
+				too small (say of the order of 1e-15) such that distance = sqrt(dx^2+dy^2)
+				runs out of the register (probably), causing a NaN distance despite good result.
+				*/
+				System.err.println("Geodetic distance is NaN for " + this);
+				distance = 0.0;
+			}
+			return distance;
+		} catch (Exception e) {
+			System.err.println("Unhandled exception in Vehicle.distance2() for " + this);
+			return 0.0;
 		}
-		if (returnVals != null && returnVals.length == 2) {
-			returnVals[0] = c2.x - c1.x;
-			returnVals[1] = c2.y - c1.y;
-		}
-		return distance;
 	}
 	
 	private void move2(double dx, double dy){
