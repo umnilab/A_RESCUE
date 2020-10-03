@@ -643,7 +643,7 @@ public class CsvOutputWriter implements DataConsumer {
         for (String line : lines) {
 	        	if (line == null) continue;
 	        	
-	        	line += "," + (int) tick.getTickNumber();
+	        	line += "," + (int) (tick.getTickNumber()/10); // RV: divide by 10 to reduce precision by 1
 	        	this.writer.write(line);
 	        	this.writer.newLine();
         }

@@ -4,5 +4,8 @@
 /Repast_ParaRoute_PartOpt/EvacSim/bin/
 /Repast_ParaRoute_PartOpt/EvacSim/dynamic_dest_test/
 /Repast_ParaRoute_PartOpt/EvacSim/velocity.log
+/Repast_ParaRoute_PartOpt/EvacSim/debug.log
+/Repast_ParaRoute_PartOpt/EvacSim/debug.log.1
+/Repast_ParaRoute_PartOpt/EvacSim/EvacSim Model.launch
 .Rproj.user
 *.DS_Store
