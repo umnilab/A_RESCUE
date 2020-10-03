@@ -302,6 +302,7 @@ public class Vehicle {
 		float capspd = road.calcSpeed();// calculate the initial speed
 
 		currentSpeed_ = capspd; // have to change later
+		desiredSpeed_ = this.road.getFreeSpeed(); //Initial value is 0.0, added Oct 2ed
 		this.road.removeVehicleFromNewQueue(this);
 		this.setRoad(road);
 		this.append(firstlane);
@@ -1128,7 +1129,7 @@ public class Vehicle {
 			
 			// If we can get all the way to the next coords on the route then
 			// just go there
-			if (distTravelled + distToTarget < dx) {
+			if (distTravelled + distToTarget <= dx) { //included 0, which is important
 				distTravelled += distToTarget;
 				this.setCurrentCoord(target);
 //				
@@ -1156,14 +1157,14 @@ public class Vehicle {
 					if (this.nextRoad() != null) {
 						if (this.isOnLane()) {
 							this.coordMap.add(coor); // Stop and wait
-							if (this.appendToJunction(nextLane_) == 0)
-								break;
+							this.appendToJunction(nextLane_); //Successfully enter the junction
+							break;
 						} else {
-							if (this.changeRoad() == 0) {
-								break;
-							}
+							this.changeRoad(); //Successfully enter the next road
+							break;
 						}
 					} else {
+						System.out.println("This is called");
 						this.setCoordMap(this.lane);
 					}
 				}

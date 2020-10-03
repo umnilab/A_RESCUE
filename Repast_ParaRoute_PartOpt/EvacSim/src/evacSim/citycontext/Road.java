@@ -42,7 +42,7 @@ public class Road {
 	private double length;
 	private float speed_; // current speed
 	private double travelTime;
-	private double freeSpeed_;
+	private float freeSpeed_;
 	
 	private Road oppositeRoad;
 	private ArrayList<Road> downStreamMovements;
@@ -614,7 +614,7 @@ public class Road {
 		return this.length;
 	}
 
-	public double getFreeSpeed() {
+	public float getFreeSpeed() {
 		return this.freeSpeed_;
 	}
 
@@ -832,8 +832,8 @@ public class Road {
 		hour = hour % 24;
 		//each hour set events
 		if (this.curhour<hour) {
-			double value = BackgroundTraffic.backgroundTraffic.get(this.linkid)
-					.get(hour)* 0.44704; // HG: convert from miles per hour to meters per second
+			float value = (float) (BackgroundTraffic.backgroundTraffic.get(this.linkid)
+					.get(hour)* 0.44704); // HG: convert from miles per hour to meters per second
                   if (this.checkEventFlag()) {
 						this.setDefaultFreeSpeed();
 					}
@@ -860,8 +860,8 @@ public class Road {
 
 	
 	/* Modify the free flow speed based on the events */
-	public void updateFreeFlowSpeed_event(double newFFSpd) {
-		this.freeSpeed_ = newFFSpd* 0.44704; //HG: convert from Miles per hour to meter per second
+	public void updateFreeFlowSpeed_event(float newFFSpd) {
+		this.freeSpeed_ = (float) (newFFSpd* 0.44704); //HG: convert from Miles per hour to meter per second
 	}
 	
 	public void printTick(){

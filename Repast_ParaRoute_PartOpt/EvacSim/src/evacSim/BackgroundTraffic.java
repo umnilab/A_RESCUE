@@ -22,10 +22,10 @@ import java.util.*;
 
 
 public class BackgroundTraffic{
-	public static TreeMap<Integer,ArrayList<Double>> backgroundTraffic;
+	public static TreeMap<Integer,ArrayList<Float>> backgroundTraffic;
 	//initialize everything
 	public BackgroundTraffic(){
-		backgroundTraffic=new TreeMap<Integer,ArrayList<Double>>();
+		backgroundTraffic=new TreeMap<Integer,ArrayList<Float>>();
 		readEventFile();
 	}
 	// read and parse CSV files
@@ -47,10 +47,10 @@ public class BackgroundTraffic{
 					readingheader = false;
 					
 				} else {
-					ArrayList<Double> value = new ArrayList<Double>(Collections.nCopies(24,0.0d));
+					ArrayList<Float> value = new ArrayList<Float>(Collections.nCopies(24,0.0f));
 					roadID = Integer.parseInt(nextLine[0]);
 					for (int i=0 ; i<24 ; i++ ){
-						value.set(i, Double.parseDouble(nextLine[i+1]));
+						value.set(i, Float.parseFloat(nextLine[i+1]));
 					}
 					BackgroundTraffic.backgroundTraffic.put(roadID, value);
 	            }
@@ -67,7 +67,7 @@ public class BackgroundTraffic{
 	//}
 	
 }
-
+
 
 
 //public class BackgroundTraffic {
