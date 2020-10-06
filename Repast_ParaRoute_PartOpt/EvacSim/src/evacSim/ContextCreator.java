@@ -2,9 +2,11 @@ package evacSim;
 
 import java.io.FileInputStream;
 import java.util.Properties;
+//import java.util.concurrent.locks.ReentrantLock;
+
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
-import com.vividsolutions.jts.geom.Coordinate;
+//import com.vividsolutions.jts.geom.Coordinate;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
@@ -42,7 +44,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 	public static BackgroundTraffic backgroundtraffic = new BackgroundTraffic();
 	
 	// Create a global lock to enforce concurrency
-	// public static ReentrantLock lock = new ReentrantLock();
+//	 public static ReentrantLock lock = new ReentrantLock();
 	
 	/**
 	 * The citycontext will create its own subcontexts (RoadContext,

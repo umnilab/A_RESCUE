@@ -221,7 +221,7 @@ public class VehicleSnapshot {
      */
     public double getPrevX() { return this.prev_x; }
     
-    public String getPrevXString(){ return String.format("%5f", this.prev_x); }
+    public String getPrevXString(){ return String.format("%3f", this.prev_x); }
     
     
     /**
@@ -231,7 +231,7 @@ public class VehicleSnapshot {
      */
     public double getPrevY() { return this.prev_y; }
     
-    public String getPrevYString(){ return String.format("%5f", this.prev_y); }
+    public String getPrevYString(){ return String.format("%3f", this.prev_y); }
     
     /**
      * Returns the X-axis (longitude?) position within the simulation.
@@ -240,7 +240,7 @@ public class VehicleSnapshot {
      */
     public double getX() { return this.x; }
     
-    public String getXString(){ return String.format("%5f", this.x); }
+    public String getXString(){ return String.format("%3f", this.x); }
     
     /**
      * Returns the Y-axis (latitude?) position within the simulation.
@@ -249,7 +249,7 @@ public class VehicleSnapshot {
      */
     public double getY() { return this.y; }
     
-    public String getYString(){ return String.format("%5f", this.y); }
+    public String getYString(){ return String.format("%3f", this.y); }
         
     /**
      * Returns the current speed of the vehicle within the simulation.

@@ -701,13 +701,13 @@ public class JsonOutputWriter implements DataConsumer {
         vehicleArray.add(vehicle.getXString());
         vehicleArray.add(vehicle.getYString());
         vehicleArray.add(vehicle.getSpeedString());
-        vehicleArray.add(vehicle.getOriginXString());
-        vehicleArray.add(vehicle.getOriginYString());
-        vehicleArray.add(vehicle.getDestXString());
-        vehicleArray.add(vehicle.getDestYString());
-        vehicleArray.add(Integer.toString(vehicle.getNearlyArrived()));
-        vehicleArray.add(Integer.toString(vehicle.getvehicleClass()));
-        vehicleArray.add(Integer.toString(vehicle.getRoadID()));
+//        vehicleArray.add(vehicle.getOriginXString());
+//        vehicleArray.add(vehicle.getOriginYString());
+//        vehicleArray.add(vehicle.getDestXString());
+//        vehicleArray.add(vehicle.getDestYString());
+//        vehicleArray.add(Integer.toString(vehicle.getNearlyArrived()));
+//        vehicleArray.add(Integer.toString(vehicle.getvehicleClass()));
+//        vehicleArray.add(Integer.toString(vehicle.getRoadID()));
         //double z = vehicle.getZ();
    
         //int departure = vehicle.getDeparture();

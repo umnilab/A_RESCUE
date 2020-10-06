@@ -1,6 +1,5 @@
 package evacSim.citycontext;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -61,6 +60,8 @@ public class Road {
 	private boolean eventFlag; // Indicator whether there is an event happening on the road
 	
 	private double defaultFreeSpeed_; // Store default speed limit value in case of events
+	
+	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
 
 	// Road constructor
 	public Road() {
@@ -119,21 +120,22 @@ public class Road {
 	public void step() {	
 		// if (RepastEssentials.GetTickCount() % 10 == 0)
 		// this.setTravelTime();
-		double time = System.currentTimeMillis();
+//		double time = System.currentTimeMillis();
 		Vehicle v;
 		int tickcount = (int) RepastEssentials.GetTickCount();
-		double maxHours = 0.5;
-		double maxTicks = 3600 * maxHours // time that a path is kept in the
+//		double maxHours = 0.5;
+//		double maxTicks = 3600 * maxHours // time that a path is kept in the
 											// list
-				/ GlobalVariables.SIMULATION_STEP_SIZE;
+//				/ GlobalVariables.SIMULATION_STEP_SIZE;
 		try {
 			while (this.newqueue.size() > 0) {
 				v = this.newqueueHead(); // BL: change to use the TreeMap
 
-				if (v.atActivityLocation()) {
-//					System.out.println(v.getCurrentCoord());
-					v.setCoordMap(this.firstLane());
-				}
+//				if (v.atActivityLocation()) {
+////					System.out.println(v.getCurrentCoord());
+//					v.setCoordMap(this.firstLane());
+//				}
+				
 				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
 					if (v.enterNetwork(this) == 0) {
 						break;
@@ -172,7 +174,8 @@ public class Road {
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
 //					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
-					break;
+					pv = pv.macroTrailing();
+					break; //With the condition only one vehicle can enter the junction, we knew this is the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
 				pv.calcState();
@@ -222,6 +225,14 @@ public class Road {
 	@Override
 	public String toString() {
 		return "Agent id: " + id + " description: " + description;
+	}
+	
+	public void updateLastEnterTick(int current_tick){
+		this.lastEnterTick = current_tick;
+	}
+	
+	public int getLastEnterTick(){
+		return this.lastEnterTick;
 	}
 
 	public void setLinkid(int linkid) {
@@ -640,15 +651,20 @@ public class Road {
 //	}
 
 	public float calcSpeed() {
-		if (nVehicles_ <= 0)
-			return speed_ = (float) freeSpeed_;
+		if (nVehicles_ < 1)
+			return speed_ = freeSpeed_;
+		int nVehicles = 0;
 		float sum = 0.0f;
 		Vehicle pv = this.firstVehicle();
-		while (pv != null) {
+		while ((pv != null && pv.isOnLane())) { // LZ: Vehicle in junction is not taken into account
 			sum += pv.currentSpeed();
+			nVehicles += 1;
 			pv = pv.macroTrailing();
 		}
-		return speed_ = sum / nVehicles_;
+		if (nVehicles < 1 ){
+			return speed_ = freeSpeed_;
+		}
+		return speed_ = sum / nVehicles;
 	}
 
 	public void calcLength() {
@@ -693,9 +709,9 @@ public class Road {
 			}
 		}
 		// outAverageSpeed: For output travel times
-		DecimalFormat myFormatter = new DecimalFormat("##.##");
+//		DecimalFormat myFormatter = new DecimalFormat("##.##");
 
-		String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
+//		String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
 
 		this.travelTime = (float) this.length / averageSpeed;
 	}

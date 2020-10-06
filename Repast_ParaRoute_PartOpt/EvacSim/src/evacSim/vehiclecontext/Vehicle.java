@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
+//import java.util.concurrent.locks.ReentrantLock;
 
 import org.opengis.referencing.operation.MathTransformFactory;
-import org.apache.commons.lang3.ArrayUtils;
+//import org.apache.commons.lang3.ArrayUtils;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
 import java.lang.Math;
@@ -73,7 +74,7 @@ public class Vehicle {
 
 	private boolean reachDest;
 	private boolean reachActLocation;
-	private boolean moveVehicle = true;// LZ: Vehicle is moved or not, initial value is true to let vehicle enter the network
+//	private boolean moveVehicle = true;// LZ: Vehicle is moved or not, initial value is true to let vehicle enter the network
 	private int lastMoveTick = -1; // LZ: A better solution to avoid double modification in single tick
 	// the next step
 	private boolean onlane = false;
@@ -298,7 +299,7 @@ public class Vehicle {
 		
 //		// Add vehicle to vehicle context
 //		ContextCreator.getVehicleContext().add(this);
-	
+//	    System.out.println("A vehicle is entering the road.");
 		float capspd = road.calcSpeed();// calculate the initial speed
 
 		currentSpeed_ = capspd; // have to change later
@@ -538,28 +539,26 @@ public class Vehicle {
 		lastCoordinate = this.getCurrentCoord();
 		
 		if (plane != null) {
-			Coordinate[] coords = laneGeography.getGeometry(plane)
-					.getCoordinates();
-			Coordinate start, end;
-			start = coords[0];
-			end = coords[coords.length - 1];
-			if (!start.equals(getNearestCoordinate(lastCoordinate, start, end))) {
-				ArrayUtils.reverse(coords);
-				if (this.id == GlobalVariables.Global_Vehicle_ID
-						&& !GlobalVariables.Debug_On_Road)
-					System.out
-							.println("Reversed the coordinates for this vehicle's coordinate map");
-			}
+			Coordinate[] coords = laneGeography.getGeometry(plane).getCoordinates();
+//			Coordinate start, end;
+//			start = coords[0];
+//			end = coords[coords.length - 1];
+//			if (!start.equals(getNearestCoordinate(lastCoordinate, start, end))) {
+//				ArrayUtils.reverse(coords);
+//				if (this.id == GlobalVariables.Global_Vehicle_ID && !GlobalVariables.Debug_On_Road)
+//					System.out.println("Reversed the coordinates for this vehicle's coordinate map");
+//			}
 			coordMap.clear();
 			for (Coordinate coord : coords) {
 				this.coordMap.add(coord);
 			}
-			this.distance_ = (float) plane.getLength() - lastStepMove_ / 2;
+			
+			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap
+			this.coordMap.remove(0);
+			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ should has no impact on this
 		} else {
 			this.coordMap.add(destCoord);
-			this.distance_ = (float) distance(lastCoordinate,
-					this.coordMap.get(0))
-					- lastStepMove_ / 2;
+			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
 		}
 	}
 
@@ -982,7 +981,7 @@ public class Vehicle {
 		float dx = 0;
 		
 		boolean travelledMaxDist = false; // True when traveled maximum dist
-		double distTravelled = 0; // LZ: The distance traveled so far, should outside the loop, but in the code it is within the loop
+		float distTravelled = 0; // LZ: The distance traveled so far, should outside the loop, but in the code it is within the loop
 		
 		/*
 		 * For debuging: print out the current road and next junction ID of the
@@ -996,7 +995,7 @@ public class Vehicle {
 		 * line it would be just vehicle movement without signals
 		 */
 		// update the vehicle move flag
-		this.moveVehicle = true;
+//		this.moveVehicle = true;
 		
 		// float oldpos = distance(); // have to check
 		float step = GlobalVariables.SIMULATION_STEP_SIZE;
@@ -1049,59 +1048,57 @@ public class Vehicle {
 		/*
 		 * check if the vehicle's current pos. is under some threshold, i.e. it
 		 * will move to the next road 1. search for the junction 2. searchfor
-		 * the road connected to the junction which has the same id with next
 		 * road id3. find the first vehicle of all the lanes of those roads4.
 		 * find the minimum of the distances of these vehicles and this
 		 * vehicle.5. if
 		 */
-		
+//		int counter = 0;
 		while (!travelledMaxDist) {
 			
-			// Hack for intersection
-			double maxMove = this.getRoad().getFreeSpeed()
-					* GlobalVariables.SIMULATION_STEP_SIZE; // Current speed can be zero, so use free speed
+			// Hack for intersection. LZ: Why we need this?
+//			double maxMove = this.road.getFreeSpeed()
+//					* GlobalVariables.SIMULATION_STEP_SIZE; // Use current speed first, if this doesn't work, go back to freespeed
+//			if (distance_ <= maxMove && !onlane) { // LZ: include 0 , which is important
+//				/*
+//				 * System.out.println(this.id + " " + this.road.getIdentifier()
+//				 * + " " + this.distance_ + " " + moveVehicle);
+//				 */
+//				ArrayList<Road> allRoads_ = new ArrayList<Road>();
+//				ArrayList<Road> allApproaches_ = new ArrayList<Road>();
+//				if (this.nextJuction() != null) {
+//					for (Road r : this.nextJuction().getRoads()) {
+//						if (r.getID() != this.road.getID()
+//								&& r.getID() != this.nextRoad().getID()) {
+//							allRoads_.add(r);
+//						}
+//					}
+//					if (allRoads_.size() != 0) {
+//						for (Road r : allRoads_) {
+//							if (this.nextJuction().getID() == r.getJunctions()
+//									.get(1).getID()) {
+//								allApproaches_.add(r);
+//							}
+//						}
+//						if (allApproaches_.size() != 0) {
+//							for (Road r : allApproaches_) {
+//								for (Lane l : r.getLanes()) {
+//									if (l.firstVehicle() != null) {
+//										double dis = l.firstVehicle()
+//												.distance();
+//										if (dis < this.distance())  //LZ: Make nonsense?
+//											this.moveVehicle = false; 
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 			
-			if (distance_ < maxMove && !onlane) {
-				/*
-				 * System.out.println(this.id + " " + this.road.getIdentifier()
-				 * + " " + this.distance_ + " " + moveVehicle);
-				 */
-				ArrayList<Road> allRoads_ = new ArrayList<Road>();
-				ArrayList<Road> allApproaches_ = new ArrayList<Road>();
-				if (this.nextJuction() != null) {
-					for (Road r : this.nextJuction().getRoads()) {
-						if (r.getID() != this.road.getID()
-								&& r.getID() != this.nextRoad().getID()) {
-							allRoads_.add(r);
-						}
-					}
-					if (allRoads_.size() != 0) {
-						for (Road r : allRoads_) {
-							if (this.nextJuction().getID() == r.getJunctions()
-									.get(1).getID()) {
-								allApproaches_.add(r);
-							}
-						}
-						if (allApproaches_.size() != 0) {
-							for (Road r : allApproaches_) {
-								for (Lane l : r.getLanes()) {
-									if (l.firstVehicle() != null) {
-										double dis = l.firstVehicle()
-												.distance();
-										if (dis < this.distance())
-											this.moveVehicle = false; // No space for the vehicle to enter
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			if (!this.moveVehicle) {
-				lastStepMove_ = 0;
-				return;
-			}
+//			if (!this.moveVehicle) {
+//				lastStepMove_ = 0;
+//				return;
+//			}
 			
 			// update position
 			distance_ -= dx;
@@ -1123,16 +1120,22 @@ public class Vehicle {
 //			double[] distAndAngle = new double[2];
 //			double distToTarget =  this.distance(currentCoord, target, distAndAngle);
 			
-			// LZ
+			// LZ: replace previous vehicle movement function
 			double[] deltaXY = new double[2];
 			double distToTarget = this.distance2(currentCoord, target, deltaXY);
 			
 			// If we can get all the way to the next coords on the route then
 			// just go there
-			if (distTravelled + distToTarget <= dx) { //included 0, which is important
+			
+			if (distTravelled + distToTarget <= dx) { // LZ: include 0 , which is important
 				distTravelled += distToTarget;
 				this.setCurrentCoord(target);
 //				
+//				counter +=1;
+//				
+//				if(counter>100){
+//					System.out.println("This really happend!!! " + distTravelled+ "_"+distToTarget+"_"+dx);
+//				}
 //				try {
 //					// HG: the following condition can be put to reduce the 
 //					// data when the output of interest is the final case when
@@ -1157,14 +1160,21 @@ public class Vehicle {
 					if (this.nextRoad() != null) {
 						if (this.isOnLane()) {
 							this.coordMap.add(coor); // Stop and wait
-							this.appendToJunction(nextLane_); // enter the junction
-							break;
+							if(this.appendToJunction(nextLane_)==0){
+								lastStepMove_ = distTravelled;
+								break; // cannot enter the next road
+							}
+//							System.out.println("Enter 1");
 						} else {
-							this.changeRoad(); // enter the next road
-							break;
+							if(this.changeRoad()==0){
+								this.changeRoad(); // LZ: The same as above
+								lastStepMove_ = distTravelled;
+								break;// cannot enter the next road
+							}
+//							System.out.println("Enter 2");
 						}
 					} else {
-						System.out.println("This is called");
+//						System.out.println("This is called");
 						this.setCoordMap(this.lane);
 					}
 				}
@@ -1261,7 +1271,7 @@ public class Vehicle {
 		if (this.atDestination()) {
 			return;
 		}
-		boolean travelledMaxDist = false; // True when traveled max dist this
+//		boolean travelledMaxDist = false; // True when traveled max dist this
 		// iteration
 		
 		
@@ -1275,7 +1285,11 @@ public class Vehicle {
 			target = this.coordMap.get(0);
 		} else {
 			lane = this.road.firstLane();
-			this.setCoordMap(lane);
+			Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
+			for(Coordinate coord: coords){
+				this.coordMap.add(coord);
+			}
+			//this.setCoordMap(lane);
 			target = this.coordMap.get(0);
 		}
 
@@ -1295,10 +1309,12 @@ public class Vehicle {
 		double distToTarget;
 		distToTarget = this.distance2(currentCoord, target, deltaXY);
 		
-		if (distToTarget < travelPerTurn) {
+		if (distToTarget <= travelPerTurn) { // Include equal, which is important
 			// this.lock.lock();
 			// vehicleGeography.move(this, targetGeom);
 			this.setCurrentCoord(target);
+			
+			System.out.println("This is called.");
 			// try {
 			// //HG: the following condition can be put to reduce the data when
 			// the output of interest is the final case when vehicles reach
@@ -1317,7 +1333,7 @@ public class Vehicle {
 			// System.out.println("distToTarget=
 			// "+ContextCreator.convertToMeters(distToTarget));
 			// System.out.println(this.coordMap.size());
-			this.coordMap.remove(0);
+//			this.coordMap.remove(0);
 			// this.route.remove();
 		}
 		// Otherwise move as far as we can towards the target along the road
@@ -1356,7 +1372,7 @@ public class Vehicle {
 			// currentCoord.y += alpha*deltaXY[1];
 			// this.setCurrentCoord(currentCoord);
 
-			travelledMaxDist = true;
+//			travelledMaxDist = true;
 		}
 		return;
 	}
@@ -1377,45 +1393,49 @@ public class Vehicle {
 			return 0; // only one will reach destination once
 		} else if (this.nextRoad_ != null) {
 			// BL: check if there is enough space in the next road to change to
-			if (this.entranceGap(nextLane_) < 1.2 * GlobalVariables.DEFAULT_VEHICLE_LENGTH) {
-				if (this.coordMap.isEmpty()) {
-					Coordinate coor = null;
-					Coordinate[] coords = laneGeography.getGeometry(nextLane_)
-							.getCoordinates();
-					Coordinate lastCoordinate = null, start, end;
-					// SH Temp
-					// Geography<Vehicle> vehicleGeography;
-					// vehicleGeography = ContextCreator.getVehicleGeography();
-					lastCoordinate = this.getCurrentCoord();
-					start = coords[0];
-					end = coords[coords.length - 1];
-					coor = this
-							.getNearestCoordinate(lastCoordinate, start, end);
-					coordMap.add(coor);
-				}
-				return 0;
-			} else {
+			int tickcount = (int) RepastEssentials.GetTickCount(); 
+			if ((this.entranceGap(nextLane_) >= 1.2 * GlobalVariables.DEFAULT_VEHICLE_LENGTH) && (tickcount>this.nextRoad_.getLastEnterTick()) && (!onlane)) { //LZ: redundant if condition
+//				if (this.coordMap.isEmpty()) {
+//					Coordinate coor = null;
+//					Coordinate[] coords = laneGeography.getGeometry(nextLane_)
+//							.getCoordinates();
+//					Coordinate lastCoordinate = null, start, end;
+//					// SH Temp
+//					// Geography<Vehicle> vehicleGeography;
+//					// vehicleGeography = ContextCreator.getVehicleGeography();
+//					lastCoordinate = this.getCurrentCoord();
+//					start = coords[0];
+//					end = coords[coords.length - 1];
+//					coor = this.getNearestCoordinate(lastCoordinate, start, end);
+//					coordMap.add(coor);
+//				}
+//				return 0;
+//			} else {
 //				float maxMove = GlobalVariables.FREE_SPEED
 //						* GlobalVariables.SIMULATION_STEP_SIZE;
 				// if (distance_ < maxMove && !onlane) {
-				if (!onlane) {
+//				if () {
+					this.nextRoad_.updateLastEnterTick(tickcount); //LZ: update enter tick so other vehicle cannot enter this road in this tick
 					this.setCoordMap(nextLane_);
 					this.removeFromLane();
 					this.removeFromMacroList();
 //					this.lock.lock();
 					this.appendToRoad(this.nextRoad());
-					this.append(nextLane_); 
-//					this.lock.unlock();
+					this.append(nextLane_); // Two vehicles entering the same lane, then messed up.
+//					this.lock.unlock();  
 					this.setNextRoad();
 					this.assignNextLane();
 					// Reset the desired speed according to the new road
-					this.desiredSpeed_ = (float) (this.road.getFreeSpeed());
-					if(this.currentSpeed_ > (float) (this.road.getFreeSpeed())) //HG: need to update current speed according to the new free speed
-						this.currentSpeed_ = (float) (this.road.getFreeSpeed());
+					this.desiredSpeed_ =  this.road.getFreeSpeed();
+					if(this.currentSpeed_ > (this.road.calcSpeed())) //HG: need to update current speed according to the new free speed //LZ: Should be the current speed instead of the free speed, be consistent with the setting in enteringNetwork
+						this.currentSpeed_ = this.road.calcSpeed();
+						//this.currentSpeed_ = (float) (this.road.getFreeSpeed());
 					return 1;
-				}
+//				}
 			}
 		}
+		coordMap.clear();
+		coordMap.add(this.getCurrentCoord());//LZ: Fail to enter next link, wait at the old place
 		return 0;
 	}
 
@@ -1428,7 +1448,8 @@ public class Vehicle {
 		if (this.coordMap == null)
 			return 0;
 		else if (this.coordMap.size() == 0)
-			System.out.println("Zero size coordMap for " + this);
+			return 0;
+//			System.out.println("Zero size coordMap for " + this);
 		else
 			nextCoord = this.coordMap.get(0);
 
@@ -1686,7 +1707,7 @@ public class Vehicle {
 		this.trailing_ = null;
 		this.coordMap = null;
 		this.currentSpeed_ = 0.0f;
-		this.moveVehicle = false;
+//		this.moveVehicle = false;
 		this.destCoord = null;
 		this.destZone = null;
 		this.targetLane_ = null;
@@ -1737,9 +1758,9 @@ public class Vehicle {
 		return this.lastMoveTick;
 	}
 
-	public boolean getMoveVehicleFlag() {
-		return this.moveVehicle;
-	}
+//	public boolean getMoveVehicleFlag() {
+//		return this.moveVehicle;
+//	}
 
 	// BL: remove a vehicle from the macro vehicle list in the current road
 	// segment.
@@ -2491,40 +2512,43 @@ public class Vehicle {
 	public int appendToJunction(Lane nextlane) {
 		Coordinate lastCoordinate = this.getCurrentCoord();
 //		coordMap.clear();
-		if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID
-				&& this.nextRoad().getLinkid() == this.destRoadID) {
-			System.out.println("Vehicle " + this.getVehicleID()
-					+ " is appending to a junction of the final Road");
-		}
+//		if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID
+//				&& this.nextRoad().getLinkid() == this.destRoadID) {
+//			System.out.println("Vehicle " + this.getVehicleID()
+//					+ " is appending to a junction of the final Road");
+//		}
 		if (this.atDestination()) {
 //			this.removeFromLane();
 //			this.removeFromMacroList();
 			return 0;
-		} else if (nextlane != null) {
-			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID
-					&& this.nextRoad().getLinkid() == this.destRoadID)
-				System.out.println("Vehicle " + this.getVehicleID()
-						+ " has final next lane " + nextlane.getLaneid());
-			Coordinate[] coords = laneGeography.getGeometry(nextlane)
-					.getCoordinates();
-
-			Coordinate start = coords[0];
-			Coordinate end = coords[coords.length - 1];
-			Coordinate coor = this.getNearestCoordinate(lastCoordinate, start, end);
+		} else if (nextlane != null) { // LZ: want to change to next lane
+//			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID
+//					&& this.nextRoad().getLinkid() == this.destRoadID)
+//				System.out.println("Vehicle " + this.getVehicleID()
+//						+ " has final next lane " + nextlane.getLaneid());
+//			Coordinate[] coords = laneGeography.getGeometry(nextlane)
+//					.getCoordinates();
+//			Coordinate start = coords[0];
+//			Coordinate end = coords[coords.length - 1];
+//			Coordinate coor = this.getNearestCoordinate(lastCoordinate, start, end);
 			coordMap.clear();
-			coordMap.add(coor);
-		} else {
+			coordMap.add(lastCoordinate);
+		} else { // Final lane?
 			coordMap.clear();
 			coordMap.add(this.destCoord);
 		}
 
-		this.distance_ = (float) distance(lastCoordinate, coordMap.get(0))
-				- lastStepMove_ / 2;
+		this.distance_ = 0; // (float) distance(lastCoordinate, coordMap.get(0)); // LZ: End of the link
+				//- lastStepMove_ / 2;
 		this.onlane = false;
-		if (this.distance_ < 0) {
-			if (this.changeRoad() == 0)
-				return 0;
+		
+//		if (this.distance_ <= 0) {
+		if (this.changeRoad() == 0){
+			return 0;
 		}
+			
+//		}
+		
 		return 1;
 	}
 
@@ -2615,41 +2639,45 @@ public class Vehicle {
 //	}
 	
 	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
-		if (Double.isNaN(c1.x) || Double.isNaN(c1.y) || Double.isNaN(c2.x) || Double.isNaN(c2.y)) {
-			System.err.println("NaN coordinate component of " + this);
-			return 0.0;
-		}
+//		if (Double.isNaN(c1.x) || Double.isNaN(c1.y) || Double.isNaN(c2.x) || Double.isNaN(c2.y)) {
+//			System.err.println("NaN coordinate component of " + this);
+//			return 0.0;
+//		}
+		// try {
+		double distance;
+		// double dx = c2.x - c1.x;
+		// double dy = c2.y - c1.y;
+		// if (dx < 1e-10) c1.x = c2.x;
+		// if (dy < 1e-10) c1.y = c2.y;
+		calculator.setStartingGeographicPoint(c1.x, c1.y);
+		calculator.setDestinationGeographicPoint(c2.x, c2.y);
+//		distance = calculator.getOrthodromicDistance();
 		try {
-			double distance;
-			double dx = c2.x - c1.x;
-			double dy = c2.y - c1.y;
-			if (dx < 1e-10) c1.x = c2.x;
-			if (dy < 1e-10) c1.y = c2.y;
-			calculator.setStartingGeographicPoint(c1.x, c1.y);
-			calculator.setDestinationGeographicPoint(c2.x, c2.y);
-			try {
-				distance = calculator.getOrthodromicDistance();
-			} catch (AssertionError e) {
-				System.err.println("Error with finding distance: " + e);
-				distance = 0.0;
-			}
-			if (returnVals != null && returnVals.length == 2) {
-				returnVals[0] = c2.x - c1.x;
-				returnVals[1] = c2.y - c1.y;
-			}
-			if (Double.isNaN(distance)) {
-				/* RV: TODO: Fix this part. This likely occurs when dx or dy is
-				too small (say of the order of 1e-15) such that distance = sqrt(dx^2+dy^2)
-				runs out of the register (probably), causing a NaN distance despite good result.
-				*/
-				System.err.println("Geodetic distance is NaN for " + this);
-				distance = 0.0;
-			}
-			return distance;
-		} catch (Exception e) {
-			System.err.println("Unhandled exception in Vehicle.distance2() for " + this);
-			return 0.0;
+			distance = calculator.getOrthodromicDistance();
+		} catch (AssertionError e) {
+			System.err.println("Error with finding distance: " + e);
+			distance = 0.0;
 		}
+		if (returnVals != null && returnVals.length == 2) {
+			returnVals[0] = c2.x - c1.x;
+			returnVals[1] = c2.y - c1.y;
+		}
+		// if (Double.isNaN(distance)) {
+		// /* RV: TODO: Fix this part. This likely occurs when dx or dy is
+		// too small (say of the order of 1e-15) such that distance =
+		// sqrt(dx^2+dy^2)
+		// runs out of the register (probably), causing a NaN distance despite
+		// good result.
+		// */
+		// System.err.println("Geodetic distance is NaN for " + this);
+		// distance = 0.0;
+		// }
+		return distance;
+		// } catch (Exception e) {
+		// System.err.println("Unhandled exception in Vehicle.distance2() for "
+		// + this);
+		// return 0.0;
+		// }
 	}
 	
 	private void move2(double dx, double dy){
