@@ -405,7 +405,6 @@ public class Vehicle {
 		
 	}
 	
-	
 	public void setNextRoad() {
 		try {
 			if (!this.atOrigin) { // Not at origin
@@ -1164,12 +1163,20 @@ public class Vehicle {
 								lastStepMove_ = distTravelled;
 								break; // cannot enter the next road
 							}
+							else{
+								lastStepMove_ = distTravelled;
+								break;
+							}
 //							System.out.println("Enter 1");
 						} else {
 							if(this.changeRoad()==0){
 								this.changeRoad(); // LZ: The same as above
 								lastStepMove_ = distTravelled;
 								break;// cannot enter the next road
+							}
+							else{
+								lastStepMove_ = distTravelled;
+								break;
 							}
 //							System.out.println("Enter 2");
 						}
