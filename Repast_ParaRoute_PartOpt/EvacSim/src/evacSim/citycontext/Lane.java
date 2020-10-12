@@ -46,6 +46,8 @@ public class Lane {
 	private ArrayList<Lane> dnLanes_;// BL: Down stream lanes that connect to
 	// this lane
 	private int index;
+	
+	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
 
 	public Lane() {
 		this.id = ContextCreator.generateAgentID();
@@ -56,6 +58,13 @@ public class Lane {
 		this.dnLanes_ = new ArrayList<Lane>();
 	}
 
+	public void updateLastEnterTick(int current_tick){
+		this.lastEnterTick = current_tick;
+	}
+	
+	public int getLastEnterTick(){
+		return this.lastEnterTick;
+	}
 	
 	public int getLaneid() {
 		return laneid;

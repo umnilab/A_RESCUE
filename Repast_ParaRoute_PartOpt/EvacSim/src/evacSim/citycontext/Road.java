@@ -61,7 +61,8 @@ public class Road {
 	
 	private double defaultFreeSpeed_; // Store default speed limit value in case of events
 	
-	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
+//	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
+	private boolean lock_ = false;
 
 	// Road constructor
 	public Road() {
@@ -227,12 +228,24 @@ public class Road {
 		return "Agent id: " + id + " description: " + description;
 	}
 	
-	public void updateLastEnterTick(int current_tick){
-		this.lastEnterTick = current_tick;
+//	public void updateLastEnterTick(int current_tick){
+//		this.lastEnterTick = current_tick;
+//	}
+//	
+//	public int getLastEnterTick(){
+//		return this.lastEnterTick;
+//	}
+	
+	public void setLock(){
+		this.lock_ = true;
 	}
 	
-	public int getLastEnterTick(){
-		return this.lastEnterTick;
+	public void releaseLock(){
+		this.lock_ = false;
+	}
+	
+	public boolean isLocked(){
+		return this.lock_;
 	}
 
 	public void setLinkid(int linkid) {

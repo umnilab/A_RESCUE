@@ -1126,6 +1126,7 @@ public class Vehicle {
 			// If we can get all the way to the next coords on the route then
 			// just go there
 			
+			// Vehicle can stop at the intersection for long time, how to fix it?
 			if (distTravelled + distToTarget <= dx) { // LZ: include 0 , which is important
 				distTravelled += distToTarget;
 				this.setCurrentCoord(target);
@@ -1401,7 +1402,7 @@ public class Vehicle {
 		} else if (this.nextRoad_ != null) {
 			// BL: check if there is enough space in the next road to change to
 			int tickcount = (int) RepastEssentials.GetTickCount(); 
-			if ((this.entranceGap(nextLane_) >= 1.2 * GlobalVariables.DEFAULT_VEHICLE_LENGTH) && (tickcount>this.nextRoad_.getLastEnterTick()) && (!onlane)) { //LZ: redundant if condition
+			if ((this.entranceGap(nextLane_) >= 1.2 * GlobalVariables.DEFAULT_VEHICLE_LENGTH) && (tickcount>this.nextLane_.getLastEnterTick()) && (!onlane)) { //LZ: redundant if condition
 //				if (this.coordMap.isEmpty()) {
 //					Coordinate coor = null;
 //					Coordinate[] coords = laneGeography.getGeometry(nextLane_)
@@ -1422,22 +1423,25 @@ public class Vehicle {
 //						* GlobalVariables.SIMULATION_STEP_SIZE;
 				// if (distance_ < maxMove && !onlane) {
 //				if () {
-					this.nextRoad_.updateLastEnterTick(tickcount); //LZ: update enter tick so other vehicle cannot enter this road in this tick
-					this.setCoordMap(nextLane_);
-					this.removeFromLane();
-					this.removeFromMacroList();
-//					this.lock.lock();
-					this.appendToRoad(this.nextRoad());
-					this.append(nextLane_); // Two vehicles entering the same lane, then messed up.
-//					this.lock.unlock();  
-					this.setNextRoad();
-					this.assignNextLane();
-					// Reset the desired speed according to the new road
-					this.desiredSpeed_ =  this.road.getFreeSpeed();
-					if(this.currentSpeed_ > (this.road.calcSpeed())) //HG: need to update current speed according to the new free speed //LZ: Should be the current speed instead of the free speed, be consistent with the setting in enteringNetwork
-						this.currentSpeed_ = this.road.calcSpeed();
-						//this.currentSpeed_ = (float) (this.road.getFreeSpeed());
-					return 1;
+				this.nextLane_.updateLastEnterTick(tickcount); //LZ: update enter tick so other vehicle cannot enter this road in this tick
+				this.setCoordMap(nextLane_);
+				this.removeFromLane();
+				this.removeFromMacroList();
+//				this.lock.lock();
+				while(this.nextRoad().isLocked());//LZ: Wait until the lock is released， this is too slow so I use if instead
+				this.nextRoad().setLock();
+				this.appendToRoad(this.nextRoad());
+				this.nextRoad().releaseLock();
+				this.append(nextLane_); // LZ: Two vehicles entered the same lane, then messed up.
+//				this.lock.unlock();  
+				this.setNextRoad();
+				this.assignNextLane();
+				// Reset the desired speed according to the new road
+				this.desiredSpeed_ =  this.road.getFreeSpeed();
+				if(this.currentSpeed_ > (this.road.calcSpeed())) //HG: need to update current speed according to the new free speed //LZ: Should be the current speed instead of the free speed, be consistent with the setting in enteringNetwork
+					this.currentSpeed_ = this.road.calcSpeed();
+					//this.currentSpeed_ = (float) (this.road.getFreeSpeed());
+				return 1;
 //				}
 			}
 		}
