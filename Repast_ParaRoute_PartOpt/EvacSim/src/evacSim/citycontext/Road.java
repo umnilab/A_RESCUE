@@ -172,11 +172,16 @@ public class Road {
 //				}
 //			}
 			Vehicle pv = this.firstVehicle();
+			int counter = 0;
 			while (pv != null) {
+				counter+=1;
+				if(counter>1000){
+					System.out.print("THIS REALLY HAPPENS");
+				}
 				if(tickcount<=pv.getLastMoveTick()){
 //					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
 					pv = pv.macroTrailing();
-					break; //With the condition only one vehicle can enter the junction, we knew this is the last vehicle
+					break; //With the condition only one vehicle just entered this road, we knew this is the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
 				pv.calcState();

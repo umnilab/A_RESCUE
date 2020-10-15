@@ -466,6 +466,7 @@ public class JsonOutputWriter implements DataConsumer {
                 // if the flush threw an exception, the writer is closed
                 // and is just a stale object that wasn't destroyed.
                 // we should be safe to replace it.
+            	
             }
             catch (Exception e) {
                 // because we're already trapping IOException from the flush,

@@ -296,7 +296,11 @@ public class Vehicle {
 				return 0;
 			}
 		}
-		
+		int tickcount = (int) RepastEssentials.GetTickCount(); 
+		if(tickcount<=firstlane.getLastEnterTick()){
+			return 0;
+		}
+		firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
 //		// Add vehicle to vehicle context
 //		ContextCreator.getVehicleContext().add(this);
 //	    System.out.println("A vehicle is entering the road.");
@@ -308,7 +312,10 @@ public class Vehicle {
 		this.setRoad(road);
 		this.append(firstlane);
 		this.setCoordMap(firstlane);
+//		while(this.road.isLocked()); // LZ: Also need a lock here
+//		this.road.setLock();
 		this.appendToRoad(this.road);
+//		this.road.releaseLock();
 		this.setNextRoad();
 		this.assignNextLane();
 		GlobalVariables.NUM_GENERATED_VEHICLES++;
@@ -1428,10 +1435,10 @@ public class Vehicle {
 				this.removeFromLane();
 				this.removeFromMacroList();
 //				this.lock.lock();
-				while(this.nextRoad().isLocked());//LZ: Wait until the lock is released， this is too slow so I use if instead
-				this.nextRoad().setLock();
+//				while(this.nextRoad().isLocked());//LZ: Wait until the lock is released
+//				this.nextRoad().setLock();
 				this.appendToRoad(this.nextRoad());
-				this.nextRoad().releaseLock();
+//				this.nextRoad().releaseLock();
 				this.append(nextLane_); // LZ: Two vehicles entered the same lane, then messed up.
 //				this.lock.unlock();  
 				this.setNextRoad();
@@ -1446,7 +1453,7 @@ public class Vehicle {
 			}
 		}
 		coordMap.clear();
-		coordMap.add(this.getCurrentCoord());//LZ: Fail to enter next link, wait at the old place
+		coordMap.add(this.getCurrentCoord());//LZ: Fail to enter next link, try again in the next tick
 		return 0;
 	}
 
@@ -1504,23 +1511,39 @@ public class Vehicle {
 	}
 
 	public void appendToMacroList(Road road) {
-		macroLeading_ = road.lastVehicle();
 		macroTrailing_ = null;
-		road.lastVehicle(this);
-		if (macroLeading_ != null) // there is a vehicle ahead
-		{
-			macroLeading_.macroTrailing_ = this;
-		} else {
+		//LZ: Oct 14, 2020 update
+		//This has trouble with the advanceInMacroList 
+		//If the macroLeading is modified in advanceInMacroList by other thread
+		//Then this vehicle will be misplaced in the Chain List
+		if (road.lastVehicle() != null){
+			road.lastVehicle().macroTrailing_ = this; 
+			macroLeading_ = road.lastVehicle();
+		}
+		else{
+			macroLeading_ = null;
 			road.firstVehicle(this);
 		}
+		road.lastVehicle(this);
+		// macroLeading_ = road.lastVehicle();
+		// road.lastVehicle(this);
+		// if (macroLeading_ != null) // there is a vehicle ahead
+		// {
+		// macroLeading_.macroTrailing_ = this;
+		// } else {
+		// road.firstVehicle(this);
+		// }
 		// after this appending, update the number of vehicles
-		Vehicle pv = road.firstVehicle();
-		int nVehicles_ = 0;
-		while (pv != null) {
-			nVehicles_++;
-			pv = pv.macroTrailing_;
-		}
-		road.setNumberOfVehicles(nVehicles_);
+		// LZ: Oct 14, 2020 update, this part seems unnecessary
+		// we just need to increase the nVehicles_ by 1, as below
+		road.setNumberOfVehicles(road.getVehicleNum()+1);
+		// Vehicle pv = road.firstVehicle();
+		// int nVehicles_ = 0;
+		// while (pv != null) {
+		// nVehicles_++;
+		// pv = pv.macroTrailing_;
+		// }
+		// road.setNumberOfVehicles(nVehicles_);
 	}
 
 	public void leading(Vehicle v) {
@@ -1812,11 +1835,15 @@ public class Vehicle {
 	 */
 	// BL: changed from distance_ to realDistance_ (Jul 27/2012)
 	public void advanceInMacroList() {
+		Road pr = this.road;
+//		while(pr.isLocked()); //LZ: Locked when other thread is modifying the macroTrailing and front
+//		pr.setLock();
 		// (0) check if vehicle should be advanced in the list
 		if (macroLeading_ == null || this.distance_ >= macroLeading_.distance_) {
 			// no macroLeading or the distance to downstream node is greater
 			// than marcroLeading
 			// no need to advance this vehicle in list
+//			pr.releaseLock();
 			return;
 		}
 		// (1) find vehicle's position in the list
@@ -1831,7 +1858,7 @@ public class Vehicle {
 		// (2) Take this vehicle out from the list
 		// this macroLeading now will be assigned to be macroLeading of this
 		// vehicle marcroTrailing
-		Road pr = this.road;
+		
 		this.macroLeading_.macroTrailing_ = this.macroTrailing_;
 		if (this.macroTrailing_ != null) {
 			macroTrailing_.macroLeading_ = this.macroLeading_;
@@ -1854,6 +1881,7 @@ public class Vehicle {
 		} else {
 			pr.lastVehicle(this);
 		}
+//		pr.releaseLock();
 	}
 
 	/*
