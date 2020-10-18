@@ -56,7 +56,8 @@ public class Road {
 	private Vehicle firstVehicle_ = null;
 	private boolean eventFlag; // Indicator whether there is an event happening on the road
 	private double defaultFreeSpeed_; // Store default speed limit value in case of events
-	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
+//	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
+	private boolean lock_ = false;
 
 	// Road constructor
 	public Road() {
