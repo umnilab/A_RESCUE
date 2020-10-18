@@ -42,7 +42,6 @@ public class Zone {
 		houses = new ArrayList<House>();
 	}
 	
-	// LZ: this changed
 	public Zone(int integerID) {
 		this.integerID = integerID;
 		id = ContextCreator.generateAgentID();
