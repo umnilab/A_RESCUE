@@ -10,8 +10,11 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 import evacSim.GlobalVariables;
 import evacSim.NetworkEventObject;
+import evacSim.citycontext.Road;
+import evacSim.citycontext.Zone;
 import evacSim.vehiclecontext.Vehicle;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.essentials.RepastEssentials;
 
 
 /**
@@ -268,7 +271,8 @@ public class DataCollector {
      * can read and begin to process it.  The list of consumers is also
      * signaled to know that a new piece of data is available.
      */
-    public void stopTickCollection() {       
+    public void stopTickCollection() {
+    	
         // place the current tick into the buffer if anything was recorded
         if (!this.currentSnapshot.isEmpty()) {
             this.buffer.add(this.currentSnapshot);
@@ -289,25 +293,59 @@ public class DataCollector {
      * @param coordinate the current vehicle position in the simulation.
      * @throws Throwable if an error occurs trying to record the vehicle.
      */
-    public void recordSnapshot(Vehicle vehicle,
+    public void recordVehicleTickSnapshot(Vehicle vehicle,
                                Coordinate coordinate) throws Throwable {
+    	
+    	@SuppressWarnings("unused")
+		double currentTick = RepastEssentials.GetTickCount();
+    	
         // make sure the given vehicle object is valid
         if (vehicle == null) {
             throw new IllegalArgumentException("No vehicle given.");
         }
         if (coordinate == null) {
-            throw new IllegalArgumentException("no coordinate given.");
+            throw new IllegalArgumentException("No coordinate given.");
         }
-        
         // make sure a tick is currently being processed
         if (this.currentSnapshot == null) {
             throw new Exception("No tick snapshot being processed.");
         }
-        
-        // add the vehicle to the current snapshot
-        this.currentSnapshot.logVehicle(vehicle, coordinate);
+        	// create the snapshot
+        	this.currentSnapshot.recordVehicleSnapshot(vehicle, coordinate);
+//        this.currentSnapshot.logVehicle(vehicle, coordinate);
     }
     
+    /**
+     * RV: Record the current status of the road & add it to the tick snapshot
+     * @param road: Road to be recorded
+     */
+    public void recordRoadTickSnapshot(Road road) {
+    	if (road == null) {
+    		throw new IllegalArgumentException("No road given");
+    	}
+    	// make sure a tick is currently being processed
+        if (this.currentSnapshot == null) {
+            throw new RuntimeException("No tick snapshot being processed.");
+        }
+        // create the snapshot
+        	this.currentSnapshot.recordRoadSnapshot(road);
+    }
+    
+    /**
+     * RV: Record the current status of a shelter & add it to the tick snapshot
+     * @param shelt: Shelter to be recorded
+     */
+    public void recordShelterTickSnapshot(Zone shelt) {
+    	if (shelt == null) {
+    		throw new IllegalArgumentException("No shelter given");
+    	}
+    	// make sure a tick is currently being processed
+        if (this.currentSnapshot == null) {
+            throw new RuntimeException("No tick snapshot being processed.");
+        }
+        // create the snapshot
+    	this.currentSnapshot.recordShelterSnapshot(shelt);
+    }
     
     /**
      * HG: Records starting and ending of events

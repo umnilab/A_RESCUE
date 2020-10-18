@@ -373,6 +373,10 @@ private static Properties config;
 	 * */
 	public static final int FREQ_RECORD_VEH_SNAPSHOT_FORVIZ = 
 			Integer.valueOf(loadConfig("FREQ_RECORD_VEH_SNAPSHOT_FORVIZ"));
+	public static final int FREQ_RECORD_ROAD_SNAPSHOT_FORVIZ =
+			Integer.valueOf(loadConfig("FREQ_RECORD_ROAD_SNAPSHOT_FORVIZ"));
+	public static final int FREQ_RECORD_SHELT_SNAPSHOT_FORVIZ =
+			Integer.valueOf(loadConfig("FREQ_RECORD_SHELT_SNAPSHOT_FORVIZ"));
 	
 	public static double datacollection_start = 0.0;
 	public static double datacollection_total = 0.0;	
@@ -382,12 +386,17 @@ private static Properties config;
 	public static LinkedList<NetworkEventObject> newEventQueue = new
 			LinkedList<NetworkEventObject>();//Global queue for storing events
 	
-	/* RV: This variable tracks the no. of generated vehicles (loaded from demand) so far 
-	 * This is useful to let the simulator know when to stop */
+	/* 
+	 * RV: This variable tracks the no. of generated vehicles (loaded from demand) so far 
+	 * This is useful to let the simulator know when to stop
+	 * Similarly, also track the number of vehicles having entered the network so far.
+	 * */
 	public static int NUM_GENERATED_VEHICLES = 0;
+	public static int NUM_VEHICLES_ENTERED_ROAD_NETWORK = 0;
+	
 	/* Gehlot: This variable will keep track of the number of vehicles arrived 
 	 * at destination for visualization purposes*/
-	public static int NUM_KILLED_VEHICLES = 0;	
+	public static int NUM_KILLED_VEHICLES = 0;
 	
 	/* Parameters for handling multiclass routing.
 	 * Note that the proportion of original routing vehicles being generated is equal to

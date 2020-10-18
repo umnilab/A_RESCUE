@@ -200,29 +200,40 @@ public class ContextCreator implements ContextBuilder<Object> {
 		/* Schedule Parameters for the graph partitioning */
 		if (GlobalVariables.MULTI_THREADING){
 			ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
-			ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2); //Network partitioning, priority 2
+			//Network partitioning, priority 2
+			ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
 			schedule.schedule(initialPartitionParams, partitioner, "first_run");
 			schedule.schedule(partitionParams, partitioner, "check_run");
 		}
 		
 		// schedule the data collection framework tasks to mark the start
-				// and stop of the model and the start and stop of each sim tick
+		// and stop of the model and the start and stop of each sim tick
+		// TODO: figure out the double value for the tick duration
+		double tickDuration = 1.0d;
 				
-			    // TODO: figure out the double value for the tick duration
-		        double tickDuration = 1.0d;
-				
-	     if(GlobalVariables.ENABLE_DATA_COLLECTION){
-			ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(0.0, ScheduleParameters.FIRST_PRIORITY); //Data collection, priority infinity
+	    if(GlobalVariables.ENABLE_DATA_COLLECTION){
+	    		//Data collection, priority infinity
+			ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(
+					0.0, ScheduleParameters.FIRST_PRIORITY);
 			schedule.schedule(dataStartParams, dataContext, "startCollecting");
 			
-			ScheduleParameters dataEndParams = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);
+			ScheduleParameters dataEndParams = ScheduleParameters.createAtEnd(
+					ScheduleParameters.LAST_PRIORITY);
 			schedule.schedule(dataEndParams, dataContext, "stopCollecting");
 			
-			ScheduleParameters tickStartParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.FIRST_PRIORITY);
+			ScheduleParameters tickStartParams = ScheduleParameters.createRepeating(
+					0.0d, tickDuration, ScheduleParameters.FIRST_PRIORITY);
 			schedule.schedule(tickStartParams, dataContext, "startTick");
 			
-			ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
+			ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(
+					0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
 			schedule.schedule(tickEndParams, dataContext, "stopTick");
+			
+			// RV: schedule the recording of shelter snapshots for the visualization interface
+			ScheduleParameters recordShelterSnapshotParams = ScheduleParameters.createRepeating(
+					0, GlobalVariables.FREQ_RECORD_SHELT_SNAPSHOT_FORVIZ, 6);
+			schedule.schedule(recordShelterSnapshotParams,
+					ContextCreator.getZoneContext(), "recordShelterStatus");
 			
 			// RV: For recording the actual system time spent per few ticks
 			ScheduleParameters recordRuntimeParams = ScheduleParameters.createRepeating(

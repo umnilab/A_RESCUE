@@ -18,14 +18,15 @@ import repast.simphony.space.gis.GeographyParameters;
 import repast.simphony.space.gis.ShapefileLoader;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
+import evacSim.data.DataCollector;
 import evacSim.demand.DatasetOfHouseholdsPerZones;
 import repast.simphony.parameter.Parameters;
 
 public class ZoneContext extends DefaultContext<Zone> {
 	
 	public DatasetOfHouseholdsPerZones dataset;
-	
-	public SOShelterRouting soShelterMatcher;
+	public SOShelterRouting soShelterMatcher; // RV: shelter SO routing matcher object
+	public ArrayList<Zone> shelters; // RV: added for quick access in this.recordShelterStatus()
 
 	public ZoneContext() {
 
@@ -96,6 +97,9 @@ public class ZoneContext extends DefaultContext<Zone> {
 			// create the SO routing scheduler
 			this.soShelterMatcher = new SOShelterRouting(shelters);
 			System.out.println("Created SO shelter matcher: " + this.soShelterMatcher.toString());
+			
+			// RV: also add the list of shelter objects so that
+			this.shelters = shelters;
 
 		} catch (java.net.MalformedURLException e) {
 			System.err
@@ -173,5 +177,21 @@ public class ZoneContext extends DefaultContext<Zone> {
 		}
 	}
 	
+	/**
+	 * RV: Whenever vehicles are recorded for visualization,
+	 * also record the status of all the shelters. This function
+	 * is scheduled in 
+	 */
+	public void recordShelterStatus() {
+		for (Zone shelter : this.shelters) {
+			if (shelter.getOccupancy() != shelter.getLastRecordedOccupancy()) {
+				try {
+					DataCollector.getInstance().recordShelterTickSnapshot(shelter);
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+			}
+		}
+	}
 	
 }

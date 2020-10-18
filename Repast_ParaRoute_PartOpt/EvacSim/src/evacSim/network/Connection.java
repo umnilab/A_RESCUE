@@ -1,13 +1,10 @@
 package evacSim.network;
 
-
 import evacSim.GlobalVariables;
 import evacSim.NetworkEventObject;
 import evacSim.data.DataCollector;
 import evacSim.data.DataConsumer;
 import evacSim.data.TickSnapshot;
-import evacSim.data.VehicleSnapshot;
-import evacSim.NetworkEventHandler;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -432,27 +429,30 @@ public class Connection implements DataConsumer {
         lines.add("TICK," + tickNum);
         
         // loop through the list of vehicles and convert each to a string
-        for (Integer id : vehicleIDs) {
-            if (id == null) {
-                continue;
-            }
-            
-            // retrieve the vehicle snapshot from the tick snapshot
-            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
-            if (vehicle == null) {
-                continue;
-            }
-            
-            // get the string representation of the vehicle
-            String line = Connection.createVehicleMessage(vehicle);
-            if (line == null) {
-                continue;
-            }
-            
-            // prepend the tick number, data type token, and add to array
-            line = "V," + line;
-            lines.add(line);
-        }
+        	for (String line : tick.createCSVTickLines()) {
+        		lines.add("V," + line);
+        	}
+//        for (Integer id : vehicleIDs) {
+//            if (id == null) {
+//                continue;
+//            }
+//            
+//            // retrieve the vehicle snapshot from the tick snapshot
+//            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
+//            if (vehicle == null) {
+//                continue;
+//            }
+//            
+//            // get the string representation of the vehicle
+//            String line = Connection.createVehicleMessage(vehicle);
+//            if (line == null) {
+//                continue;
+//            }
+//            
+//            // prepend the tick number, data type token, and add to array
+//            line = "V," + line;
+//            lines.add(line);
+//        }
 
         // HG: loop through the list of starting events and convert each to a string
         for (NetworkEventObject event : tick.getEventList().get(0)) {
@@ -510,54 +510,54 @@ public class Connection implements DataConsumer {
     }
     
     
-    /**
-     * Returns the socket message representation of the given vehicle.
-     * 
-     * @param vehicle the snapshot of a vehicle to convert into a message.
-     * @return the socket message representation of the given vehicle.
-     */
-    public static String createVehicleMessage(VehicleSnapshot vehicle) {
-        // check if the vehicle snapshot even exists
-        if (vehicle == null) {
-            return null;
-        }
-        
-        // extract all the values from the vehicle snapshot
-        int id = vehicle.getId();
-        double prev_x = vehicle.getPrevX();
-        double prev_y = vehicle.getPrevY();
-        double x = vehicle.getX();
-        double y = vehicle.getY();
-        float speed = vehicle.getSpeed();
-        double originalX = vehicle.getOriginX();
-        double originalY = vehicle.getOriginY();
-        double destX = vehicle.getDestX();
-        double destY = vehicle.getDestY();
-        int nearlyArrived = vehicle.getNearlyArrived();
-        int vehicleClass = vehicle.getvehicleClass();
-        int roadID = vehicle.getRoadID();    
-        //int departure = vehicle.getDeparture();
-        //int arrival = vehicle.getArrival();
-        //float distance = vehicle.getDistance();
-
-        // put them together into a string for the socket and return it
-        return id + "," +
-        	   prev_x + "," +
-        	   prev_y + "," +
-               x + "," +
-               y + "," +
-               speed + "," +
-               originalX + "," +
-               originalY + "," +
-               destX + "," +
-               destY + "," +
-               nearlyArrived + "," +
-               vehicleClass + "," +      
-               roadID ;
-               //departure + "," +
-               //arrival + "," +
-               //distance + "," +
-}
+//    /**
+//     * Returns the socket message representation of the given vehicle.
+//     * 
+//     * @param vehicle the snapshot of a vehicle to convert into a message.
+//     * @return the socket message representation of the given vehicle.
+//     */
+//    public static String createVehicleMessage(VehicleSnapshot vehicle) {
+//        // check if the vehicle snapshot even exists
+//        if (vehicle == null) {
+//            return null;
+//        }
+//        
+//        // extract all the values from the vehicle snapshot
+//        int id = vehicle.getId();
+//        double prev_x = vehicle.getPrevX();
+//        double prev_y = vehicle.getPrevY();
+//        double x = vehicle.getX();
+//        double y = vehicle.getY();
+//        float speed = vehicle.getSpeed();
+//        double originalX = vehicle.getOriginX();
+//        double originalY = vehicle.getOriginY();
+//        double destX = vehicle.getDestX();
+//        double destY = vehicle.getDestY();
+//        int nearlyArrived = vehicle.getNearlyArrived();
+//        int vehicleClass = vehicle.getvehicleClass();
+//        int roadID = vehicle.getRoadID();    
+//        //int departure = vehicle.getDeparture();
+//        //int arrival = vehicle.getArrival();
+//        //float distance = vehicle.getDistance();
+//
+//        // put them together into a string for the socket and return it
+//        return id + "," +
+//        	   prev_x + "," +
+//        	   prev_y + "," +
+//               x + "," +
+//               y + "," +
+//               speed + "," +
+//               originalX + "," +
+//               originalY + "," +
+//               destX + "," +
+//               destY + "," +
+//               nearlyArrived + "," +
+//               vehicleClass + "," +      
+//               roadID ;
+//               //departure + "," +
+//               //arrival + "," +
+//               //distance + "," +
+//}
     
     /**
      * Returns the socket message representation of the given vehicle.

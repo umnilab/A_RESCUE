@@ -1,22 +1,18 @@
 package evacSim.data;
 
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-//import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import evacSim.GlobalVariables;
-
+import repast.simphony.essentials.RepastEssentials;
 
 /**
  * evacSim.data.JsonOutputWriter
@@ -58,7 +54,8 @@ public class JsonOutputWriter implements DataConsumer {
     private int ticksWritten;
     
     /** The number in the output series for the current JSON file.  */
-    private int fileSeriesNumber;
+    @SuppressWarnings("unused")
+	private int fileSeriesNumber;
     
     /** The thread which periodically reads the buffer for data to process. */
     private Thread writingThread;
@@ -82,6 +79,7 @@ public class JsonOutputWriter implements DataConsumer {
      */
     public JsonOutputWriter() {
         this(new File(JsonOutputWriter.createDefaultFilePath()), false);
+        System.out.println("Creating JSON file " + JsonOutputWriter.createDefaultFilePath());
     }
     
     
@@ -240,6 +238,7 @@ public class JsonOutputWriter implements DataConsumer {
                         // we are currently paused, so we will wait our delay
                         // before performing another poll on our running state
                         try {
+                        	System.out.println("Sleeping JSON consumer at t=" + RepastEssentials.GetTickCount());
                             Thread.sleep(GlobalVariables.JSON_BUFFER_REFRESH);
                             continue;
                         }
@@ -249,9 +248,14 @@ public class JsonOutputWriter implements DataConsumer {
                         }
                     }
                     
-                    // get the next item from the buffer. HGehlot: I have changed from 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only send the data at the new frequency for viz interpolation
-                    double nextTick = JsonOutputWriter.this.currentTick + GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
+                    /* get the next item from the buffer. HGehlot: I have changed from
+                     * 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only 
+                     * send the data at the new frequency for viz interpolation
+                     */
+                    double nextTick = JsonOutputWriter.this.currentTick +
+                    		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
+                    
                     if (snapshot == null) {
                         // the buffer has no more items for us at this time
                         if (writeCount > 0) {
@@ -281,8 +285,7 @@ public class JsonOutputWriter implements DataConsumer {
                     }
                     
                     // update the currently processing tick index to this item
-                    JsonOutputWriter.this.currentTick = 
-                            snapshot.getTickNumber();
+                    JsonOutputWriter.this.currentTick = snapshot.getTickNumber();
                     
                     // process the current item into lines in the output file
                     try {
@@ -324,7 +327,6 @@ public class JsonOutputWriter implements DataConsumer {
         this.writingThread = new Thread(writingRunnable);
         this.writingThread.start();
     }
-    
     
     /**
      * Stops the data consumption and writing (after finishing any currently
@@ -592,21 +594,15 @@ public class JsonOutputWriter implements DataConsumer {
      * @param tick the tick snapshot to be written to the output file.
      * @throws IOException if any error occurred writing the lines to disk.
      */
-    private void writeTickSnapshot(TickSnapshot tick) throws IOException {
+    @SuppressWarnings("unchecked")
+	private void writeTickSnapshot(TickSnapshot tick) throws IOException {
         if (tick == null) {
             return;
         }
-        
-        // get the json representation of this tick
-        ArrayList<ArrayList<String>> tickArray = JsonOutputWriter.createTickLines(tick);
-        if (tickArray == null) {
-            // there was no json output created by this tick
-            return;
-        }
-        
+
         // check the file has been opened
         if (this.writer == null) {
-            throw new IOException("The JSON file is not open for writing.");
+        		throw new IOException("The JSON file is not open for writing.");
         }
         
         // check if writing these lines will go over our output file limit
@@ -617,9 +613,39 @@ public class JsonOutputWriter implements DataConsumer {
             this.storeJsonObjects = new HashMap<String, Object>();
         }
         
-        //add this tick information to the HashMap
+        /*
+         * RV: Change the structure of this hashmap to include the status of roads and shelters.
+         * Previously, it was of the format:
+         * { "tick 1": [[vehicle attribute1, attr2, ...], ...], "tick 2": ... }
+         * Now, changing to the new format:
+         * { "tick1": { "vehicles": [[veh attr1, attr2, ...], ...],
+         *              "roads": [[road id, speed, nVehicles], ...],
+         *              "shelters": [[shelt id, available spaces], ...] },
+         *   "tick2": ...
+         * }
+         */
+
+        // get the JSON representation of this tick
         String tickString = String.valueOf(tick.getTickNumber());
-        this.storeJsonObjects.put(tickString, tickArray);
+        
+        HashMap<String, ArrayList<String>> tickData = new
+        		HashMap<String, ArrayList<String>>();
+
+        // get the 2D arrays containing data of vehicles, roads, and shelters
+        ArrayList<String> vehTickArray = tick.createJSONTickLines("vehicle");
+        ArrayList<String> roadTickArray = tick.createJSONTickLines("road");
+        ArrayList<String> sheltTickArray = tick.createJSONTickLines("shelter");
+        
+        if (vehTickArray == null) {
+            return; // there was no JSON output created by this tick
+        }
+        	
+        	// add the data
+        	tickData.put("vehicles", vehTickArray);
+        	tickData.put("shelters", sheltTickArray);
+        tickData.put("roads", roadTickArray);
+        
+        this.storeJsonObjects.put(tickString, tickData);
         
         //write the the ticks to json file if only one more tick information needs to be added to the current file
         if (this.ticksWritten == GlobalVariables.JSON_TICK_LIMIT_PER_FILE - 1) {
@@ -634,99 +660,102 @@ public class JsonOutputWriter implements DataConsumer {
     }
     
     
-    /**
-     * HG: Returns the given tick snapshot as an array of arrays.
-     * 
-     * @param tick the snapshot of the tick to convert.
-     * @return the array of array for the given tick snapshot.
-     */
-    public static ArrayList<ArrayList<String>> createTickLines(TickSnapshot tick) {
-        // check the tick snapshot exists
-        if (tick == null) {
-            return null;
-        }
-        
-        // get the list of of vehicles stored in the tick snapshot 
-        Collection<Integer> vehicleIDs = tick.getVehicleList();
-        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
-            return null;
-        }
-        
-        // loop through the list of vehicles and convert each to a arraylist
-        ArrayList<ArrayList<String>> tickArray = new ArrayList<ArrayList<String>>();
-        for (Integer id : vehicleIDs) {
-            if (id == null) {
-                continue;
-            }
-            
-            // retrieve the vehicle snapshot from the tick snapshot
-            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
-            if (vehicle == null) {
-                continue;
-            }
-            
-            // get the arraylist representation of this vehicle
-            ArrayList<String> vehicleArray = JsonOutputWriter.createVehicleLine(vehicle);
-            if (vehicleArray == null) {
-                continue;
-            }
-            
-            //add the vehicle array to the tick arraylist
-            tickArray.add(vehicleArray);
-            
-        }
-        
-        return tickArray;
-        
-    }
-    
-    
-    /**
-     * HG: Returns the arraylist representation of the given vehicle snapshot. 
-     * 
-     * @param vehicle the vehicle snapshot to convert to arraylist.
-     * @return the arraylist representation of the given vehicle snapshot.
-     */
-    public static ArrayList<String> createVehicleLine(VehicleSnapshot vehicle) {
-        if (vehicle == null) {
-            return null;
-        }
-        
-        ArrayList<String> vehicleArray = new ArrayList<String>();
-        
-        // extract the values from the vehicle snapshot
-        vehicleArray.add(Integer.toString(vehicle.getId()));
-        vehicleArray.add(vehicle.getPrevXString());
-        vehicleArray.add(vehicle.getPrevYString());
-        vehicleArray.add(vehicle.getXString());
-        vehicleArray.add(vehicle.getYString());
-        vehicleArray.add(vehicle.getSpeedString());
-//        vehicleArray.add(vehicle.getOriginXString());
-//        vehicleArray.add(vehicle.getOriginYString());
-//        vehicleArray.add(vehicle.getDestXString());
-//        vehicleArray.add(vehicle.getDestYString());
-//        vehicleArray.add(Integer.toString(vehicle.getNearlyArrived()));
-//        vehicleArray.add(Integer.toString(vehicle.getvehicleClass()));
-//        vehicleArray.add(Integer.toString(vehicle.getRoadID()));
-        //double z = vehicle.getZ();
-   
-        //int departure = vehicle.getDeparture();
-        //int arrival = vehicle.getArrival();
-        //float distance = vehicle.getDistance();
-
-
-        return vehicleArray;
-        // build the json line and return it
-        //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
-        //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
-//        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
-//        		originalX + "," + originalY + "," + destX + "," + destY + "," +
-//                nearlyArrived + "," + vehicleClass + "," + roadID);
-        //departure + "," +
-        //arrival + "," +
-        //distance + "," +
-    }
-    
+//    /**
+//     * HG: Returns the given tick snapshot as an array of arrays.
+//     * 
+//     * @param tick: the snapshot of the tick to convert.
+//     * @param object: the type of simulation object (vehicle/road/shelter) that
+//     * @return the array of array for the given tick snapshot.
+//     */
+//    public static ArrayList<ArrayList<String>> createTickLines(TickSnapshot tick) {
+//        // check the tick snapshot exists
+//        if (tick == null) {
+//            return null;
+//        }
+//
+//        // output array
+//        ArrayList<ArrayList<String>> tickArray = new ArrayList<ArrayList<String>>();
+//        
+//        // get the list of of vehicles stored in the tick snapshot
+//        Collection<Integer> vehicleIDs = tick.getVehicleList();
+//        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
+//            return null;
+//        }
+//        
+//        // loop through the list of vehicles and convert each to a arraylist
+//        for (Integer id : vehicleIDs) {
+//            if (id == null) {
+//                continue;
+//            }
+//            
+//            // retrieve the vehicle snapshot from the tick snapshot
+//            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
+//            if (vehicle == null) {
+//                continue;
+//            }
+//            
+//            // get the arraylist representation of this vehicle
+//            ArrayList<String> vehicleArray = JsonOutputWriter.createVehicleLine(vehicle);
+//            if (vehicleArray == null) {
+//                continue;
+//            }
+//            
+//            //add the vehicle array to the tick arraylist
+//            tickArray.add(vehicleArray);
+//            
+//        }
+//        
+//        return tickArray;
+//        
+//    }
+//    
+//    
+//    /**
+//     * HG: Returns the arraylist representation of the given vehicle snapshot. 
+//     * 
+//     * @param vehicle the vehicle snapshot to convert to arraylist.
+//     * @return the arraylist representation of the given vehicle snapshot.
+//     */
+//    public static ArrayList<String> createVehicleLine(VehicleSnapshot vehicle) {
+//        if (vehicle == null) {
+//            return null;
+//        }
+//        
+//        // extract the values from the vehicle snapshot
+//        ArrayList<String> vehicleArray = new ArrayList<String>();
+//        vehicleArray.add(Integer.toString(vehicle.getId()));
+//        vehicleArray.add(vehicle.getPrevXString());
+//        vehicleArray.add(vehicle.getPrevYString());
+//        vehicleArray.add(vehicle.getXString());
+//        vehicleArray.add(vehicle.getYString());
+//        vehicleArray.add(vehicle.getSpeedString());
+//        
+////        vehicleArray.add(vehicle.getOriginXString());
+////        vehicleArray.add(vehicle.getOriginYString());
+////        vehicleArray.add(vehicle.getDestXString());
+////        vehicleArray.add(vehicle.getDestYString());
+////        vehicleArray.add(Integer.toString(vehicle.getNearlyArrived()));
+////        vehicleArray.add(Integer.toString(vehicle.getvehicleClass()));
+////        vehicleArray.add(Integer.toString(vehicle.getRoadID()));
+//        //double z = vehicle.getZ();
+//   
+//        //int departure = vehicle.getDeparture();
+//        //int arrival = vehicle.getArrival();
+//        //float distance = vehicle.getDistance();
+//
+//
+//        return vehicleArray;
+//        // build the json line and return it
+//        //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
+//        //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
+////        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
+////        		originalX + "," + originalY + "," + destX + "," + destY + "," +
+////                nearlyArrived + "," + vehicleClass + "," + roadID);
+//        //departure + "," +
+//        //arrival + "," +
+//        //distance + "," +
+//    }
+//    
     
     /**
      * Returns a guaranteed unique absolute path for writing output

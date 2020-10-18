@@ -135,7 +135,6 @@ public class Vehicle {
 	protected double indiffBand; 
 	// LZ,RV:DynaDestTest: List of visited shelters along with the time of visit
 	protected HashMap<Integer, Integer> visitedShelters;
-	// RV
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
@@ -195,7 +194,7 @@ public class Vehicle {
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
 		// RV
-//		GlobalVariables.NUM_GENERATED_VEHICLES++;
+		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
 
 	/* HG: This is a new subclass of Vehicle class that has some different 
@@ -252,7 +251,7 @@ public class Vehicle {
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
 		// RV
-//		GlobalVariables.NUM_GENERATED_VEHICLES++;
+		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
 	 
 	public void setNextPlan() {
@@ -311,7 +310,7 @@ public class Vehicle {
 		this.appendToRoad(this.road);
 		this.setNextRoad();
 		this.assignNextLane();
-		GlobalVariables.NUM_GENERATED_VEHICLES++;
+		GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK++;
 		return (1);
 	}
 
@@ -827,7 +826,6 @@ public class Vehicle {
 				double laneChangeProb1 = GlobalVariables.RandomGenerator
 						.nextDouble();
 				// The vehicle is at beginning of the lane, it is free to change lane
-//				Lane tarLane = this.findBetterLane();
 				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb1 < 1.0)
@@ -842,7 +840,6 @@ public class Vehicle {
 					if (laneChangeProb2 < 1.0)
 						this.discretionaryLC(tarLane);
 				}
-				
 			}
 		}
 	}
@@ -898,28 +895,37 @@ public class Vehicle {
 		}
 	}
 	
-
-	/*
-	 * HGehlot: Record the vehicle snapshot if this tick corresponds to the required epoch that is needed for visualization interpolation.
-	 * Note that this is recording is independent of snapshots of vehicles whether they move or not in the current tick. 
-	 * (So when vehicles do not move in a tick but we need to record positions for viz interpolation then recVehSnaphotForVisInterp is useful). 
-	 * Also, we update the coordinates of the previous epoch in the end of the function.
+	/**
+	 * HGehlot: Record the vehicle snapshot if this tick corresponds to the
+	 * required epoch that is needed for visualization interpolation.
+	 * Note that this is recording is independent of snapshots of vehicles 
+	 * whether they move or not in the current tick. 
+	 * (So when vehicles do not move in a tick but we need to record positions
+	 * for visualization interpolation then recVehSnaphotForVisInterp is useful). 
+	 * Also, we update the coordinates of the previous epoch in the end of the
+	 * function.
 	 */ 
 	public void recVehSnaphotForVisInterp(){
-//		Coordinate currentCoord = null;
 		Coordinate currentCoord = this.getCurrentCoord();
 		if( currentCoord != null){
 			try {
-				//HG: the following condition can be put to reduce the data when the output of interest is the final case when vehicles reach close to destination
-//				if(this.nextRoad() == null){
-					DataCollector.getInstance().recordSnapshot(this, currentCoord);//HGehlot: I use currentCoord rather than the targeted coordinates (as in move() function) and this is an approximation but anyway if the vehicle moves then it will get overriden.
-//				}
+				/*
+				 * HG: the following condition can be put to reduce the data when 
+				 * the output of interest is the final case when vehicles reach 
+				 * close to destination
+				 * 
+				 * Update: I use currentCoord rather than the targeted coordinates
+				 * (as in move() function) and this is an approximation but anyway
+				 * if the vehicle moves then it will get overridden.
+				 */
+				DataCollector.getInstance().recordVehicleTickSnapshot(this, currentCoord);
 			}
 			catch (Throwable t) {
 			    // could not log the vehicle's new position in data buffer!
 			    DataCollector.printDebug("ERR" + t.getMessage());
 			}
-			setPreviousEpochCoord(currentCoord);//update the previous coordinate as the current coordinate
+			// update the previous coordinate as the current coordinate
+			setPreviousEpochCoord(currentCoord);
 		}
 	}
 	

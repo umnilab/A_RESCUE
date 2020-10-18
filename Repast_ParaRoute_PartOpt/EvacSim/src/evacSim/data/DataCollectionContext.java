@@ -1,13 +1,9 @@
 package evacSim.data;
 
 import java.util.ArrayList;
-
-import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
-
 import repast.simphony.context.DefaultContext;
 import repast.simphony.engine.environment.RunEnvironment;
-
 
 /**
  * DataCollectionContext
@@ -102,7 +98,8 @@ public class DataCollectionContext extends DefaultContext<Object> {
     		// print the total no. of vehicles generated and destroyed so far,
     		// along with runtime since the last call of this function
     		System.out.println("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
-    				+ ", nVehDestroyed=" + GlobalVariables.NUM_KILLED_VEHICLES
+    				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
+    				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
     				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount()
     				+ ", cumRuntime=" + runtimeRecorder.get(runtimeRecorder.size() - 1));
     	}

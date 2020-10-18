@@ -36,9 +36,11 @@ public class CityContext extends DefaultContext<Object> {
 	private HashMap<Integer, Road> road_KeyLinkID;
 	private HashMap<Integer, Junction> junction_KeyJunctionID;
 
-	// Cache the nearest road Coordinate to every house for efficiency (agents
-	// usually/always need to get from the centroids of houses to/from the
-	// nearest road.
+	/**
+	 * Cache the nearest road Coordinate to every house for efficiency (agents
+	 * usually/always need to get from the centroids of houses to/from the
+	 * nearest road.
+	 */
 	private Map<Coordinate, Coordinate> nearestRoadCoordCache;
 
 	/**
@@ -174,7 +176,7 @@ public class CityContext extends DefaultContext<Object> {
 		}
 	}
 
-	/*
+	/**
 	 * Get road movement from shapefile and put in an arraylist
 	 */
 	public void roadMovementFromShapeFile(Road road) {
@@ -264,8 +266,10 @@ public class CityContext extends DefaultContext<Object> {
 		}
 	}
 
-	/* We update node based routing while modify road network */
-	/* TODO: change if want to incorporate other routing method */
+	/**
+	 * We update node based routing while modify road network
+	/* TODO: change if want to incorporate other routing method
+	 * */
 	public void modifyRoadNetwork() {
 //		System.out.println("Modifying road network! Tick: "
 //				+ System.currentTimeMillis());
@@ -320,10 +324,6 @@ public class CityContext extends DefaultContext<Object> {
 		return id;
 	}
 
-	/**
-	 * @param edge
-	 * @return
-	 */
 	public int getIdNumFromEdge(RepastEdge<Junction> edge) {
 		int id = 0;
 		try {
@@ -340,9 +340,7 @@ public class CityContext extends DefaultContext<Object> {
 	/**
 	 * Get the repast edge with the given Road ID number This is the easiest way
 	 * to find an edge using the road info
-	 * 
-	 * @param ID
-	 *            of the road
+	 * @param ID of the road
 	 */
 	public RepastEdge<?> getEdgeFromIDNum(int id) {
 		RepastEdge<?> edge = null;
@@ -357,7 +355,7 @@ public class CityContext extends DefaultContext<Object> {
 		return edge;
 	}
 
-	/*
+	/**
 	 * Returns the road which is crosses the given coordinates (Actually it just
 	 * returns thenearest road to the coords)
 	 */
@@ -393,7 +391,7 @@ public class CityContext extends DefaultContext<Object> {
 		return nearestRoadID;
 	}
 
-	/*
+	/**
 	 * Returns the road which is crosses the given coordinates (Actually it just
 	 * returns the nearest road to the coords)
 	 */
@@ -600,8 +598,6 @@ public class CityContext extends DefaultContext<Object> {
 
 	/**
 	 * Return true if the roads nearest to each house have been cached.
-	 * 
-	 * @return
 	 */
 	public boolean nearestRoadsCached() {
 		return (this.nearestRoadCoordCache != null);

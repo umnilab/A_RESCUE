@@ -6,9 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-
 import evacSim.GlobalVariables;
 
 /**
@@ -281,8 +279,8 @@ public class CsvOutputWriter implements DataConsumer {
                     // process the current item into lines in the output file
                     try {
                     	// RV:DynaDestTest: commented `writeTickSnapshot` for only testing
-//                        CsvOutputWriter.this.writeTickSnapshot(snapshot);
-                    	CsvOutputWriter.this.testWriteTickSnapshot(snapshot);
+                        CsvOutputWriter.this.writeTickSnapshot(snapshot);
+//                    	CsvOutputWriter.this.testWriteTickSnapshot(snapshot);
                         totalCount++;
                         writeCount++;
                     }
@@ -578,7 +576,6 @@ public class CsvOutputWriter implements DataConsumer {
      * @param tick the tick snapshot to be written to the output file.
      * @throws IOException if any error occurred writing the lines to disk.
      */
-    @SuppressWarnings("unused")
 	private void writeTickSnapshot(TickSnapshot tick) throws IOException {
         if (tick == null) {
             return;
@@ -619,36 +616,36 @@ public class CsvOutputWriter implements DataConsumer {
         this.writer.flush();
     }
     
-    /** RV:DynaDestTest: Write to CSV a different variation of the tick snapshot, specifically
-     * for getting the trajectory info as defined in TickSnapShot.storeDynamicDestTestDetails() */
-    private void testWriteTickSnapshot (TickSnapshot tick) throws IOException {
-    	// check if the file has been opened
-        if (this.writer == null) {
-            throw new IOException("The CSV file is not open for writing.");
-        }
-        // write the header row
-        if (this.linesWritten == 0) {
-        		this.writer.write("veh,orig,dest,x,y,speed,time\n");
-        }
-        // get the lines list (excludes current time)
-        ArrayList<String> lines = tick.dynamicDestTestVehDetails;
-        
-        // check if writing these lines will go over our output file limit
-        // and create the next output file in the series if necessary
-        if ((this.linesWritten + lines.size()) >= GlobalVariables.CSV_LINE_LIMIT) {
-            this.startNextOutputFile();
-            this.linesWritten = 0;
-        }
-        // write the lines, adding current time at the end of each line
-        for (String line : lines) {
-	        	if (line == null) continue;
-	        	
-	        	line += "," + (int) (tick.getTickNumber()/10); // RV: divide by 10 to reduce precision by 1
-	        	this.writer.write(line);
-	        	this.writer.newLine();
-        }
-        this.linesWritten += lines.size();
-    }
+//    /** RV:DynaDestTest: Write to CSV a different variation of the tick snapshot, specifically
+//     * for getting the trajectory info as defined in TickSnapShot.storeDynamicDestTestDetails() */
+//    private void testWriteTickSnapshot (TickSnapshot tick) throws IOException {
+//    	// check if the file has been opened
+//        if (this.writer == null) {
+//            throw new IOException("The CSV file is not open for writing.");
+//        }
+//        // write the header row
+//        if (this.linesWritten == 0) {
+//        		this.writer.write("veh,orig,dest,x,y,speed,time\n");
+//        }
+//        // get the lines list (excludes current time)
+//        ArrayList<String> lines = tick.dynamicDestTestVehDetails;
+//        
+//        // check if writing these lines will go over our output file limit
+//        // and create the next output file in the series if necessary
+//        if ((this.linesWritten + lines.size()) >= GlobalVariables.CSV_LINE_LIMIT) {
+//            this.startNextOutputFile();
+//            this.linesWritten = 0;
+//        }
+//        // write the lines, adding current time at the end of each line
+//        for (String line : lines) {
+//	        	if (line == null) continue;
+//	        	
+//	        	line += "," + (int) (tick.getTickNumber()/10); // RV: divide by 10 to reduce precision by 1
+//	        	this.writer.write(line);
+//	        	this.writer.newLine();
+//        }
+//        this.linesWritten += lines.size();
+//    }
     
     /**
      * Returns the CSV representation of the given tick snapshot as
@@ -662,85 +659,92 @@ public class CsvOutputWriter implements DataConsumer {
         if (tick == null) {
             return null;
         }
-        String tickNum = "" + tick.getTickNumber();
+        String tickNum = Integer.toString(tick.getTickNumber());
         
-        // get the list of of vehicles stored in the tick snapshot 
-        Collection<Integer> vehicleIDs = tick.getVehicleList();
-        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
-            return null;
-        }
+        	// get the list of lines corresponding to vehicles' trajectory
+        	ArrayList<String> lines = tick.createCSVTickLines();
+        	
+        	for (int i=0; i < lines.size(); i++) {
+        		lines.set(i, tickNum + "," + lines.get(i));
+        	}
         
-        // loop through the list of vehicles and convert each to a CSV line
-        ArrayList<String> lines = new ArrayList<String>();
-        for (Integer id : vehicleIDs) {
-            if (id == null) {
-                continue;
-            }
-            
-            // retrieve the vehicle snapshot from the tick snapshot
-            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
-            if (vehicle == null) {
-                continue;
-            }
-            
-            // get the CSV representation of this vehicle
-            String line = CsvOutputWriter.createVehicleLine(vehicle);
-            if (line == null) {
-                continue;
-            }
-            
-            // prepend the tick number, data type token, and add to array
-            line = tickNum + ",V," + line;
-            lines.add(line);
-        }
+//        // get the list of of vehicles stored in the tick snapshot 
+//        Collection<Integer> vehicleIDs = tick.getVehicleList();
+//        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
+//            return null;
+//        }
+//        
+//        // loop through the list of vehicles and convert each to a CSV line
+//        ArrayList<String> lines = new ArrayList<String>();
+//        for (Integer id : vehicleIDs) {
+//            if (id == null) {
+//                continue;
+//            }
+//            
+//            // retrieve the vehicle snapshot from the tick snapshot
+//            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
+//            if (vehicle == null) {
+//                continue;
+//            }
+//            
+//            // get the CSV representation of this vehicle
+//            String line = CsvOutputWriter.createVehicleLine(vehicle);
+//            if (line == null) {
+//                continue;
+//            }
+//            
+//            // prepend the tick number, data type token, and add to array
+//            line = tickNum + ",V," + line;
+//            lines.add(line);
+//        }
         
         // return the array of lines from this tick snapshot
         return lines.toArray(new String[0]);
     }
     
-    /**
-     * Returns the CSV representation of the given vehicle snapshot. 
-     * 
-     * @param vehicle the vehicle snapshot to convert to CSV.
-     * @return the CSV representation of the given vehicle snapshot.
-     */
-    public static String createVehicleLine(VehicleSnapshot vehicle) {
-        if (vehicle == null) {
-            return null;
-        }
-        
-        // extract the values from the vehicle snapshot
-        int id = vehicle.getId();
-        double prev_x = vehicle.getPrevX();
-        double prev_y = vehicle.getPrevY();    
-        double x = vehicle.getX();
-        double y = vehicle.getY();
-        float speed = vehicle.getSpeed();  
-        double originalX = vehicle.getOriginX();
-        double originalY = vehicle.getOriginY();
-        double destX = vehicle.getDestX();
-        double destY = vehicle.getDestY();
-        int nearlyArrived = vehicle.getNearlyArrived();
-        int vehicleClass = vehicle.getvehicleClass();
-        int roadID = vehicle.getRoadID();
-        //double z = vehicle.getZ();
-   
-        //int departure = vehicle.getDeparture();
-        //int arrival = vehicle.getArrival();
-        //float distance = vehicle.getDistance();
-
-
-        
-        // build the csv line and return it
-        //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
-        //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
-        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
-        		originalX + "," + originalY + "," + destX + "," + destY + "," +
-                nearlyArrived + "," + vehicleClass + "," + roadID);
-        //departure + "," +
-        //arrival + "," +
-        //distance + "," +
-    }
+//    /**
+//     * Returns the CSV representation of the given vehicle snapshot. 
+//     * 
+//     * @param vehicle the vehicle snapshot to convert to CSV.
+//     * @return the CSV representation of the given vehicle snapshot.
+//     */
+//    public static String createVehicleLine(VehicleSnapshot vehicle) {
+//        if (vehicle == null) {
+//            return null;
+//        }
+//        
+//        // extract the values from the vehicle snapshot
+//        int id = vehicle.getId();
+//        double prev_x = vehicle.getPrevX();
+//        double prev_y = vehicle.getPrevY();    
+//        double x = vehicle.getX();
+//        double y = vehicle.getY();
+//        float speed = vehicle.getSpeed();  
+//        double originalX = vehicle.getOriginX();
+//        double originalY = vehicle.getOriginY();
+//        double destX = vehicle.getDestX();
+//        double destY = vehicle.getDestY();
+//        int nearlyArrived = vehicle.getNearlyArrived();
+//        int vehicleClass = vehicle.getvehicleClass();
+//        int roadID = vehicle.getRoadID();
+//        //double z = vehicle.getZ();
+//   
+//        //int departure = vehicle.getDeparture();
+//        //int arrival = vehicle.getArrival();
+//        //float distance = vehicle.getDistance();
+//
+//
+//        
+//        // build the csv line and return it
+//        //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
+//        //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
+//        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
+//        		originalX + "," + originalY + "," + destX + "," + destY + "," +
+//                nearlyArrived + "," + vehicleClass + "," + roadID);
+//        //departure + "," +
+//        //arrival + "," +
+//        //distance + "," +
+//    }
     
     
     /**

@@ -32,7 +32,9 @@ public class Zone {
 	private Road departureRoad; //road with the starting point closest to the zone (used in route calculations)
 //	private Coordinate nearestCoord; // nearest point on the nearest road
 	private Junction downJunc; // downstream junction of its road
-
+	// RV: for snapshot
+	private int lastRecordedOccupancy = 0;
+	
 	// RV: Constructor for shelters only (after reading shape file)
 	public Zone() {
 		id = ContextCreator.generateAgentID();
@@ -136,10 +138,6 @@ public class Zone {
 		return departureRoad;
 	}
 	
-//	public Coordinate getNearestCoord() {
-//		return nearestCoord;
-//	}
-	
 	public Junction getDownJunc() {
 		return downJunc;
 	}
@@ -215,6 +213,18 @@ public class Zone {
 	
 	public void setOccupancy(int occupied) {
 		occupancy = occupied;
+	}
+	
+	public int getAvailability() {
+		return this.capacity - this.occupancy;
+	}
+	
+	public int getLastRecordedOccupancy() {
+		return lastRecordedOccupancy;
+	}
+
+	public void setLastRecordedOccupancy(int value) {
+		this.lastRecordedOccupancy = value;
 	}
 	
 	public Queue<Vehicle> getWaiting() {
