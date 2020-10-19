@@ -227,8 +227,8 @@ public class Road {
 		 * */
 		if (tickcount % GlobalVariables.FREQ_RECORD_ROAD_SNAPSHOT_FORVIZ == 0) {
 			// if any snapshot attribute is different from the last snapshot
-			if (speed_ != lastRecordedSpeed || getNumVehicles() != lastRecordedNumVehicles) {
-				lastRecordedNumVehicles = getNumVehicles();
+			if (speed_ != lastRecordedSpeed || getVehicleNum() != lastRecordedNumVehicles) {
+				lastRecordedNumVehicles = getVehicleNum();
 				lastRecordedSpeed = speed_;
 				try {
 					DataCollector.getInstance().recordRoadTickSnapshot(this);
@@ -651,19 +651,19 @@ public class Road {
 		return this.freeSpeed_;
 	}
 
-	/**
-	 * RV: Get the number of vehicles currently on the road,
-	 * including those at the junction (unlike `this.calcSpeed()`)
-	 */
-	public int getNumVehicles() {
-		int nVehicles = 0;
-		Vehicle pv = this.firstVehicle();
-		while ((pv != null)) {
-			nVehicles += 1;
-			pv = pv.macroTrailing();
-		}
-		return nVehicles;
-	}
+//	/**
+//	 * RV: Get the number of vehicles currently on the road,
+//	 * including those at the junction (unlike `this.calcSpeed()`)
+//	 */
+//	public int getNumVehicles() {
+//		int nVehicles = 0;
+//		Vehicle pv = this.firstVehicle();
+//		while ((pv != null)) {
+//			nVehicles += 1;
+//			pv = pv.macroTrailing();
+//		}
+//		return nVehicles;
+//	}
 	
 	public float calcSpeed() {
 		if (nVehicles_ < 1)

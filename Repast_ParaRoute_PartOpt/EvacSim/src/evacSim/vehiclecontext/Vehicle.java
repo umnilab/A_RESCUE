@@ -1818,13 +1818,14 @@ public class Vehicle {
 		} else {
 			pr.lastVehicle(macroLeading_);
 		}
-		Vehicle pv = pr.firstVehicle();
-		int nVehicles_ = 0;
-		while (pv != null) {
-			nVehicles_++;
-			pv = pv.macroTrailing_;
-		}
-		pr.setNumberOfVehicles(nVehicles_);
+		pr.setNumberOfVehicles(pr.getVehicleNum()-1); // LZ: Oct 19, replaced the redundant operations below with this
+//		Vehicle pv = pr.firstVehicle();
+//		int nVehicles_ = 0;
+//		while (pv != null) {
+//			nVehicles_++;
+//			pv = pv.macroTrailing_;
+//		}
+//		pr.setNumberOfVehicles(nVehicles_);
 	}
 
 	/*

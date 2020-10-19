@@ -176,7 +176,7 @@ public class TickSnapshot {
     	RoadSnapshot(Road road) {
     		id = road.getID();
     		speed = road.calcSpeed();
-    		nVehicles = road.getNumVehicles();
+    		nVehicles = road.getVehicleNum(); //LZ: Oct 19, replaced getNumVehicles with this.
     		
     		// validity checks
     		if (id < 0) {
