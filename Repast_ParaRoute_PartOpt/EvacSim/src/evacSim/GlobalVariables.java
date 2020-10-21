@@ -139,6 +139,10 @@ private static Properties config;
 			.valueOf(loadConfig("SIMULATION_STOP_TIME"));
 	public static final double TRAVEL_PER_TURN = Double
 			.valueOf(loadConfig("TRAVEL_PER_TURN"));
+	// RV: if change in lat/lon of vehicle per turn is less than this, make it zero
+	// this is useful to overcome the precision error in GeodeticCalculator
+	public static final double MIN_DX_DY_PER_TURN = Double
+			.valueOf(loadConfig("MIN_DX_DY_PER_TURN"));
 	
 	// RV: Stop the simulation if all vehicles have been killed
 	public static final boolean ENABLE_SIMULATION_STOP_IF_NO_VEHICLE =

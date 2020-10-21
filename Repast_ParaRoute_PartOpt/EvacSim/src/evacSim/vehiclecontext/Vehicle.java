@@ -2684,20 +2684,28 @@ public class Vehicle {
 //		return distance;
 //	}
 	
+	/**
+	 * 
+	 * @param c1 current coordinate
+	 * @param c2 next coordinate
+	 * @param returnVals a mutable 
+	 * @return
+	 */
 	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
-//		if (Double.isNaN(c1.x) || Double.isNaN(c1.y) || Double.isNaN(c2.x) || Double.isNaN(c2.y)) {
-//			System.err.println("NaN coordinate component of " + this);
-//			return 0.0;
-//		}
-		// try {
 		double distance;
-		// double dx = c2.x - c1.x;
-		// double dy = c2.y - c1.y;
-		// if (dx < 1e-10) c1.x = c2.x;
-		// if (dy < 1e-10) c1.y = c2.y;
-		calculator.setStartingGeographicPoint(c1.x, c1.y);
-		calculator.setDestinationGeographicPoint(c2.x, c2.y);
-//		distance = calculator.getOrthodromicDistance();
+		double min_dx_dy = GlobalVariables.MIN_DX_DY_PER_TURN;
+		Coordinate c1Copy = new Coordinate(c1.x, c1.y);
+		Coordinate c2Copy = new Coordinate(c2.x, c2.y);
+		double dx = c2Copy.x - c1Copy.x;
+		double dy = c2Copy.y - c1Copy.y;
+		if (Math.abs(dx) < min_dx_dy) {
+			c1Copy.x = c2Copy.x;
+		}
+		if (Math.abs(dy) < min_dx_dy) {
+			c1Copy.y = c2Copy.y;
+		}
+		calculator.setStartingGeographicPoint(c1Copy.x, c1Copy.y);
+		calculator.setDestinationGeographicPoint(c2Copy.x, c2Copy.y);
 		try {
 			distance = calculator.getOrthodromicDistance();
 		} catch (AssertionError e) {
@@ -2705,39 +2713,28 @@ public class Vehicle {
 			distance = 0.0;
 		}
 		if (returnVals != null && returnVals.length == 2) {
-			returnVals[0] = c2.x - c1.x;
-			returnVals[1] = c2.y - c1.y;
+			returnVals[0] = c2Copy.x - c1Copy.x;
+			returnVals[1] = c2Copy.y - c1Copy.y;
 		}
-		// if (Double.isNaN(distance)) {
-		// /* RV: TODO: Fix this part. This likely occurs when dx or dy is
-		// too small (say of the order of 1e-15) such that distance =
-		// sqrt(dx^2+dy^2)
-		// runs out of the register (probably), causing a NaN distance despite
-		// good result.
-		// */
-		// System.err.println("Geodetic distance is NaN for " + this);
-		// distance = 0.0;
-		// }
+		if (Double.isNaN(distance)) {
+			// RV: Check if this condition ever occurs
+			System.err.println("Geodetic distance is NaN for " + this);
+			distance = 0.0;
+		}
 		return distance;
-		// } catch (Exception e) {
-		// System.err.println("Unhandled exception in Vehicle.distance2() for "
-		// + this);
-		// return 0.0;
-		// }
 	}
 	
 	private void move2(double dx, double dy){
-		this.currentCoord_.x+=dx;
-		this.currentCoord_.y+=dy;
+		this.currentCoord_.x += dx;
+		this.currentCoord_.y += dy;
 	}
 	
-	/* *
+	/**
 	 * Thread safe version of the moveByVector, replace the one in the DefaultGeography class
 	 * Creating a new Geometry point given the current location of the vehicle as well as the distance and angle.
 	 * In the end, move the vehicle to the new geometry point.
 	 * @return the new Geometry point
 	 */
-	
 //	public void moveVehicleByVector(double distance, double angleInRadians) {
 //		Geometry geom = ContextCreator.getVehicleGeography().getGeometry(this);
 //		if (geom == null) {
