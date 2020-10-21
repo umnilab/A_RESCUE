@@ -36,12 +36,18 @@ public class CityContext extends DefaultContext<Object> {
 	private HashMap<Integer, Road> road_KeyLinkID;
 	private HashMap<Integer, Junction> junction_KeyJunctionID;
 
-	/**
+	/*
 	 * Cache the nearest road Coordinate to every house for efficiency (agents
 	 * usually/always need to get from the centroids of houses to/from the
 	 * nearest road.
 	 */
 	private Map<Coordinate, Coordinate> nearestRoadCoordCache;
+	
+	/* 
+	 * RV: Bottom-left-most point on the road network, used to shift origin of
+	 * coordinates for storage reduction in JSON for visualization
+	 */
+	private Coordinate origin;
 
 	/**
 	 * Constructs a CityContextContext and creates a Geography (called
@@ -55,6 +61,7 @@ public class CityContext extends DefaultContext<Object> {
 		this.lane_KeyLaneID = new HashMap<Integer, Lane>();
 		this.junction_KeyJunctionID = new HashMap<Integer, Junction>();
 		this.road_KeyLinkID = new HashMap<Integer, Road>();
+		this.origin = new Coordinate(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 	}
 
 	public void createSubContexts() {
@@ -101,6 +108,13 @@ public class CityContext extends DefaultContext<Object> {
 			Coordinate c1 = roadGeom.getCoordinates()[0];
 			// Last coord
 			Coordinate c2 = roadGeom.getCoordinates()[roadGeom.getNumPoints() - 1];
+			
+			/* RV: Set the coordinate of the origin as the bottom left most
+			 * corner of the road network */
+			if (c1.x < origin.x) origin.x = c1.x;
+			if (c2.x < origin.x) origin.x = c2.x;
+			if (c1.y < origin.y) origin.y = c1.y;
+			if (c1.y < origin.y) origin.y = c2.y;
 
 			// Create Junctions from these coordinates and add them to the
 			// JunctionGeography (if they haven't been created already)
@@ -305,7 +319,6 @@ public class CityContext extends DefaultContext<Object> {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/**
 	 * Gets the ID String associated with a given edge. Useful for linking
@@ -702,7 +715,12 @@ public class CityContext extends DefaultContext<Object> {
 	 * RV:DynamicDest: Main caller of the SO routing scheduling (shelter matching)
 	 * */
 	public void soShelterRoutingSchedule() {
+
 		ContextCreator.getZoneContext().soShelterMatcher.
 			assignMatching(GlobalVariables.SO_SHELTER_MATCHING_ALGO);
+	}
+	
+	public Coordinate getOrigin() {
+		return this.origin;
 	}
 }

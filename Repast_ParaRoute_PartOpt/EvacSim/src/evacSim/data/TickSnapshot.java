@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import evacSim.ContextCreator;
 import evacSim.NetworkEventObject;
 import evacSim.citycontext.Plan;
 import evacSim.citycontext.Road;
@@ -149,8 +150,23 @@ public class TickSnapshot {
             // format 1 includes previous coordinate (for smoother visualization)
 //        		jsonLine = String.format("%d,%.6f,%.6f,%.6f,%.6f,%.3f",
 //        				id, prevX, prevY, curX, curY, speed);
+        		
         		// format 2 excludes previous coordinate since it is not necessary
-        		return String.format("%d,%.6f,%.6f,%.3f", id, curX, curY, speed);
+//        		return String.format("%d,%.6f,%.6f,%.3f", id, curX, curY, speed);
+        		
+        		/* format 3 shifts the origin of the coordinates & removes the decimal
+        		 * point upto a precision of 6 decimal places to save some storage space.
+        		 * Also converts speed from m/s to mm/s & converted as integer.
+        		 */
+        		Coordinate origin = ContextCreator.getCityContext().getOrigin();
+        		int shiftedCurX = (int) ((curX - origin.x) * 1e6);
+        		int shiftedCurY = (int) ((curY - origin.y) * 1e6);
+        		int speed_mms = (int) (speed * 1e3);
+        		String output = id + "," + shiftedCurX + "," + shiftedCurY + "," + speed_mms;
+        		if (output == null || output.isEmpty()) {
+        			System.err.println("empty/null string for " + id);
+        		}
+        		return output;
         	}
         
         	/** Return the string of this vehicles's attributes to be exported to CSV */
