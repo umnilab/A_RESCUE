@@ -3,7 +3,9 @@ package evacSim.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 //import java.util.LinkedList;
 import java.util.Map;
 
@@ -42,18 +44,18 @@ public class TickSnapshot {
     
     /** The collection of vehicle data gathered during this time tick.
      *  Access of this object is package-level so that DataCollector can modify it. */
-    private HashMap<Integer, VehicleSnapshot> vehicles;
+    private List<VehicleSnapshot> vehicles;
     
     /** The collection of road data gathered during this time tick.
      *  Access of this object is package-level so that DataCollector can modify it. */
-    private HashMap<Integer, RoadSnapshot> roads;
+    private List<RoadSnapshot> roads;
     
     /** The collection of shelter data gathered during this time tick.
      *  Access of this object is package-level so that DataCollector can modify it. */
-    private HashMap<Integer, ShelterSnapshot> shelters;
+    private List<ShelterSnapshot> shelters;
     
     /** HG: The collection of event data gathered during this time tick. */
-    private ArrayList<ArrayList<NetworkEventObject>> events;
+    private List<ArrayList<NetworkEventObject>> events;
 
 //    /** RV:DynaDestTest: String containing relevant details of vehicles 
 //     * in this tick for testing purposes */
@@ -139,7 +141,7 @@ public class TickSnapshot {
             }
     		
     		// add this object to the map of vehicle snapshots in the tick snapshot
-    		vehicles.put(id, this); 
+    		vehicles.add(this); //Comment this out and see what would happen
         	}
         	
         	/** Return the string of this vehicle's attributes to be exported to JSON */
@@ -194,7 +196,7 @@ public class TickSnapshot {
     		}
     		
     		// add this object to the map of road snapshots in the tick snapshot
-    		roads.put(this.id, this);
+    		roads.add(this);
     	}
     	
     	/** Return the string of this vehicle's attributes to be exported to JSON */
@@ -235,7 +237,7 @@ public class TickSnapshot {
     		}
     		
     		// add this object to the map of shelter snapshots in the tick snapshot
-    		shelters.put(id, this);
+    		shelters.add(this);
     	}
     	
     	/** Return the string of this vehicle's attributes to be exported to JSON */
@@ -262,16 +264,16 @@ public class TickSnapshot {
         this.tickNumber = (int) tickNumber;
         
         // setup the map for holding the vehicle data
-        this.vehicles = new HashMap<Integer, VehicleSnapshot>();
+        this.vehicles =  Collections.synchronizedList(new ArrayList<VehicleSnapshot>());
         	
         // RV: also add the data of the roads and shelters
-        this.roads = new HashMap<Integer, RoadSnapshot>();
-        this.shelters = new HashMap<Integer, ShelterSnapshot>();
+        this.roads = Collections.synchronizedList(new ArrayList<RoadSnapshot>());
+        this.shelters = Collections.synchronizedList(new ArrayList<ShelterSnapshot>());
         
         /* HG: setup the map for holding the event data.
          * Two sub-array lists (for starting events and ending events)
          * is created in a large array list */
-        this.events = new ArrayList<ArrayList<NetworkEventObject>>(3);
+        this.events = Collections.synchronizedList(new ArrayList<ArrayList<NetworkEventObject>>(3));
         for (int i=0;i<3;i++){
         		this.events.add(new ArrayList<NetworkEventObject>());
 	    }
@@ -315,24 +317,21 @@ public class TickSnapshot {
     	
     	// for vehicles
     	if (objectType == "vehicle") {
-	        for (Map.Entry<Integer, VehicleSnapshot> entry : vehicles.entrySet()) {
-	            VehicleSnapshot veh = entry.getValue();
+	        for (VehicleSnapshot veh : vehicles) {
 	            if (veh == null) continue;
 	            lines.add(veh.getJSONLine());
 	        }
     	}
     	// for roads
     	if (objectType == "road") {
-	        for (Map.Entry<Integer, RoadSnapshot> entry : roads.entrySet()) {
-	            RoadSnapshot road = entry.getValue();
+	        for (RoadSnapshot road : roads) {
 	            if (road == null) continue;
 	            lines.add(road.getJSONLine());
 	        }
     	}
     	// for shelters
     	if (objectType == "shelter") {
-	        for (Map.Entry<Integer, ShelterSnapshot> entry : shelters.entrySet()) {
-	            ShelterSnapshot shelt = entry.getValue();
+	        for (ShelterSnapshot shelt : shelters) {
 	            if (shelt == null) continue;
 	            lines.add(shelt.getJSONLine());
 	        }
@@ -348,8 +347,7 @@ public class TickSnapshot {
     public ArrayList<String> createCSVTickLines() {
     	
     	ArrayList<String> lines = new ArrayList<String>();
-    	for (Map.Entry<Integer, VehicleSnapshot> entry : vehicles.entrySet()) {
-            VehicleSnapshot veh = entry.getValue();
+    	for (VehicleSnapshot veh: vehicles) {
             if (veh == null) continue;
             lines.add(veh.getCSVLine());
         }
@@ -382,15 +380,20 @@ public class TickSnapshot {
     }
     
     /** Returns a list of vehicle IDs stored in the tick snapshot. */
-    public Collection<Integer> getVehicleList() {
+    // LZ: Oct 21, update the implementation
+    public List<VehicleSnapshot> getVehicleList() {
         if (this.vehicles == null || this.vehicles.isEmpty()) {
             return null;
         }
-        return this.vehicles.keySet();
+        ArrayList<Integer> vID = new ArrayList<Integer>();
+        for(VehicleSnapshot v: this.vehicles){
+        	vID.add(v.id);
+        }
+        return this.vehicles;
     }
     
     /** HG: Returns a list of events stored in the tick snapshot. */
-    public ArrayList<ArrayList<NetworkEventObject>> getEventList() {
+    public List<ArrayList<NetworkEventObject>> getEventList() {
         if (this.events == null || this.events.isEmpty()) {
             return null;
         }

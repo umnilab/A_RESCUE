@@ -164,12 +164,12 @@ public class Road {
 //				}
 //			}
 			Vehicle pv = this.firstVehicle();
-			int counter = 0;
+//			int counter = 0;
 			while (pv != null) {
-				counter+=1;
-				if(counter>1000){
-					System.out.print("THIS REALLY HAPPENS");
-				}
+//				counter+=1;
+//				if(counter>1000){
+//					System.out.print("THIS REALLY HAPPENS");
+//				}
 				if(tickcount<=pv.getLastMoveTick()){
 //					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
 					pv = pv.macroTrailing();
