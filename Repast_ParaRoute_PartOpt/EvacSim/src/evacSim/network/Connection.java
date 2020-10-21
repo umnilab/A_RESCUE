@@ -5,6 +5,7 @@ import evacSim.NetworkEventObject;
 import evacSim.data.DataCollector;
 import evacSim.data.DataConsumer;
 import evacSim.data.TickSnapshot;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -418,11 +419,12 @@ public class Connection implements DataConsumer {
         }
         double tickNum = tick.getTickNumber();
         
-        // get the list of vehicles stored in the tick snapshot
-        Collection<Integer> vehicleIDs = tick.getVehicleList();
-        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
-            return null;
-        }
+        //LZ: Oct 21, the empty vehicle list issue is handled in tickSnapshot
+//        // get the list of vehicles stored in the tick snapshot
+//        ArrayList<VehicleSnapshot> vehicleIDs = tick.getVehicleList();
+//        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
+//            return null;
+//        }
         
         // open the socket tick message by saying which tick this is
         ArrayList<String> lines = new ArrayList<String>();
