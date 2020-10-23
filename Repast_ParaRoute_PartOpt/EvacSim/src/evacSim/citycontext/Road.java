@@ -164,12 +164,12 @@ public class Road {
 //				}
 //			}
 			Vehicle pv = this.firstVehicle();
+			if(pv !=null){ // LZ: Oct 23, resolve the gridlock issue caused by A is in front of B and B is in front of A.
+				pv.leading(null);
+				pv.clearMacroLeading(); 
+			}
 //			int counter = 0;
 			while (pv != null) {
-//				counter+=1;
-//				if(counter>1000){
-//					System.out.print("THIS REALLY HAPPENS");
-//				}
 				if(tickcount<=pv.getLastMoveTick()){
 //					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
 					pv = pv.macroTrailing();

@@ -1558,6 +1558,10 @@ public class Vehicle {
 		else
 			this.leading_ = null;
 	}
+	
+	public void clearMacroLeading(){
+		this.macroLeading_ = null;
+	}
 
 	public Vehicle leading() {
 		return leading_;
