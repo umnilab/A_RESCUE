@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 //import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class Road {
 	private boolean eventFlag; // Indicator whether there is an event happening on the road
 	private double defaultFreeSpeed_; // Store default speed limit value in case of events
 //	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
-	private boolean lock_ = false;
+//	private List<Vehicle> enteringVehicles;
 
 	// Road constructor
 	public Road() {
@@ -81,6 +82,9 @@ public class Road {
 		// RV: For road snapshot
 		this.lastRecordedNumVehicles = 0;
 		this.lastRecordedSpeed = 0f;
+		
+		// LZ: Handle vehicles' entering the link in single thread manner
+//		enteringVehicles = Collections.synchronizedList(new ArrayList<Vehicle>());
 	}
 	
 	// Set the defaultFreeSpeed_
@@ -176,7 +180,10 @@ public class Road {
 					break; //With the condition only one vehicle just entered this road, we knew this is the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
-				pv.calcState();
+				if(!pv.calcState()){ //This vehicle is corrupted, do not proceed for this road
+					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
+					break;
+				}
 				pv.travel();
 				if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){
 					pv.recVehSnaphotForVisInterp(); // LZ: record vehicle location here!
@@ -254,17 +261,6 @@ public class Road {
 //		return this.lastEnterTick;
 //	}
 	
-	public void setLock(){
-		this.lock_ = true;
-	}
-	
-	public void releaseLock(){
-		this.lock_ = false;
-	}
-	
-	public boolean isLocked(){
-		return this.lock_;
-	}
 
 	public void setLinkid(int linkid) {
 		this.linkid = linkid;

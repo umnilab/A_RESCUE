@@ -132,9 +132,15 @@ public class MetisPartition {
 			}
 			
 			if (TotVehNum >= GlobalVariables.THRESHOLD_VEHICLE_NUMBER) {
-				this.run();
+				try{
+				    this.run();
+				}
+				catch(Exception e){ 
+					System.out.println("Partition failed...");
+					this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
+				}
 			} else {
-				this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;;
+				this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 			}
 		} else {
 			this.run();
@@ -142,7 +148,7 @@ public class MetisPartition {
 	} 
 	
 	
-	public void run() throws NumberFormatException, ExecutionException {
+	public void run() throws NumberFormatException, ExecutionException, NullPointerException {
 		GaliosGraphConverter<ArrayList<ArrayList<Road>>> graphConverter = new GaliosGraphConverter<ArrayList<ArrayList<Road>>>();
 		MetisGraph metisGraph = graphConverter.RepastToGaliosGraph(false);
 		/*System.out.println("Metis Running...");

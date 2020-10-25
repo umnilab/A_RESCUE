@@ -607,14 +607,18 @@ public class Vehicle {
 		this.distance_ += (float) adjustdist_;
 	}
 
-	public void calcState() {
+	public boolean calcState() {
 		// SH-- right now there is only one function we may also invoke lane
 		// changing decision here
 		// SHinvoke accelerating decision
 		this.makeAcceleratingDecision();
-
-		if (this.road.getnLanes() > 1 && this.onlane) {
-			this.makeLaneChangingDecision();
+		if(this.road == null){
+			return false;
+		}else{
+			if (this.road.getnLanes() > 1 && this.onlane) {
+				this.makeLaneChangingDecision();
+			}
+			return true;
 		}
 	}
 
@@ -1173,25 +1177,14 @@ public class Vehicle {
 					if (this.nextRoad() != null) {
 						if (this.isOnLane()) {
 							this.coordMap.add(coor); // Stop and wait
-							if(this.appendToJunction(nextLane_)==0){
-								lastStepMove_ = distTravelled;
-								break; // cannot enter the next road
-							}
-							else{
-								lastStepMove_ = distTravelled;
-								break;
-							}
+							this.appendToJunction(nextLane_);
+							lastStepMove_ = distTravelled;
+							break; // cannot enter the next road
 //							System.out.println("Enter 1");
 						} else {
-							if(this.changeRoad()==0){
-								this.changeRoad(); // LZ: The same as above
-								lastStepMove_ = distTravelled;
-								break;// cannot enter the next road
-							}
-							else{
-								lastStepMove_ = distTravelled;
-								break;
-							}
+							this.changeRoad();
+							lastStepMove_ = distTravelled;
+							break;// cannot enter the next road
 //							System.out.println("Enter 2");
 						}
 					} else {
@@ -2861,13 +2854,13 @@ public class Vehicle {
 		// else if current shelter is not available, reroute this to next shelter
 		else {
 			// reset the location & geometry
-			this.removeFromLane();
-			this.removeFromMacroList();
+			this.removeFromLane(); // Remove from Lane
+			this.removeFromMacroList(); // Remove from Road
 			Coordinate target = this.destCoord;
 			this.setCurrentCoord(target);
 			CityContext cityContext = (CityContext) ContextCreator.getCityContext();
 			Coordinate currentCoord = this.getCurrentCoord();
-			Road road = cityContext.findRoadAtCoordinates(currentCoord, false);
+			Road road = cityContext.findRoadAtCoordinates(currentCoord, false); // Can this be null?
 			this.setRoad(road);
 			
 			// mark this shelter visited
