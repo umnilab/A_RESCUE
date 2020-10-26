@@ -1535,7 +1535,7 @@ public class Vehicle {
 		// after this appending, update the number of vehicles
 		// LZ: Oct 14, 2020 update, this part seems unnecessary
 		// we just need to increase the nVehicles_ by 1, as below
-		road.setNumberOfVehicles(road.getVehicleNum()+1);
+		road.changeNumberOfVehicles(1);
 		// Vehicle pv = road.firstVehicle();
 		// int nVehicles_ = 0;
 		// while (pv != null) {
@@ -1815,7 +1815,7 @@ public class Vehicle {
 		} else {
 			pr.lastVehicle(macroLeading_);
 		}
-		pr.setNumberOfVehicles(pr.getVehicleNum()-1); // LZ: Oct 19, replaced the redundant operations below with this
+		pr.changeNumberOfVehicles(-1); // LZ: Oct 19, replaced the redundant operations below with this
 //		Vehicle pv = pr.firstVehicle();
 //		int nVehicles_ = 0;
 //		while (pv != null) {

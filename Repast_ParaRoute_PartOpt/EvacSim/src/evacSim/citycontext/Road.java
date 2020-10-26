@@ -529,6 +529,10 @@ public class Road {
 		this.nVehicles_ = nVeh;
 	}
 	
+	public void changeNumberOfVehicles(int nVeh){
+		this.nVehicles_ += nVeh;
+	}
+	
 	public void firstVehicle(Vehicle v) {
 		if (v != null)
 			this.firstVehicle_ = v;
