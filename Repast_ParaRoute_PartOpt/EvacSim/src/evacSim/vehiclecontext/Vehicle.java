@@ -1181,29 +1181,10 @@ public class Vehicle {
 				// System.out.println("distToTarget(move)= "+ContextCreator.convertToMeters(distToTarget));
 				// this.route.remove();
 				// LZ: Oct 31, the distance and calculated value is not consistent (Vehicle reached the end of the link != Vehicle.distance_ <= 0), therefore, hacking in the intersection!
-				Coordinate coor = this.coordMap.get(0);
+//				Coordinate coor = this.coordMap.get(0);
 				this.coordMap.remove(0);
 //				double maxMove = this.road.getFreeSpeed()
 //						* GlobalVariables.SIMULATION_STEP_SIZE;
-				if (this.coordMap.isEmpty() || this.distance_<GlobalVariables.INTERSECTION_BUFFER_LENGTH) {
-					if (this.nextRoad() != null) {
-						if (this.isOnLane()) {
-							this.coordMap.add(coor); // Stop and wait
-							this.appendToJunction(nextLane_);
-							lastStepMove_ = distTravelled;
-							break; // cannot enter the next road
-//							System.out.println("Enter 1");
-						} else {
-							this.changeRoad();
-							lastStepMove_ = distTravelled;
-							break;// cannot enter the next road
-//							System.out.println("Enter 2");
-						}
-					} else {
-//						System.out.println("This is called");
-						this.setCoordMap(this.lane);
-					}
-				}
 //				if (this.coordMap.isEmpty()) {
 //					if (this.nextRoad() != null) {
 //						if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
@@ -1237,6 +1218,25 @@ public class Vehicle {
 //						this.setCoordMap(this.lane);
 //					}
 //				}
+				if (this.coordMap.isEmpty()) {
+					if (this.nextRoad() != null) {
+						if (this.isOnLane()) {
+							this.coordMap.add(this.getCurrentCoord()); // Stop and wait
+							this.appendToJunction(nextLane_);
+							lastStepMove_ = distTravelled;
+							break; // cannot enter the next road
+//							System.out.println("Enter 1");
+						} else {
+							this.changeRoad();
+							lastStepMove_ = distTravelled;
+							break;// cannot enter the next road
+//							System.out.println("Enter 2");
+						}
+					} else {
+//						System.out.println("This is called");
+						this.setCoordMap(this.lane);
+					}
+				}
 			}
 
 			// Otherwise move as far as we can towards the target along the road
@@ -1269,14 +1269,30 @@ public class Vehicle {
 //				this.setCurrentCoord(currentCoord);
 				
 				this.accummulatedDistance_ += dx;
+				lastStepMove_ = dx;
 				// SH: Trying to remove this function context creator but this
 				// is not working either
 				travelledMaxDist = true;
+				
+				if (this.distance_<GlobalVariables.INTERSECTION_BUFFER_LENGTH) { // Relax the changeRoad condition by a little bit
+					if (this.nextRoad() != null) {
+						if (this.isOnLane()) {
+							this.coordMap.add(this.getCurrentCoord()); // Stop and wait
+							this.appendToJunction(nextLane_);
+							break; // cannot enter the next road
+//							System.out.println("Enter 1");
+						} else {
+							this.changeRoad();
+							break;// cannot enter the next road
+//							System.out.println("Enter 2");
+						}
+					} 
+				}
 			} // else
 
-			lastStepMove_ = dx;
 //			printGlobalVehicle(dx);
-
+			// Handle lane changing behavior
+			
 		}
 		return;
 	}
@@ -2592,7 +2608,7 @@ public class Vehicle {
 			coordMap.add(this.getCurrentCoord());
 		}
 
-		this.distance_ = 0; // (float) distance(lastCoordinate, coordMap.get(0)); // LZ: End of the link
+		//this.distance_ = 0; // (float) distance(lastCoordinate, coordMap.get(0)); // LZ: End of the link
 				//- lastStepMove_ / 2;
 		this.onlane = false;
 		
