@@ -1183,9 +1183,9 @@ public class Vehicle {
 				// LZ: Oct 31, the distance and calculated value is not consistent (Vehicle reached the end of the link != Vehicle.distance_ <= 0), therefore, hacking in the intersection!
 				Coordinate coor = this.coordMap.get(0);
 				this.coordMap.remove(0);
-				double maxMove = this.road.getFreeSpeed()
-						* GlobalVariables.SIMULATION_STEP_SIZE;
-				if (this.coordMap.isEmpty() || this.distance_<=maxMove) {
+//				double maxMove = this.road.getFreeSpeed()
+//						* GlobalVariables.SIMULATION_STEP_SIZE;
+				if (this.coordMap.isEmpty() || this.distance_<GlobalVariables.INTERSECTION_BUFFER_LENGTH) {
 					if (this.nextRoad() != null) {
 						if (this.isOnLane()) {
 							this.coordMap.add(coor); // Stop and wait
@@ -1501,10 +1501,9 @@ public class Vehicle {
 	}
 
 	public boolean checkAtDestination() throws Exception { // Close to the last intersection
-		double maxMove = this.road.getFreeSpeed()
-				* GlobalVariables.SIMULATION_STEP_SIZE;
+		// double maxMove = this.road.getFreeSpeed() * GlobalVariables.SIMULATION_STEP_SIZE;
 
-		if (distance_ < maxMove) {
+		if (distance_ < GlobalVariables.INTERSECTION_BUFFER_LENGTH) {
 			this.setReachDest();
 			return true;
 		}

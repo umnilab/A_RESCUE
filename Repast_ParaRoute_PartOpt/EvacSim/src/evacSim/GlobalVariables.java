@@ -181,6 +181,8 @@ private static Properties config;
 			.valueOf(loadConfig("DEFAULT_VEHICLE_WIDTH")); // meters
 	public static final float DEFAULT_VEHICLE_LENGTH = Float
 			.valueOf(loadConfig("DEFAULT_VEHICLE_LENGTH")); // meters
+	public static final float INTERSECTION_BUFFER_LENGTH = Float
+			.valueOf(loadConfig("INTERSECTION_BUFFER_LENGTH"));
 
 	public static final double SPEED_EPSILON = Double
 			.valueOf(loadConfig("SPEED_EPSILON")); // meter/sec
