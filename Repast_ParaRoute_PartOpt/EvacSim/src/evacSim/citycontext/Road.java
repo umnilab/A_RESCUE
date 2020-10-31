@@ -181,7 +181,8 @@ public class Road {
 				}
 				pv.updateLastMoveTick(tickcount);
 				if(!pv.calcState()){ //This vehicle is corrupted, do not proceed for this road
-					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
+//					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
+					System.out.print('.');
 					break;
 				}
 				pv.travel();

@@ -565,6 +565,9 @@ public class Vehicle {
 			this.coordMap.add(destCoord);
 			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
 		}
+		if (Double.isNaN(distance_)) {
+			int x = 0; //System.out.println("distance_ is NaN in setCoordMap for " + this);
+		}
 	}
 
 	/**
@@ -597,12 +600,21 @@ public class Vehicle {
 		if (coordMap.size() > 0) {
 			adjustdist_ = distance(vcoordinate, coordMap.get(0));
 			double cos = (double) GlobalVariables.LANE_WIDTH / adjustdist_;
+//			if (cos > 1.0 || cos < -1.0) {
+//				System.err.println("cosine is >1 or <-1 in updateCoordMap() for " + this);
+//			}
 			cos = Math.acos(cos);
 			adjustdist_ = adjustdist_ * (1 - Math.sin(cos));
 			if (this.id == 178) {
 				System.out.println("Distance adjusted for vehicle: " + this.id
 						+ " is " + adjustdist_);
 			}
+		}
+		if (Double.isNaN(adjustdist_)) {
+//			System.out.println("adjustdist_ in updateCoordMap is NaN for " + this +
+//					": " + distance(vcoordinate, coordMap.get(0)));
+//					": " + distance(vcoordinate, coordMap.get(0)));
+			adjustdist_ = 0;
 		}
 		this.distance_ += (float) adjustdist_;
 	}
@@ -656,6 +668,12 @@ public class Vehicle {
 		}
 
 		accRate_ = acc;
+		if (Double.isNaN(accRate_)) {
+			System.err.println("NaN acceleration rate for " + this);
+		}
+		if (accRate_ == 0) {
+			int x = 0; //System.out.println("accRate_ = 0 in makeAcceleratingDecision() for " + this);
+		}
 	}
 
 	public float calcCarFollowingRate(Vehicle front) {
@@ -742,6 +760,12 @@ public class Vehicle {
 			}
 			regime_ = GlobalVariables.STATUS_REGIME_CARFOLLOWING;
 		}
+		if (Double.isNaN(acc)) {
+			System.err.println("acc is NaN for " + this);
+		}
+		if (acc == 0) {
+			int x = 0; // System.err.println("acc is 0 for " + this);
+		}
 		return acc;
 	}
 
@@ -804,6 +828,9 @@ public class Vehicle {
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
+		}
+		if (Double.isNaN(headwayDistance)) {
+			System.out.println("headway is NaN");
 		}
 		return (headwayDistance);
 	}
@@ -1031,6 +1058,13 @@ public class Vehicle {
 
 		} else { // stops before the cycle end
 			dx = -0.5f * currentSpeed_ * currentSpeed_ / accRate_;
+			if (currentSpeed_ == 0.0f && accRate_ == 0.0f) {
+//				System.out.println("both speed & acc are 0 in move() for " + this);
+				dx = 0.0f;
+			}
+		}
+		if (Double.isNaN(dx)) {
+			System.out.println("dx is NaN in move() for " + this);
 		}
 
 		// Solve the crash problem // LZ,RV: commented the CFM vehicle stop
@@ -1055,12 +1089,22 @@ public class Vehicle {
 		} else if (currentSpeed_ > this.road.getFreeSpeed() && accRate_ > GlobalVariables.ACC_EPSILON) {
 			currentSpeed_ = (float) this.road.getFreeSpeed();
 			accRate_ = (currentSpeed_ - oldv) / step;
+			if (accRate_ == 0) {
+				int x = 0;
+			}
+		}
+		if (accRate_ == 0) {
+			int x = 0;
 		}
 
 		if (dx < 0.0f) { // Cannot move
 			lastStepMove_ = 0;
 			return;
 		}
+		
+		// update position
+		distance_ -= dx;
+		
 		/*
 		 * check if the vehicle's current pos. is under some threshold, i.e. it
 		 * will move to the next road 1. search for the junction 2. searchfor
@@ -1116,9 +1160,6 @@ public class Vehicle {
 //				return;
 //			}
 			
-			// update position
-			distance_ -= dx;
-
 			// Current location
 			currentCoord = this.getCurrentCoord();
 
@@ -1128,6 +1169,13 @@ public class Vehicle {
 			 */
 			
 			target = this.coordMap.get(0);
+			if (Double.isNaN(target.x) || Double.isNaN(target.y)) {
+				System.err.println("NaN target during move() for " + this + " currently at (" +
+			        currentCoord.x + ", " + currentCoord.y + ")");
+			}
+			if (target.x == currentCoord.x && target.y == currentCoord.y) {
+//				System.out.println("Current coord same as target for " + this);
+			}
 
 			// Geometry currentGeom = geomFac.createPoint(currentCoord);
 			
@@ -1196,6 +1244,7 @@ public class Vehicle {
 //					if (this.nextRoad() != null) {
 //						if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
 //							System.out
+//							System.out
 //									.println("+++++++++ I am moving but coordinate map is empty+++++++++++++");
 //							System.out.println("My next road is: "
 //									+ this.nextRoad().getLinkid());
@@ -1251,6 +1300,9 @@ public class Vehicle {
 //				 this.moveVehicleByVector(dx, distAndAngle[1]);
 				// LZ
 				double alpha = (dx-distTravelled)/distToTarget;
+				if (Double.isNaN(alpha) || Double.isNaN(deltaXY[0]) || Double.isNaN(deltaXY[0])) {
+					System.err.println("alpha or deltaXY NaN in move() for " + this);
+				}
 				move2(alpha*deltaXY[0], alpha*deltaXY[1]);
 //				currentCoord.x += alpha*deltaXY[0];
 //				currentCoord.y += alpha*deltaXY[1];
@@ -2235,6 +2287,9 @@ public class Vehicle {
 		this.nosingFlag = false;
 		// if (this.distFraction() < 0.25 && this.onlane)
 		// lagVehicle.yieldingFlag = true;
+		if (Double.isNaN(acc)) {
+			System.err.println("acc is NaN for " + this);
+		}
 		return acc;
 	}
 
@@ -2646,6 +2701,9 @@ public class Vehicle {
 			System.err.println("Error with finding distance");
 			distance = 0.0;
 		}
+		if (Double.isNaN(distance)) {
+			System.err.println("distance is NaN in Vehicle.distance() for " + this);
+		}
 		return distance;
 	}
 
@@ -2701,8 +2759,13 @@ public class Vehicle {
 		if (Math.abs(dy) < min_dx_dy) {
 			c1Copy.y = c2Copy.y;
 		}
-		calculator.setStartingGeographicPoint(c1Copy.x, c1Copy.y);
-		calculator.setDestinationGeographicPoint(c2Copy.x, c2Copy.y);
+		try {
+			calculator.setStartingGeographicPoint(c1Copy.x, c1Copy.y);
+			calculator.setStartingGeographicPoint(c1Copy.x, c1Copy.y);
+			calculator.setDestinationGeographicPoint(c2Copy.x, c2Copy.y);
+		} catch (Exception e) {
+			System.out.println("Coordinate format error in " + this);
+		}
 		try {
 			distance = calculator.getOrthodromicDistance();
 		} catch (AssertionError e) {
@@ -2717,6 +2780,9 @@ public class Vehicle {
 			// RV: Check if this condition ever occurs
 			System.err.println("Geodetic distance is NaN for " + this);
 			distance = 0.0;
+		}
+		if (distance == 0.0) {
+//			System.out.println("For some reason the distance is zero in distance2() for " + this);
 		}
 		return distance;
 	}
