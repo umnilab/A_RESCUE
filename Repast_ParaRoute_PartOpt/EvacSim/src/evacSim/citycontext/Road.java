@@ -112,7 +112,6 @@ public class Road {
 		this.eventFlag = false;
 	}
 	
-	// TODO: write Step 
 	/* New step function using node based routing */
 	// @ScheduledMethod(start=1, priority=1, duration=1)
 	public void step() {	
@@ -168,58 +167,61 @@ public class Road {
 //				}
 //			}
 			Vehicle pv = this.firstVehicle();
-			if(pv !=null){ // LZ: Oct 23, resolve the gridlock issue caused by A is in front of B and B is in front of A.
-				pv.leading(null);
-				pv.clearMacroLeading(); 
-			}
+//			if(pv !=null){ // LZ: Oct 23, doesn't work, want to resolve the gridlock issue caused by A is in front of B and B is in front of A.
+//				pv.leading(null);
+//				pv.clearMacroLeading(); 
+//			}
 //			int counter = 0;
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
 //					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
-					pv = pv.macroTrailing();
+					pv = pv.macroTrailing(); //There is next vehicle
 					break; //With the condition only one vehicle just entered this road, we knew this is the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
-				if(!pv.calcState()){ //This vehicle is corrupted, do not proceed for this road
+				if(!pv.calcState()){ //This vehicle list is corrupted, do not proceed for this road
 					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
 					break;
 				}
-				pv.travel();
+				
 				if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){
-					pv.recVehSnaphotForVisInterp(); // LZ: record vehicle location here!
+					pv.recVehSnaphotForVisInterp(); // LZ: Note vehicle can be killed after calling pv.travel, so we record vehicle location here!
 				}
+				
+				pv.travel();
+				
 				pv = pv.macroTrailing();
 			}
-			/*
-			for (Lane l : this.getLanes()) {
-				while (true) {
-					v = l.firstVehicle();
-					if (v == null) {
-						break;
-					} else {
-//						System.out.println(v.getMoveVehicleFlag());
-						if (v.getMoveVehicleFlag()) {
-							double maxMove = this.freeSpeed_
-									* GlobalVariables.SIMULATION_STEP_SIZE;
-//							double maxMove =
-//							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
-							if (v.distance() < maxMove) {
-								// this move exceed the available distance of
-								// the link.
-								if (!v.isOnLane()) {
-									if (v.changeRoad() == 0)
-										break;
-								} else if (v.isOnLane()) {
-									if (v.appendToJunction(v.getNextLane()) == 0)
-										break;
-								}
-							}
-						}
-						break;
-					}
-				}
-			}
-			*/
+			
+//			for (Lane l : this.getLanes()) {
+//				while (true) {
+//					v = l.firstVehicle();
+//					if (v == null) {
+//						break;
+//					} else {
+////						System.out.println(v.getMoveVehicleFlag());
+//						if (v.currentSpeed()==0) {
+//							double maxMove = this.freeSpeed_
+//									* GlobalVariables.SIMULATION_STEP_SIZE;
+////							double maxMove =
+////							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
+//							if (v.distance() < maxMove) {
+//								// this move exceed the available distance of
+//								// the link.
+//								if (!v.isOnLane()) {
+//									if (v.changeRoad() == 0)
+//										break;
+//								} else if (v.isOnLane()) {
+//									if (v.appendToJunction(v.getNextLane()) == 0)
+//										break;
+//								}
+//							}
+//						}
+//						break;
+//					}
+//				}
+//			}
+			
 		} catch (Exception e) {
 			System.err.println("Road " + this.linkid
 					+ " had an error while moving vehicles");
@@ -247,6 +249,13 @@ public class Road {
 		}
 		
 	}
+	
+	// Handling the vehicles entering new link
+//	public void postStep(){
+//		for(Vehicle v: enteringVehicles){
+//			
+//		}
+//	}
 	
 	@Override
 	public String toString() {
