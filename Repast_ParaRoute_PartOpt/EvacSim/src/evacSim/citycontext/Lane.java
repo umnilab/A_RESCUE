@@ -17,7 +17,7 @@ public class Lane {
 	private int left;
 	private int through;
 	private int right;
-	private double length;
+//	private double length;
 
 	private Road road_; // SH: The Road for which this lane belongs to
 	private int nVehicles_; // SH: number of vehicle in the lane //
@@ -74,17 +74,17 @@ public class Lane {
 		this.laneid = laneid;
 	}
 
-	public void setLength(double length) {
-		this.length = length;
-	}
+//	public void setLength(double length) {
+//		this.length = length;
+//	}
 
-	public double getLength() {
-		return length;
-	}
-	
-	public double lengthLane() {
-		return this.length;
-	}
+//	public double getLength() {
+//		return length;
+//	}
+//	
+//	public double lengthLane() {
+//		return this.length;
+//	}
 	/*
 	 * public int getId() { return Id; }
 	 * 
