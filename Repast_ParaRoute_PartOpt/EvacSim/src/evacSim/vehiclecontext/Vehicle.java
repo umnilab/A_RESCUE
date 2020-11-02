@@ -294,7 +294,7 @@ public class Vehicle {
 		// out to test the route when vehicle re-enter network from activity
 		// location
 		Lane firstlane = road.firstLane();
-		float roadlen = (float) firstlane.length();
+		float roadlen = (float) firstlane.getLength();
 		Vehicle front = firstlane.lastVehicle();
 		if (front != null) {
 			float gap = roadlen - (front.distance() + front.length());
@@ -307,7 +307,7 @@ public class Vehicle {
 			return 0;
 		}
 		firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
-		this.distance_ = (float) firstlane.length();
+//		this.distance_ = (float) firstlane.length();
 		// For debug, if this is null, show it. Result, this cannot be null
 //		System.out.println(this.distance_);
 //		// Add vehicle to vehicle context
@@ -568,12 +568,12 @@ public class Vehicle {
 				this.coordMap.add(coord);
 			}
 			
-//			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap, this conflicts with the updateCoordMap, make it returns Nan
-//			this.coordMap.remove(0);
-			this.distance_ = (float) plane.length();// - lastStepMove_ / 2; //LZ: lastStepMove_ should have no impact on this
+			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap
+			this.coordMap.remove(0);
+			this.distance_ = (float) plane.getLength()-this.length/2;// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
 		} else {
 			this.coordMap.add(destCoord);
-			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
+			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0))-this.length/2;// - lastStepMove_ / 2;
 		}
 	}
 
@@ -583,29 +583,45 @@ public class Vehicle {
 	 * @param: lane
 	 */
 	private void updateCoordMap(Lane lane) {
+		double newdist_ = 0;
 		double adjustdist_ = 0;
 		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
-
-		Coordinate juncCoordinate, nextLaneCoordinate, closeVehCoordinate;
-		juncCoordinate = coords[coords.length - 1];
-
-		// SH Temp
-		// Geography<Vehicle> vehicleGeography;
-		// vehicleGeography = ContextCreator.getVehicleGeography();
-		Coordinate vcoordinate = this.getCurrentCoord();
+		
+		// LZ: This does not work properly, replace with new implementation
+//		Coordinate juncCoordinate, nextLaneCoordinate, closeVehCoordinate;
+//		juncCoordinate = coords[coords.length - 1]; //The last coordinate of the lane
+//
+//		// SH Temp
+//		Coordinate vcoordinate = this.getCurrentCoord();
+//		coordMap.clear();
+//		for (int i = 0; i < coords.length - 1; i++) {
+//			nextLaneCoordinate = getNearestCoordinate(juncCoordinate,
+//					coords[i], coords[i + 1]); // Get the coord that closer to juncCoordinate, but why?
+//			// nextLaneCoordinate = coords[i];
+//			closeVehCoordinate = getNearestCoordinate(juncCoordinate,
+//					vcoordinate, nextLaneCoordinate);
+//			if (!closeVehCoordinate.equals(vcoordinate))
+//				coordMap.add(nextLaneCoordinate);
+//		}
 		coordMap.clear();
+		double accDist = lane.getLength();
+
 		for (int i = 0; i < coords.length - 1; i++) {
-			nextLaneCoordinate = getNearestCoordinate(juncCoordinate,
-					coords[i], coords[i + 1]);
-			// nextLaneCoordinate = coords[i];
-			closeVehCoordinate = getNearestCoordinate(juncCoordinate,
-					vcoordinate, nextLaneCoordinate);
-			if (!closeVehCoordinate.equals(vcoordinate))
-				coordMap.add(nextLaneCoordinate);
+			accDist-=distance(coords[i], coords[i+1]);
+			if(this.distance_>accDist){ // Find the first pt in CoordMap that has smaller distance
+				newdist_ = accDist;
+				for (int j = i+1; j < coords.length; j++){ // Add the rest coords into the CoordMap
+					coordMap.add(coords[j]);
+				}
+				break;
+			}
 		}
+		
 		// BL: update distance due to the additional length covers by lane width
+		// LZ: This is wrong, directly calculate the distance
+		Coordinate currentCoord = this.getCurrentCoord();
 		if (coordMap.size() > 0) {
-			adjustdist_ = distance(vcoordinate, coordMap.get(0));
+			adjustdist_ = distance(currentCoord, coordMap.get(0));
 //			double cos = (double) GlobalVariables.LANE_WIDTH / adjustdist_;
 //			cos = Math.acos(cos); //Totally wrong!!!
 //			adjustdist_ = adjustdist_ * (1 - Math.sin(cos));
@@ -617,8 +633,14 @@ public class Vehicle {
 //				System.out.println("Distance adjusted for vehicle: " + this.id
 //						+ " is " + adjustdist_);
 //			}
+		}else{ 
+			System.out.println("Too close to the junction, what is going on?");
+			coordMap.add(coords[coords.length-1]);
+			newdist_ = 0; 
+			adjustdist_ = distance(currentCoord, coordMap.get(0));
 		}
-		this.distance_ += (float) adjustdist_;
+		
+		this.distance_  = (float) (newdist_+adjustdist_)-this.length/2;
 		//For debug, it can be clear seen that adjustdist_ can be null!
 //		if(Float.isNaN(this.distance_)){
 //			System.out.println(adjustdist_+","+this.coordMap.get(0).x+","+this.coordMap.get(0).y+","+vcoordinate.x+","+vcoordinate.y);
@@ -689,7 +711,10 @@ public class Vehicle {
 
 		float space = gapDistance(front);
 		// if (ContextCreator.debug)
-		// System.out.println("Gap with front vehicle :"+ space);
+		// For debug, we can clear see that leading is corrupted
+//		if(space <0){
+//			System.out.println("Gap with front vehicle :"+ space+","+front.distance_+","+this.distance_+","+this.lane.getLaneid()+","+front.lane.getLaneid());
+//		}
 
 		float speed = currentSpeed_ == 0f ? 0.00001f : currentSpeed_;
 
@@ -818,7 +843,7 @@ public class Vehicle {
 						- front.length();
 			} else { /* different lane */
 				headwayDistance = this.distance_
-						+ ((float) front.lane.length() - front.distance() - front
+						+ ((float) front.lane.getLength() - front.distance() - front
 								.length()); //LZ: front vehicle is in the next road
 			}
 		} else { /* no vehicle ahead. */
@@ -1012,14 +1037,15 @@ public class Vehicle {
 //			this.currentSpeed_ = (float) this.road.getFreeSpeed();
 
 		// LZ: The vehicle is close enough to the intersection/destination
-		if (this.distance_ < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
+		float distance = this.distance_;
+		if (distance < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
 			if (this.nextRoad() != null) { // Has next road to go, otherwise it reaches the destination
 				if (this.isOnLane()) { // On lane
 					this.coordMap.add(this.getCurrentCoord()); // Stop and wait
 					if (this.appendToJunction(nextLane_) == 0) { // This will make this.isOnLane becomes false, return 0 means the vehicle cannot enter the next road
 						this.lastStepMove_ = 0;
 					} else {
-						this.lastStepMove_ = this.distance_; // Successfully entered the next road, update the lastStepMove and accumulatedDistance
+						this.lastStepMove_ = distance; // Successfully entered the next road, update the lastStepMove and accumulatedDistance
 						this.accummulatedDistance_ += this.lastStepMove_;
 					}
 					return; // move finished
@@ -1027,7 +1053,7 @@ public class Vehicle {
 					if (this.changeRoad() == 0) { // 0 means the vehicle cannot enter the next road
 						this.lastStepMove_ = 0;
 					} else {
-						this.lastStepMove_ = this.distance_; //Successfully entered the next road, update the lastStepMove and accumulatedDistance
+						this.lastStepMove_ = distance; //Successfully entered the next road, update the lastStepMove and accumulatedDistance
 						this.accummulatedDistance_ += this.lastStepMove_;
 					}
 					return;// move finished
@@ -1208,7 +1234,11 @@ public class Vehicle {
 			
 		}
 		// update the position of vehicles, 0<=distance_<=lane.length()
+		
 		distance_ -= distTravelled;
+//		if(distTravelled<dx){
+//			System.out.println("Previous distance: "+ distance+","+ this.distance_ + ","+ distTravelled+","+dx+","+this.lane.getLaneid());
+//		}
 		if(distance_<0){
 			distance_=0;
 		}
@@ -1556,7 +1586,7 @@ public class Vehicle {
 
 	public float distFraction() {
 		if (distance_ > 0)
-			return distance_ / (float) this.road.length();
+			return distance_ / (float) this.lane.getLength();
 		else
 			return 0;
 	}
@@ -2276,7 +2306,7 @@ public class Vehicle {
 			lagGap = lagVehicle.distance() - this.distance()
 					- GlobalVariables.DEFAULT_VEHICLE_WIDTH;
 		else
-			lagGap = this.road.length() - this.distance();
+			lagGap = this.lane.getLength() - this.distance();
 		return lagGap;
 	}
 
@@ -2554,7 +2584,7 @@ public class Vehicle {
 		if (nextlane != null) {
 			Vehicle newleader = nextlane.lastVehicle();
 			if (newleader != null) {
-				gap = (float) nextlane.length() - newleader.distance_;
+				gap = (float) nextlane.getLength() - newleader.distance_;
 			} else
 				gap = 9999999;
 		}

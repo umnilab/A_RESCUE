@@ -17,7 +17,7 @@ public class Lane {
 	private int left;
 	private int through;
 	private int right;
-//	private double length;
+	private double length;
 
 	private Road road_; // SH: The Road for which this lane belongs to
 	private int nVehicles_; // SH: number of vehicle in the lane //
@@ -74,14 +74,14 @@ public class Lane {
 		this.laneid = laneid;
 	}
 
-//	public void setLength(double length) {
-//		this.length = length;
-//	}
+	public void setLength(double length) {
+		this.length = length;
+	}
 
-//	public double getLength() {
-//		return length;
-//	}
-//	
+	public double getLength() {
+		return length;
+	}
+	
 //	public double lengthLane() {
 //		return this.length;
 //	}
@@ -210,7 +210,7 @@ public class Lane {
 			dlane = dnLanes_.get(i);
 			pv = dlane.lastVehicle_;
 			if (pv != null) {
-				dis = dlane.length() - (pv.distance() + pv.length());
+				dis = dlane.getLength() - (pv.distance() + pv.length());
 				if (dis < mindis) {
 					mindis = dis;
 					last = pv;
@@ -266,7 +266,7 @@ public class Lane {
 		return connectLane;
 	}
 
-	public double length() {
+	public double lengthRoad() {
 		return this.road_.length();
 	}
 
