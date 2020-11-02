@@ -570,10 +570,10 @@ public class Vehicle {
 			
 			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap
 			this.coordMap.remove(0);
-			this.distance_ = (float) plane.getLength()-this.length/2;// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
+			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
 		} else {
 			this.coordMap.add(destCoord);
-			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0))-this.length/2;// - lastStepMove_ / 2;
+			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
 		}
 	}
 
@@ -640,7 +640,7 @@ public class Vehicle {
 			adjustdist_ = distance(currentCoord, coordMap.get(0));
 		}
 		
-		this.distance_  = (float) (newdist_+adjustdist_)-this.length/2;
+		this.distance_  = (float) (newdist_+adjustdist_);
 		//For debug, it can be clear seen that adjustdist_ can be null!
 //		if(Float.isNaN(this.distance_)){
 //			System.out.println(adjustdist_+","+this.coordMap.get(0).x+","+this.coordMap.get(0).y+","+vcoordinate.x+","+vcoordinate.y);
