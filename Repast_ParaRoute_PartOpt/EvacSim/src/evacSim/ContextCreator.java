@@ -6,6 +6,11 @@ import java.util.Properties;
 
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
+
+import org.geotools.referencing.GeodeticCalculator;
+
+import com.vividsolutions.jts.geom.Coordinate;
+
 //import com.vividsolutions.jts.geom.Coordinate;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
@@ -46,6 +51,22 @@ public class ContextCreator implements ContextBuilder<Object> {
 	// Create a global lock to enforce concurrency
 //	 public static ReentrantLock lock = new ReentrantLock();
 	
+	private double getDistance(Coordinate c1, Coordinate c2) {
+		// GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
+		// .getRoadGeography().getCRS());
+		GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
+				.getLaneGeography().getCRS());
+		calculator.setStartingGeographicPoint(c1.x, c1.y);
+		calculator.setDestinationGeographicPoint(c2.x, c2.y);
+		double distance;
+		try {
+			distance = calculator.getOrthodromicDistance();
+		} catch (AssertionError ex) {
+			System.err.println("Error with finding distance");
+			distance = 0.0;
+		}
+		return distance;
+	}
 	/**
 	 * The citycontext will create its own subcontexts (RoadContext,
 	 * JunctionContext and HouseContext).
@@ -123,6 +144,18 @@ public class ContextCreator implements ContextBuilder<Object> {
 		}
 		// debug ends
 		
+		// Check if link length and geometry are consistent, fix the inconsistency if there is.
+		for(Lane lane: ContextCreator.getLaneGeography().getAllObjects()){
+			Coordinate[] coords = ContextCreator.getLaneGeography().getGeometry(lane).getCoordinates();
+			double distance = 0;
+			for (int i = 0; i < coords.length - 1; i++) {
+				distance += getDistance(coords[i], coords[i + 1]);
+			}
+//			if(Math.abs(distance-lane.getLength())>1){
+//				System.out.println("Lane ID: " + lane.getLaneid() + "," + " Calculated distance: "+ distance+","+"Real distance: " + lane.getLength());
+//			}
+			lane.setLength(distance);
+		}
 		
 		// Schedule simulation to stop at a certain time and also record the
 		// runtime.

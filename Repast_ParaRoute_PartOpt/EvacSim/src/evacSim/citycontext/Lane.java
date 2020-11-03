@@ -82,9 +82,9 @@ public class Lane {
 		return length;
 	}
 	
-	public double lengthLane() {
-		return this.length;
-	}
+//	public double lengthLane() {
+//		return this.length;
+//	}
 	/*
 	 * public int getId() { return Id; }
 	 * 
@@ -210,7 +210,7 @@ public class Lane {
 			dlane = dnLanes_.get(i);
 			pv = dlane.lastVehicle_;
 			if (pv != null) {
-				dis = dlane.length() - (pv.distance() + pv.length());
+				dis = dlane.getLength() - (pv.distance() + pv.length());
 				if (dis < mindis) {
 					mindis = dis;
 					last = pv;
@@ -266,7 +266,7 @@ public class Lane {
 		return connectLane;
 	}
 
-	public double length() {
+	public double lengthRoad() {
 		return this.road_.length();
 	}
 
