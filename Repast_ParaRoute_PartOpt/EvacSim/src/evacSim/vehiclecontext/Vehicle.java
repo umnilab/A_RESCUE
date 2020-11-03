@@ -294,16 +294,9 @@ public class Vehicle {
 		// out to test the route when vehicle re-enter network from activity
 		// location
 		Lane firstlane = road.firstLane();
-		float roadlen = (float) firstlane.getLength();
-		Vehicle front = firstlane.lastVehicle();
-		if (front != null) {
-			float gap = roadlen - (front.distance() + front.length());
-			if (gap < this.length) {
-				return 0;
-			}
-		}
+		float gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
-		if(tickcount<=firstlane.getLastEnterTick()){
+		if(gap<this.length() || tickcount<=firstlane.getLastEnterTick()){
 			return 0;
 		}
 		firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
@@ -314,7 +307,6 @@ public class Vehicle {
 //		ContextCreator.getVehicleContext().add(this);
 //	    System.out.println("A vehicle is entering the road.");
 		float capspd = road.calcSpeed();// calculate the initial speed
-
 		currentSpeed_ = capspd; // have to change later
 		desiredSpeed_ = this.road.getFreeSpeed(); //Initial value is 0.0, added Oct 2ed
 		this.road.removeVehicleFromNewQueue(this);
@@ -570,7 +562,7 @@ public class Vehicle {
 			
 			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap
 			this.coordMap.remove(0);
-			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
+			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense
 		} else {
 			this.coordMap.add(destCoord);
 			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
@@ -583,8 +575,6 @@ public class Vehicle {
 	 * @param: lane
 	 */
 	private void updateCoordMap(Lane lane) {
-		double newdist_ = 0;
-		double adjustdist_ = 0;
 		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
 		
 		// LZ: This does not work properly, replace with new implementation
@@ -608,20 +598,24 @@ public class Vehicle {
 
 		for (int i = 0; i < coords.length - 1; i++) {
 			accDist-=distance(coords[i], coords[i+1]);
-			if(this.distance_>accDist){ // Find the first pt in CoordMap that has smaller distance
-				newdist_ = accDist;
+			if(this.distance_>=accDist){ // Find the first pt in CoordMap that has smaller distance;
+				double[] distAndAngle = new double[2];
+				distance2(coords[i], coords[i+1], distAndAngle);
+				Coordinate coord = coords[i];
+				move2(coord, this.distance_- accDist, distAndAngle[1]); // Update vehicle location
 				for (int j = i+1; j < coords.length; j++){ // Add the rest coords into the CoordMap
 					coordMap.add(coords[j]);
 				}
 				break;
 			}
 		}
-		
+		if (coordMap.size() == 0) {
+			System.out.println("Too close to the junction, what is going on?");
+			coordMap.add(coords[coords.length-1]);
+		}
 		// BL: update distance due to the additional length covers by lane width
 		// LZ: This is wrong, directly calculate the distance
-		Coordinate currentCoord = this.getCurrentCoord();
-		if (coordMap.size() > 0) {
-			adjustdist_ = distance(currentCoord, coordMap.get(0));
+//		if (coordMap.size() > 0) {
 //			double cos = (double) GlobalVariables.LANE_WIDTH / adjustdist_;
 //			cos = Math.acos(cos); //Totally wrong!!!
 //			adjustdist_ = adjustdist_ * (1 - Math.sin(cos));
@@ -633,18 +627,17 @@ public class Vehicle {
 //				System.out.println("Distance adjusted for vehicle: " + this.id
 //						+ " is " + adjustdist_);
 //			}
-		}else{ 
-			System.out.println("Too close to the junction, what is going on?");
-			coordMap.add(coords[coords.length-1]);
-			newdist_ = 0; 
-			adjustdist_ = distance(currentCoord, coordMap.get(0));
-		}
+//		}else{ 
+//			System.out.println("Too close to the junction, what is going on?");
+//			coordMap.add(coords[coords.length-1]);
+//		}
 		
-		this.distance_  = (float) (newdist_+adjustdist_);
 		//For debug, it can be clear seen that adjustdist_ can be null!
 //		if(Float.isNaN(this.distance_)){
 //			System.out.println(adjustdist_+","+this.coordMap.get(0).x+","+this.coordMap.get(0).y+","+vcoordinate.x+","+vcoordinate.y);
 //		}
+		
+		
 	}
 
 	public boolean calcState() {
@@ -712,9 +705,9 @@ public class Vehicle {
 		float space = gapDistance(front);
 		// if (ContextCreator.debug)
 		// For debug, we can clear see that leading is corrupted
-//		if(space <0){
-//			System.out.println("Gap with front vehicle :"+ space+","+front.distance_+","+this.distance_+","+this.lane.getLaneid()+","+front.lane.getLaneid());
-//		}
+		if(space <0){
+			System.out.println("Gap with front vehicle :"+ space+","+front.distance_+","+this.distance_+","+this.lane.getLaneid()+","+front.lane.getLaneid()+","+this.vehicleID_+","+front.vehicleID_);
+		}
 
 		float speed = currentSpeed_ == 0f ? 0.00001f : currentSpeed_;
 
@@ -839,12 +832,10 @@ public class Vehicle {
 				headwayDistance = Float.MAX_VALUE;
 			}
 			else if (this.lane.getID() == front.lane.getID()) { /* same lane */
-				headwayDistance = this.distance_ - front.distance()
-						- front.length();
+				headwayDistance = this.distance_ - front.distance();
 			} else { /* different lane */
 				headwayDistance = this.distance_
-						+ ((float) front.lane.getLength() - front.distance() - front
-								.length()); //LZ: front vehicle is in the next road
+						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
@@ -868,11 +859,11 @@ public class Vehicle {
 //					System.out.println("Vehicle " + this.getId()
 //							+ "has no lane to change");
 //					System.out.println("this vehicle is on road "
-//							+ this.road.getID() + " which has "
+//							+ this.road.getLinkid() + " which has "
 //							+ this.road.getnLanes()
 //							+ " lane(s) and I am on lane "
 //							+ this.road.getLaneIndex(this.lane)
-//							+"with Lane ID" + this.lane.getID());
+//							+" with Lane " + this.lane.getLaneid() +" and next Lane " + this.nextLane_.getLaneid());
 				}
 			}
 		} else {
@@ -1239,7 +1230,7 @@ public class Vehicle {
 //		if(distTravelled<dx){
 //			System.out.println("Previous distance: "+ distance+","+ this.distance_ + ","+ distTravelled+","+dx+","+this.lane.getLaneid());
 //		}
-		if(distance_<0){
+		if(distance_<0.0){
 			distance_=0;
 		}
 		//LZ: For debugging, here we observed that this.distance_ can be set to NaN, but other values are valid (even in the first time this message occured)
@@ -2101,8 +2092,8 @@ public class Vehicle {
 			this.trailing(null);
 		}
 		this.lane.addVehicles();
+		this.updateCoordMap(this.lane); // Update CoordMap
 		// this.tempLane_ = null;
-		this.updateCoordMap(this.lane);
 	}
 
 	/*
@@ -2122,10 +2113,8 @@ public class Vehicle {
 		 */
 		if (leadVehicle != null) {
 			if (lagVehicle != null) {
-				if (this.leadGap(leadVehicle) >= this
-						.critLeadGapMLC(leadVehicle)
-						&& this.lagGap(lagVehicle) >= this
-								.critLagGapMLC(lagVehicle)) {
+				if (this.leadGap(leadVehicle) >= this.critLeadGapMLC(leadVehicle)
+						&& this.lagGap(lagVehicle) >= this.critLagGapMLC(lagVehicle)) {
 					// BL: debug the error that vehicle changes the lane
 					// internally but not on the GUI
 					this.changeLane(this.tempLane(), leadVehicle, lagVehicle);
@@ -2134,8 +2123,7 @@ public class Vehicle {
 					this.nosingFlag = true;
 				}
 			} else {
-				if (this.leadGap(leadVehicle) >= this
-						.critLeadGapMLC(leadVehicle)) {
+				if (this.leadGap(leadVehicle) >= this.critLeadGapMLC(leadVehicle)) {
 					this.changeLane(this.tempLane(), leadVehicle, null);
 				} else if (this.distFraction() < GlobalVariables.critDisFraction) {
 					this.nosingFlag = true;
@@ -2169,7 +2157,6 @@ public class Vehicle {
 	public float nosing() //
 	{
 		float acc = 0;
-		float lagGap;
 		Lane tarLane = this.tempLane();
 		Vehicle leadVehicle = this.leadVehicle(tarLane);
 		Vehicle lagVehicle = this.lagVehicle(tarLane);
@@ -2179,9 +2166,7 @@ public class Vehicle {
 		 * distance is less than some threshold
 		 */
 		if (lagVehicle != null) {
-			lagGap = lagVehicle.distance_ - this.distance_
-					- GlobalVariables.DEFAULT_VEHICLE_LENGTH;
-			if (lagGap < GlobalVariables.minLag) {
+			if (this.lagGap(lagVehicle) < GlobalVariables.minLag) {
 				lagVehicle.yieldingFlag = true;
 			}
 			// System.out.println("Vehicle " + this.id + " has lag gap " +
@@ -2272,8 +2257,7 @@ public class Vehicle {
 	public double leadGap(Vehicle leadVehicle) {
 		double leadGap = 0;
 		if (leadVehicle != null)
-			leadGap = this.distance() - leadVehicle.distance()
-					- GlobalVariables.DEFAULT_VEHICLE_LENGTH;
+			leadGap = this.distance() - leadVehicle.distance()-leadVehicle.length();
 		else
 			leadGap = this.distance();
 		return leadGap;
@@ -2303,8 +2287,7 @@ public class Vehicle {
 	public double lagGap(Vehicle lagVehicle) {
 		double lagGap = 0;
 		if (lagVehicle != null)
-			lagGap = lagVehicle.distance() - this.distance()
-					- GlobalVariables.DEFAULT_VEHICLE_WIDTH;
+			lagGap = lagVehicle.distance() - this.distance() - this.length();
 		else
 			lagGap = this.lane.getLength() - this.distance();
 		return lagGap;
@@ -2584,7 +2567,7 @@ public class Vehicle {
 		if (nextlane != null) {
 			Vehicle newleader = nextlane.lastVehicle();
 			if (newleader != null) {
-				gap = (float) nextlane.getLength() - newleader.distance_;
+				gap = (float) nextlane.getLength() - newleader.distance_ - newleader.length();
 			} else
 				gap = 9999999;
 		}
