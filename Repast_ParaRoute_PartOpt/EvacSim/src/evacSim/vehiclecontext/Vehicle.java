@@ -66,17 +66,17 @@ public class Vehicle {
 	private Coordinate currentCoord_; //LZ: this variable is created when the vehicle is initialized and used to store 
 	                                 //vehicle location when it does not enter the network
 	private float length;
-	private float distance_;// distance from downstream junction
+	private double distance_;// distance from downstream junction
 	private float currentSpeed_;
-	private float accRate_;
+	private double accRate_;
 	private float desiredSpeed_; // in meter/sec
 	private  int regime_;
 	protected float maxAcceleration_; // in meter/sec2
 	private float normalDeceleration_; // in meter/sec2
 	protected float maxDeceleration_; // in meter/sec2
 	private float distanceToNormalStop_; // assuming normal dec is applied
-	private float lastStepMove_;
-	public float accummulatedDistance_;
+	private double lastStepMove_;
+	public double accummulatedDistance_;
 
 	private double travelPerTurn;
 
@@ -294,7 +294,7 @@ public class Vehicle {
 		// out to test the route when vehicle re-enter network from activity
 		// location
 		Lane firstlane = road.firstLane();
-		float gap = entranceGap(firstlane);
+		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
 		if(gap<this.length() || tickcount<=firstlane.getLastEnterTick()){
 			return 0;
@@ -658,12 +658,11 @@ public class Vehicle {
 		this.makeAcceleratingDecision();
 		if(this.road == null){
 			return false;
-		}else{
-			if (this.road.getnLanes() > 1 && this.onlane) {
-				this.makeLaneChangingDecision();
-			}
-			return true;
 		}
+		if (this.road.getnLanes() > 1 && this.onlane && this.distance_>GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
+				this.makeLaneChangingDecision();
+		}
+		return true;
 	}
 
 	/*
@@ -678,8 +677,8 @@ public class Vehicle {
 	public void makeAcceleratingDecision() {
 		// int id = GlobalVariables.Global_Vehicle_ID;
 		Vehicle front = this.vehicleAhead();
-		float aZ = this.accRate_; /* car-following */
-		float acc = this.maxAcceleration(); /* returned rate */
+		double aZ = this.accRate_; /* car-following */
+		double acc = this.maxAcceleration(); /* returned rate */
 		/*
 		 * BL: vehicle will have acceleration rate based on car following if it
 		 * is not in yielding or nosing state
@@ -702,7 +701,7 @@ public class Vehicle {
 		accRate_ = acc;
 	}
 
-	public float calcCarFollowingRate(Vehicle front) {
+	public double calcCarFollowingRate(Vehicle front) {
 		// SH-if there is no front vehicle the car will be in free flow regime
 		// and have max acceleration
 
@@ -711,18 +710,18 @@ public class Vehicle {
 			return (this.maxAcceleration_);
 		}
 
-		float acc;
+		double acc;
 
-		float space = gapDistance(front);
+		double space = gapDistance(front);
 		// if (ContextCreator.debug)
 		// For debug, we can clear see that leading is corrupted
 		if(space <0){
 			System.out.println("Gap with front vehicle :"+ space+","+front.distance_+","+this.distance_+","+this.lane.getLaneid()+","+front.lane.getLaneid()+","+this.vehicleID_+","+front.vehicleID_);
 		}
 
-		float speed = currentSpeed_ == 0f ? 0.00001f : currentSpeed_;
+		double speed = currentSpeed_ == 0f ? 0.00001f : currentSpeed_;
 
-		float headway = 2.0f * space / (speed + currentSpeed_);
+		double headway = 2.0f * space / (speed + currentSpeed_);
 		float hupper, hlower;
 
 		float AlphaDec = GlobalVariables.ALPHA_DEC;
@@ -754,7 +753,7 @@ public class Vehicle {
 					acc = front.accRate_ - 0.5f * dv * dv / space;
 				} else {
 					float dt = GlobalVariables.SIMULATION_STEP_SIZE;
-					float v = front.currentSpeed_ + front.accRate_ * dt;
+					double v = front.currentSpeed_ + front.accRate_ * dt;
 					space += 0.5f * (front.currentSpeed_ + v) * dt;
 					acc = brakeToTargetSpeed(space, v);
 				}
@@ -769,7 +768,7 @@ public class Vehicle {
 				regime_ = GlobalVariables.STATUS_REGIME_FREEFLOWING;
 			} else {
 				float dt = GlobalVariables.SIMULATION_STEP_SIZE;
-				float v = front.currentSpeed_ + front.accRate_ * dt;
+				double v = front.currentSpeed_ + front.accRate_ * dt;
 				space += 0.5 * (front.currentSpeed_ + v) * dt;
 				acc = brakeToTargetSpeed(space, v);
 				regime_ = GlobalVariables.STATUS_REGIME_FREEFLOWING;
@@ -793,11 +792,11 @@ public class Vehicle {
 		return acc;
 	}
 
-	public float brakeToTargetSpeed(float s, float v) {
-		if (s > GlobalVariables.FLT_EPSILON) {
-			float v2 = v * v;
-			float u2 = currentSpeed_ * currentSpeed_;
-			float acc = (v2 - u2) / s * 0.5f;
+	public double brakeToTargetSpeed(double space, double v) {
+		if (space > GlobalVariables.FLT_EPSILON) {
+			double v2 = v * v;
+			double u2 = currentSpeed_ * currentSpeed_;
+			double acc = (v2 - u2) / space * 0.5f;
 			return acc;
 		} else {
 			float dt = GlobalVariables.SIMULATION_STEP_SIZE;
@@ -836,17 +835,18 @@ public class Vehicle {
 		return nextJunction;
 	}
 
-	public float gapDistance(Vehicle front) {
-		float headwayDistance;
+	public double gapDistance(Vehicle front) {
+		double headwayDistance;
 		if (front != null) { /* vehicle ahead */	
 			if (front.lane == null){ // Front vehicle is being killed
 				headwayDistance = Float.MAX_VALUE;
 			}
 			else if (this.lane.getID() == front.lane.getID()) { /* same lane */
-				headwayDistance = this.distance_ - front.distance();
+				headwayDistance = this.distance_ - front.distance(); //-front.length();
 			} else { /* different lane */
-				headwayDistance = this.distance_
-						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road
+				headwayDistance = Float.MAX_VALUE;
+//				headwayDistance = this.distance_
+//						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road //-front.length();
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
@@ -1039,7 +1039,7 @@ public class Vehicle {
 //			this.currentSpeed_ = (float) this.road.getFreeSpeed();
 
 		// LZ: The vehicle is close enough to the intersection/destination
-		float distance = this.distance_;
+		double distance = this.distance_;
 		if (distance < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
 			if (this.nextRoad() != null) { // Has next road to go, otherwise it reaches the destination
 				if (this.isOnLane()) { // On lane
@@ -1065,10 +1065,10 @@ public class Vehicle {
 
 		Coordinate currentCoord = null;
 		Coordinate target = null;
-		float dx = 0; // LZ: travel distance calculated by physics
+		double dx = 0; // LZ: travel distance calculated by physics
 		
 		boolean travelledMaxDist = false; // True when traveled with maximum distance, which is dx.
-		float distTravelled = 0; // The distance traveled so far.
+		double distTravelled = 0; // The distance traveled so far.
 		
 		/*
 		 * For debuging: print out the current road and next junction ID of the
@@ -1092,7 +1092,7 @@ public class Vehicle {
 //		}
 		float oldv = currentSpeed_; // Velocity at the beginning
 
-		float dv = accRate_ * step; // Change of speed
+		double dv = accRate_ * step; // Change of speed
 
 		if (dv > -currentSpeed_) { // still moving at the end of the cycle
 			dx = currentSpeed_ * step + 0.5f * dv * step;
@@ -1104,7 +1104,7 @@ public class Vehicle {
 		// Solve the crash problem 
 		Vehicle front = this.vehicleAhead();
 		if (front != null) {
-			float gap = gapDistance(front);
+			double gap = gapDistance(front);
 			if (gap > this.length()) {
 				dx = Math.min(dx, gap - this.length());
 			} else {
@@ -1585,13 +1585,13 @@ public class Vehicle {
 		return road;
 	}
 
-	public float distance() {
+	public double distance() {
 		return distance_;
 	}
 
-	public float distFraction() {
+	public double distFraction() {
 		if (distance_ > 0)
-			return distance_ / (float) this.lane.getLength();
+			return distance_ /  this.lane.getLength();
 		else
 			return 0;
 	}
@@ -2174,9 +2174,9 @@ public class Vehicle {
 	 * vehicle in target lane to yielding status. This function will be called
 	 * in makeAccelerationDecision
 	 */
-	public float nosing() //
+	public double nosing() //
 	{
-		float acc = 0;
+		double acc = 0;
 		Lane tarLane = this.tempLane();
 		Vehicle leadVehicle = this.leadVehicle(tarLane);
 		Vehicle lagVehicle = this.lagVehicle(tarLane);
@@ -2187,7 +2187,7 @@ public class Vehicle {
 		 */
 		if (lagVehicle != null) {
 			if (this.lagGap(lagVehicle) < GlobalVariables.minLag) {
-				lagVehicle.yieldingFlag = true;
+				this.yieldingFlag = true; // LZ: Nov 3, based on the description, should not be lagVehicle.yieldingFlag = true
 			}
 			// System.out.println("Vehicle " + this.id + " has lag gap " +
 			// lagGap
@@ -2277,10 +2277,10 @@ public class Vehicle {
 	public double leadGap(Vehicle leadVehicle) {
 		double leadGap = 0;
 		if (leadVehicle != null){
-			leadGap = this.distance() - leadVehicle.distance()-leadVehicle.length(); // leadGap>=-leadVehicle.length()
+			leadGap = this.distance() - leadVehicle.distance() - leadVehicle.length(); // leadGap>=-leadVehicle.length()
 		}
 		else{
-			leadGap = this.distance();
+			leadGap = this.distance(); // LZ: Nov 3, change this.distance() to 9999999
 		}
 		return leadGap;
 	}
@@ -2584,12 +2584,12 @@ public class Vehicle {
 		return onlane;
 	}
 
-	public float entranceGap(Lane nextlane) {
-		float gap = 0;
+	public double entranceGap(Lane nextlane) {
+		double gap = 0;
 		if (nextlane != null) {
 			Vehicle newleader = nextlane.lastVehicle();
 			if (newleader != null) {
-				gap = (float) nextlane.getLength() - newleader.distance_ - newleader.length();
+				gap = nextlane.getLength() - newleader.distance_ - newleader.length();
 			} else
 				gap = 9999999;
 		}
