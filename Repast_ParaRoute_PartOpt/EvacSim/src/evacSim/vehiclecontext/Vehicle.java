@@ -1066,13 +1066,13 @@ public class Vehicle {
 //		if(this.currentSpeed_ > this.road.getFreeSpeed())
 //			this.currentSpeed_ = (float) this.road.getFreeSpeed();
 		
-		int[] selectVehicleIds = {131876};//, 96280, 371677, 102308, 96223};
-		for (int vehId : selectVehicleIds) {
-			if (this.vehicleID_ == vehId) {
-				int x=0;
-			}
-			break;
-		}
+//		int[] selectVehicleIds = {131876};//, 96280, 371677, 102308, 96223};
+//		for (int vehId : selectVehicleIds) {
+//			if (this.vehicleID_ == vehId) {
+//				int x=0;
+//			}
+//			break;
+//		}
 		// LZ: The vehicle is close enough to the intersection/destination
 		double distance = this.distance_;
 		if (distance < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
