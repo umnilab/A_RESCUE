@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
+//import java.util.List;
 //import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -32,7 +32,7 @@ public class Road {
 	private int toNode;
 	private int curhour; // BL: to find the current hour of the simulation
 	private String identifier; // can be used to match with shape file roads
-	private String description = "";
+//	private String description = "";
 	private int nVehicles_; // SH: number of vehicles currently in the road
 	private double length;
 	private float speed_; // current speed
@@ -63,7 +63,7 @@ public class Road {
 	// Road constructor
 	public Road() {
 		this.id = ContextCreator.generateAgentID();
-		this.description = "road " + id;
+//		this.description = "road " + id;
 		this.junctions = new ArrayList<Junction>();
 		this.lanes = new ArrayList<Lane>();
 		this.nVehicles_ = 0;
@@ -85,6 +85,10 @@ public class Road {
 		
 		// LZ: Handle vehicles' entering the link in single thread manner
 //		enteringVehicles = Collections.synchronizedList(new ArrayList<Vehicle>());
+	}
+	
+	public String toString() {
+		return "<Road"+this.linkid+">";
 	}
 	
 	// Set the defaultFreeSpeed_
@@ -179,6 +183,9 @@ public class Road {
 					break; //With the condition only one vehicle just entered this road, we knew this is the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
+//				if(!pv.calcState()){ //This vehicle is corrupted, do not proceed for this road
+////					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
+//					System.out.print('.');
 				if(!pv.calcState()){ //This vehicle list is corrupted, do not proceed for this road
 					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
 					break;
@@ -257,10 +264,10 @@ public class Road {
 //		}
 //	}
 	
-	@Override
-	public String toString() {
-		return "Agent id: " + id + " description: " + description;
-	}
+//	@Override
+//	public String toString() {
+//		return "Agent id: " + id + " description: " + description;
+//	}
 	
 //	public void updateLastEnterTick(int current_tick){
 //		this.lastEnterTick = current_tick;

@@ -573,10 +573,13 @@ public class Vehicle {
 			
 			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap
 			this.coordMap.remove(0);
-			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense
+			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
 		} else {
 			this.coordMap.add(destCoord);
 			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
+		}
+		if (Double.isNaN(distance_)) {
+			System.out.println("distance_ is NaN in setCoordMap for " + this);
 		}
 	}
 
@@ -586,7 +589,9 @@ public class Vehicle {
 	 * @param: lane
 	 */
 	private void updateCoordMap(Lane lane) {
-		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
+		// double newdist_ = 0; // distance between downstream junction & 1st downstream control point
+		// double adjustdist_ = 0; // distance between current coord & 1st downstream control point
+		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates(); // list of control points of new lane
 		
 		// LZ: This does not work properly, replace with new implementation
 //		Coordinate juncCoordinate, nextLaneCoordinate, closeVehCoordinate;
@@ -604,12 +609,18 @@ public class Vehicle {
 //			if (!closeVehCoordinate.equals(vcoordinate))
 //				coordMap.add(nextLaneCoordinate);
 //		}
+		int[] selectVehicleIds = {131876, 96280, 371677, 102308, 96223};
+		for (int vehId : selectVehicleIds) {
+			if (this.vehicleID_ == vehId) {
+				int x=0;
+			}
+		}
 		coordMap.clear();
 		double accDist = lane.getLength();
 
 		for (int i = 0; i < coords.length - 1; i++) {
 			accDist-=distance(coords[i], coords[i+1]);
-			if(this.distance_>=accDist){ // Find the first pt in CoordMap that has smaller distance;
+			if (this.distance_ >= accDist) { // Find the first pt in CoordMap that has smaller distance;
 				double[] distAndAngle = new double[2];
 				distance2(coords[i+1], coords[i], distAndAngle);
 				Coordinate coord = coords[i+1];
@@ -634,6 +645,20 @@ public class Vehicle {
 //			double cos = (double) GlobalVariables.LANE_WIDTH / adjustdist_;
 //			cos = Math.acos(cos); //Totally wrong!!!
 //			adjustdist_ = adjustdist_ * (1 - Math.sin(cos));
+		// } else { // if it is very close to an intersection
+		// 	System.out.println("Too close to the junction, what is going on? " + this);
+		// 	coordMap.add(coords[coords.length-1]);
+		// 	newdist_ = 0; 
+		// 	adjustdist_ = distance(currentCoord, coordMap.get(0));
+		// }
+		
+		// this.distance_  = (float) (newdist_ + adjustdist_);
+		// if (distance_ < 0) {
+		// 	System.err.println("distance_ < 0 for " + this);
+		// }
+		// if (Float.isNaN(this.distance_)) {
+		// 	System.err.println("distance_ is NaN for" + this);
+		// }
 //			//For debug, try to understand, what make adjustdist_ be null
 //			if(Double.isNaN(adjustdist_)){
 //				System.out.println(distance(vcoordinate, coordMap.get(0))+","+GlobalVariables.LANE_WIDTH / distance(vcoordinate, coordMap.get(0))+","+Math.acos(GlobalVariables.LANE_WIDTH / distance(vcoordinate, coordMap.get(0))));
@@ -651,8 +676,6 @@ public class Vehicle {
 //		if(Float.isNaN(this.distance_)){
 //			System.out.println(adjustdist_+","+this.coordMap.get(0).x+","+this.coordMap.get(0).y+","+vcoordinate.x+","+vcoordinate.y);
 //		}
-		
-		
 	}
 
 	public boolean calcState() {
@@ -703,6 +726,12 @@ public class Vehicle {
 		}
 
 		accRate_ = acc;
+		if (Double.isNaN(accRate_)) {
+			System.err.println("NaN acceleration rate for " + this);
+		}
+		if (accRate_ == 0) {
+			int x = 0; //System.out.println("accRate_ = 0 in makeAcceleratingDecision() for " + this);
+		}
 	}
 
 	public double calcCarFollowingRate(Vehicle front) {
@@ -793,6 +822,9 @@ public class Vehicle {
 			}
 			regime_ = GlobalVariables.STATUS_REGIME_CARFOLLOWING;
 		}
+		if (Double.isNaN(acc)) {
+			System.err.println("acc is NaN for " + this);
+		}
 		return acc;
 	}
 
@@ -854,6 +886,9 @@ public class Vehicle {
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
+		}
+		if (Double.isNaN(headwayDistance)) {
+			System.out.println("headway is NaN");
 		}
 		return (headwayDistance);
 	}
@@ -1041,6 +1076,14 @@ public class Vehicle {
 		//HG:update current speed based on freeflow speed
 //		if(this.currentSpeed_ > this.road.getFreeSpeed())
 //			this.currentSpeed_ = (float) this.road.getFreeSpeed();
+		
+		int[] selectVehicleIds = {131876};//, 96280, 371677, 102308, 96223};
+		for (int vehId : selectVehicleIds) {
+			if (this.vehicleID_ == vehId) {
+				int x=0;
+			}
+			break;
+		}
 		// LZ: The vehicle is close enough to the intersection/destination
 		double distance = this.distance_;
 		if (distance < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
@@ -1102,6 +1145,16 @@ public class Vehicle {
 
 		} else { // stops before the cycle end
 			dx = -0.5f * currentSpeed_ * currentSpeed_ / accRate_;
+			if (currentSpeed_ == 0.0f && accRate_ == 0.0f) {
+				dx = 0.0f;
+			}
+			else if (accRate_ == 0.0f) {
+				System.out.println("speed not 0 but accel = 0 & still vehicle stops " + this);
+				dx = 0.0f;
+			}
+		}
+		if (Double.isNaN(dx)) {
+			System.out.println("dx is NaN in move() for " + this);
 		}
 
 		// Solve the crash problem 
@@ -1125,6 +1178,13 @@ public class Vehicle {
 			accRate_ = 0.0f; // no back up allowed
 		} else if (currentSpeed_ > this.road.getFreeSpeed() && accRate_ > GlobalVariables.ACC_EPSILON) {
 			currentSpeed_ = (float) this.road.getFreeSpeed();
+//			accRate_ = (currentSpeed_ - oldv) / step;
+//			if (accRate_ == 0) {
+//				int x = 0;
+//			}
+//		}
+//		if (accRate_ == 0) {
+//			int x = 0;
 			accRate_ = (float) ((currentSpeed_ - oldv) / step);
 		}
 
@@ -1133,6 +1193,8 @@ public class Vehicle {
 			return;
 		}
 		
+//		// update position
+//		distance_ -= dx;
 		/*
 		 * Check if the vehicle's dx is under some threshold, i.e. it
 		 * will move to the next road 1. Search for the junction 2. Search for
@@ -1149,6 +1211,13 @@ public class Vehicle {
 			 */
 			
 			target = this.coordMap.get(0);
+			if (Double.isNaN(target.x) || Double.isNaN(target.y)) {
+				System.err.println("NaN target during move() for " + this + " currently at (" +
+			        currentCoord.x + ", " + currentCoord.y + ")");
+			}
+			if (target.x == currentCoord.x && target.y == currentCoord.y) {
+//				System.out.println("Current coord same as target for " + this);
+			}
 
 			// Geometry currentGeom = geomFac.createPoint(currentCoord);
 			
@@ -1221,6 +1290,11 @@ public class Vehicle {
 				// Zhan: implementation 2: thread safe version of the moveByVector
 //				 this.moveVehicleByVector(dx, distAndAngle[1]);
 				// LZ
+//				double alpha = (dx-distTravelled)/distToTarget;
+//				if (Double.isNaN(alpha) || Double.isNaN(deltaXY[0]) || Double.isNaN(deltaXY[0])) {
+//					System.err.println("alpha or deltaXY NaN in move() for " + this);
+//				}
+//				move2(alpha*deltaXY[0], alpha*deltaXY[1]);
 				//double alpha = (dx-distTravelled)/distToTarget;
 				move2(currentCoord, dx-distTravelled, distAndAngle[1]); // move by distance in the calculated direction
 //				currentCoord.x += alpha*deltaXY[0];
@@ -1240,13 +1314,16 @@ public class Vehicle {
 		}
 		// update the position of vehicles, 0<=distance_<=lane.length()
 		
+		if (distance_ < distTravelled - 2) {
+			distance_ = distTravelled;
+		}
 		distance_ -= distTravelled;
 //		if(distTravelled<dx){
 //			System.out.println("Previous distance: "+ distance+","+ this.distance_ + ","+ distTravelled+","+dx+","+this.lane.getLaneid());
 //		}
-		if(distance_<0.0){
-			distance_=0;
-		}
+//		if (distance_ < 0) {
+//			distance_=0;
+//		}
 		//LZ: For debugging, here we observed that this.distance_ can be set to NaN, but other values are valid (even in the first time this message occured)
 //		if(Float.isNaN(distance_) ){
 //			System.out.println(dx+","+currentSpeed_+","+accRate_+","+this.distance_);
@@ -2233,6 +2310,9 @@ public class Vehicle {
 		this.nosingFlag = false;
 		// if (this.distFraction() < 0.25 && this.onlane)
 		// lagVehicle.yieldingFlag = true;
+		if (Double.isNaN(acc)) {
+			System.err.println("acc is NaN for " + this);
+		}
 		return acc;
 	}
 
@@ -2640,6 +2720,9 @@ public class Vehicle {
 			System.err.println("Error with finding distance");
 			distance = 0.0;
 		}
+		if (Double.isNaN(distance)) {
+			System.err.println("distance is NaN in Vehicle.distance() for " + this);
+		}
 		return distance;
 	}
 
@@ -2684,6 +2767,24 @@ public class Vehicle {
 	 */
 	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
 		double distance;
+//		double min_dx_dy = GlobalVariables.MIN_DX_DY_PER_TURN;
+//		Coordinate c1Copy = new Coordinate(c1.x, c1.y);
+//		Coordinate c2Copy = new Coordinate(c2.x, c2.y);
+//		double dx = c2Copy.x - c1Copy.x;
+//		double dy = c2Copy.y - c1Copy.y;
+//		if (Math.abs(dx) < min_dx_dy) {
+//			c1Copy.x = c2Copy.x;
+//		}
+//		if (Math.abs(dy) < min_dx_dy) {
+//			c1Copy.y = c2Copy.y;
+//		}
+//		try {
+//			calculator.setStartingGeographicPoint(c1Copy.x, c1Copy.y);
+//			calculator.setStartingGeographicPoint(c1Copy.x, c1Copy.y);
+//			calculator.setDestinationGeographicPoint(c2Copy.x, c2Copy.y);
+//		} catch (Exception e) {
+//			System.out.println("Coordinate format error in " + this);
+//		}
 		double radius;
 //		double min_dx_dy = GlobalVariables.MIN_DX_DY_PER_TURN;
 //		Coordinate c1Copy = new Coordinate(c1.x, c1.y);
@@ -2715,6 +2816,9 @@ public class Vehicle {
 			System.err.println("Geodetic distance is NaN for " + this);
 			distance = 0.0;
 			radius = 0.0;
+		}
+		if (distance == 0.0) {
+//			System.out.println("For some reason the distance is zero in distance2() for " + this);
 		}
 		return distance;
 	}

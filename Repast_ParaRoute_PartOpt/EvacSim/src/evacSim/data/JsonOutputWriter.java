@@ -819,6 +819,7 @@ public class JsonOutputWriter implements DataConsumer {
             if (!outfile.canWrite()) {
                 throw new IOException("Can't write to file.");
             }
+            outfile.delete();
         }
         catch (IOException ioe) {
             // we don't have permissions to write to the current directory

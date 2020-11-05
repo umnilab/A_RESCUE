@@ -57,6 +57,10 @@ public class Lane {
 		this.upLanes_ = new ArrayList<Lane>();
 		this.dnLanes_ = new ArrayList<Lane>();
 	}
+	
+	public String toString() {
+		return "<Lane"+this.laneid+"@Road"+this.link+">";
+	}
 
 	public void updateLastEnterTick(int current_tick){
 		this.lastEnterTick = current_tick;
