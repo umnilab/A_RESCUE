@@ -185,6 +185,8 @@ private static Properties config;
 			.valueOf(loadConfig("INTERSECTION_BUFFER_LENGTH")); //meters
 	public static final float NO_LANECHANGING_LENGTH = Float
 			.valueOf(loadConfig("NO_LANECHANGING_LENGTH")); //meters
+	public static final float MIN_UTURN_LENGTH = Float
+			.valueOf(loadConfig("MIN_UTURN_LENGTH")); //meters
 
 	public static final double SPEED_EPSILON = Double
 			.valueOf(loadConfig("SPEED_EPSILON")); // meter/sec

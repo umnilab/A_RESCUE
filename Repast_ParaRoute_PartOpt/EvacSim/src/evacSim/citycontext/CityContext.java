@@ -274,9 +274,11 @@ public class CityContext extends DefaultContext<Object> {
 		// add u-connected lanes
 		if (road.getOppositeRoad() != null) {
 			curLane = road.getLanes().get(0);
-			dsLane = road.getOppositeRoad().getLanes().get(0);
-			curLane.addDnLane(dsLane);
-			dsLane.addUpLane(curLane);
+			if(curLane.getLength()>GlobalVariables.MIN_UTURN_LENGTH){ //LZ: Greater then 100m, otherwise the highway entrance can be link to its opposite direction...
+				dsLane = road.getOppositeRoad().getLanes().get(0);
+				curLane.addDnLane(dsLane);
+				dsLane.addUpLane(curLane);
+			}
 		}
 	}
 
