@@ -669,12 +669,14 @@ public class Vehicle {
 		// SH-- right now there is only one function we may also invoke lane
 		// changing decision here
 		// SHinvoke accelerating decision
-		this.makeAcceleratingDecision();
-		if(this.road == null){
-			return false;
-		}
-		if (this.road.getnLanes() > 1 && this.onlane && this.distance_>= GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
-				this.makeLaneChangingDecision();
+		if(this.distance_>= GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
+			this.makeAcceleratingDecision();
+			if(this.road == null){
+				return false;
+			}
+			if (this.road.getnLanes() > 1 && this.onlane) { 
+					this.makeLaneChangingDecision();
+			}
 		}
 		return true;
 	}
