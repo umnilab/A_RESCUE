@@ -296,34 +296,38 @@ public class Vehicle {
 		Lane firstlane = road.firstLane();
 		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
-		if(gap<this.length() || tickcount<=firstlane.getLastEnterTick()){
-			return 0;
+		if((gap>=this.length()|| firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && tickcount<=firstlane.getLastEnterTick()){
+			firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
+//			this.distance_ = (float) firstlane.length();
+			// For debug, if this is null, show it. Result, this cannot be null
+//			System.out.println(this.distance_);
+//			// Add vehicle to vehicle context
+//			ContextCreator.getVehicleContext().add(this);
+//		    System.out.println("A vehicle is entering the road.");
+			float capspd = road.calcSpeed();// calculate the initial speed
+			currentSpeed_ = capspd; // have to change later
+			desiredSpeed_ = this.road.getFreeSpeed(); //Initial value is 0.0, added Oct 2ed
+			this.road.removeVehicleFromNewQueue(this);
+			this.setRoad(road);
+			this.setCoordMap(firstlane);
+//			if(this.distance_<=0){
+//				System.out.println("Here 2");
+//			}
+			this.append(firstlane);
+//			while(this.road.isLocked()); // LZ: Also need a lock here
+//			this.road.setLock();
+			this.appendToRoad(this.road);
+//			this.road.releaseLock();
+			this.setNextRoad();
+			this.assignNextLane();
+			if(firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){
+				this.distance_ = 0;
+				this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
+			}
+			GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK++;
+			return 1;
 		}
-		firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
-//		this.distance_ = (float) firstlane.length();
-		// For debug, if this is null, show it. Result, this cannot be null
-//		System.out.println(this.distance_);
-//		// Add vehicle to vehicle context
-//		ContextCreator.getVehicleContext().add(this);
-//	    System.out.println("A vehicle is entering the road.");
-		float capspd = road.calcSpeed();// calculate the initial speed
-		currentSpeed_ = capspd; // have to change later
-		desiredSpeed_ = this.road.getFreeSpeed(); //Initial value is 0.0, added Oct 2ed
-		this.road.removeVehicleFromNewQueue(this);
-		this.setRoad(road);
-		this.setCoordMap(firstlane);
-//		if(this.distance_<=0){
-//			System.out.println("Here 2");
-//		}
-		this.append(firstlane);
-//		while(this.road.isLocked()); // LZ: Also need a lock here
-//		this.road.setLock();
-		this.appendToRoad(this.road);
-//		this.road.releaseLock();
-		this.setNextRoad();
-		this.assignNextLane();
-		GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK++;
-		return (1);
+		return 0;
 	}
 
 	public Road nextRoad() {
@@ -608,7 +612,7 @@ public class Vehicle {
 			if(this.distance_>=accDist){ // Find the first pt in CoordMap that has smaller distance;
 				double[] distAndAngle = new double[2];
 				distance2(coords[i+1], coords[i], distAndAngle);
-				Coordinate coord = coords[i];
+				Coordinate coord = coords[i+1];
 				move2(coord, this.distance_- accDist, distAndAngle[1]); // Update vehicle location
 				for (int j = i+1; j < coords.length; j++){ // Add the rest coords into the CoordMap
 					coordMap.add(coords[j]);
@@ -1037,7 +1041,6 @@ public class Vehicle {
 		//HG:update current speed based on freeflow speed
 //		if(this.currentSpeed_ > this.road.getFreeSpeed())
 //			this.currentSpeed_ = (float) this.road.getFreeSpeed();
-
 		// LZ: The vehicle is close enough to the intersection/destination
 		double distance = this.distance_;
 		if (distance < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
@@ -1389,7 +1392,10 @@ public class Vehicle {
 		} else if (this.nextRoad_ != null) {
 			// BL: check if there is enough space in the next road to change to
 			int tickcount = (int) RepastEssentials.GetTickCount(); 
-			if ((this.entranceGap(nextLane_) >= this.length()) && (tickcount>this.nextLane_.getLastEnterTick())) { //LZ: redundant if condition
+			// LZ: Nov 4, short lane and the vehicle can move freely
+			// Check if the target long road has space
+			
+			if ((this.entranceGap(nextLane_) >= this.length() || this.nextLane_.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && (tickcount>this.nextLane_.getLastEnterTick())) { //LZ: redundant if condition
 //				if (this.coordMap.isEmpty()) {
 //					Coordinate coor = null;
 //					Coordinate[] coords = laneGeography.getGeometry(nextLane_)
@@ -1409,7 +1415,6 @@ public class Vehicle {
 //				float maxMove = GlobalVariables.FREE_SPEED
 //						* GlobalVariables.SIMULATION_STEP_SIZE;
 				// if (distance_ < maxMove && !onlane) {
-//				if () {
 				this.nextLane_.updateLastEnterTick(tickcount); //LZ: update enter tick so other vehicle cannot enter this road in this tick
 				this.setCoordMap(nextLane_);
 				this.removeFromLane();
@@ -1426,6 +1431,10 @@ public class Vehicle {
 //				this.lock.unlock();  
 				this.setNextRoad();
 				this.assignNextLane();
+				if(this.lane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){ //move to the end of the lane
+					this.distance_ = 0;
+					this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
+				}
 				// Reset the desired speed according to the new road
 				this.desiredSpeed_ =  this.road.getFreeSpeed();
 				//HG: Need to update current speed according to the new free speed 
