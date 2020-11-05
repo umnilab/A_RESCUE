@@ -15,17 +15,10 @@ import java.util.Map.Entry;
 import java.util.Queue;
 //import java.util.concurrent.locks.ReentrantLock;
 
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.MathTransformFactory;
-import org.opengis.referencing.operation.TransformException;
-import org.geotools.geometry.jts.JTS;
-import org.geotools.referencing.CRS;
 //import org.apache.commons.lang3.ArrayUtils;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-
 import java.awt.geom.Point2D;
 import java.lang.Math;
 //import java.io.IOException;
@@ -296,7 +289,7 @@ public class Vehicle {
 		Lane firstlane = road.firstLane();
 		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
-		if((gap>=this.length()|| firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && tickcount<=firstlane.getLastEnterTick()){
+		if((gap>=this.length()|| firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && tickcount>firstlane.getLastEnterTick()){
 			firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
 //			this.distance_ = (float) firstlane.length();
 			// For debug, if this is null, show it. Result, this cannot be null
@@ -304,7 +297,7 @@ public class Vehicle {
 //			// Add vehicle to vehicle context
 //			ContextCreator.getVehicleContext().add(this);
 //		    System.out.println("A vehicle is entering the road.");
-			float capspd = road.calcSpeed();// calculate the initial speed
+			float capspd = road.getFreeSpeed();// calculate the initial speed, to be consistent with changeRoad, use free speed
 			currentSpeed_ = capspd; // have to change later
 			desiredSpeed_ = this.road.getFreeSpeed(); //Initial value is 0.0, added Oct 2ed
 			this.road.removeVehicleFromNewQueue(this);
@@ -539,9 +532,9 @@ public class Vehicle {
 		if (v != null) {
 			this.leading(v);
 //			For debugging, check if this.distance_ can be less than the front vehicle's
-			if(this.distance_<v.distance_){
-				System.out.println("Wow, " + this.distance_ + "," + v.distance_ + "," + this.lane.getLaneid() + "," + this.lane.getLength());
-			}
+//			if(this.distance_<v.distance_){
+//				System.out.println("Wow, " + this.distance_ + "," + v.distance_ + "," + this.lane.getLaneid() + "," + this.lane.getLength());
+//			}
 			v.trailing(this);
 		} else {
 			plane.firstVehicle(this);
@@ -609,12 +602,6 @@ public class Vehicle {
 //			if (!closeVehCoordinate.equals(vcoordinate))
 //				coordMap.add(nextLaneCoordinate);
 //		}
-		int[] selectVehicleIds = {131876, 96280, 371677, 102308, 96223};
-		for (int vehId : selectVehicleIds) {
-			if (this.vehicleID_ == vehId) {
-				int x=0;
-			}
-		}
 		coordMap.clear();
 		double accDist = lane.getLength();
 
@@ -686,7 +673,7 @@ public class Vehicle {
 		if(this.road == null){
 			return false;
 		}
-		if (this.road.getnLanes() > 1 && this.onlane && this.distance_>GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
+		if (this.road.getnLanes() > 1 && this.onlane && this.distance_>= GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
 				this.makeLaneChangingDecision();
 		}
 		return true;
@@ -748,9 +735,9 @@ public class Vehicle {
 		double space = gapDistance(front);
 		// if (ContextCreator.debug)
 		// For debug, we can clear see that leading is corrupted
-		if(space <0){
-			System.out.println("Gap with front vehicle :"+ space+","+front.distance_+","+this.distance_+","+this.lane.getLaneid()+","+front.lane.getLaneid()+","+this.vehicleID_+","+front.vehicleID_);
-		}
+//		if(space <0){
+//			System.out.println("Gap with front vehicle :"+ space+","+front.distance_+","+this.distance_+","+this.lane.getLaneid()+","+front.lane.getLaneid()+","+this.vehicleID_+","+front.vehicleID_);
+//		}
 
 		double speed = currentSpeed_ == 0f ? 0.00001f : currentSpeed_;
 
@@ -1106,6 +1093,8 @@ public class Vehicle {
 					}
 					return;// move finished
 				}
+			} else{
+				return; // do nothing since the vehicle reached destination
 			}
 		}
 
@@ -1516,8 +1505,8 @@ public class Vehicle {
 				this.desiredSpeed_ =  this.road.getFreeSpeed();
 				//HG: Need to update current speed according to the new free speed 
 				//LZ: Use current speed instead of the free speed, be consistent with the setting in enteringNetwork
-				if(this.currentSpeed_ > (this.road.calcSpeed()))
-					this.currentSpeed_ = this.road.calcSpeed();
+				if(this.currentSpeed_ > this.road.getFreeSpeed())
+					this.currentSpeed_ = this.road.getFreeSpeed();
 					//this.currentSpeed_ = (float) (this.road.getFreeSpeed());
 				return 1;
 //				}
