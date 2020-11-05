@@ -141,6 +141,8 @@ public class Vehicle {
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
+	// LZ, number of times the vehicle get stucked
+	protected int stuck_time = 0;
 
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
@@ -1041,15 +1043,14 @@ public class Vehicle {
 						this.lastStepMove_ = distance_;
 						this.accummulatedDistance_ += this.lastStepMove_;
 					}
-				} else { // at intersection, directly changing road
-					int canEnterNextRoad = this.changeRoad(); 
-					if (canEnterNextRoad == 0) { // cannot enter next road
+					return; // move finished
+				} else { // not on lane, directly changing road
+					if (this.changeRoad() == 0) { // 0 means the vehicle cannot enter the next road
+						stuck_time+=1;
 						this.lastStepMove_ = 0;
-//						System.out.println(this+": at intersection: "+currentCoord_.y+","+currentCoord_.x);
-//						this.trajTrackerFlag = true;
-					} else { // successfully entered the next road
-						// update the lastStepMove and accumulatedDistance
-						this.lastStepMove_ = distance_;
+					} else {
+						stuck_time=0;
+						this.lastStepMove_ = distance; //Successfully entered the next road, update the lastStepMove and accumulatedDistance
 						this.accummulatedDistance_ += this.lastStepMove_;
 					}
 				}
@@ -1133,12 +1134,20 @@ public class Vehicle {
 					if (this.nextRoad() != null) { // has a next road
 						if (this.isOnLane()) { // is still on the road
 							this.coordMap.add(this.getCurrentCoord()); // Stop and wait
-							this.appendToJunction(nextLane_);
+							if(this.appendToJunction(nextLane_)==0){
+								stuck_time+=1;
+							}else{
+								stuck_time = 0;
+							}
 							lastStepMove_ = distTravelled;
 							accummulatedDistance_ += distTravelled;
-							break; 
-						} else { // is at a junction
-							this.changeRoad();
+							break;
+						} else {
+							if(this.changeRoad()==0){
+								stuck_time+=1;
+							}else{
+								stuck_time=0;
+							}
 							lastStepMove_ = distTravelled;
 							accummulatedDistance_ += distTravelled;
 							break;
@@ -1298,6 +1307,33 @@ public class Vehicle {
 				return 1;
 //				}
 			}
+		else if(this.stuck_time>400){ // Stuck for 2 minutes, try another downward lane
+			System.out.println("THIS IS CALLED");
+			for(Lane dnlane: this.lane.getDnLanes()){
+				if ((this.entranceGap(dnlane) >= this.length() || dnlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && (tickcount>dnlane.getLastEnterTick())) {
+					dnlane.updateLastEnterTick(tickcount);
+					this.setCoordMap(dnlane);
+					this.removeFromLane();
+					this.removeFromMacroList();
+					this.appendToRoad(dnlane.road_());
+					this.append(dnlane); 
+					this.lastRouteTime=-1; // Old route is not valid, for sure
+					this.setNextRoad();
+					this.assignNextLane();
+					if(this.lane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){ //move to the end of the lane
+						this.distance_ = 0;
+						this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
+					}
+					this.desiredSpeed_ =  this.road.getFreeSpeed();
+					//HG: Need to update current speed according to the new free speed 
+					//LZ: Use current speed instead of the free speed, be consistent with the setting in enteringNetwork
+					if(this.currentSpeed_ > this.road.getFreeSpeed())
+						this.currentSpeed_ = this.road.getFreeSpeed();
+						//this.currentSpeed_ = (float) (this.road.getFreeSpeed());
+					return 1;
+				}
+			}
+		}
 		}
 		coordMap.clear();
 		coordMap.add(this.getCurrentCoord());//LZ: Fail to enter next link, try again in the next tick

@@ -543,10 +543,16 @@ public class Road {
 
 	public void setNumberOfVehicles(int nVeh){
 		this.nVehicles_ = nVeh;
+		if(this.nVehicles_<0) {
+			this.nVehicles_=0;
+		}
 	}
 	
 	public void changeNumberOfVehicles(int nVeh){
 		this.nVehicles_ += nVeh;
+		if(this.nVehicles_<0) {
+			this.nVehicles_=0;
+		}
 	}
 	
 	public void firstVehicle(Vehicle v) {
