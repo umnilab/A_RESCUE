@@ -171,10 +171,15 @@ public class Road {
 //				}
 //			}
 			Vehicle pv = this.firstVehicle();
-//			if(pv !=null){ // LZ: Oct 23, doesn't work, want to resolve the gridlock issue caused by A is in front of B and B is in front of A.
-//				pv.leading(null);
-//				pv.clearMacroLeading(); 
-//			}
+			if(pv !=null){ // LZ: Oct 23, doesn't work, want to resolve the gridlock issue caused by A is in front of B and B is in front of A.
+				if(pv.leading()!=null){
+					System.out.println("Oh, my...");
+					pv.leading().trailing(null);
+				}
+				pv.leading(null);
+				pv.clearMacroLeading(); 
+				
+			}
 //			int counter = 0;
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
