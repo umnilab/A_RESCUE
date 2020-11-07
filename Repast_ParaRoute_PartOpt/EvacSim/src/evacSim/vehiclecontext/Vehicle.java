@@ -292,6 +292,7 @@ public class Vehicle {
 		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
 		if(gap>=this.length() && tickcount>firstlane.getLastEnterTick()){
+			this.updateLastMoveTick(tickcount);
 			firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
 //			this.distance_ = (float) firstlane.length();
 			// For debug, if this is null, show it. Result, this cannot be null
@@ -513,7 +514,7 @@ public class Vehicle {
 						itr.next();
 						this.nextRoad_ = itr.next(); // RV: null
 					} else {
-						System.out.println(this + " same road" + this.road.getID() + " for next dest");
+						System.out.println(this + " same road" + this.road.getLinkid() + " for next dest");
 						this.nextRoad_ = null;
 					}
 				}
@@ -675,10 +676,10 @@ public class Vehicle {
 			return false;
 		}
 //		if(this.lane.getLength()>= GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
-			this.makeAcceleratingDecision();
-			if (this.road.getnLanes() > 1 && this.onlane && this.distance_>=GlobalVariables.NO_LANECHANGING_LENGTH) { 
-					this.makeLaneChangingDecision();
-			}
+		this.makeAcceleratingDecision();
+		if (this.road.getnLanes() > 1 && this.onlane && this.distance_>=GlobalVariables.NO_LANECHANGING_LENGTH) { 
+				this.makeLaneChangingDecision();
+		}
 //		}
 		return true;
 	}
@@ -831,18 +832,14 @@ public class Vehicle {
 	}
 
 	public Vehicle vehicleAhead() {
-		try {
-			if (leading_ != null) {
-				return leading_;
-			} else if (nextLane_ != null) {
-				if (nextLane_.lastVehicle() != null)
-					return nextLane_.lastVehicle();
-				else
-					return null;
-			} else {
+		if (leading_ != null) {
+			return leading_;
+		} else if (nextLane_ != null) {
+			if (nextLane_.lastVehicle() != null)
+				return nextLane_.lastVehicle();
+			else
 				return null;
-			}
-		} catch (NullPointerException e) {
+		} else {
 			return null;
 		}
 	}
@@ -868,9 +865,8 @@ public class Vehicle {
 			else if (this.lane.getID() == front.lane.getID()) { /* same lane */
 				headwayDistance = this.distance_ - front.distance(); //-front.length();
 			} else { /* different lane */
-				headwayDistance = Float.MAX_VALUE;
-//				headwayDistance = this.distance_
-//						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road //-front.length();
+				headwayDistance = this.distance_
+						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road //-front.length();
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
@@ -1123,9 +1119,9 @@ public class Vehicle {
 		 */
 		
 		float step = GlobalVariables.SIMULATION_STEP_SIZE; // 0.3
-		if (currentSpeed_ < GlobalVariables.SPEED_EPSILON && accRate_ < GlobalVariables.ACC_EPSILON) { //0.001
-			return; // Does not move
-		}
+//		if (currentSpeed_ < GlobalVariables.SPEED_EPSILON && accRate_ < GlobalVariables.ACC_EPSILON) { //0.001
+//			return; // Does not move
+//		}
 		// For debugging, check if the inputs for calculating dx can be null, not here
 //		if(Float.isNaN(currentSpeed_)|| Float.isNaN(accRate_) ){
 //			System.out.println(currentSpeed_+","+accRate_+","+this.distance_);
@@ -1142,10 +1138,10 @@ public class Vehicle {
 			if (currentSpeed_ == 0.0f && accRate_ == 0.0f) {
 				dx = 0.0f;
 			}
-			else if (accRate_ == 0.0f) {
-				System.out.println("speed not 0 but accel = 0 & still vehicle stops " + this);
-				dx = 0.0f;
-			}
+//			else if (accRate_ == 0.0f) {
+//				System.out.println("speed not 0 but accel = 0 & still vehicle stops " + this);
+//				dx = 0.0f;
+//			}
 		}
 		if (Double.isNaN(dx)) {
 			System.out.println("dx is NaN in move() for " + this);
@@ -1164,8 +1160,8 @@ public class Vehicle {
 		
 		// actual acceleration rate applied in last time interval.
 		accRate_ = (float) (2.0f * (dx - oldv * step) / (step * step));
-
-		// update speed
+//
+//		// update speed
 		currentSpeed_ += accRate_ * step;
 		if (currentSpeed_ < GlobalVariables.SPEED_EPSILON) {
 			currentSpeed_ = 0.0f;
@@ -1181,7 +1177,7 @@ public class Vehicle {
 //			int x = 0;
 			accRate_ = (float) ((currentSpeed_ - oldv) / step);
 		}
-
+//
 		if (dx < 0.0f) { // Negative dx is not allowed
 			lastStepMove_ = 0;
 			return;
@@ -1205,13 +1201,13 @@ public class Vehicle {
 			 */
 			
 			target = this.coordMap.get(0);
-			if (Double.isNaN(target.x) || Double.isNaN(target.y)) {
-				System.err.println("NaN target during move() for " + this + " currently at (" +
-			        currentCoord.x + ", " + currentCoord.y + ")");
-			}
-			if (target.x == currentCoord.x && target.y == currentCoord.y) {
-//				System.out.println("Current coord same as target for " + this);
-			}
+//			if (Double.isNaN(target.x) || Double.isNaN(target.y)) {
+//				System.err.println("NaN target during move() for " + this + " currently at (" +
+//			        currentCoord.x + ", " + currentCoord.y + ")");
+//			}
+//			if (target.x == currentCoord.x && target.y == currentCoord.y) {
+////				System.out.println("Current coord same as target for " + this);
+//			}
 
 			// Geometry currentGeom = geomFac.createPoint(currentCoord);
 			
@@ -1315,21 +1311,19 @@ public class Vehicle {
 			
 		}
 		// update the position of vehicles, 0<=distance_<=lane.length()
-		
-		if (distance_ < distTravelled - 2) {
-			distance_ = distTravelled;
-		}
 		distance_ -= distTravelled;
 //		if(distTravelled<dx){
 //			System.out.println("Previous distance: "+ distance+","+ this.distance_ + ","+ distTravelled+","+dx+","+this.lane.getLaneid());
 //		}
-//		if (distance_ < 0) {
-//			distance_=0;
-//		}
+		if (distance_ < 0) {
+			distance_=0;
+		}
 		//LZ: For debugging, here we observed that this.distance_ can be set to NaN, but other values are valid (even in the first time this message occured)
 //		if(Float.isNaN(distance_) ){
 //			System.out.println(dx+","+currentSpeed_+","+accRate_+","+this.distance_);
 //		}
+//		this.currentSpeed_ = (float) (distTravelled/step);
+//		this.accRate_ = (this.currentSpeed_-oldv)/step;
 		return;
 	}
 
@@ -1495,9 +1489,9 @@ public class Vehicle {
 //						* GlobalVariables.SIMULATION_STEP_SIZE;
 				// if (distance_ < maxMove && !onlane) {
 				this.nextLane_.updateLastEnterTick(tickcount); //LZ: update enter tick so other vehicle cannot enter this road in this tick
-				this.setCoordMap(nextLane_);
 				this.removeFromLane();
 				this.removeFromMacroList();
+				this.setCoordMap(nextLane_);
 //				this.lock.lock();
 //				while(this.nextRoad().isLocked());//LZ: Wait until the lock is released
 //				this.nextRoad().setLock();
