@@ -139,7 +139,7 @@ public class Vehicle {
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
-	// LZ, number of times the vehicle get stucked
+	// LZ, number of times the vehicle get stuck
 	protected int stuck_time = 0;
 
 	public Vehicle(House h) {
@@ -720,9 +720,6 @@ public class Vehicle {
 		if (Double.isNaN(accRate_)) {
 			System.err.println("NaN acceleration rate for " + this);
 		}
-		if (accRate_ == 0) {
-			int x = 0; //System.out.println("accRate_ = 0 in makeAcceleratingDecision() for " + this);
-		}
 	}
 
 	public double calcCarFollowingRate(Vehicle front) {
@@ -910,18 +907,20 @@ public class Vehicle {
 		} else {
 			if (this.distFraction() > 0.75) {
 				// First 25% in the road, do discretionary LC with 100% chance
-				double laneChangeProb1 = GlobalVariables.RandomGenerator
-						.nextDouble();
-				// The vehicle is at beginning of the lane, it is free to change lane
+				double laneChangeProb1 = GlobalVariables.RandomGenerator.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change
+				// lane
 				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb1 < 1.0)
 						this.discretionaryLC(tarLane);
-				}			} else {
-				// First 25%-50% in the road, we do discretionary LC but only to correct lanes with 100% chance
-				double laneChangeProb2 = GlobalVariables.RandomGenerator
-						.nextDouble();
-				// The vehicle is at beginning of the lane, it is free to change lane
+				}
+			} else {
+				// First 25%-50% in the road, we do discretionary LC but only to
+				// correct lanes with 100% chance
+				double laneChangeProb2 = GlobalVariables.RandomGenerator.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change
+				// lane
 				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb2 < 1.0)
@@ -1426,9 +1425,9 @@ public class Vehicle {
 			// 0->2PI
 			double distToTravel = travelPerTurn;
 			// Need to convert distance from long/lat degrees to meters
-			double distToTravelM = ContextCreator.convertToMeters(distToTravel);
+//			double distToTravelM = ContextCreator.convertToMeters(distToTravel);
 			// System.out.println("Angle: "+angle);
-			this.accummulatedDistance_ += distToTravelM;
+			this.accummulatedDistance_ += distToTravel;
 			// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
 			// System.out.println("Vehicle ID: " + this.getVehicleID()
 			// +" disToTravelM= "+distToTravelM);
@@ -1445,7 +1444,7 @@ public class Vehicle {
 
 			// LZ: implementation 3: drop the geom class and change the coordinates
 			//double alpha = distToTravelM / distToTarget;
-			move2(currentCoord, distToTravelM, distAndAngle[1]);
+			move2(currentCoord, distToTravel, distAndAngle[1]);
 			// currentCoord.x += alpha*deltaXY[0];
 			// currentCoord.y += alpha*deltaXY[1];
 			// this.setCurrentCoord(currentCoord);
@@ -1561,7 +1560,7 @@ public class Vehicle {
 	public int closeToRoad(Road road) {
 		// SH Temp
 		Coordinate currentCoord = this.getCurrentCoord();
-		GeometryFactory geomFac = new GeometryFactory();
+//		GeometryFactory geomFac = new GeometryFactory();
 		Coordinate nextCoord = null;
 
 		if (this.coordMap == null)
@@ -1572,11 +1571,11 @@ public class Vehicle {
 		else
 			nextCoord = this.coordMap.get(0);
 
-		Geometry geom1 = geomFac.createPoint(currentCoord);
-		Geometry geom2 = geomFac.createPoint(nextCoord);
-		DistanceOp dist1 = new DistanceOp(geom1, geom2);
+//		Geometry geom1 = geomFac.createPoint(currentCoord);
+//		Geometry geom2 = geomFac.createPoint(nextCoord);
+//		DistanceOp dist1 = new DistanceOp(geom1, geom2);
 
-		if (dist1.distance() < GlobalVariables.TRAVEL_PER_TURN) {
+		if (distance(currentCoord, nextCoord) < GlobalVariables.TRAVEL_PER_TURN) {
 			return 1;
 		} else
 			return 0;
