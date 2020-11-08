@@ -292,8 +292,8 @@ public class Vehicle {
 		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
 		if(gap>=this.length() && tickcount>firstlane.getLastEnterTick()){
-			this.updateLastMoveTick(tickcount);
 			firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
+			this.updateLastMoveTick(tickcount);
 //			this.distance_ = (float) firstlane.length();
 			// For debug, if this is null, show it. Result, this cannot be null
 //			System.out.println(this.distance_);
@@ -523,7 +523,7 @@ public class Vehicle {
 			e.printStackTrace();
 			System.out.println("No next road found for Vehicle "
 					+ this.vehicleID_ + " on Road " + this.road.getLinkid());
-			this.nextRoad_ = null;
+			this.nextRoad_ = null; // LZ: Remove the vehicle, can we do something better? 
 		}
 	}
 
