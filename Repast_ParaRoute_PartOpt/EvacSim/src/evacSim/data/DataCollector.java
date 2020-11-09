@@ -200,7 +200,6 @@ public class DataCollector {
         // TODO: tell each of the consumers to stop ?
     }
     
-    
     /**
      * Tells the data collection system to stop accepting new data from the
      * simulation but that data collection may continue in the future.  The
@@ -373,7 +372,7 @@ public class DataCollector {
     /**
      * Adds the given data consumer to the list of registered data consumers.
      * Each object in the program which needs to read data from the buffer
-     * should register a data consumer.  Each data consumer processes the
+     * should register a data consumer.  Each dGlobalVariables.NUM_FAILED_VEHICLES ata consumer processes the
      * data buffer at its own rate, and the data buffer will keep items
      * available in memory only as long as is necessary for all currently
      * registered data consumers to process them.

@@ -408,6 +408,8 @@ private static Properties config;
 	 * at destination for visualization purposes*/
 	public static int NUM_KILLED_VEHICLES = 0;
 	
+	public static int NUM_FAILED_VEHICLES = 0;
+	
 	/* Parameters for handling multiclass routing.
 	 * Note that the proportion of original routing vehicles being generated is equal to
 	 * 1 - (PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES). */ 

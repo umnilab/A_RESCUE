@@ -523,6 +523,7 @@ public class Vehicle {
 			e.printStackTrace();
 			System.out.println("No next road found for Vehicle "
 					+ this.vehicleID_ + " on Road " + this.road.getLinkid());
+			GlobalVariables.NUM_FAILED_VEHICLES += 1;
 			this.nextRoad_ = null; // LZ: Remove the vehicle, can we do something better? 
 		}
 	}
