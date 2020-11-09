@@ -1,10 +1,6 @@
 package evacSim.vehiclecontext;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.operation.distance.DistanceOp;
-
 //import cern.colt.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +16,7 @@ import org.opengis.referencing.operation.MathTransformFactory;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.lang.Math;
 //import java.io.IOException;
 //import java.util.concurrent.locks.ReentrantLock;
@@ -1798,6 +1795,15 @@ public class Vehicle {
 			this.reachActLocation = false;
 			this.reachDest = true;
 //			System.out.println(this + " reached dest zone " + destinationZone);
+			//LZ: Log the vehicle information here
+			String formated_msg = this.getVehicleID() + "," + 0 + "," + this.getDepTime() + "," + this.getEndTime() + "," + 
+			this.getHouse().getZoneId()+ ","+this.getDestinationID()+","+this.accummulatedDistance_+","+this.visitedShelters.size();
+			try {
+				ContextCreator.bw.write(formated_msg);
+				ContextCreator.bw.newLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			this.killVehicle();
 		}
 	}
@@ -2988,6 +2994,14 @@ public class Vehicle {
 			this.reachActLocation = false;
 			this.reachDest = true;
 			System.out.println(this + " reached dest shelter " + curDest);
+			String formated_msg = this.getVehicleID() + "," + 0 + "," + this.getDepTime() + "," + this.getEndTime() + "," + 
+					this.getHouse().getZoneId()+ ","+this.getDestinationID()+","+this.accummulatedDistance_+","+this.visitedShelters.size();
+					try {
+						ContextCreator.bw.write(formated_msg);
+						ContextCreator.bw.newLine();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 			this.killVehicle();
 		}
 		// else if current shelter is not available, reroute this to next shelter

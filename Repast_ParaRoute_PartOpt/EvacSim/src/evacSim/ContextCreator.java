@@ -1,6 +1,9 @@
 package evacSim;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Properties;
 //import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,6 +29,8 @@ import evacSim.partition.*;
 import evacSim.data.*;
 
 public class ContextCreator implements ContextBuilder<Object> {
+	
+	public static BufferedWriter bw; // Vehicle logger
 
 	private static Context<Object> mainContext; // Useful to keep a reference to
 												// the main context
@@ -272,6 +277,20 @@ public class ContextCreator implements ContextBuilder<Object> {
 			ScheduleParameters recordRuntimeParams = ScheduleParameters.createRepeating(
 					0, GlobalVariables.RUNTIME_RECORD_INTERVAL, 6);
 			schedule.schedule(recordRuntimeParams, dataContext, "recordRuntime");
+			
+			// LZ: initialize UCBLogger
+			System.out.println("Vehicle logger creating...");
+			try{
+				FileWriter fw = new FileWriter("VehicleLogger.csv", false);
+				bw = new BufferedWriter(fw);
+				bw.write("vehicleID,type,startTime,endTime,originID,destID,totalDistance,visitedShelters");
+				bw.newLine();
+				bw.flush();
+				System.out.println("Vehicle logger created!");
+			} catch (IOException e){
+				e.printStackTrace();
+				System.out.println("Vehicle logger failed.");
+			}
 	     }
 		
 		agentID = 0;
@@ -297,6 +316,11 @@ public class ContextCreator implements ContextBuilder<Object> {
 				+ (System.currentTimeMillis() - startTime));
 //		System.out.println("Finished data collection: "
 //				+ (GlobalVariables.datacollection_total));
+		try{
+			bw.close();
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	/** RV: Prematurely end the simulation if there is no vehicle on the road network or

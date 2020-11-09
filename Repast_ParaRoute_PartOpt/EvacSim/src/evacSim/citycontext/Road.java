@@ -171,14 +171,13 @@ public class Road {
 //				}
 //			}
 			Vehicle pv = this.firstVehicle(); // The first vehicle in a road
-			if(pv !=null){ // LZ: Oct 23, doesn't work, want to resolve the gridlock issue caused by A is in front of B and B is in front of A.
+			if(pv !=null){
 				if(pv.leading()!=null){
 					System.out.println("Oh, my..." + "," + pv.getLane().getLaneid()+","+pv.getLane().getLength()+","+pv.leading().getLane().getLaneid()+","+pv.distance()+","+ pv.leading().distance());
 //					pv.leading().trailing(null);
 				}
 //				pv.leading(null);
 //				pv.clearMacroLeading(); 
-				
 			}
 //			int counter = 0;
 			while (pv != null) {
