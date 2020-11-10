@@ -441,8 +441,6 @@ private static Properties config;
 	 * See CityContext.getClosestShelter() for details */
 	public static final int DYNAMIC_DEST_STRATEGY = Integer
 			.valueOf(loadConfig("DYNAMIC_DEST_STRATEGY"));
-//	public static final int SHELTER_CAP = Integer.
-//			valueOf(loadConfig("SHELTER_CAP")); // same capacity of each shelter
 	public static final String SO_SHELTER_MATCHING_ALGO = 
 			String.valueOf(loadConfig("SO_SHELTER_MATCHING_ALGO"));
 	public static final int SO_SHELTER_MATCHING_INTERVAL =
@@ -451,7 +449,7 @@ private static Properties config;
 			new ArrayList<ArrayList<Integer>>();	
 	public static final Boolean ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION = 
 			Boolean.valueOf(loadConfig("ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION"));
-	/* RV: Record the runtime spent in each 1000 ticks for performance analysis */
+	// RV: Record the runtime spent in each 1000 ticks for performance analysis */
 	public static final boolean ENABLE_RUNTIME_RECORD =
 			Boolean.valueOf(loadConfig("ENABLE_RUNTIME_RECORD"));
 	public static final int RUNTIME_RECORD_INTERVAL =
@@ -459,4 +457,6 @@ private static Properties config;
 	public static ArrayList<Double> RUNTIME_RECORD_LIST = new ArrayList<Double>();
 	// LZ
 	public static final Boolean DISABLE_GEOMETRY = Boolean.valueOf(loadConfig("DISABLE_GEOMETRY"));
+	
+	public static final int MAX_STUCK_TIME = Integer.valueOf(loadConfig("MAX_STUCK_TIME"));
 }
