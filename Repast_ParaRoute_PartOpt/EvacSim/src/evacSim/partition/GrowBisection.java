@@ -105,7 +105,7 @@ public class GrowBisection {
     Arrays.fill(visited, 0);
     // LZ: Add a sanity check to avoid 0 inputs
     if(numNodes <= 0) {
-    	queue[0] = 0;
+    	return;
     }
     else {
     	queue[0] = random.nextInt(numNodes);
