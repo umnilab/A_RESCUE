@@ -170,11 +170,15 @@ public class Road {
 //					v_ = v_.macroTrailing();//get the next vehicle behind the current vehicle
 //				}
 //			}
-			Vehicle pv = this.firstVehicle();
-//			if(pv !=null){ // LZ: Oct 23, doesn't work, want to resolve the gridlock issue caused by A is in front of B and B is in front of A.
+			Vehicle pv = this.firstVehicle(); // The first vehicle in a road
+			if(pv !=null){
+				if(pv.leading()!=null){
+					System.out.println("Oh, my..." + "," + pv.getLane().getLaneid()+","+pv.getLane().getLength()+","+pv.leading().getLane().getLaneid()+","+pv.distance()+","+ pv.leading().distance());
+//					pv.leading().trailing(null);
+				}
 //				pv.leading(null);
 //				pv.clearMacroLeading(); 
-//			}
+			}
 //			int counter = 0;
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
@@ -556,8 +560,13 @@ public class Road {
 	}
 	
 	public void firstVehicle(Vehicle v) {
-		if (v != null)
+		
+		if (v != null) {
+			if(v.leading()!=null){
+				System.out.println("Well");
+			}
 			this.firstVehicle_ = v;
+		}
 		else
 			this.firstVehicle_ = null;
 	}

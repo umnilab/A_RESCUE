@@ -103,7 +103,13 @@ public class GrowBisection {
     int[] visited = new int[numNodes];
     int[] queue = new int[numNodes];
     Arrays.fill(visited, 0);
-    queue[0] = random.nextInt(numNodes);
+    // LZ: Add a sanity check to avoid 0 inputs
+    if(numNodes <= 0) {
+    	queue[0] = 0;
+    }
+    else {
+    	queue[0] = random.nextInt(numNodes);
+    }
     visited[queue[0]] = 1;
     int first = 0;
     int last = 1;

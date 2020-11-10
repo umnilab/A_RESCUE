@@ -1,10 +1,6 @@
 package evacSim.vehiclecontext;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.operation.distance.DistanceOp;
-
 //import cern.colt.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +16,7 @@ import org.opengis.referencing.operation.MathTransformFactory;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.lang.Math;
 //import java.io.IOException;
 //import java.util.concurrent.locks.ReentrantLock;
@@ -141,7 +138,7 @@ public class Vehicle {
 	
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 //	private ReentrantLock lock;
-	// LZ, number of times the vehicle get stucked
+	// LZ, number of times the vehicle get stuck
 	protected int stuck_time = 0;
 
 	public Vehicle(House h) {
@@ -294,8 +291,9 @@ public class Vehicle {
 		Lane firstlane = road.firstLane();
 		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
-		if((gap>=this.length()|| firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && tickcount>firstlane.getLastEnterTick()){
+		if(gap>=this.length() && tickcount>firstlane.getLastEnterTick()){
 			firstlane.updateLastEnterTick(tickcount); //LZ: Update the last enter tick for this lane
+			this.updateLastMoveTick(tickcount);
 //			this.distance_ = (float) firstlane.length();
 			// For debug, if this is null, show it. Result, this cannot be null
 //			System.out.println(this.distance_);
@@ -318,10 +316,10 @@ public class Vehicle {
 //			this.road.releaseLock();
 			this.setNextRoad();
 			this.assignNextLane();
-			if(firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){
-				this.distance_ = 0;
-				this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
-			}
+//			if(firstlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){
+//				this.distance_ = 0;
+//				this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
+//			}
 			GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK++;
 			return 1;
 		}
@@ -516,7 +514,7 @@ public class Vehicle {
 						itr.next();
 						this.nextRoad_ = itr.next(); // RV: null
 					} else {
-						System.out.println(this + " same road" + this.road.getID() + " for next dest");
+						System.out.println(this + " same road" + this.road.getLinkid() + " for next dest");
 						this.nextRoad_ = null;
 					}
 				}
@@ -525,7 +523,8 @@ public class Vehicle {
 			e.printStackTrace();
 			System.out.println("No next road found for Vehicle "
 					+ this.vehicleID_ + " on Road " + this.road.getLinkid());
-			this.nextRoad_ = null;
+			GlobalVariables.NUM_FAILED_VEHICLES += 1;
+			this.nextRoad_ = null; // LZ: Remove the vehicle, can we do something better? 
 		}
 	}
 
@@ -623,15 +622,15 @@ public class Vehicle {
 		// SH-- right now there is only one function we may also invoke lane
 		// changing decision here
 		// SHinvoke accelerating decision
-		if(this.lane.getLength()>= GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
-			this.makeAcceleratingDecision();
-			if(this.road == null){
-				return false;
-			}
-			if (this.road.getnLanes() > 1 && this.onlane && this.distance_>=GlobalVariables.NO_LANECHANGING_LENGTH) { 
-					this.makeLaneChangingDecision();
-			}
+		if(this.road == null || this==null){
+			return false;
 		}
+//		if(this.lane.getLength()>= GlobalVariables.NO_LANECHANGING_LENGTH) { //LZ: Nov 4, add NO_LANECHANGING_LENGTH
+		this.makeAcceleratingDecision();
+		if (this.road.getnLanes() > 1 && this.onlane && this.distance_>=GlobalVariables.NO_LANECHANGING_LENGTH) { 
+				this.makeLaneChangingDecision();
+		}
+//		}
 		return true;
 	}
 
@@ -671,9 +670,6 @@ public class Vehicle {
 		accRate_ = acc;
 		if (Double.isNaN(accRate_)) {
 			System.err.println("NaN acceleration rate for " + this);
-		}
-		if (accRate_ == 0) {
-			int x = 0; //System.out.println("accRate_ = 0 in makeAcceleratingDecision() for " + this);
 		}
 	}
 
@@ -786,18 +782,14 @@ public class Vehicle {
 	}
 
 	public Vehicle vehicleAhead() {
-		try {
-			if (leading_ != null) {
-				return leading_;
-			} else if (nextLane_ != null) {
-				if (nextLane_.lastVehicle() != null)
-					return nextLane_.lastVehicle();
-				else
-					return null;
-			} else {
+		if (leading_ != null) {
+			return leading_;
+		} else if (nextLane_ != null) {
+			if (nextLane_.lastVehicle() != null)
+				return nextLane_.lastVehicle();
+			else
 				return null;
-			}
-		} catch (NullPointerException e) {
+		} else {
 			return null;
 		}
 	}
@@ -823,9 +815,8 @@ public class Vehicle {
 			else if (this.lane.getID() == front.lane.getID()) { /* same lane */
 				headwayDistance = this.distance_ - front.distance(); //-front.length();
 			} else { /* different lane */
-				headwayDistance = Float.MAX_VALUE;
-//				headwayDistance = this.distance_
-//						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road //-front.length();
+				headwayDistance = this.distance_
+						+ (float) front.lane.getLength() - front.distance(); //LZ: front vehicle is in the next road //-front.length();
 			}
 		} else { /* no vehicle ahead. */
 			headwayDistance = Float.MAX_VALUE;
@@ -848,18 +839,20 @@ public class Vehicle {
 		} else {
 			if (this.distFraction() > 0.75) {
 				// First 25% in the road, do discretionary LC with 100% chance
-				double laneChangeProb1 = GlobalVariables.RandomGenerator
-						.nextDouble();
-				// The vehicle is at beginning of the lane, it is free to change lane
+				double laneChangeProb1 = GlobalVariables.RandomGenerator.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change
+				// lane
 				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb1 < 1.0)
 						this.discretionaryLC(tarLane);
-				}			} else {
-				// First 25%-50% in the road, we do discretionary LC but only to correct lanes with 100% chance
-				double laneChangeProb2 = GlobalVariables.RandomGenerator
-						.nextDouble();
-				// The vehicle is at beginning of the lane, it is free to change lane
+				}
+			} else {
+				// First 25%-50% in the road, we do discretionary LC but only to
+				// correct lanes with 100% chance
+				double laneChangeProb2 = GlobalVariables.RandomGenerator.nextDouble();
+				// The vehicle is at beginning of the lane, it is free to change
+				// lane
 				Lane tarLane = this.findBetterCorrectLane();
 				if (tarLane != null) {
 					if (laneChangeProb2 < 1.0)
@@ -1058,19 +1051,42 @@ public class Vehicle {
 			return; // move finished; $this has reached destination
 		}
 		
-		// if both speed & acceleration are below a threshold, do not move
-		if (currentSpeed_ < minSpeed && accRate_ < minAcc) {
-			return;
-		}
-		// calculate distance based on kinematics
-		double dv = accRate_ * step; // change of speed
+		float step = GlobalVariables.SIMULATION_STEP_SIZE; // 0.3
+//		if (currentSpeed_ < GlobalVariables.SPEED_EPSILON && accRate_ < GlobalVariables.ACC_EPSILON) { //0.001
+//			return; // Does not move
+//		}
+		// For debugging, check if the inputs for calculating dx can be null, not here
+//		if(Float.isNaN(currentSpeed_)|| Float.isNaN(accRate_) ){
+//			System.out.println(currentSpeed_+","+accRate_+","+this.distance_);
+//		}
+		float oldv = currentSpeed_; // Velocity at the beginning
+
+		double dv = accRate_ * step; // Change of speed
+
 		if (dv > -currentSpeed_) { // still moving at the end of the cycle
 			dx = currentSpeed_ * step + 0.5f * dv * step;
 		} else { // stops before the cycle end
-			if (accRate_ == 0) { // $this was stopped before & is still stopped
-				dx = 0;
-			} else { // $this decelerates to a stop
-				dx = -0.5f * currentSpeed_ * currentSpeed_ / accRate_;
+			dx = -0.5f * currentSpeed_ * currentSpeed_ / accRate_;
+			if (currentSpeed_ == 0.0f && accRate_ == 0.0f) {
+				dx = 0.0f;
+			}
+//			else if (accRate_ == 0.0f) {
+//				System.out.println("speed not 0 but accel = 0 & still vehicle stops " + this);
+//				dx = 0.0f;
+//			}
+		}
+		if (Double.isNaN(dx)) {
+			System.out.println("dx is NaN in move() for " + this);
+		}
+
+		// Solve the crash problem 
+		Vehicle front = this.vehicleAhead();
+		if (front != null) {
+			double gap = gapDistance(front);
+			if (gap > this.length()) {
+				dx = Math.min(dx, gap - this.length());
+			} else {
+				dx = 0.0f;
 			}
 		}
 		if (dx < 0 || Double.isNaN(dx))
@@ -1082,8 +1098,8 @@ public class Vehicle {
 		
 		// actual acceleration rate applied in last time interval.
 		accRate_ = (float) (2.0f * (dx - oldv * step) / (step * step));
-
-		// update speed
+//
+//		// update speed
 		currentSpeed_ += accRate_ * step;
 		if (currentSpeed_ < minSpeed) {
 			currentSpeed_ = 0.0f;
@@ -1092,9 +1108,8 @@ public class Vehicle {
 			currentSpeed_ = (float) maxSpeed;
 			accRate_ = (float) ((currentSpeed_ - oldv) / step);
 		}
-		
-		// if distance to be travelled is zero, return
-		if (dx == 0) {
+//
+		if (dx < 0.0f) { // Negative dx is not allowed
 			lastStepMove_ = 0;
 			return;
 		}
@@ -1106,15 +1121,30 @@ public class Vehicle {
 		 * 3. Find the first vehicle of all the lanes of those roads.
 		 */
 		while (!travelledMaxDist) {
-			currentCoord = this.getCurrentCoord(); // current location
-			target = this.coordMap.get(0); // first control point on this lane ahead of $this veh.
-			if (Double.isNaN(target.x) || Double.isNaN(target.y)) {
-				System.err.println("Vehicle.move(): target.x=NaN or target.y=NaN "+this);
-			}
-			/* // SH: new block of code for using new distance
-			double[] distAndAngle = new double[2];
-			double distToTarget =  this.distance(currentCoord, target, distAndAngle);
-			*/
+			
+			// Current location
+			currentCoord = this.getCurrentCoord();
+
+			/*
+			 * Solve the no coordinate problem (10/23/2012) need to recall
+			 * last coordinate if it was deleted.
+			 */
+			
+			target = this.coordMap.get(0);
+//			if (Double.isNaN(target.x) || Double.isNaN(target.y)) {
+//				System.err.println("NaN target during move() for " + this + " currently at (" +
+//			        currentCoord.x + ", " + currentCoord.y + ")");
+//			}
+//			if (target.x == currentCoord.x && target.y == currentCoord.y) {
+////				System.out.println("Current coord same as target for " + this);
+//			}
+
+			// Geometry currentGeom = geomFac.createPoint(currentCoord);
+			
+			// SH: new block of code for using new distance
+//			double[] distAndAngle = new double[2];
+//			double distToTarget =  this.distance(currentCoord, target, distAndAngle);
+			
 			// LZ: replace previous vehicle movement function
 			double[] distAndAngle = new double[2]; // the first element is the distance, and the second is the radius
 			double distToTarget = this.distance2(currentCoord, target, distAndAngle);
@@ -1234,9 +1264,9 @@ public class Vehicle {
 			// 0->2PI
 			double distToTravel = travelPerTurn;
 			// Need to convert distance from long/lat degrees to meters
-			double distToTravelM = ContextCreator.convertToMeters(distToTravel);
+//			double distToTravelM = ContextCreator.convertToMeters(distToTravel);
 			// System.out.println("Angle: "+angle);
-			this.accummulatedDistance_ += distToTravelM;
+			this.accummulatedDistance_ += distToTravel;
 			// if(this.vehicleID_ == GlobalVariables.Global_Vehicle_ID)
 			// System.out.println("Vehicle ID: " + this.getVehicleID()
 			// +" disToTravelM= "+distToTravelM);
@@ -1281,9 +1311,9 @@ public class Vehicle {
 					|| this.nextLane_.getLength() < GlobalVariables.NO_LANECHANGING_LENGTH)
 					&& (tickcount > this.nextLane_.getLastEnterTick())) { //LZ: redundant if condition
 				this.nextLane_.updateLastEnterTick(tickcount); //LZ: update enter tick so other vehicle cannot enter this road in this tick
-				this.setCoordMap(nextLane_);
 				this.removeFromLane();
 				this.removeFromMacroList();
+				this.setCoordMap(nextLane_);
 //				this.lock.lock();
 //				while(this.nextRoad().isLocked());//LZ: Wait until the lock is released
 //				this.nextRoad().setLock();
@@ -1293,10 +1323,10 @@ public class Vehicle {
 //				this.lock.unlock();
 				this.setNextRoad();
 				this.assignNextLane();
-				if(this.lane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){ //move to the end of the lane
-					this.distance_ = 0;
-					this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
-				}
+//				if(this.lane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){ //move to the end of the lane
+//					this.distance_ = 0;
+//					this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
+//				}
 				// Reset the desired speed according to the new road
 				this.desiredSpeed_ =  this.road.getFreeSpeed();
 				//HG: Need to update current speed according to the new free speed 
@@ -1308,9 +1338,9 @@ public class Vehicle {
 //				}
 			}
 		else if(this.stuck_time>400){ // Stuck for 2 minutes, try another downward lane
-			System.out.println("THIS IS CALLED");
+//			System.out.println("THIS IS CALLED");
 			for(Lane dnlane: this.lane.getDnLanes()){
-				if ((this.entranceGap(dnlane) >= this.length() || dnlane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH) && (tickcount>dnlane.getLastEnterTick())) {
+				if (this.entranceGap(dnlane) >= this.length() && (tickcount>dnlane.getLastEnterTick())) {
 					dnlane.updateLastEnterTick(tickcount);
 					this.setCoordMap(dnlane);
 					this.removeFromLane();
@@ -1320,10 +1350,10 @@ public class Vehicle {
 					this.lastRouteTime=-1; // Old route is not valid, for sure
 					this.setNextRoad();
 					this.assignNextLane();
-					if(this.lane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){ //move to the end of the lane
-						this.distance_ = 0;
-						this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
-					}
+//					if(this.lane.getLength()<GlobalVariables.NO_LANECHANGING_LENGTH){ //move to the end of the lane
+//						this.distance_ = 0;
+//						this.setCurrentCoord(this.coordMap.get(this.coordMap.size()-1));
+//					}
 					this.desiredSpeed_ =  this.road.getFreeSpeed();
 					//HG: Need to update current speed according to the new free speed 
 					//LZ: Use current speed instead of the free speed, be consistent with the setting in enteringNetwork
@@ -1343,7 +1373,7 @@ public class Vehicle {
 	public int closeToRoad(Road road) {
 		// SH Temp
 		Coordinate currentCoord = this.getCurrentCoord();
-		GeometryFactory geomFac = new GeometryFactory();
+//		GeometryFactory geomFac = new GeometryFactory();
 		Coordinate nextCoord = null;
 
 		if (this.coordMap == null)
@@ -1354,11 +1384,11 @@ public class Vehicle {
 		else
 			nextCoord = this.coordMap.get(0);
 
-		Geometry geom1 = geomFac.createPoint(currentCoord);
-		Geometry geom2 = geomFac.createPoint(nextCoord);
-		DistanceOp dist1 = new DistanceOp(geom1, geom2);
+//		Geometry geom1 = geomFac.createPoint(currentCoord);
+//		Geometry geom2 = geomFac.createPoint(nextCoord);
+//		DistanceOp dist1 = new DistanceOp(geom1, geom2);
 
-		if (dist1.distance() < GlobalVariables.TRAVEL_PER_TURN) {
+		if (distance(currentCoord, nextCoord) < GlobalVariables.TRAVEL_PER_TURN) {
 			return 1;
 		} else
 			return 0;
@@ -1586,6 +1616,15 @@ public class Vehicle {
 			this.reachActLocation = false;
 			this.reachDest = true;
 //			System.out.println(this + " reached dest zone " + destinationZone);
+			//LZ: Log the vehicle information here
+			String formated_msg = this.getVehicleID() + "," + 0 + "," + this.getDepTime() + "," + this.getEndTime() + "," + 
+			this.getHouse().getZoneId()+ ","+this.getDestinationID()+","+this.accummulatedDistance_+","+this.visitedShelters.size();
+			try {
+				ContextCreator.bw.write(formated_msg);
+				ContextCreator.bw.newLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			this.killVehicle();
 		}
 	}
@@ -2742,6 +2781,14 @@ public class Vehicle {
 			this.reachActLocation = false;
 			this.reachDest = true;
 			System.out.println(this + " reached dest shelter " + curDest);
+			String formated_msg = this.getVehicleID() + "," + 0 + "," + this.getDepTime() + "," + this.getEndTime() + "," + 
+					this.getHouse().getZoneId()+ ","+this.getDestinationID()+","+this.accummulatedDistance_+","+this.visitedShelters.size();
+					try {
+						ContextCreator.bw.write(formated_msg);
+						ContextCreator.bw.newLine();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 			this.killVehicle();
 		}
 		// else if current shelter is not available, reroute this to next shelter

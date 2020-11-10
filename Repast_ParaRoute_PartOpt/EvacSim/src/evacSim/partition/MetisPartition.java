@@ -30,6 +30,7 @@ import galois.objects.graph.IntGraph;
 //import galois.runtime.GaloisRuntime;
 //import repast.simphony.space.gis.Geography;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 //import java.util.Iterator;
@@ -161,6 +162,13 @@ public class MetisPartition {
 					+ " edges");
 			System.err.println();
 		}*/
+		
+		try{
+			ContextCreator.bw.flush();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
 		
 		System.gc(); // For gabage collection
 		

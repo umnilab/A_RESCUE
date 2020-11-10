@@ -100,12 +100,14 @@ public class DataCollectionContext extends DefaultContext<Object> {
     		System.out.println("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
     				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
     				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
+    				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES
     				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount()
     				+ ", cumRuntime=" + runtimeRecorder.get(runtimeRecorder.size() - 1));
     	} else {
     		System.out.println("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
     				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
     				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
+    				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES
     				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount());
     	}
     }
