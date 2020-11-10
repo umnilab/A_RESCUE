@@ -1043,7 +1043,7 @@ public class Vehicle {
 						this.lastStepMove_ = 0;
 					} else {
 						stuck_time=0;
-						this.lastStepMove_ = distance; //Successfully entered the next road, update the lastStepMove and accumulatedDistance
+						this.lastStepMove_ = distance_; //Successfully entered the next road, update the lastStepMove and accumulatedDistance
 						this.accummulatedDistance_ += this.lastStepMove_;
 					}
 				}
@@ -1051,7 +1051,6 @@ public class Vehicle {
 			return; // move finished; $this has reached destination
 		}
 		
-		float step = GlobalVariables.SIMULATION_STEP_SIZE; // 0.3
 //		if (currentSpeed_ < GlobalVariables.SPEED_EPSILON && accRate_ < GlobalVariables.ACC_EPSILON) { //0.001
 //			return; // Does not move
 //		}
@@ -1059,7 +1058,6 @@ public class Vehicle {
 //		if(Float.isNaN(currentSpeed_)|| Float.isNaN(accRate_) ){
 //			System.out.println(currentSpeed_+","+accRate_+","+this.distance_);
 //		}
-		float oldv = currentSpeed_; // Velocity at the beginning
 
 		double dv = accRate_ * step; // Change of speed
 
@@ -1283,7 +1281,7 @@ public class Vehicle {
 
 			// LZ: implementation 3: drop the geom class and change the coordinates
 			//double alpha = distToTravelM / distToTarget;
-			move2(currentCoord, distToTravelM, distAndAngle[1]);
+			move2(currentCoord, distToTravel, distAndAngle[1]);
 		}
 		return;
 	}
