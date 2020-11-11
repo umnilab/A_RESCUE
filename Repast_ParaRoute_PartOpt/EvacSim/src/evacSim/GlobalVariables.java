@@ -459,4 +459,5 @@ private static Properties config;
 	public static final Boolean DISABLE_GEOMETRY = Boolean.valueOf(loadConfig("DISABLE_GEOMETRY"));
 	
 	public static final int MAX_STUCK_TIME = Integer.valueOf(loadConfig("MAX_STUCK_TIME"));
+	public static final int MAX_STUCK_TIME2 = Integer.valueOf(loadConfig("MAX_STUCK_TIME2"));
 }

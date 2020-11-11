@@ -138,9 +138,10 @@ public class Road {
 //				}
 				
 				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
-					if (v.enterNetwork(this) == 0) {
-						break;
+					if(v.enterNetwork(this)==1){
+						v.advanceInMacroList(); //Vehicle entering network
 					}
+					break;
 				} else {
 					// BL: iterate all element in the TreeMap
 					Set keys = (Set) this.newqueue.keySet();
@@ -172,7 +173,7 @@ public class Road {
 //			}
 			Vehicle pv = this.firstVehicle(); // The first vehicle in a road
 			if(pv !=null){
-				if(pv.leading()!=null){
+				if(pv.leading()!=null){ // The behind vehicle surpass the front one, which should not happen.
 					System.out.println("Oh, my..." + "," + pv.getLane().getLaneid()+","+pv.getLane().getLength()+","+pv.leading().getLane().getLaneid()+","+pv.distance()+","+ pv.leading().distance());
 //					pv.leading().trailing(null);
 				}
@@ -183,8 +184,8 @@ public class Road {
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
 //					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
-					pv = pv.macroTrailing(); //There is next vehicle
-					break; //With the condition only one vehicle just entered this road, we knew this is the last vehicle
+					pv = pv.macroTrailing();
+					continue; //Skip this vehicle.
 				}
 				pv.updateLastMoveTick(tickcount);
 //				if(!pv.calcState()){ //This vehicle is corrupted, do not proceed for this road
@@ -560,7 +561,6 @@ public class Road {
 	}
 	
 	public void firstVehicle(Vehicle v) {
-		
 		if (v != null) {
 			if(v.leading()!=null){
 				System.out.println("Well");

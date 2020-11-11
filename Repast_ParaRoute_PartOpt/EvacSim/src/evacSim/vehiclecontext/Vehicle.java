@@ -222,7 +222,7 @@ public class Vehicle {
 		Lane firstlane = road.firstLane();
 		double gap = entranceGap(firstlane);
 		int tickcount = (int) RepastEssentials.GetTickCount(); 
-		if (gap >= this.length() && tickcount > firstlane.getLastEnterTick()) {
+		if (gap >= 1.2*this.length() && tickcount > firstlane.getLastEnterTick()) {
 			// LZ: Update the last enter tick for this lane
 			firstlane.updateLastEnterTick(tickcount);
 			this.updateLastMoveTick(tickcount);
@@ -501,10 +501,14 @@ public class Vehicle {
 			this.setCurrentCoord(this.coordMap.get(0));//LZ: update the vehicle location to be the first pt in the coordMap
 			this.coordMap.remove(0);
 			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
-		} else {
-			this.coordMap.add(destCoord);
-			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
+		} 
+		else{
+			System.err.println("There is no target lane to set!");
 		}
+//		else {
+//			this.coordMap.add(destCoord);
+//			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
+//		}
 		if (Double.isNaN(distance_)) {
 			System.out.println("distance_ is NaN in setCoordMap for " + this);
 		}
@@ -925,10 +929,10 @@ public class Vehicle {
 		double minAcc = GlobalVariables.ACC_EPSILON; // min allowed acceleration (m/s2)
 		double maxSpeed = this.road.getFreeSpeed();
 		
-		// LZ: Check if $this is close to intersection or destination.
+		// LZ: Check if this is close to intersection or destination.
 		if (distance_ < GlobalVariables.INTERSECTION_BUFFER_LENGTH) { 
-			if (this.nextRoad() != null) { // $this has not reached destination
-				if (this.isOnLane()) { // $this is still on the road
+			if (this.nextRoad() != null) { // this has not reached destination
+				if (this.isOnLane()) { // this is still on the road
 					this.coordMap.add(this.getCurrentCoord()); // stop and wait
 					// make this.isOnLane become false
 					int canEnterNextRoad = this.appendToJunction(nextLane_); 
@@ -954,7 +958,7 @@ public class Vehicle {
 					}
 				}
 			}
-			return; // move finished; $this has reached destination
+			return; // move finished; this has reached destination
 		}
 		
 		double dv = accRate_ * step; // Change of speed
@@ -986,8 +990,7 @@ public class Vehicle {
 			accRate_ = (float) ((currentSpeed_ - oldv) / step);
 		}
 		if (dx < 0.0f) { // negative dx is not allowed
-			lastStepMove_ = 0;
-			return;
+			dx = 0.0;
 		}
 		/* Check if the vehicle's dx is under some threshold, i.e. it
 		 * will move to the next road
@@ -1015,7 +1018,7 @@ public class Vehicle {
 				 * .distance_ <= 0), therefore, use a intersection buffer（see
 				 * the changeRoad block above) */
 				this.coordMap.remove(0);
-				if (this.coordMap.isEmpty()) { // $this is close to intersection
+				if (this.coordMap.isEmpty()) { // this is close to intersection
 					if (this.nextRoad() != null) { // has a next road
 						if (this.isOnLane()) { // is still on the road
 							this.coordMap.add(this.getCurrentCoord()); // stop and wait
@@ -1059,7 +1062,7 @@ public class Vehicle {
 				travelledMaxDist = true;
 			}
 		}
-		// reduce the distance to junction by the amount moved
+		// reduce the distance to junction by the amount moved, can distTravelled larger than dx?
 		distance_ -= distTravelled;
 		// make sure the distance_ to junction is not negative
 		if (distance_ < 0) {
@@ -1135,8 +1138,7 @@ public class Vehicle {
 			int tickcount = (int) RepastEssentials.GetTickCount(); 
 			// LZ: Nov 4, short lane and the vehicle can move freely
 			// check if the target long road has space
-			if ((this.entranceGap(nextLane_) >= this.length()
-					|| this.nextLane_.getLength() < GlobalVariables.NO_LANECHANGING_LENGTH)
+			if ((this.entranceGap(nextLane_) >= 1.2*this.length())
 					&& (tickcount > this.nextLane_.getLastEnterTick())) {
 				//LZ: update enter tick so other vehicle cannot enter this road in this tick
 				this.nextLane_.updateLastEnterTick(tickcount);
@@ -1156,27 +1158,35 @@ public class Vehicle {
 					this.currentSpeed_ = this.road.getFreeSpeed();
 				return 1;
 			}
-			// $this has been stuck for some time, try another downward lane
+			// this vehicle has been stuck for more than 2 minutes, if both of the followings does not work, then failed vehicle number +=1
 			else if (this.stuck_time > GlobalVariables.MAX_STUCK_TIME) {
-				for(Lane dnlane: this.lane.getDnLanes()){
-					if (this.entranceGap(dnlane) >= this.length() &&
-							(tickcount>dnlane.getLastEnterTick())) {
-						dnlane.updateLastEnterTick(tickcount);
-						this.setCoordMap(dnlane);
-						this.removeFromLane();
-						this.removeFromMacroList();
-						this.appendToRoad(dnlane.road_());
-						this.append(dnlane); 
-						this.lastRouteTime=-1; // old route is not valid, for sure
-						this.setNextRoad();
-						this.assignNextLane();
-						this.desiredSpeed_ =  this.road.getFreeSpeed();
-						//HG: Need to update current speed according to the new free speed
-						//LZ: Use current speed instead of the free speed, be
-						// consistent with the setting in enteringNetwork
-						if(this.currentSpeed_ > this.road.getFreeSpeed())
-							this.currentSpeed_ = this.road.getFreeSpeed();
-						return 1;
+				if(this.stuck_time <= GlobalVariables.MAX_STUCK_TIME2){ // Wait for more than 2 minutes but less than 10 minutes, reroute itself
+					this.lastRouteTime = -1; //old route is not valid 
+					this.setNextRoad();
+					this.assignNextLane();
+				}
+				else{
+				for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 10 minutes, go to the connected empty lane and reroute itself.
+						if (this.entranceGap(dnlane) >= this.length() && (tickcount > dnlane.getLastEnterTick())) {
+							dnlane.updateLastEnterTick(tickcount);
+							this.setCoordMap(dnlane);
+							this.removeFromLane();
+							this.removeFromMacroList();
+							this.appendToRoad(dnlane.road_());
+							this.append(dnlane);
+							this.lastRouteTime = -1; // old route is not valid for sure
+							this.setNextRoad();
+							this.assignNextLane();
+							this.desiredSpeed_ = this.road.getFreeSpeed();
+							// HG: Need to update current speed according to the
+							// new free speed
+							// LZ: Use current speed instead of the free speed,
+							// be
+							// consistent with the setting in enteringNetwork
+							if (this.currentSpeed_ > this.road.getFreeSpeed())
+								this.currentSpeed_ = this.road.getFreeSpeed();
+							return 1;
+						}
 					}
 				}
 			}
