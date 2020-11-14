@@ -1,9 +1,12 @@
 package evacSim;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 //import java.util.concurrent.locks.ReentrantLock;
 
@@ -279,18 +282,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 			schedule.schedule(recordRuntimeParams, dataContext, "recordRuntime");
 			
 			// LZ: initialize UCBLogger
-			System.out.println("Vehicle logger creating...");
-			try{
-				FileWriter fw = new FileWriter("VehicleLogger.csv", false);
-				bw = new BufferedWriter(fw);
-				bw.write("vehicleID,type,startTime,endTime,originID,destID,totalDistance,visitedShelters");
-				bw.newLine();
-				bw.flush();
-				System.out.println("Vehicle logger created!");
-			} catch (IOException e){
-				e.printStackTrace();
-				System.out.println("Vehicle logger failed.");
-			}
+			createVehicleLogger();
 	     }
 		
 		agentID = 0;
@@ -417,8 +409,44 @@ public class ContextCreator implements ContextBuilder<Object> {
 	}
 	
 	public static double convertToMeters(double dist) {
+
 		double distInMeters = NonSI.NAUTICAL_MILE.getConverterTo(SI.METER)
 				.convert(dist * 60);
 		return distInMeters;
+	}
+	
+	/**
+	 * LZ,RV: Create a logger for vehicle attributes during data collection
+	 * as part of the analysis for shelter routing and to prevent reading the
+	 * massive JSON trajectory files.
+	 */
+	public static void createVehicleLogger() {
+		System.out.println("Vehicle logger creating...");
+		// get the output directory - the same as the JSON output
+		String dir = GlobalVariables.JSON_DEFAULT_PATH;
+		if (dir == null || dir.trim().length() < 1) {
+			dir = System.getProperty("user.dir");
+		}
+		// get the filename - same as the JSON output
+		String basename = GlobalVariables.JSON_DEFAULT_FILENAME;
+		// get the current timestamp
+		String timestamp = new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss")
+				.format(new Date());
+		// create the overall file path
+		String outpath = dir + File.separatorChar + "vehicle-logger-" + 
+				basename + "-" + timestamp + ".csv";
+		// check the path will be a valid file
+		try {
+			FileWriter fw = new FileWriter(outpath, false);
+			bw = new BufferedWriter(fw);
+			bw.write("vehicleID,type,startTime,endTime,originID,destID," + 
+					"totalDistance,visitedShelters");
+			bw.newLine();
+			bw.flush();
+			System.out.println("Vehicle logger created!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Vehicle logger failed.");
+		}
 	}
 }
