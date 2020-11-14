@@ -2393,7 +2393,7 @@ public class Vehicle {
 			this.reachDest = true;
 			System.out.println(this + " reached dest shelter " + curDest);
 			String formatted_msg = (getVehicleID()
-					+ "," + 0 +
+					+ "," + 1 +
 					"," + getDepTime() + 
 					"," + getEndTime() +
 					"," + getHouse().getZoneId() +

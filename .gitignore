@@ -1,16 +1,14 @@
 /.metadata/
 /.recommenders/
+*.DS_Store
 /Repast_ParaRoute_PartOpt/.metadata/
 /Repast_ParaRoute_PartOpt/EvacSim/bin/
-/Repast_ParaRoute_PartOpt/EvacSim/dynamic_dest_test/
+/Repast_ParaRoute_PartOpt/EvacSim/analysis/
+/Repast_ParaRoute_PartOpt/EvacSim/data/demand/Shen-scenarios-xlsx/
+/Repast_ParaRoute_PartOpt/EvacSim/simulation_output/
 /Repast_ParaRoute_PartOpt/EvacSim/Repast.settings
 /Repast_ParaRoute_PartOpt/EvacSim/velocity.log
 /Repast_ParaRoute_PartOpt/EvacSim/velocity.log.1
 /Repast_ParaRoute_PartOpt/EvacSim/debug.log
 /Repast_ParaRoute_PartOpt/EvacSim/debug.log.1
 /Repast_ParaRoute_PartOpt/EvacSim/EvacSim Model.launch
-.Rproj.user
-*.DS_Store
-/Repast_ParaRoute_PartOpt/EvacSim/velocity.log.1
-/Repast_ParaRoute_PartOpt/EvacSim/simulation_output/
-Repast_ParaRoute_PartOpt/EvacSim/Repast.settings

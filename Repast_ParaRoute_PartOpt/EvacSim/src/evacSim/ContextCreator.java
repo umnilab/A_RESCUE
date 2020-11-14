@@ -439,7 +439,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		try {
 			FileWriter fw = new FileWriter(outpath, false);
 			bw = new BufferedWriter(fw);
-			bw.write("vehicleID,type,startTime,endTime,originID,destID," + 
+			bw.write("vehicleID,zoneType,startTime,endTime,originID,destID," + 
 					"totalDistance,visitedShelters");
 			bw.newLine();
 			bw.flush();
