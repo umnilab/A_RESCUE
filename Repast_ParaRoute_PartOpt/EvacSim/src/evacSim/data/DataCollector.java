@@ -327,7 +327,7 @@ public class DataCollector {
             throw new RuntimeException("No tick snapshot being processed.");
         }
         // create the snapshot
-        	this.currentSnapshot.recordRoadSnapshot(road);
+        this.currentSnapshot.recordRoadSnapshot(road);
     }
     
     /**

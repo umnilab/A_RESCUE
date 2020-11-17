@@ -641,9 +641,9 @@ public class JsonOutputWriter implements DataConsumer {
             return; // there was no JSON output created by this tick
         }
         	
-        	// add the data
-        	tickData.put("vehicles", vehTickArray);
-        	tickData.put("shelters", sheltTickArray);
+        // add the data
+        tickData.put("vehicles", vehTickArray);
+        tickData.put("shelters", sheltTickArray);
         tickData.put("roads", roadTickArray);
         
         this.storeJsonObjects.put(tickString, tickData);

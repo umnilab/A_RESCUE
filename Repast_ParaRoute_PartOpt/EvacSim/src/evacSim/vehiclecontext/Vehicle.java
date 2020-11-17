@@ -1167,7 +1167,7 @@ public class Vehicle {
 				}
 				else{
 				for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 10 minutes, go to the connected empty lane and reroute itself.
-						if (this.entranceGap(dnlane) >= this.length() && (tickcount > dnlane.getLastEnterTick())) {
+						if (this.entranceGap(dnlane) >= 1.2*this.length() && (tickcount > dnlane.getLastEnterTick())) {
 							dnlane.updateLastEnterTick(tickcount);
 							this.setCoordMap(dnlane);
 							this.removeFromLane();
