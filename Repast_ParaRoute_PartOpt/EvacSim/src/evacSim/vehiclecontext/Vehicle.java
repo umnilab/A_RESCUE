@@ -1399,7 +1399,6 @@ public class Vehicle {
 				this.getDestinationID());
 		// if the destination is a shelter
 		if (destinationZone.getType() == 1) {
-			System.out.println(this + " reached shelter " + destinationZone);
 			this.findNextShelter(destinationZone);
 		}
 		// if the current destination is not a shelter but a regular CBG zone

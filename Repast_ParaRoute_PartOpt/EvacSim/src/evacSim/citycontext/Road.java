@@ -174,7 +174,12 @@ public class Road {
 			Vehicle pv = this.firstVehicle(); // The first vehicle in a road
 			if(pv !=null){
 				if(pv.leading()!=null){ // The behind vehicle surpass the front one, which should not happen.
-					System.out.println("Oh, my..." + "," + pv.getLane().getLaneid()+","+pv.getLane().getLength()+","+pv.leading().getLane().getLaneid()+","+pv.distance()+","+ pv.leading().distance());
+					System.out.println("Oh, my..."
+							+ "," + pv.getLane().getLaneid()
+							+","+pv.getLane().getLength()
+							+","+pv.leading().getLane().getLaneid()
+							+","+pv.distance()
+							+","+ pv.leading().distance());
 //					pv.leading().trailing(null);
 				}
 //				pv.leading(null);

@@ -87,7 +87,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 				// set the fields
 				shelter.setName(result[2]);
 				shelter.setType(1);
-				shelter.setCapacity(Integer.parseInt(result[9]));
+				shelter.setCapacity(Integer.parseInt(result[7]));
 				shelter.setOccupancy(0);
 				shelter.setGeometry(zoneGeography);
 				shelters.add(shelter);
