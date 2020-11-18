@@ -192,7 +192,7 @@ public class TickSnapshot {
     	final int nVehicles;
     	
     	RoadSnapshot(Road road) {
-    		id = road.getID();
+    		id = road.getLinkid();
     		speed = road.calcSpeed();
     		nVehicles = road.getVehicleNum(); //LZ: Oct 19, replaced getNumVehicles with this.
     		
