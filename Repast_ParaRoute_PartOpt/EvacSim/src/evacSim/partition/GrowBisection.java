@@ -72,16 +72,16 @@ public class GrowBisection {
 
       bisection(graph, nodes, minWgtPart1, maxWgtPart1, pwgts);
       /* Check to see if we hit any bad limiting cases */
-      if (pwgts[1] == 0) {
-    	  try {
-    		  int i = random.nextInt(numNodes);
-    		  MetisNode nodeData = nodes[i].getData();
-    		  nodeData.setPartition(1);
-    		  pwgts[0] += nodeData.getWeight();
-    		  pwgts[1] -= nodeData.getWeight();
-    	  } catch (Exception e) {
-    		  System.err.println("GrowBisection.bisection(): " + e);
-    	  }
+      if (pwgts[1] == 0) { 
+    	// LZ: Add a sanity check to avoid 0 inputs
+    	if(numNodes <= 0) {
+    	    return;
+    	}
+    	int i = random.nextInt(numNodes);
+    	MetisNode nodeData = nodes[i].getData();
+    	nodeData.setPartition(1);
+    	pwgts[0] += nodeData.getWeight();
+    	pwgts[1] -= nodeData.getWeight();
       }
 
       metisGraph.computeTwoWayPartitionParams();

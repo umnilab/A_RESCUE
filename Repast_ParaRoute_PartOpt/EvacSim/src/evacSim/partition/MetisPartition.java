@@ -125,27 +125,26 @@ public class MetisPartition {
 	
 	
 	public void check_run() throws NumberFormatException, ExecutionException {
-		if (this.partition_duration <= GlobalVariables.SIMULATION_MAX_PARTITION_REFRESH_INTERVAL){
+//		if (this.partition_duration <= GlobalVariables.SIMULATION_MAX_PARTITION_REFRESH_INTERVAL){
 			/* Get the total number of vehicles in the network */
-			int TotVehNum = 0;
-			for (Road road : ContextCreator.getRoadGeography().getAllObjects()) {
-				TotVehNum += road.getVehicleNum();
-			}
-			
-			if (TotVehNum >= GlobalVariables.THRESHOLD_VEHICLE_NUMBER) {
-				try{
-				    this.run();
-				}
-				catch(Exception e){ 
-					System.out.println("Partition failed...");
-					this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
-				}
-			} else {
+		int TotVehNum = 0;
+		for (Road road : ContextCreator.getRoadGeography().getAllObjects()) {
+			TotVehNum += road.getVehicleNum();
+		}
+
+		if (TotVehNum >= GlobalVariables.THRESHOLD_VEHICLE_NUMBER) {
+			try {
+				this.run();
+			} catch (Exception e) {
+				System.out.println("Partition failed...");
 				this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 			}
 		} else {
-			this.run();
+			this.partition_duration += GlobalVariables.SIMULATION_PARTITION_REFRESH_INTERVAL;
 		}
+//		} else {
+//			this.run();
+//		}
 	} 
 	
 	
