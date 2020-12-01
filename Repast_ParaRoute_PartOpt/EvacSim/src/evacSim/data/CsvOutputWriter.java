@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -530,10 +532,8 @@ public class CsvOutputWriter implements DataConsumer {
         // of the series.  it should end ".1.csv", ".2.csv", etc.  we can
         // easily create the next in the series this way.  if not, we will
         // have to do a little extra checking to setup the next file.
-        String currentEnd = "." + this.fileSeriesNumber + "." + 
-                            GlobalVariables.CSV_DEFAULT_EXTENSION;
-        String nextEnd = "." + (this.fileSeriesNumber + 1) + "." +
-                         GlobalVariables.CSV_DEFAULT_EXTENSION;
+        String currentEnd = "." + this.fileSeriesNumber + ".csv";
+        String nextEnd = "." + (this.fileSeriesNumber + 1) + ".csv";
         
         String newFilename = filename;
         if (newFilename.endsWith(currentEnd)) {
@@ -543,7 +543,7 @@ public class CsvOutputWriter implements DataConsumer {
         else {
             // the user is using a custom filename format so we need to
             // do a little extra work to create the next filename...
-            String extEnd = "." + GlobalVariables.CSV_DEFAULT_EXTENSION;
+            String extEnd = ".csv";
             if (newFilename.endsWith(extEnd)) {
                 newFilename = newFilename.replaceAll(extEnd + "$", nextEnd);
             }
@@ -761,33 +761,52 @@ public class CsvOutputWriter implements DataConsumer {
      */
     public static String createDefaultFilePath() {
         // get the default pieces of the filename to assemble
-        String defaultFilename = GlobalVariables.CSV_DEFAULT_FILENAME;
-        String defaultExtension = GlobalVariables.CSV_DEFAULT_EXTENSION;
+        String defaultFilename = GlobalVariables.DEFAULT_OUT_FNAME;
         
         // get a timestamp to use in the filename
         SimpleDateFormat formatter = 
                 new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss");
         String timestamp = formatter.format(new Date());
         
+        // RV: use the basename of the demand file in the output file
+        String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
+        String temp2 = temp1[temp1.length - 1];
+        String activityScenario = temp2.substring(0, temp2.lastIndexOf('.'));
+        	if (activityScenario == null || activityScenario.length() <= 0) {
+        		System.err.println("JsonOutputWriter.createDefaultPath():"
+        				+ "activity file name is not valid");
+        	}
+        
         // build the filename
-        String filename = defaultFilename + "_" + timestamp + 
-                          ".1." + defaultExtension;
+        String filename = defaultFilename + "-" + activityScenario + "-"
+        		+ timestamp + ".1.csv";
         
         // get the default directory for placing the file
-        String defaultDir = GlobalVariables.CSV_DEFAULT_PATH;
+        String defaultDir = GlobalVariables.DEFAULT_OUT_PATH;
         if (defaultDir == null || defaultDir.trim().length() < 1) {
-            // there was no default dir specified in the config file
-            // so we will just use the home directory of the user
-//            defaultDir = System.getProperty("user.home");
-            
-            // if no homedir is defined, fall back on current working dir
-//            if (defaultDir == null || defaultDir.trim().length() < 1) {
-                defaultDir = System.getProperty("user.dir");
-//            }
+        		defaultDir = System.getProperty("user.dir");
+        }
+        
+        /* RV: provide the output directory - either the default one or
+         * in case of running multiple scenarios, organize all files into
+         * a folder for each scenario based on its demand filename
+         */
+        String outDir;
+        if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+    		outDir = defaultDir + File.separatorChar + activityScenario;
+    		
+    		// if the directory does not exist, create it
+    		try {
+    			Files.createDirectories(Paths.get(outDir));
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+        } else {
+        		outDir = defaultDir;
         }
                 
         // build the full path to the file
-        String outpath = defaultDir + File.separatorChar + filename;
+        String outpath = outDir + File.separatorChar + filename;
         
         // check the path will be a valid file
         File outfile = new File(outpath);
@@ -798,7 +817,7 @@ public class CsvOutputWriter implements DataConsumer {
             // a bit of randomization and just hope that is good enough.
             int hashCode = System.identityHashCode(filename);
             filename = defaultFilename + "_" + timestamp + "_" +
-                       hashCode + ".1." + defaultExtension;
+                       hashCode + ".1.csv";
             outpath = defaultDir + File.pathSeparator + filename;
             outfile = new File(outpath);
         }
@@ -814,7 +833,7 @@ public class CsvOutputWriter implements DataConsumer {
             // so we will have to fall back on saving this in the temp dir
             try {
                 outfile = 
-                    File.createTempFile(filename, defaultExtension);
+                    File.createTempFile(filename, "csv");
             }
             catch (IOException ioe2) {
                 // our default filename failed, and now our temp file failed.

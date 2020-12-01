@@ -327,15 +327,17 @@ private static Properties config;
 	public static final int DATA_CLEANUP_REFRESH =
 	        Integer.valueOf(loadConfig("DATA_CLEANUP_REFRESH"));
 	
+	/* RV: Common parameters for data output writers */
+	public static final String DEFAULT_OUT_PATH = 
+			loadConfig("DEFAULT_OUT_PATH");
+	public static final String DEFAULT_OUT_FNAME =
+			loadConfig("DEFAULT_OUT_FNAME");
+	public static final boolean ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME =
+			Boolean.valueOf(loadConfig("ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME"));
+	
 	/* Parameters for the CSV output file writer */
 	public static final boolean ENABLE_CSV_WRITE =
 	        Boolean.valueOf(loadConfig("ENABLE_CSV_WRITE"));
-	public static final String CSV_DEFAULT_FILENAME =
-	        loadConfig("CSV_DEFAULT_FILENAME");
-	public static final String CSV_DEFAULT_EXTENSION =
-	        loadConfig("CSV_DEFAULT_EXTENSION");
-	public static final String CSV_DEFAULT_PATH = 
-	        loadConfig("CSV_DEFAULT_PATH");
 	public static final int CSV_BUFFER_REFRESH =
 	        Integer.valueOf(loadConfig("CSV_BUFFER_REFRESH"));
 	public static final int CSV_LINE_LIMIT =
@@ -345,12 +347,6 @@ private static Properties config;
 	 * JSON_TICK_LIMIT_PER_FILE which represents the number of ticks are written in a json file) */
 	public static final boolean ENABLE_JSON_WRITE =
 	        Boolean.valueOf(loadConfig("ENABLE_JSON_WRITE"));
-	public static final String JSON_DEFAULT_FILENAME =
-	        loadConfig("JSON_DEFAULT_FILENAME");
-	public static final String JSON_DEFAULT_EXTENSION =
-	        loadConfig("JSON_DEFAULT_EXTENSION");
-	public static final String JSON_DEFAULT_PATH = 
-	        loadConfig("JSON_DEFAULT_PATH");
 	public static final int JSON_BUFFER_REFRESH =
 	        Integer.valueOf(loadConfig("JSON_BUFFER_REFRESH"));
 	public static final int JSON_TICK_LIMIT_PER_FILE =

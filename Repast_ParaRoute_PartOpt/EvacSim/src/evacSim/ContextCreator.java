@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -421,20 +423,49 @@ public class ContextCreator implements ContextBuilder<Object> {
 	 * massive JSON trajectory files.
 	 */
 	public static void createVehicleLogger() {
-		System.out.println("Vehicle logger creating...");
-		// get the output directory - the same as the JSON output
-		String dir = GlobalVariables.JSON_DEFAULT_PATH;
-		if (dir == null || dir.trim().length() < 1) {
-			dir = System.getProperty("user.dir");
+		/*
+		 * RV: get the output directory - either the default one or
+		 * in case of running multiple scenarios, organize all files into
+		 * a folder for each scenario based on its demand filename
+		 */
+		// get the default output directory - the same as the JSON output
+		String defaultDir = GlobalVariables.DEFAULT_OUT_PATH;
+		if (defaultDir == null || defaultDir.trim().length() < 1) {
+			defaultDir = System.getProperty("user.dir");
 		}
-		// get the filename - same as the JSON output
-		String basename = GlobalVariables.JSON_DEFAULT_FILENAME;
+		
+		// get the basename of the demand file
+		String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
+        String temp2 = temp1[temp1.length - 1];
+        String activityScenario = temp2.substring(0, temp2.lastIndexOf('.'));
+        	if (activityScenario == null || activityScenario.length() <= 0) {
+        		System.err.println("JsonOutputWriter.createDefaultPath():"
+        				+ "activity file name is not valid");
+        	}
+		
+		// specify the actual output directory
+		String outDir;
+		// if the output is to be organized by scenario name
+        if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+            	// create/use a subdirectory of defaultDir named after demand file
+    		outDir = defaultDir + File.separatorChar + activityScenario;
+        } else {
+        		outDir = defaultDir;
+        }
+        
+        // if the directory does not exist, create it
+		try {
+			Files.createDirectories(Paths.get(outDir));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		// get the current timestamp
 		String timestamp = new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss")
 				.format(new Date());
-		// create the overall file path
-		String outpath = dir + File.separatorChar + "vehicle-logger-" + 
-				basename + "-" + timestamp + ".csv";
+		// create the overall file path, named after the demand filename
+		String outpath = outDir + File.separatorChar + "logger-vehicles-" + 
+				activityScenario + "-" + timestamp + ".csv";
 		// check the path will be a valid file
 		try {
 			FileWriter fw = new FileWriter(outpath, false);
@@ -443,10 +474,10 @@ public class ContextCreator implements ContextBuilder<Object> {
 					"totalDistance,visitedShelters");
 			bw.newLine();
 			bw.flush();
-			System.out.println("Vehicle logger created!");
+			System.out.println("Vehicle logger created");
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Vehicle logger failed.");
+			System.err.println("Vehicle logger failed");
 		}
 	}
 }
