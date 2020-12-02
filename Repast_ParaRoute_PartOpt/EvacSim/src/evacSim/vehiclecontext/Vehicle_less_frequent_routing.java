@@ -1,10 +1,12 @@
 package evacSim.vehiclecontext;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
+
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.House;
 import evacSim.citycontext.Road;
@@ -12,6 +14,7 @@ import evacSim.routing.RouteV;
 import repast.simphony.essentials.RepastEssentials;
 
 public class Vehicle_less_frequent_routing extends Vehicle {
+	private Logger logger = ContextCreator.logger;
 
 	public Vehicle_less_frequent_routing(House h) {
 		super(h);
@@ -53,9 +56,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 						//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
 						//, the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
 						if (pathTimeOldPath - pathTimeNew > this.indiffBand * pathTimeOldPath) { //Rajat, Xue
-							//System.out.print("relativeDifference \n");
 							if (pathTimeOldPath - pathTimeNew > GlobalVariables.TAU) {
-								//System.out.print("AbsoluteDifference \n");
 								tempPath = tempPathNew;                              // Update path.
 								this.travelTimeForPreviousRoute = pathTimeNew;       // Update path time.
 								this.previousTick =  currentTick;                    // Update tick.
@@ -83,7 +84,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 							this.nextRoad_ = itr.next();
 						}
 						
-//						System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
+//						logger.info("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 					} else {
 						// Route information is still valid
 						// Remove the current road from the path
@@ -96,16 +97,16 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 
 //					if (nextRoad != null)
 //						if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
-//							System.out.println("Next Road ID for Vehicle: "
+//							logger.info("Next Road ID for Vehicle: "
 //									+ this.getVehicleID() + " is "
 //									+ nextRoad.getLinkid());
 					
 					/*
 					 * if (nextRoad.getLinkid() != this.road.getLinkid()) {
-					 * System.out.println("Next Road ID for Vehicle: " +
+					 * logger.info("Next Road ID for Vehicle: " +
 					 * this.getVehicleID() + " is " + nextRoad.getLinkid());
 					 * this.nextRoad_ = nextRoad; } else {
-					 * System.out.println("No next road found for Vehicle " +
+					 * logger.info("No next road found for Vehicle " +
 					 * this.vehicleID_ + " on Road " + this.road.getLinkid());
 					 * this.nextRoad_ = null; }
 					 */
@@ -126,11 +127,11 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 					Iterator<Road> itr = this.roadPath.iterator();
 					itr.next();
 					this.nextRoad_ = itr.next();
-//					System.out.println("Debug 2: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
+//					logger.info("Debug 2: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("No next road found for Vehicle "
+				logger.info("No next road found for Vehicle "
 						+ this.vehicleID_ + " on Road " + this.road.getLinkid());
 				this.nextRoad_ = null;
 			}

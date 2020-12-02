@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import au.com.bytecode.opencsv.CSVReader;
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.House;
 
 public class DatasetOfHouseholdsPerZones {
-	//private HashMap<Integer, ArrayList<House>> housesbyzone;
-	//private HashMap<Integer, House> housesbyID; // unused variable
+	
+	private Logger logger = ContextCreator.logger;
+	
 	private TreeMap<Integer,HashMap<Integer, ArrayList<House>>> housesbyhour;
 
 	// constructor to use with CSV file
@@ -113,7 +117,7 @@ public class DatasetOfHouseholdsPerZones {
 					}
 				}
 			}
-			System.out.println("Total houses generated: " + GlobalVariables.NUM_HOUSES);
+			logger.info("Total houses generated: " + GlobalVariables.NUM_HOUSES);
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

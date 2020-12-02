@@ -44,7 +44,6 @@ public class JungToJgraph<T>
          {
             weight = ((RepastEdge) edge).getWeight();
          }
-         // if (ContextCreator.debugSH) System.out.println("Weight: "+ weight);
 
          T source = jungGraph.getSource(edge);
          T target = jungGraph.getDest(edge);

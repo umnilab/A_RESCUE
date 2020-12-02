@@ -9,6 +9,8 @@ import java.util.List;
 //import java.util.LinkedList;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacSim.ContextCreator;
@@ -39,6 +41,8 @@ import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
  * @date 28 June 2017
  */
 public class TickSnapshot {
+	
+	private Logger logger = ContextCreator.logger;
     
     /** The number of the time step of this snapshot of the simulation. */
     private final int tickNumber;
@@ -176,7 +180,7 @@ public class TickSnapshot {
         		String output = String.format("%d,%.5f,%.5f,%.2f,%.2f",
         				id, curX, curY, speed, bearing); // 5 digits to reach precision of 1 meter.
         		if (output == null || output.isEmpty()) {
-        			System.err.println("empty/null string for " + id);
+        			logger.error("empty/null string for " + id);
         		}
         		return output;
         	}

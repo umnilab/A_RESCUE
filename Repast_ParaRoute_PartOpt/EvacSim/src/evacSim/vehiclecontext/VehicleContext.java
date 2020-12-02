@@ -3,6 +3,8 @@ package evacSim.vehiclecontext;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import repast.simphony.context.DefaultContext;
@@ -18,7 +20,10 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 
 	public VehicleContext() {
 		super("VehicleContext");
-		System.out.println("VehicleContext creation");
+		
+		Logger logger = ContextCreator.logger;
+		
+		logger.info("VehicleContext creation");
 		GeographyParameters<Vehicle> geoParams = new GeographyParameters<Vehicle>();
 		 geoParams.setCrs("EPSG:32618");
 		Geography<Vehicle> vehicleGeography = GeographyFactoryFinder
@@ -55,7 +60,7 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 //				} else {
 //					v = new Vehicle(h);
 //				}
-////				System.out.println(v + "_" + v.getHouse().getActivityPlan());
+////				logger.info(v + "_" + v.getHouse().getActivityPlan());
 //				
 //				this.add(v);
 //				v.setOriginalCoord(coord);
@@ -153,7 +158,7 @@ public class VehicleContext extends DefaultContext<Vehicle> {
 //			if (vehicleCreator.getVehiclesByZone(zoneId) != null) {
 //				evacuatingVehicles = vehicleCreator.getVehiclesByZone(zoneId);
 //				/*
-//				 * System.out.println(
+//				 * logger.info(
 //				 * "VehicleContext: createVehicleContextFromManualDemand: Evacuating vehicles size: "
 //				 * + evacuatingVehicles.size());
 //				 */

@@ -7,11 +7,13 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import evacSim.ContextCreator;
 import evacSim.citycontext.Road;
 import evacSim.citycontext.Zone;
 import evacSim.routing.RouteV;
 import evacSim.vehiclecontext.Vehicle;
 
+import org.apache.log4j.Logger;
 import org.jgrapht.alg.interfaces.*;
 //import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.alg.matching.GreedyWeightedMatching;
@@ -36,6 +38,8 @@ relocation demand is [60,55,55,70,95].
 */
 
 public class SOShelterRouting {
+	Logger logger = ContextCreator.logger;
+	
 	private ArrayList<Zone> shelters;
 	private ArrayList<Integer> shelterCapacity;
 	private ArrayList<Integer> shelterRemaining;
@@ -131,7 +135,7 @@ public class SOShelterRouting {
 					}
 				} catch (NullPointerException e) {
 					// TODO: RV: Check the exact cause of this error & fix it
-					System.out.println("Error in calc. dist. b/w " + orig + " & " + dest);
+					logger.info("Error in calc. dist. b/w " + orig + " & " + dest);
 //					dMatrix.get(i).set(j, maxDist);
 				}
 			}
@@ -153,7 +157,7 @@ public class SOShelterRouting {
 		updateRelocateDemand();
 		
 		if (demandSum == 0) {
-//			System.out.println("Zero relocation demand.");
+//			logger.info("Zero relocation demand.");
 			return;
 		}
 		
@@ -176,7 +180,7 @@ public class SOShelterRouting {
 		}
 		
 		if (matching == null) {
-			System.err.println("Null matching in shelter relocation for non-zero demand.");
+			logger.error("Null matching in shelter relocation for non-zero demand.");
 			return;
 		}
 		
@@ -201,7 +205,7 @@ public class SOShelterRouting {
 						// check if current destination of vehicle is same as this shelter
 						int curDestID = veh.getDestinationID();
 						if (curDestID != origin.getIntegerId()) {
-							System.err.println("Shelter reassignment does not match"
+							logger.error("Shelter reassignment does not match"
 								+ " for vehicle " + veh.getVehicleID() + " (current"
 								+ "plan destination: " + curDestID +
 								", current shelter: " + origin.getIntegerId() + ")");
@@ -212,10 +216,9 @@ public class SOShelterRouting {
 					}
 				}
 			} else {
-				System.err.println("Matching sizes do not match for shelter " +
+				logger.error("Matching sizes do not match for shelter " +
 						origin + ", required: " + relocateVehicles.size() +
 						", assigned:" + getSum(matchingRow));
-//				System.out.print("...");
 			}
 		}
 	}
@@ -414,31 +417,30 @@ public class SOShelterRouting {
 		int[][] assignment = ha.findOptimalAssignment();
 		if (assignment.length > 0) {
 			for (int i = 0; i < assignment.length; i++) {
-				//System.out.print("Col" + assignment[i][0] + " => Row" + assignment[i][1] + " (" + dataMatrix[assignment[i][0]][assignment[i][1]] + ")");
-			    //System.out.println();
+				//logger.info("Col" + assignment[i][0] + " => Row" + assignment[i][1] + " (" + dataMatrix[assignment[i][0]][assignment[i][1]] + ")");
 			}
 		}
 		
-		// step 4: System.out.println(assignment);
+		// step 4: logger.info(assignment);
 		ArrayList<ArrayList<Integer>> AALMI_assignment = new ArrayList<ArrayList<Integer>>();
 		if (assignment.length > 0){
-			System.out.println(assignment.length);
+			logger.info(assignment.length);
 			for (int i = 0; i < assignment.length; i++){
 				ArrayList<Integer> row = new ArrayList<Integer>();
 				for(int j = 0; j < 2; j++){
 					row.add(assignment[i][j]);
 					//if (i<5){
-					//System.out.println("assignment[i][0]");
-					//	System.out.println(assignment[i][0]);
-					//  	System.out.println("assignment[i][1]");
-					//	System.out.println(assignment[i][1]);
-					//	System.out.println("------------------------------------------");
+					//logger.info("assignment[i][0]");
+					//	logger.info(assignment[i][0]);
+					//  	logger.info("assignment[i][1]");
+					//	logger.info(assignment[i][1]);
+					//	logger.info("------------------------------------------");
 					//}
 				}
 				AALMI_assignment.add(row);
 			}	
 		}
-		System.out.println("hungarian_aalmi algorithm");
+		logger.info("hungarian_aalmi algorithm");
 		return returnPlan_AALMI(AALMI_assignment);
 	};
 	
@@ -461,12 +463,12 @@ public class SOShelterRouting {
 			
 			if (assignment_demand < demandSum){
 				//count += 1;
-				//System.out.println(count);
+				//logger.info(count);
 				int locationI = getLocation(relocateDemand, assignment_demand+1);
 				int locationJ = getLocation(shelterRemaining, assignment_supply+1);
 				count = count + 1;
 				result.get(locationI).set(locationJ, result.get(locationI).get(locationJ)+1);
-				//System.out.println(count);
+				//logger.info(count);
 			}
 		}
 		return result;
@@ -531,11 +533,11 @@ public class SOShelterRouting {
 				// increase the entry in result matrix by 1.
 			}
 			if (str1First.equals("su") && str2First.equals("de")) {
-//				System.out.println(str2Number);
+//				logger.info(str2Number);
 				int locationI = getLocation(relocateDemand, str2Number);  // start form 0
 				int locationJ = getLocation(shelterRemaining, str1Number); // start from 0.
-//				System.out.println(locationI);
-//				System.out.println(locationJ);
+//				logger.info(locationI);
+//				logger.info(locationJ);
 				result.get(locationI).set(locationJ, result.get(locationI).get(locationJ)+1); // increase the entry in result matrix by 1.
 			}
 		}

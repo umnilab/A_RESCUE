@@ -3,6 +3,8 @@ package evacSim.partition;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 
 import galois.objects.graph.GNode;
@@ -23,6 +25,8 @@ import evacSim.GlobalVariables;
 
 
 public class GaliosGraphConverter<T> implements ProjectionListener<T> {
+	private Logger logger = ContextCreator.logger;
+	
 	public Graph<T, RepastEdge<T>> RepastGraph; // Repast graph
 	public static Network<Junction> roadNetwork; // Repast network projection
 	public IntGraph<MetisNode> GaliosGraph;
@@ -166,7 +170,7 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 		    metisGraph.setNumEdges(edgeNum);
 		    metisGraph.setGraph(GaliosGraph);
 		    computeLeftOverRoads(); // Get the leftover roads
-		    System.out.println("finished reading Repast graph " + GaliosGraph.size() + " " + metisGraph.getNumEdges() + 
+		    logger.info("Finished reading Repast graph " + GaliosGraph.size() + " " + metisGraph.getNumEdges() + 
 		    		" # Leftover roads: " + this.LeftOverRoads.size());
 		    return metisGraph;
 		} catch (Exception e){

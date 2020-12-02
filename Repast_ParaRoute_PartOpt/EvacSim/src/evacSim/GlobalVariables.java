@@ -53,7 +53,7 @@ import java.util.Properties;
 import java.util.Random;
 
 public class GlobalVariables {
-private static Properties config;
+	private static Properties config;
 	/* Loading properties from ConfigFile, by Zhan. Modified by Chris later. */
 	private static String loadConfig(String property) {
 	    if (config == null) {
@@ -87,6 +87,8 @@ private static Properties config;
 	
 	public static final String ACTIVITY_CSV = loadConfig("ACTIVITY_SEQ_CSV");
 
+	public static final String LOGGER_PROPERTIES = loadConfig("LOGGER_PROPERTIES");
+	
 	/* Path for the supply side event file */
 	public static final String EVENT_FILE = loadConfig("EVENT_FILE");
 	public static final int EVENT_CHECK_FREQUENCY = Integer.
@@ -327,15 +329,23 @@ private static Properties config;
 	public static final int DATA_CLEANUP_REFRESH =
 	        Integer.valueOf(loadConfig("DATA_CLEANUP_REFRESH"));
 	
+	/* RV: Common parameters for data output writers */
+	public static final String DEFAULT_OUTPUT_DIR = 
+			loadConfig("DEFAULT_OUTPUT_DIR");
+	public static final boolean ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME =
+			Boolean.valueOf(loadConfig("ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME"));
+	public static final String DEFAULT_SNAPSHOT_FILENAME =
+			loadConfig("DEFAULT_SNAPSHOT_FILENAME");
+	// RV: actual output directory - may be modified by the simulator
+	// depending on whether ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME is true
+	public static String OUTPUT_DIR = DEFAULT_OUTPUT_DIR;
+	// RV: name of the simulation scenario used to define the output directory
+	// and the names of output files
+	public static String SCENARIO_NAME = null; 
+	
 	/* Parameters for the CSV output file writer */
 	public static final boolean ENABLE_CSV_WRITE =
 	        Boolean.valueOf(loadConfig("ENABLE_CSV_WRITE"));
-	public static final String CSV_DEFAULT_FILENAME =
-	        loadConfig("CSV_DEFAULT_FILENAME");
-	public static final String CSV_DEFAULT_EXTENSION =
-	        loadConfig("CSV_DEFAULT_EXTENSION");
-	public static final String CSV_DEFAULT_PATH = 
-	        loadConfig("CSV_DEFAULT_PATH");
 	public static final int CSV_BUFFER_REFRESH =
 	        Integer.valueOf(loadConfig("CSV_BUFFER_REFRESH"));
 	public static final int CSV_LINE_LIMIT =
@@ -345,12 +355,6 @@ private static Properties config;
 	 * JSON_TICK_LIMIT_PER_FILE which represents the number of ticks are written in a json file) */
 	public static final boolean ENABLE_JSON_WRITE =
 	        Boolean.valueOf(loadConfig("ENABLE_JSON_WRITE"));
-	public static final String JSON_DEFAULT_FILENAME =
-	        loadConfig("JSON_DEFAULT_FILENAME");
-	public static final String JSON_DEFAULT_EXTENSION =
-	        loadConfig("JSON_DEFAULT_EXTENSION");
-	public static final String JSON_DEFAULT_PATH = 
-	        loadConfig("JSON_DEFAULT_PATH");
 	public static final int JSON_BUFFER_REFRESH =
 	        Integer.valueOf(loadConfig("JSON_BUFFER_REFRESH"));
 	public static final int JSON_TICK_LIMIT_PER_FILE =

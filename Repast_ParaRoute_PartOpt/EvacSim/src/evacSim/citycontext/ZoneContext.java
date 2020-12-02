@@ -9,6 +9,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import evacSim.routing.SOShelterRouting;
 import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.gis.GeographyFactoryFinder;
@@ -23,6 +25,7 @@ import evacSim.demand.DatasetOfHouseholdsPerZones;
 import repast.simphony.parameter.Parameters;
 
 public class ZoneContext extends DefaultContext<Zone> {
+	Logger logger = ContextCreator.logger;
 	
 	public DatasetOfHouseholdsPerZones dataset;
 	public SOShelterRouting soShelterMatcher; // RV: shelter SO routing matcher object
@@ -32,7 +35,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 		super("ZoneContext");
 		
-		System.out.println("ZoneContext creation");
+		logger.info("ZoneContext creation");
 		/*
 		 * GIS projection for spatial information about Roads. This is used to
 		 * then create junctions and finally the road network.
@@ -47,7 +50,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 		/* Read in the data and add to the context and geography */
 		try {
 			/* Load the demand zones (census block groups) */
-			System.out.println("Initializing demand zones only");
+			logger.info("Initializing demand zones only");
 			File zoneFile = null;
 			ShapefileLoader<Zone> zoneLoader = null;
 			zoneFile = new File(GlobalVariables.ZONES_SHAPEFILE);
@@ -66,7 +69,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 			String shelterCsvName = null;
 			ShapefileLoader<Zone> shelterLoader = null;
 			ArrayList<Zone> shelters = new ArrayList<Zone>();
-			System.out.println("Initializing shelters");
+			logger.info("Initializing shelters");
 
 			// read the shelters shape-file
 			shelterFile = new File(GlobalVariables.SHELTERS_SHAPEFILE);
@@ -96,7 +99,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 			
 			// create the SO routing scheduler
 			this.soShelterMatcher = new SOShelterRouting(shelters);
-			System.out.println("Created SO shelter matcher: " + this.soShelterMatcher.toString());
+			logger.info("Created SO shelter matcher: " + this.soShelterMatcher.toString());
 			
 			// RV: also add the list of shelter objects so that
 			this.shelters = shelters;
@@ -115,7 +118,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 
 		// RV: Shelter matching for excess shelter seekers
 		if (GlobalVariables.DYNAMIC_DEST_STRATEGY == 3) {
-			System.out.println("Trying shelter matching!");
+			logger.info("Trying shelter matching!");
 		}
 		
 		// SH - for implementing activity simulator
@@ -131,11 +134,11 @@ public class ZoneContext extends DefaultContext<Zone> {
 				Parameters params = RunEnvironment.getInstance().getParameters();
                 int demandNumber = params.getInteger("demandFiles");
                 String a_filepath = "data/multiple_instances_of_demand/" + demandNumber + ".csv";
-                System.out.println("data file: "+a_filepath);
+                logger.info("data file: "+a_filepath);
     			dataset = new DatasetOfHouseholdsPerZones(a_filepath);
 			} else {
 				String a_filepath = GlobalVariables.ACTIVITY_CSV;
-				System.out.println("data file: "+a_filepath);
+				logger.info("data file: "+a_filepath);
 				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
 			}
 			
@@ -188,7 +191,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 				try {
 					DataCollector.getInstance().recordShelterTickSnapshot(shelter);
 				} catch (Exception e) {
-					System.err.println(e);
+					logger.error(e);
 				}
 			}
 		}

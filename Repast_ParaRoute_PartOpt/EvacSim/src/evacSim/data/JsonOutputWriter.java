@@ -10,7 +10,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import repast.simphony.essentials.RepastEssentials;
 
@@ -34,6 +37,8 @@ import repast.simphony.essentials.RepastEssentials;
  * @date 10 August 2017, 6 June 2019
  */
 public class JsonOutputWriter implements DataConsumer {
+	
+	private Logger logger = ContextCreator.logger;
     
     /** Whether or not existing output files should be appended. */
     private boolean append;
@@ -79,7 +84,7 @@ public class JsonOutputWriter implements DataConsumer {
      */
     public JsonOutputWriter() {
         this(new File(JsonOutputWriter.createDefaultFilePath()), false);
-        System.out.println("Creating JSON file " + JsonOutputWriter.createDefaultFilePath());
+        logger.info("Creating JSON file " + JsonOutputWriter.createDefaultFilePath());
     }
     
     
@@ -238,7 +243,7 @@ public class JsonOutputWriter implements DataConsumer {
                         // we are currently paused, so we will wait our delay
                         // before performing another poll on our running state
                         try {
-                        	System.out.println("Sleeping JSON consumer at t=" + RepastEssentials.GetTickCount());
+                        	logger.info("Sleeping JSON consumer at t=" + RepastEssentials.GetTickCount());
                             Thread.sleep(GlobalVariables.JSON_BUFFER_REFRESH);
                             continue;
                         }
@@ -544,12 +549,12 @@ public class JsonOutputWriter implements DataConsumer {
         // have to do a little extra checking to setup the next file.
 //        String currentEnd = "." + this.fileSeriesNumber + "." + 
 //                            GlobalVariables.JSON_DEFAULT_EXTENSION;
-        String currentEnd = "." + this.previousFileName + "." +
-                GlobalVariables.JSON_DEFAULT_EXTENSION;
-        String nextEnd = "." + (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1) + "." +
-                         GlobalVariables.JSON_DEFAULT_EXTENSION;
+
+        String currentEnd = "." + this.previousFileName + ".json";
+        String nextEnd = "." + (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1) + ".json";
         
         //System.out.println("filename" + currentEnd + ", "+ nextEnd);
+
         
         String newFilename = filename;
         
@@ -655,9 +660,9 @@ public class JsonOutputWriter implements DataConsumer {
         
         //write the the ticks to json file if only one more tick information needs to be added to the current file
         if (this.ticksWritten == GlobalVariables.JSON_TICK_LIMIT_PER_FILE - 1) {
-        	JSONObject jsonObject = new JSONObject();
-            jsonObject.putAll(this.storeJsonObjects);
-        	this.writer.write(JSONObject.toJSONString(jsonObject));
+        		JSONObject jsonObject = new JSONObject();
+        		jsonObject.putAll(this.storeJsonObjects);
+        		this.writer.write(JSONObject.toJSONString(jsonObject));
         }
         this.ticksWritten += 1;
         		
@@ -777,33 +782,23 @@ public class JsonOutputWriter implements DataConsumer {
      */
     public static String createDefaultFilePath() {
         // get the default pieces of the filename to assemble
-        String defaultFilename = GlobalVariables.JSON_DEFAULT_FILENAME;
-        String defaultExtension = GlobalVariables.JSON_DEFAULT_EXTENSION;
+        String defaultFilename = GlobalVariables.DEFAULT_SNAPSHOT_FILENAME;
         
         // get a timestamp to use in the filename
         SimpleDateFormat formatter = 
-                new SimpleDateFormat("YYYY-MM-dd-hhmm-ss");
+                new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss");
         String timestamp = formatter.format(new Date());
         
-        // build the filename
-        String filename = defaultFilename + "_" + timestamp + 
-                          ".1." + defaultExtension;
+        // build the filename based on the default name, scenario name & timestamp
+        String filename = defaultFilename + "-" +
+        		GlobalVariables.SCENARIO_NAME + "-" +
+        		timestamp +".1.json";
         
         // get the default directory for placing the file
-        String defaultDir = GlobalVariables.JSON_DEFAULT_PATH;
-        if (defaultDir == null || defaultDir.trim().length() < 1) {
-            // there was no default dir specified in the config file
-            // so we will just use the home directory of the user
-//            defaultDir = System.getProperty("user.home");
-            
-            // if no homedir is defined, fall back on current working dir
-//            if (defaultDir == null || defaultDir.trim().length() < 1) {
-                defaultDir = System.getProperty("user.dir");
-//            }
-        }
+        String outDir = GlobalVariables.OUTPUT_DIR;
                 
         // build the full path to the file
-        String outpath = defaultDir + File.separatorChar + filename;
+        String outpath = outDir + File.separatorChar + filename;
         
         // check the path will be a valid file
         File outfile = new File(outpath);
@@ -814,8 +809,8 @@ public class JsonOutputWriter implements DataConsumer {
             // a bit of randomization and just hope that is good enough.
             int hashCode = System.identityHashCode(filename);
             filename = defaultFilename + "_" + timestamp + "_" +
-                       hashCode + ".1." + defaultExtension;
-            outpath = defaultDir + File.pathSeparator + filename;
+                       hashCode + ".1.json";
+            outpath = outDir + File.pathSeparator + filename;
             outfile = new File(outpath);
         }
 
@@ -831,7 +826,7 @@ public class JsonOutputWriter implements DataConsumer {
             // so we will have to fall back on saving this in the temp dir
             try {
                 outfile = 
-                    File.createTempFile(filename, defaultExtension);
+                    File.createTempFile(filename, "json");
             }
             catch (IOException ioe2) {
                 // our default filename failed, and now our temp file failed.

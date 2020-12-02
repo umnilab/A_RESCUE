@@ -1,6 +1,9 @@
 package evacSim.data;
 
 import java.util.ArrayList;
+import org.apache.log4j.Logger;
+
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import repast.simphony.context.DefaultContext;
 import repast.simphony.engine.environment.RunEnvironment;
@@ -17,12 +20,13 @@ import repast.simphony.engine.environment.RunEnvironment;
  * @date 20 sept 2017
  */
 public class DataCollectionContext extends DefaultContext<Object> {
+	private Logger logger = ContextCreator.logger;
     
     /** A convenience reference to to the system-wide data collector. */
     private DataCollector collector;
     
     /** A consumer of output data from the buffer which saves it to disk. */
-    private CsvOutputWriter outputWriter;
+    private CsvOutputWriter csvOutputWriter;
     
     /** A consumer of output data from the buffer which saves it to disk. */
     private JsonOutputWriter jsonOutputWriter;
@@ -44,8 +48,8 @@ public class DataCollectionContext extends DefaultContext<Object> {
         // this will generate a unique value including a current timestamp
         // and placing it in the current jre working directory.
         if (GlobalVariables.ENABLE_CSV_WRITE) {
-            this.outputWriter = new CsvOutputWriter();
-            this.collector.registerDataConsumer(this.outputWriter);
+            this.csvOutputWriter = new CsvOutputWriter();
+            this.collector.registerDataConsumer(this.csvOutputWriter);
         }
 
         // create the JSON output file writer.  without specifying a filename,
@@ -61,17 +65,14 @@ public class DataCollectionContext extends DefaultContext<Object> {
         		GlobalVariables.RUNTIME_RECORD_LIST.add((double) System.currentTimeMillis());
         	}
     }
-    
-    
+
     public void startCollecting() {
         this.collector.startDataCollection();
     }
     
-    
     public void stopCollecting() {
         this.collector.stopDataCollection();
     }
-    
     
     public void startTick() {
         // get the current tick number from the system
@@ -83,13 +84,13 @@ public class DataCollectionContext extends DefaultContext<Object> {
         this.collector.startTickCollection(tickNumber);
     }
     
-    
     public void stopTick() {
         this.collector.stopTickCollection();
     }
     
-    
-    /** RV: Record runtime per few ticks for performance analysis (in seconds) */
+    /**
+     * RV: Record runtime per few ticks for performance analysis (in seconds)
+     * */
     public void recordRuntime() {
     	if (GlobalVariables.ENABLE_RUNTIME_RECORD) {
     		ArrayList<Double> runtimeRecorder = GlobalVariables.RUNTIME_RECORD_LIST;
@@ -97,14 +98,14 @@ public class DataCollectionContext extends DefaultContext<Object> {
     		
     		// print the total no. of vehicles generated and destroyed so far,
     		// along with runtime since the last call of this function
-    		System.out.println("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
+    		logger.info("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
     				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
     				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
     				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES
     				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount()
     				+ ", cumRuntime=" + runtimeRecorder.get(runtimeRecorder.size() - 1));
     	} else {
-    		System.out.println("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
+    		logger.info("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
     				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
     				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
     				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES

@@ -10,7 +10,11 @@ import repast.simphony.space.gis.GeographyParameters;
 
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
+
+import evacSim.ContextCreator;
 
 /**
  * Context which holds junction objects and also the RoadNetwork.
@@ -19,12 +23,13 @@ import com.vividsolutions.jts.geom.Coordinate;
  */
 public class JunctionContext extends DefaultContext<Junction>
 {
+	private Logger logger = ContextCreator.logger;
 
    public JunctionContext()
    {
 
       super("JunctionContext");
-      System.out.println("JunctionContext creation");
+      ContextCreator.logger.info("JunctionContext creation");
 
       /* Create a Network projection for the road network--->Network Projection */
       NetworkFactory netFac =
@@ -60,8 +65,8 @@ public class JunctionContext extends DefaultContext<Junction>
       {
          if (junc.getCoordinate().equals(c)) return junc;
       }
-      System.err.print("JunctionContext: getJunctionWithCoordinates: error, junction not found. ");
-      System.err.println("Coordinates: " + c.toString());
+      logger.error("JunctionContext: getJunctionWithCoordinates: error, junction not found. ");
+      logger.error("Coordinates: " + c.toString());
       return null;
 	}
    
@@ -72,7 +77,7 @@ public class JunctionContext extends DefaultContext<Junction>
 	         if (junc.getJunctionID() == id) return junc;
 	      }
 	      System.err.print("JunctionContext: getJunctionFromID: error, junction not found. ");
-	      System.err.println("Junction ID: %d\n" + id);
+	      logger.error("Junction ID: %d\n" + id);
 	      return null;
    }
 
