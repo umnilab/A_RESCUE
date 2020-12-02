@@ -761,50 +761,27 @@ public class CsvOutputWriter implements DataConsumer {
      */
     public static String createDefaultFilePath() {
         // get the default pieces of the filename to assemble
-        String defaultFilename = GlobalVariables.DEFAULT_OUT_FNAME;
+        String defaultFilename = GlobalVariables.DEFAULT_SNAPSHOT_FILENAME;
         
         // get a timestamp to use in the filename
         SimpleDateFormat formatter = 
                 new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss");
         String timestamp = formatter.format(new Date());
         
-        // RV: use the basename of the demand file in the output file
-        String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
-        String temp2 = temp1[temp1.length - 1];
-        String activityScenario = temp2.substring(0, temp2.lastIndexOf('.'));
-        	if (activityScenario == null || activityScenario.length() <= 0) {
-        		System.err.println("JsonOutputWriter.createDefaultPath():"
-        				+ "activity file name is not valid");
-        	}
-        
+        // RV: get the basename of the demand file -
+ 		String basename = "";
+ 		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+ 			String[] temp = GlobalVariables.OUTPUT_DIR.split("/");
+ 			basename = temp[temp.length - 1];
+ 		}
+ 		
         // build the filename
-        String filename = defaultFilename + "-" + activityScenario + "-"
+        String filename = defaultFilename + "-" + basename + "-"
         		+ timestamp + ".1.csv";
         
         // get the default directory for placing the file
-        String defaultDir = GlobalVariables.DEFAULT_OUT_PATH;
-        if (defaultDir == null || defaultDir.trim().length() < 1) {
-        		defaultDir = System.getProperty("user.dir");
-        }
+        String outDir = GlobalVariables.OUTPUT_DIR;
         
-        /* RV: provide the output directory - either the default one or
-         * in case of running multiple scenarios, organize all files into
-         * a folder for each scenario based on its demand filename
-         */
-        String outDir;
-        if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
-    		outDir = defaultDir + File.separatorChar + activityScenario;
-    		
-    		// if the directory does not exist, create it
-    		try {
-    			Files.createDirectories(Paths.get(outDir));
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
-        } else {
-        		outDir = defaultDir;
-        }
-                
         // build the full path to the file
         String outpath = outDir + File.separatorChar + filename;
         
@@ -818,7 +795,7 @@ public class CsvOutputWriter implements DataConsumer {
             int hashCode = System.identityHashCode(filename);
             filename = defaultFilename + "_" + timestamp + "_" +
                        hashCode + ".1.csv";
-            outpath = defaultDir + File.pathSeparator + filename;
+            outpath = outDir + File.pathSeparator + filename;
             outfile = new File(outpath);
         }
 

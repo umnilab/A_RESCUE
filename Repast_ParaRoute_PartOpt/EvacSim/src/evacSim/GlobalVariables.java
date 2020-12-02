@@ -53,7 +53,7 @@ import java.util.Properties;
 import java.util.Random;
 
 public class GlobalVariables {
-private static Properties config;
+	private static Properties config;
 	/* Loading properties from ConfigFile, by Zhan. Modified by Chris later. */
 	private static String loadConfig(String property) {
 	    if (config == null) {
@@ -328,12 +328,15 @@ private static Properties config;
 	        Integer.valueOf(loadConfig("DATA_CLEANUP_REFRESH"));
 	
 	/* RV: Common parameters for data output writers */
-	public static final String DEFAULT_OUT_PATH = 
-			loadConfig("DEFAULT_OUT_PATH");
-	public static final String DEFAULT_OUT_FNAME =
-			loadConfig("DEFAULT_OUT_FNAME");
+	public static final String DEFAULT_OUTPUT_DIR = 
+			loadConfig("DEFAULT_OUTPUT_DIR");
 	public static final boolean ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME =
 			Boolean.valueOf(loadConfig("ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME"));
+	public static final String DEFAULT_SNAPSHOT_FILENAME =
+			loadConfig("DEFAULT_SNAPSHOT_FILENAME");
+	// RV: actual output directory - may be modified by the simulator
+	// depending on whether ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME is true
+	public static String OUTPUT_DIR = DEFAULT_OUTPUT_DIR;
 	
 	/* Parameters for the CSV output file writer */
 	public static final boolean ENABLE_CSV_WRITE =

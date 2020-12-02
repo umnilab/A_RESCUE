@@ -1,10 +1,16 @@
 package evacSim;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -30,6 +36,7 @@ import repast.simphony.space.graph.Network;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.*;
 import evacSim.vehiclecontext.*;
+import jdk.nashorn.internal.objects.Global;
 import evacSim.partition.*;
 import evacSim.data.*;
 
@@ -77,17 +84,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		}
 		return distance;
 	}
-	/**
-	 * The citycontext will create its own subcontexts (RoadContext,
-	 * JunctionContext and HouseContext).
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * repast.simphony.dataLoader.ContextBuilder#build(repast.simphony.context
-	 * .Context)
-	 */
+	
 	public Context<Object> build(Context<Object> context) {
 		Properties propertyFile = new Properties();
 
@@ -254,7 +251,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		// TODO: figure out the double value for the tick duration
 		double tickDuration = 1.0d;
 				
-	    if(GlobalVariables.ENABLE_DATA_COLLECTION){
+	    if (GlobalVariables.ENABLE_DATA_COLLECTION) {
 	    		//Data collection, priority infinity
 			ScheduleParameters dataStartParams = ScheduleParameters.createOneTime(
 					0.0, ScheduleParameters.FIRST_PRIORITY);
@@ -308,13 +305,48 @@ public class ContextCreator implements ContextBuilder<Object> {
 	public static void end() {
 		System.out.println("Finished sim: "
 				+ (System.currentTimeMillis() - startTime));
-//		System.out.println("Finished data collection: "
-//				+ (GlobalVariables.datacollection_total));
-		try{
+		try {
 			bw.close();
 		} catch (IOException e){
 			e.printStackTrace();
 		}
+		String logText = System.out.toString();
+		try {
+			PrintWriter out = new PrintWriter("simulation_output/output.log");
+			out.println(logText);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+//		// RV: write the console output as a log file
+//		try {
+//			//create a buffered reader that connects to the console, we use it so we can read lines
+//			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+//			
+//			//read a line from the console
+//			String lineFromInput = in.readLine();
+//			
+//			//create an print writer for writing to a file
+//			PrintWriter out = new PrintWriter(new
+//					FileWriter("simulation_output/output.log"));
+//			
+//			//output to the file a line
+//			out.println(lineFromInput);
+//			
+//			//close the file (VERY IMPORTANT!)
+//			out.close();
+//	   }
+//	      catch(IOException e1) {
+//	        System.out.println("Error during reading/writing");
+//	   }
+//		PrintStream out;
+//		try {
+//			out = new PrintStream(new FileOutputStream("simulation_output/output.log"));
+//			System.setOut(out);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}
+		
 	}
 
 	/** RV: Prematurely end the simulation if there is no vehicle on the road network or
@@ -428,36 +460,14 @@ public class ContextCreator implements ContextBuilder<Object> {
 		 * in case of running multiple scenarios, organize all files into
 		 * a folder for each scenario based on its demand filename
 		 */
-		// get the default output directory - the same as the JSON output
-		String defaultDir = GlobalVariables.DEFAULT_OUT_PATH;
-		if (defaultDir == null || defaultDir.trim().length() < 1) {
-			defaultDir = System.getProperty("user.dir");
-		}
+		// get the default output directory
+		String outDir = GlobalVariables.OUTPUT_DIR;
 		
-		// get the basename of the demand file
-		String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
-        String temp2 = temp1[temp1.length - 1];
-        String activityScenario = temp2.substring(0, temp2.lastIndexOf('.'));
-        	if (activityScenario == null || activityScenario.length() <= 0) {
-        		System.err.println("JsonOutputWriter.createDefaultPath():"
-        				+ "activity file name is not valid");
-        	}
-		
-		// specify the actual output directory
-		String outDir;
-		// if the output is to be organized by scenario name
-        if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
-            	// create/use a subdirectory of defaultDir named after demand file
-    		outDir = defaultDir + File.separatorChar + activityScenario;
-        } else {
-        		outDir = defaultDir;
-        }
-        
-        // if the directory does not exist, create it
-		try {
-			Files.createDirectories(Paths.get(outDir));
-		} catch (IOException e) {
-			e.printStackTrace();
+		// get the basename of the demand file -
+		String basename = "";
+		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+			String[] temp = GlobalVariables.OUTPUT_DIR.split("/");
+			basename = temp[temp.length - 1];
 		}
 		
 		// get the current timestamp
@@ -465,7 +475,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 				.format(new Date());
 		// create the overall file path, named after the demand filename
 		String outpath = outDir + File.separatorChar + "logger-vehicles-" + 
-				activityScenario + "-" + timestamp + ".csv";
+				basename + "-" + timestamp + ".csv";
 		// check the path will be a valid file
 		try {
 			FileWriter fw = new FileWriter(outpath, false);

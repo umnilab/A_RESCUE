@@ -1,5 +1,9 @@
 package evacSim.data;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import evacSim.GlobalVariables;
 import repast.simphony.context.DefaultContext;
@@ -22,7 +26,7 @@ public class DataCollectionContext extends DefaultContext<Object> {
     private DataCollector collector;
     
     /** A consumer of output data from the buffer which saves it to disk. */
-    private CsvOutputWriter outputWriter;
+    private CsvOutputWriter csvOutputWriter;
     
     /** A consumer of output data from the buffer which saves it to disk. */
     private JsonOutputWriter jsonOutputWriter;
@@ -40,12 +44,18 @@ public class DataCollectionContext extends DefaultContext<Object> {
         // at least once to ensure that it created an instance of itself
         this.collector = DataCollector.getInstance();
         
+        
+        // RV: update the default output directory if multiple demand scenarios are run
+		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+			updateOutputDirectory();
+		}
+        
         // create the output file writer.  without specifying a filename,
         // this will generate a unique value including a current timestamp
         // and placing it in the current jre working directory.
         if (GlobalVariables.ENABLE_CSV_WRITE) {
-            this.outputWriter = new CsvOutputWriter();
-            this.collector.registerDataConsumer(this.outputWriter);
+            this.csvOutputWriter = new CsvOutputWriter();
+            this.collector.registerDataConsumer(this.csvOutputWriter);
         }
 
         // create the JSON output file writer.  without specifying a filename,
@@ -88,8 +98,36 @@ public class DataCollectionContext extends DefaultContext<Object> {
         this.collector.stopTickCollection();
     }
     
+	/**
+	 * RV: Modify the default output directory to be a subdirectory
+	 * of the default output directory, named by the basename of the
+	 * demand (activity) file.
+	 */
+	public static void updateOutputDirectory() {
+		String outDir = GlobalVariables.DEFAULT_OUTPUT_DIR;
+		// get the base name of the demand file
+		String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
+        String temp2 = temp1[temp1.length - 1];
+        String activityScenario = temp2.substring(0, temp2.lastIndexOf('.'));
+        	if (activityScenario == null || activityScenario.length() <= 0) {
+        		System.err.println("JsonOutputWriter.createDefaultPath():"
+        				+ "activity file name is not valid");
+        	}
+        	// set this base name as a subdirectory
+        	outDir = outDir + File.separatorChar + activityScenario;
+        	// if the directory does not exist, create it
+		try {
+			Files.createDirectories(Paths.get(outDir));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// set it as the default output directory
+		GlobalVariables.OUTPUT_DIR = outDir;
+	}
     
-    /** RV: Record runtime per few ticks for performance analysis (in seconds) */
+    /**
+     * RV: Record runtime per few ticks for performance analysis (in seconds)
+     * */
     public void recordRuntime() {
     	if (GlobalVariables.ENABLE_RUNTIME_RECORD) {
     		ArrayList<Double> runtimeRecorder = GlobalVariables.RUNTIME_RECORD_LIST;
