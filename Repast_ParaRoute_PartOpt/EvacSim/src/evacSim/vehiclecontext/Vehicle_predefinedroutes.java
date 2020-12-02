@@ -1,11 +1,14 @@
 package evacSim.vehiclecontext;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+
 import java.util.Queue;
 
+import evacSim.ContextCreator;
 import evacSim.citycontext.House;
 import evacSim.citycontext.Road;
 import evacSim.routing.RouteV;
@@ -13,6 +16,7 @@ import repast.simphony.essentials.RepastEssentials;
 
 //Gehlot: This is a subclass of Vehicle class
 public class Vehicle_predefinedroutes extends Vehicle {
+	private Logger logger = ContextCreator.logger;
 
 	public Vehicle_predefinedroutes(House h) {
 		super(h);
@@ -53,7 +57,7 @@ public class Vehicle_predefinedroutes extends Vehicle {
 						Iterator<Road> itr = this.roadPath.iterator();
 						itr.next();
 						this.nextRoad_ = itr.next();
-//						System.out.println("initial routing done for "+this.vehicleID_+"lastroutetime= "+this.lastRouteTime);//Gehlot: for debugging
+//						logger.info("initial routing done for "+this.vehicleID_+"lastroutetime= "+this.lastRouteTime);//Gehlot: for debugging
 					} else {
 						// New Route will cause blocking, use the old path
 						// Remove the current road from the path
@@ -63,7 +67,7 @@ public class Vehicle_predefinedroutes extends Vehicle {
 						itr.next();
 						this.nextRoad_ = itr.next();
 					}
-//					System.out.println("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
+//					logger.info("Debug 1: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 				} else {
 					// Route information is still valid
 					// Remove the current road from the path
@@ -76,16 +80,16 @@ public class Vehicle_predefinedroutes extends Vehicle {
 
 //				if (nextRoad != null)
 //					if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
-//						System.out.println("Next Road ID for Vehicle: "
+//						logger.info("Next Road ID for Vehicle: "
 //								+ this.getVehicleID() + " is "
 //								+ nextRoad.getLinkid());
 				
 				/*
 				 * if (nextRoad.getLinkid() != this.road.getLinkid()) {
-				 * System.out.println("Next Road ID for Vehicle: " +
+				 * logger.info("Next Road ID for Vehicle: " +
 				 * this.getVehicleID() + " is " + nextRoad.getLinkid());
 				 * this.nextRoad_ = nextRoad; } else {
-				 * System.out.println("No next road found for Vehicle " +
+				 * logger.info("No next road found for Vehicle " +
 				 * this.vehicleID_ + " on Road " + this.road.getLinkid());
 				 * this.nextRoad_ = null; }
 				 */
@@ -106,11 +110,11 @@ public class Vehicle_predefinedroutes extends Vehicle {
 				Iterator<Road> itr = this.roadPath.iterator();
 				itr.next();
 				this.nextRoad_ = itr.next();
-//				System.out.println("Debug 2: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
+//				logger.info("Debug 2: Vehicle: " + this.getId() + " current road: " + this.road.getLinkid() + " next road: " + this.nextRoad_.getLinkid());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("No next road found for Vehicle "
+			logger.info("No next road found for Vehicle "
 					+ this.vehicleID_ + " on Road " + this.road.getLinkid());
 			this.nextRoad_ = null;
 		}

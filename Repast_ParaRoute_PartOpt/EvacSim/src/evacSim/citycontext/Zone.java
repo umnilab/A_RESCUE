@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
 import com.vividsolutions.jts.geom.Coordinate;
-
 import evacSim.ContextCreator;
 import evacSim.vehiclecontext.Vehicle;
 import repast.simphony.space.gis.Geography;
 
 public class Zone {
+	Logger logger = ContextCreator.logger;
 	// /////////////////////////////////////////RODRIGO/////////////////////////////////
 	private int id;
 	private int totalevacuationvehicles;
@@ -51,7 +52,6 @@ public class Zone {
 		occupancy = 0;
 		capacity = 0;
 		waiting = new LinkedList<Vehicle>();
-		System.out.print(".");
 	}
 	
 	public Zone(int integerID, int type, int capacity) {
@@ -185,11 +185,11 @@ public class Zone {
 	}
 
 	public void printHouses() {
-		System.out.println("Zone number of houses in zone "
+		logger.info("Zone number of houses in zone "
 				+ this.houses.size());
 		for (int i = 0; i < this.houses.size(); i++) {
 			House h = this.houses.get(i);
-			System.out.println("Zone House " + h.getId() + ": is in Zone = "
+			logger.info("Zone House " + h.getId() + ": is in Zone = "
 					+ h.getZoneId() + ", Evacuates? " + h.getEvacuate()
 					+ ", at evacuation time = " + h.getEvacuationTime()
 					+ ", to destZone: " + h.getDestZone());

@@ -6,6 +6,8 @@ import java.util.Set;
 /*We used the code about hungarian algorithm in github: 
  * https://github.com/aalmi/HungarianAlgorithm/blob/master/HungarianAlgorithm.java*/
 
+import evacSim.ContextCreator;
+
 public class HungarianAlgorithm_AALMI {
 
     int[][] matrix; // initial matrix (cost matrix)
@@ -18,7 +20,7 @@ public class HungarianAlgorithm_AALMI {
             try {
                 throw new IllegalAccessException("The matrix is not square!");
             } catch (IllegalAccessException ex) {
-                System.err.println(ex);
+                ContextCreator.logger.error(ex);
                 System.exit(1);
             }
         }
@@ -37,7 +39,6 @@ public class HungarianAlgorithm_AALMI {
 
     /**
      * find an optimal assignment
-     *
      * @return optimal assignment
      */
     public int[][] findOptimalAssignment() {
@@ -68,9 +69,6 @@ public class HungarianAlgorithm_AALMI {
         for (int i = 0; i < squareInCol.length; i++) {
             optimalAssignment[i] = new int[]{i, squareInCol[i]};
         }
-		//for (int j =0; j< optimalAssignment.length;j++){
-		//	System.out.println(optimalAssignment[j]);
-		//}
         return optimalAssignment;
     }
 

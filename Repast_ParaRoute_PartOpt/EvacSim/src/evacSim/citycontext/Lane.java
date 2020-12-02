@@ -2,6 +2,8 @@ package evacSim.citycontext;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import evacSim.ContextCreator;
 import evacSim.vehiclecontext.Vehicle;
 import evacSim.GlobalVariables;
@@ -11,6 +13,8 @@ import evacSim.GlobalVariables;
  */
 @SuppressWarnings("unused")
 public class Lane {
+	Logger logger = ContextCreator.logger;
+	
 	private int id; // SH: An auto-generated id from ContextCreater
 	private int laneid; // from shape file
 	private int link; // from shape file
@@ -127,7 +131,7 @@ public class Lane {
 	}
 
 	public void printShpInput() {
-		System.out.println("Repast Lane ID: " + id + " Lane ID: "+ laneid 
+		logger.info("Repast Lane ID: " + id + " Lane ID: "+ laneid 
 				+" link " + link + " L: "+ left + " T: " + through 
 				+ " R: " + right + " Repast road ID "
 				+ road_.getID());
@@ -299,13 +303,13 @@ public class Lane {
 	}
 
 	public void printLaneConnection(){
-		System.out.println("Road: "+ this.road_.getLinkid()+ " lane " +this.laneid +" has downstream connections: ");
+		logger.info("Road: "+ this.road_.getLinkid()+ " lane " +this.laneid +" has downstream connections: ");
 		for (int i=0;i<this.dnLanes_.size();i++) {
-			System.out.println("To Lane: " +this.dnLanes_.get(i).laneid+" of road: "+this.dnLanes_.get(i).road_.getLinkid());
+			logger.info("To Lane: " +this.dnLanes_.get(i).laneid+" of road: "+this.dnLanes_.get(i).road_.getLinkid());
 		}
-		System.out.println("and with upstream connection: ");
+		logger.info("and with upstream connection: ");
 		for (int i=0;i<this.upLanes_.size();i++) {
-			System.out.println("To Lane: " +this.upLanes_.get(i).laneid+" of road: "+this.upLanes_.get(i).road_.getLinkid());
+			logger.info("To Lane: " +this.upLanes_.get(i).laneid+" of road: "+this.upLanes_.get(i).road_.getLinkid());
 		}
 	}
 	//BL: following are functions dedicated for discretionary lane changing

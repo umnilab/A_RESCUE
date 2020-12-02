@@ -4,15 +4,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import repast.simphony.essentials.RepastEssentials;
 
@@ -36,6 +37,8 @@ import repast.simphony.essentials.RepastEssentials;
  * @date 10 August 2017, 6 June 2019
  */
 public class JsonOutputWriter implements DataConsumer {
+	
+	private Logger logger = ContextCreator.logger;
     
     /** Whether or not existing output files should be appended. */
     private boolean append;
@@ -81,7 +84,7 @@ public class JsonOutputWriter implements DataConsumer {
      */
     public JsonOutputWriter() {
         this(new File(JsonOutputWriter.createDefaultFilePath()), false);
-        System.out.println("Creating JSON file " + JsonOutputWriter.createDefaultFilePath());
+        logger.info("Creating JSON file " + JsonOutputWriter.createDefaultFilePath());
     }
     
     
@@ -240,7 +243,7 @@ public class JsonOutputWriter implements DataConsumer {
                         // we are currently paused, so we will wait our delay
                         // before performing another poll on our running state
                         try {
-                        	System.out.println("Sleeping JSON consumer at t=" + RepastEssentials.GetTickCount());
+                        	logger.info("Sleeping JSON consumer at t=" + RepastEssentials.GetTickCount());
                             Thread.sleep(GlobalVariables.JSON_BUFFER_REFRESH);
                             continue;
                         }
@@ -778,16 +781,10 @@ public class JsonOutputWriter implements DataConsumer {
                 new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss");
         String timestamp = formatter.format(new Date());
         
-        	// RV: get the basename of the demand file -
-		String basename = "";
-		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
-			String[] temp = GlobalVariables.OUTPUT_DIR.split("/");
-			basename = temp[temp.length - 1];
-		}
-        
-        // build the filename
-        String filename = defaultFilename + "-" + basename + "-" +
-        		timestamp + ".1.json";
+        // build the filename based on the default name, scenario name & timestamp
+        String filename = defaultFilename + "-" +
+        		GlobalVariables.SCENARIO_NAME + "-" +
+        		timestamp +".1.json";
         
         // get the default directory for placing the file
         String outDir = GlobalVariables.OUTPUT_DIR;

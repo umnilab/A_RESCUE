@@ -6,6 +6,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -21,6 +23,8 @@ import evacSim.routing.RouteV;
 import evacSim.vehiclecontext.*;
 
 public class CityContext extends DefaultContext<Object> {
+	
+	Logger logger = ContextCreator.logger;
 
 	// These are used so we can keep a link between Roads (in the RoadGeography)
 	// and Edges in the RoadNetwork
@@ -154,7 +158,7 @@ public class CityContext extends DefaultContext<Object> {
 				this.edgeIdNum_KeyEdge.put(edge, road.getID());
 				this.edgeIDs_KeyIDNum.put(road.getID(), edge);
 			} catch (Exception e) {
-				System.err.println(e.getMessage());
+				logger.error(e.getMessage());
 			}
 			if (!roadNetwork.containsEdge(edge)) {
 				roadNetwork.addEdge(edge);
@@ -242,7 +246,7 @@ public class CityContext extends DefaultContext<Object> {
 		Lane curLane, dsLane;
 
 		/*
-		 * System.out.println("Road " + road.getLinkid() + " has "+
+		 * logger.info("Road " + road.getLinkid() + " has "+
 		 * nLanes+" lanes and is " + road.getLength() + " meters long");
 		 */
 
@@ -253,16 +257,16 @@ public class CityContext extends DefaultContext<Object> {
 			dsLaneIds.add(curLane.getThrough());
 			dsLaneIds.add(curLane.getRight());
 			/*
-			 * System.out.println("Lane: " + curLane.getLaneid() + " from road "
+			 * logger.info("Lane: " + curLane.getLaneid() + " from road "
 			 * + curLane.road_().getIdentifier() +
 			 * " has downstream connections: ");
 			 */
 			for (double dsLaneId : dsLaneIds) {
-				// System.out.println("Connection " + dsLaneId);
+				// logger.info("Connection " + dsLaneId);
 				if (dsLaneId != 0) {
 					dsLane = this.lane_KeyLaneID.get((int) dsLaneId);
 					/*
-					 * System.out.println("Connection " + dsLane.getLaneid() +
+					 * logger.info("Connection " + dsLane.getLaneid() +
 					 * " Repast ID: " + dsLane.getID());
 					 */
 					curLane.addDnLane(dsLane);
@@ -287,7 +291,7 @@ public class CityContext extends DefaultContext<Object> {
 	/* TODO: change if want to incorporate other routing method
 	 * */
 	public void modifyRoadNetwork() {
-//		System.out.println("Modifying road network! Tick: "
+//		logger.info("Modifying road network! Tick: "
 //				+ System.currentTimeMillis());
 		int tickcount;
 		Geography<Road> roadGeography = ContextCreator.getRoadGeography();
@@ -304,7 +308,7 @@ public class CityContext extends DefaultContext<Object> {
 
 		// At beginning, initialize route object
 		tickcount = (int) RepastEssentials.GetTickCount();
-		System.out.println("Tick: " + tickcount);
+		logger.info("Tick: " + tickcount);
 		if (tickcount < 1) {
 			try {
 				RouteV.createRoute();
@@ -334,7 +338,7 @@ public class CityContext extends DefaultContext<Object> {
 			System.err
 					.println("CityContext: getIDDromEdge: Error, probably no id found for edge "
 							+ edge.toString());
-			System.err.println(e.getStackTrace());
+			logger.error(e.getStackTrace());
 		}
 		return id;
 	}
@@ -347,7 +351,7 @@ public class CityContext extends DefaultContext<Object> {
 			System.err
 					.println("CityContext: getIdNumFromEdge: Error, probably no id found for edge "
 							+ edge.toString());
-			System.err.println(e.getStackTrace());
+			logger.error(e.getStackTrace());
 		}
 		return id;
 	}
@@ -365,7 +369,7 @@ public class CityContext extends DefaultContext<Object> {
 			System.err
 					.println("CityContext: getEdgeDromID: Error, probably no edge found for id "
 							+ id);
-			System.err.println(e.getStackTrace());
+			logger.error(e.getStackTrace());
 		}
 		return edge;
 	}
@@ -509,7 +513,7 @@ public class CityContext extends DefaultContext<Object> {
 		for (Road road : roadGeography.getAllObjects()) {
 			junctions = road.getJunctions();
 //			if (junctions.get(0).getJunctionID() == junc1 || junctions.get(0).getJunctionID() == junc2)
-//				System.out.println("First junction: " + junctions.get(0).getJunctionID() + " Second Junction: "+junctions.get(1).getJunctionID());
+//				logger.info("First junction: " + junctions.get(0).getJunctionID() + " Second Junction: "+junctions.get(1).getJunctionID());
 
 			if ((junctions.get(0).getJunctionID() == junc1
 					&& junctions.get(1).getJunctionID() == junc2)) {
@@ -707,7 +711,7 @@ public class CityContext extends DefaultContext<Object> {
 	
 	public void loadDemandOfNextHour() {
 		if(ContextCreator.getZoneContext().dataset.getHousesByHour().size()>0) {
-			System.out.println("Loading demand for the next hour...");
+			logger.info("Loading demand for the next hour...");
 			ContextCreator.getZoneContext().loadDemandofNextHour();
 			ContextCreator.getVehicleContext().createVehicleContextFromActivityModels();
 		}

@@ -26,6 +26,7 @@ import repast.simphony.context.space.gis.GeographyFactoryFinder;
 import repast.simphony.space.gis.Geography;
 import repast.simphony.space.gis.GeographyParameters;
 import repast.simphony.space.gis.ShapefileLoader;
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 
 public class LaneContext extends DefaultContext<Lane> {
@@ -40,7 +41,7 @@ public class LaneContext extends DefaultContext<Lane> {
 		/*
 		 * GIS projection for spatial information about Lanes. 
 		 */
-		System.out.println("LaneContext: building lane context and projections");
+		ContextCreator.logger.info("LaneContext: building lane context and projections");
 		
 		GeographyParameters<Lane> geoParams = new GeographyParameters<Lane>();
 		//geoParams.setCrs("EPSG:32618");

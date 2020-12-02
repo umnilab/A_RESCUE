@@ -4,11 +4,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import org.apache.log4j.Logger;
+
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 
 /**
@@ -32,6 +34,8 @@ import evacSim.GlobalVariables;
  * @date 10 August 2017
  */
 public class CsvOutputWriter implements DataConsumer {
+	
+	private Logger logger = ContextCreator.logger;
     
     /** Whether or not existing output files should be appended. */
     private boolean append;
@@ -270,8 +274,8 @@ public class CsvOutputWriter implements DataConsumer {
                     // RV:DynaDestTest: print the shelter relocations when the simulation ends
                     if (nextTick == GlobalVariables.SIMULATION_STOP_TIME - 
                     		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ) {
-                    	System.out.println("Shelter relocations:");
-//                    	System.out.println(GlobalVariables.shelterRelocateTracker);
+                    	logger.info("Shelter relocations:");
+//                    	logger.info(GlobalVariables.shelterRelocateTracker);
                     }
                     
                     // update the currently processing tick index to this item
@@ -768,20 +772,14 @@ public class CsvOutputWriter implements DataConsumer {
                 new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss");
         String timestamp = formatter.format(new Date());
         
-        // RV: get the basename of the demand file -
- 		String basename = "";
- 		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
- 			String[] temp = GlobalVariables.OUTPUT_DIR.split("/");
- 			basename = temp[temp.length - 1];
- 		}
- 		
-        // build the filename
-        String filename = defaultFilename + "-" + basename + "-"
-        		+ timestamp + ".1.csv";
+        // build the filename based on the default name, scenario name & timestamp
+        String filename = defaultFilename + "-" +
+        		GlobalVariables.SCENARIO_NAME + "-" +
+        		timestamp +".1.csv";
         
         // get the default directory for placing the file
         String outDir = GlobalVariables.OUTPUT_DIR;
-        
+                
         // build the full path to the file
         String outpath = outDir + File.separatorChar + filename;
         
@@ -804,6 +802,7 @@ public class CsvOutputWriter implements DataConsumer {
             if (!outfile.canWrite()) {
                 throw new IOException("Can't write to file.");
             }
+            outfile.delete();
         }
         catch (IOException ioe) {
             // we don't have permissions to write to the current directory

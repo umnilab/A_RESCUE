@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Queue;
 
 import org.opengis.referencing.operation.MathTransformFactory;
+import org.apache.log4j.Logger;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.ReferencingFactoryFinder;
 import java.awt.geom.Point2D;
@@ -32,6 +33,8 @@ import evacSim.data.DataCollector;
 import evacSim.routing.RouteV;
 
 public class Vehicle {
+	private Logger logger = ContextCreator.logger;
+	
 	private int id;
 	protected int vehicleID_;
 	private int deptime;
@@ -205,7 +208,7 @@ public class Vehicle {
 		CityContext cityContext = (CityContext) ContextCreator.getCityContext();
 		this.destZone = cityContext.findHouseWithDestID(destinationZoneId);
 		if (destZone == null) {
-			System.out.println("helloooo");
+			logger.info("helloooo");
 		}
 		this.destCoord = this.destZone.getCoord();
 		this.originalCoord = cityContext.findHouseWithDestID(
@@ -373,9 +376,7 @@ public class Vehicle {
 						//Xue: make the comparison between the previous route time and the new route time. If the absolute and relative difference are both large 
 						//the vehicle will shift to the new route (Mahmassani and Jayakrishnan(1991), System performance  and user  response  under  real-time  information  in a congested  traffic corridor).
 						if (pathTimeOldPath - pathTimeNew > indiffBand * pathTimeOldPath) {  //Rajat, Xue
-							//System.out.print("relativeDifference \n");
 							if (pathTimeOldPath - pathTimeNew > GlobalVariables.TAU) {
-								//System.out.print("AbsoluteDifference \n");
 								tempPath = tempPathNew;                              // Update path.
 								this.travelTimeForPreviousRoute = pathTimeNew;       // Update path time.
 								this.previousTick =  currentTick;                    // Update tick.
@@ -413,14 +414,14 @@ public class Vehicle {
 
 //				if (nextRoad != null)
 //					if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
-//						System.out.println("Next Road ID for Vehicle: "
+//						logger.info("Next Road ID for Vehicle: "
 //								+ t his.getVehicleID() + " is "
 //								+ nextRoad.getLinkid());
 //				 if (nextRoad.getLinkid() != this.road.getLinkid()) {
-//				 System.out.println("Next Road ID for Vehicle: " +
+//				 logger.info("Next Road ID for Vehicle: " +
 //				 this.getVehicleID() + " is " + nextRoad.getLinkid());
 //				 this.nextRoad_ = nextRoad; } else {
-//				 System.out.println("No next road found for Vehicle " +
+//				 logger.info("No next road found for Vehicle " +
 //				 this.vehicleID_ + " on Road " + this.road.getLinkid());
 //				 this.nextRoad_ = null;
 //                }
@@ -444,14 +445,14 @@ public class Vehicle {
 						itr.next();
 						this.nextRoad_ = itr.next(); // RV: null
 					} else {
-						System.out.println(this + " same road" + this.road.getLinkid() + " for next dest");
+						logger.info(this + " same road" + this.road.getLinkid() + " for next dest");
 						this.nextRoad_ = null;
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("No next road found for Vehicle "
+			logger.info("No next road found for Vehicle "
 					+ this.vehicleID_ + " on Road " + this.road.getLinkid());
 			GlobalVariables.NUM_FAILED_VEHICLES += 1;
 			this.nextRoad_ = null; // LZ: Remove the vehicle, can we do something better? 
@@ -467,7 +468,7 @@ public class Vehicle {
 			this.leading(v);
 //			For debugging, check if this.distance_ can be less than the front vehicle's
 //			if(this.distance_<v.distance_){
-//				System.out.println("Wow, " + this.distance_ + "," + v.distance_ + "," + this.lane.getLaneid() + "," + this.lane.getLength());
+//				logger.info("Wow, " + this.distance_ + "," + v.distance_ + "," + this.lane.getLaneid() + "," + this.lane.getLength());
 //			}
 			v.trailing(this);
 		} else {
@@ -491,7 +492,7 @@ public class Vehicle {
 //			if (!start.equals(getNearestCoordinate(lastCoordinate, start, end))) {
 //				ArrayUtils.reverse(coords);
 //				if (this.id == GlobalVariables.Global_Vehicle_ID && !GlobalVariables.Debug_On_Road)
-//					System.out.println("Reversed the coordinates for this vehicle's coordinate map");
+//					logger.info("Reversed the coordinates for this vehicle's coordinate map");
 //			}
 			coordMap.clear();
 			for (Coordinate coord : coords) {
@@ -503,14 +504,14 @@ public class Vehicle {
 			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2; //LZ: lastStepMove_ does note make sense, should be this.length/2
 		} 
 		else{
-			System.err.println("There is no target lane to set!");
+			logger.error("There is no target lane to set!");
 		}
 //		else {
 //			this.coordMap.add(destCoord);
 //			this.distance_ = (float) distance(lastCoordinate, this.coordMap.get(0));// - lastStepMove_ / 2;
 //		}
 		if (Double.isNaN(distance_)) {
-			System.out.println("distance_ is NaN in setCoordMap for " + this);
+			logger.info("distance_ is NaN in setCoordMap for " + this);
 		}
 	}
 
@@ -595,7 +596,7 @@ public class Vehicle {
 		}
 		accRate_ = acc;
 		if (Double.isNaN(accRate_)) {
-			System.err.println("Vehicle.makeAcceleratingDecision: " + 
+			logger.error("Vehicle.makeAcceleratingDecision: " + 
 					"acc=NaN for "+this);
 		}
 	}
@@ -671,7 +672,7 @@ public class Vehicle {
 			regime_ = GlobalVariables.STATUS_REGIME_CARFOLLOWING;
 		}
 		if (Double.isNaN(acc)) {
-			System.err.println("Vehicle.calcCarFollowingRate(): "+
+			logger.error("Vehicle.calcCarFollowingRate(): "+
 					" acc=NaN for " + this);
 		}
 		return acc;
@@ -737,7 +738,7 @@ public class Vehicle {
 			headwayDistance = Float.MAX_VALUE;
 		}
 		if (Double.isNaN(headwayDistance)) {
-			System.err.println("Vehicle.gapDistance(): headway=NaN for "+this);
+			logger.error("Vehicle.gapDistance(): headway=NaN for "+this);
 		}
 		return (headwayDistance);
 	}
@@ -799,7 +800,7 @@ public class Vehicle {
 				if (plane != null)
 					this.mandatoryLC(plane);
 				else {
-					System.out.println("Vehicle " + this.getId()
+					logger.info("Vehicle " + this.getId()
 							+ "has no lane to change");
 				}
 			} else {
@@ -820,7 +821,7 @@ public class Vehicle {
 				if (plane != null)
 					this.mandatoryLC(plane);
 				else {
-					System.out.println("Vehicle " + this.getId()
+					logger.info("Vehicle " + this.getId()
 							+ "has no lane to change");
 				}
 			}
@@ -891,7 +892,7 @@ public class Vehicle {
 			}
 		} catch (Exception e) {
 			try { // print the error-causing vehicle during move()
-				System.err.println("Vehicle " + this.getVehicleID()
+				logger.error("Vehicle " + this.getVehicleID()
 						+ " had an error while travelling on road: "
 						+ this.road.getLinkid() + "with next road: "
 						+ this.nextRoad().getLinkid());
@@ -899,7 +900,7 @@ public class Vehicle {
 				RunEnvironment.getInstance().pauseRun();
 			}
 			catch (NullPointerException exc) { // LZ,RV: in case next road is null
-				System.err.println("Vehicle.travel(): " + this
+				logger.error("Vehicle.travel(): " + this
 					+ " had an error while travelling on road: "
 					+ road.getLinkid() + " with next road: ");
 				e.printStackTrace();
@@ -911,11 +912,11 @@ public class Vehicle {
 	public void move() {
 		// validation checks
 		if (distance_ < 0 || Double.isNaN(distance_))
-			System.err.println("Vehicle.move(): distance_="+distance_+" "+this);
+			logger.error("Vehicle.move(): distance_="+distance_+" "+this);
 		if (currentSpeed_ < 0 || Float.isNaN(currentSpeed_))
-			System.err.println("Vehicle.move(): currentSpeed_="+currentSpeed_+" "+this);
+			logger.error("Vehicle.move(): currentSpeed_="+currentSpeed_+" "+this);
 		if (Double.isNaN(accRate_))
-			System.err.println("Vehicle.move(): accRate_="+accRate_+" "+this);
+			logger.error("Vehicle.move(): accRate_="+accRate_+" "+this);
 		
 		// intialization
 		Coordinate currentCoord = null;
@@ -971,7 +972,7 @@ public class Vehicle {
 			}
 		}
 		if (Double.isNaN(dx)) {
-			System.out.println("dx is NaN in move() for " + this);
+			logger.info("dx is NaN in move() for " + this);
 		}
 
 		// solve the crash problem by making sure 0 <= dx <= gap with its front vehicle
@@ -1073,7 +1074,7 @@ public class Vehicle {
 
 	public void printGlobalVehicle(float dx) {
 		if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID) {
-			System.out.println("Next Road ID for vhielc: " + this.vehicleID_
+			logger.info("Next Road ID for vhielc: " + this.vehicleID_
 					+ " is: " + this.nextRoad().getLinkid() + " step size is: "
 					+ dx + " distance to downstream: " + this.distance_ + 
 					" next lane: " + this.nextLane_
@@ -1636,7 +1637,7 @@ public class Vehicle {
 
 		if (this.nextRoad() == null) {
 			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
-				System.out.println("Assign next lane: current link ID= "
+				logger.info("Assign next lane: current link ID= "
 						+ curRoad.getLinkid() + " current lane ID: "
 						+ curLane.getLaneid() + " next link ID="
 						+ this.nextRoad());
@@ -1665,7 +1666,7 @@ public class Vehicle {
 				this.nextLane_ = this.nextRoad().getLane(0);
 			}
 			if (this.nextLane_ == null)
-				System.err.println("No next lane found for vehicle: "
+				logger.error("No next lane found for vehicle: "
 						+ this.vehicleID_ + " moving on the road: "
 						+ this.getRoad().getLinkid() + " lane: "
 						+ this.getLane().getLaneid() + " heading to location "
@@ -1772,7 +1773,7 @@ public class Vehicle {
 		this.lane = plane; // vehicle move to the target lane
 		if (leadVehicle != null) {
 			if (this.distance_ < leadVehicle.distance_) {
-				System.err.println("Vehicle.changeLane(): distance_=" + distance_ + 
+				logger.error("Vehicle.changeLane(): distance_=" + distance_ + 
 						" is less than leadVehicle.distance_=" + leadVehicle.distance_ +
 						" on lane=" + lane.getLaneid() + " with length=" + lane.getLength());
 			}
@@ -1781,7 +1782,7 @@ public class Vehicle {
 			this.leading_.trailing(this);
 			if (lagVehicle != null) {
 				if (lagVehicle.distance_ < this.distance_) {
-					System.err.println("Vehicle.changeLane(): distance_=" + distance_ + 
+					logger.error("Vehicle.changeLane(): distance_=" + distance_ + 
 							" is greater than lagVehicle.distance_=" + lagVehicle.distance_ +
 							" on lane=" + lane.getLaneid() + " with length=" + lane.getLength());
 				}
@@ -1793,7 +1794,7 @@ public class Vehicle {
 			}
 		} else if (lagVehicle != null) {
 			if (lagVehicle.distance_ < this.distance_) {
-				System.err.println("Vehicle.changeLane(): distance_=" + distance_ + 
+				logger.error("Vehicle.changeLane(): distance_=" + distance_ + 
 						" is greater than leadVehicle.distance_=" + lagVehicle.distance_ +
 						" (when leadVehicle is null), $this on lane=" +
 						lane.getLaneid() + " with length=" + lane.getLength());
@@ -1914,7 +1915,7 @@ public class Vehicle {
 		}
 		this.nosingFlag = false;
 		if (Double.isNaN(acc)) {
-			System.err.println("Vehicle.nosing(): acceleration=NaN for " + this);
+			logger.error("Vehicle.nosing(): acceleration=NaN for " + this);
 		}
 		return acc;
 	}
@@ -2075,7 +2076,7 @@ public class Vehicle {
 							&& front.accRate_ > 0)
 						return targetLane;
 				} else if (this.leading_ == null) {
-					System.err.println(
+					logger.error(
 							"Vehicle.findBetterLane(): this.leading_=null for"+this);
 				}
 			}
@@ -2188,7 +2189,7 @@ public class Vehicle {
 			coor1 = this.coordMap.get(end);
 			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
 					&& !GlobalVariables.Debug_On_Road) {
-				System.err.println("Vehicle.updateCoordMapWithNewLane(): " + this +
+				logger.error("Vehicle.updateCoordMapWithNewLane(): " + this +
 						" already had its coordinate map but need to update " +
 						"for moving through junction which connects to the " +
 						"point: " + coor1);
@@ -2206,7 +2207,7 @@ public class Vehicle {
 			coor2 = getNearestCoordinate(coor1, c1, c2);
 			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
 					&& !GlobalVariables.Debug_On_Road) {
-				System.out.println("The adding coordinate is from the lane: "
+				logger.info("The adding coordinate is from the lane: "
 						+ plane.getLaneid());
 			}
 		} else
@@ -2215,22 +2216,22 @@ public class Vehicle {
 			this.coordMap.add(coor2);
 			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
 					&& !GlobalVariables.Debug_On_Road) {
-				System.out.println("Vehicle.updateCoorMapWithNewLane(): " +
+				logger.info("Vehicle.updateCoorMapWithNewLane(): " +
 					" Added new coordinate " + this);
 			}
 		} else {
 			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
 					&& !GlobalVariables.Debug_On_Road) {
-				System.out.println("Vehicle.updateCoorMapWithNewLane(): " +
+				logger.info("Vehicle.updateCoorMapWithNewLane(): " +
 						" No coordinate added " + this);
 			}
 		}
 		if (this.id == GlobalVariables.Global_Vehicle_ID
 				&& !GlobalVariables.Debug_On_Road) {
 			int end = this.coordMap.size() - 1;
-			System.out.println("Vehicle.updateCoorMapWithNewLane(): " +
+			logger.info("Vehicle.updateCoorMapWithNewLane(): " +
 				" Coordinate map after the next lane for " + this + ": ");
-			System.out.println("Distance to added point: "
+			logger.info("Distance to added point: "
 					+ distance(this.coordMap.get(end - 1),
 							this.coordMap.get(end)));
 		}
@@ -2286,11 +2287,11 @@ public class Vehicle {
 		try {
 			distance = calculator.getOrthodromicDistance();
 		} catch (AssertionError ex) {
-			System.err.println("Error with finding distance");
+			logger.error("Error with finding distance");
 			distance = 0.0;
 		}
 		if (Double.isNaN(distance)) {
-			System.err.println("distance is NaN in Vehicle.distance() for " + this);
+			logger.error("distance is NaN in Vehicle.distance() for " + this);
 		}
 		return distance;
 	}
@@ -2304,7 +2305,7 @@ public class Vehicle {
 			distance = calculator.getOrthodromicDistance();
 			radius = calculator.getAzimuth(); // the azimuth in degree, value from -180-180
 		} catch (AssertionError e) {
-			System.err.println("Error with finding distance: " + e);
+			logger.error("Error with finding distance: " + e);
 			distance = 0.0;
 			radius = 0.0;
 		}
@@ -2314,7 +2315,7 @@ public class Vehicle {
 		}
 		if (Double.isNaN(distance)) {
 			// RV: Check if this condition ever occurs
-			System.err.println("Geodetic distance is NaN for " + this);
+			logger.error("Geodetic distance is NaN for " + this);
 			distance = 0.0;
 			radius = 0.0;
 		}
@@ -2333,7 +2334,7 @@ public class Vehicle {
 			this.setCurrentCoord(new Coordinate(p.getX(), p.getY()));
 		}
 		else{
-			System.err.println("Vehicle.move2(): Cannot move " + this + "from "
+			logger.error("Vehicle.move2(): Cannot move " + this + "from "
 					+ coord + " by dist=" + distance + ", angle=" + angleInDegrees);
 		}
 	}
@@ -2390,7 +2391,7 @@ public class Vehicle {
 			this.endTime = (int) RepastEssentials.GetTickCount();
 			this.reachActLocation = false;
 			this.reachDest = true;
-			System.out.println(this + " reached dest shelter " + curDest);
+			logger.info(this + " reached dest shelter " + curDest);
 			String formatted_msg = (getVehicleID()
 					+ "," + 1 +
 					"," + getDepTime() + 
@@ -2440,7 +2441,7 @@ public class Vehicle {
 			}
 			// if all shelters have rejected this vehicle, kill it
 			else {
-				System.out.println(this + ": All shelters exhausted; killing self");
+				logger.info(this + ": All shelters exhausted; killing self");
 				this.killVehicle();
 			}
 		}
@@ -2465,7 +2466,7 @@ public class Vehicle {
 		this.setHouse(new_house);
 		
 		int tick = (int) RepastEssentials.GetTickCount();
-		System.out.println(
+		logger.info(
 				"Rerouting" + this +
 				"from " + locations.get(0) +
 				" to " + locations.get(1) +

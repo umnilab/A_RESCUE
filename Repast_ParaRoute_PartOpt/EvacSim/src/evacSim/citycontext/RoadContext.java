@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -19,16 +21,19 @@ import repast.simphony.context.space.gis.GeographyFactoryFinder;
 import repast.simphony.space.gis.Geography;
 import repast.simphony.space.gis.GeographyParameters;
 import repast.simphony.space.gis.ShapefileLoader;
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 
 public class RoadContext extends DefaultContext<Road> {
 
+	private Logger logger = ContextCreator.logger;
+	
 	// NM: Cache every coordinate which forms a road so that Route.onRoad() is quicker.
 	private static Map<Coordinate, ?> coordCache;
 
 	public RoadContext() {
 		super("RoadContext");
-		System.out.println("RoadContext creation");
+		logger.info("RoadContext creation");
 
 		// Create the cache:
 		coordCache = new HashMap<Coordinate, Object>();

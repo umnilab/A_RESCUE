@@ -1,14 +1,13 @@
 package evacSim.routing;
 
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
 import org.jgrapht.*;
 //import org.jgrapht.graph.*;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -34,6 +33,9 @@ import evacSim.citycontext.Junction;
 import evacSim.citycontext.Road;
 
 public class VehicleRouting {
+	
+	Logger logger = ContextCreator.logger;
+	
 	private Network<Junction> network;
 	private WeightedGraph<Junction, RepastEdge<Junction>> transformedNetwork = null;
 	private CityContext cityContext;
@@ -73,7 +75,7 @@ public class VehicleRouting {
 //					if(road.getFn() == node.getJunctionID())
 //						tempdegree+=1;
 //				if(tempdegree>=4)	
-//					System.out.println("junctionid"+node.getJunctionID()+"sizeofjunction"+node.getRoads().size()+"rode_list"+node.getRoads());
+//					logger.info("junctionid"+node.getJunctionID()+"sizeofjunction"+node.getRoads().size()+"rode_list"+node.getRoads());
 //		}
 	}
 	
@@ -152,7 +154,7 @@ public class VehicleRouting {
 //			DijkstraShortestPath<Junction, RepastEdge<Junction>> sp_debug = new DijkstraShortestPath<Junction, RepastEdge<Junction>>(transformedNetwork, currJunc_db, destJunc_db);
 //			for (RepastEdge<Junction> edge : sp_debug.getPathEdgeList())
 //			{
-//				System.out.println("id="+cityContext.getLinkIDFromEdge(edge));
+//				logger.info("id="+cityContext.getLinkIDFromEdge(edge));
 //			}
 		}
 		// Find the roads which are associated with these edges
@@ -162,7 +164,7 @@ public class VehicleRouting {
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);
 			Road road = cityContext.findRoadWithLinkID(linkID);
-//			System.out.println("linkID: " + linkID + " Path-" + road.getID());
+//			logger.info("linkID: " + linkID + " Path-" + road.getID());
 			roadPath_.offer(road);
 			shortestPathLength = shortestPathLength + edge.getWeight();
 		}

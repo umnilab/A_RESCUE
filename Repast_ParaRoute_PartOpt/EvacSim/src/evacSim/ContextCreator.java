@@ -1,16 +1,10 @@
 package evacSim;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -21,6 +15,8 @@ import java.util.Properties;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.geotools.referencing.GeodeticCalculator;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -36,11 +32,12 @@ import repast.simphony.space.graph.Network;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.*;
 import evacSim.vehiclecontext.*;
-import jdk.nashorn.internal.objects.Global;
 import evacSim.partition.*;
 import evacSim.data.*;
 
 public class ContextCreator implements ContextBuilder<Object> {
+	
+	public static Logger logger; // progress logger
 	
 	public static BufferedWriter bw; // Vehicle logger
 
@@ -68,39 +65,34 @@ public class ContextCreator implements ContextBuilder<Object> {
 	// Create a global lock to enforce concurrency
 //	 public static ReentrantLock lock = new ReentrantLock();
 	
-	private double getDistance(Coordinate c1, Coordinate c2) {
-		// GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
-		// .getRoadGeography().getCRS());
-		GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
-				.getLaneGeography().getCRS());
-		calculator.setStartingGeographicPoint(c1.x, c1.y);
-		calculator.setDestinationGeographicPoint(c2.x, c2.y);
-		double distance;
-		try {
-			distance = calculator.getOrthodromicDistance();
-		} catch (AssertionError ex) {
-			System.err.println("Error with finding distance");
-			distance = 0.0;
-		}
-		return distance;
-	}
-	
 	public Context<Object> build(Context<Object> context) {
+		
+		// read the simulation settings
 		Properties propertyFile = new Properties();
-
 		try {
-//			propertyFile.load(new FileInputStream("config/Data.properties"));
 			propertyFile.load(new FileInputStream("data/Data.properties"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// RV: get the name of the simulation run scenario to be used in
+		// naming the output files and directory & set it as a global variable
+		String scenarioName = setScenarioName();
+		GlobalVariables.SCENARIO_NAME = scenarioName;
+		
+		// RV: change the output directory if outputs are to be organized by
+		// demand file name
+		updateOutputDirectory();
 
+		// RV: set up the log file
+		setSimulationLogger();
+		
 		ContextCreator.mainContext = context;
 
 		while(GlobalVariables.SIMULATION_SLEEPS == 0){
 			try {
 				Thread.sleep(1000);
-				System.out.println("Waiting for visualization");
+				logger.info("Waiting for visualization");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -114,40 +106,18 @@ public class ContextCreator implements ContextBuilder<Object> {
 		cityContext.buildRoadNetwork();
 		cityContext.createNearestRoadCoordCache();
 		
-		System.out.println("Create other context");
+		logger.info("Create other context");
 		VehicleContext vehicleContext = new VehicleContext();
-		System.out.println("Create vehicleContext: "+vehicleContext.getTypeID());
+		logger.info("Create vehicleContext: "+vehicleContext.getTypeID());
 		context.addSubContext(vehicleContext);
-		System.out.println("Adding vehicleContext");
-		
-//		Geography<Vehicle> vehicleGeography = ContextCreator.getVehicleGeography();
-
-
-		// Load the initial vehicles into the queue of each road
-//		for (Vehicle v : getVehicleContext().getObjects(Vehicle.class)) {
-////			Coordinate currentCoord = vehicleGeography.getGeometry(v)
-////					.getCoordinate();
-////			v.setCurrentCoord(currentCoord);
-//			Road road = cityContext.findRoadAtCoordinates(v.getCurrentCoord(), false); 
-//			if(road.getLinkid() == 104819){
-//				road =  ContextCreator.getCityContext().findRoadWithLinkID(104818);
-//			}
-//			if(road.getLinkid() == 101235){
-//				road =  ContextCreator.getCityContext().findRoadWithLinkID(101236);
-//			}
-//			road.addVehicleToNewQueue(v);
-//		}
+		logger.info("Adding vehicleContext");
 		
 		DataCollectionContext dataContext = new DataCollectionContext();
 		context.addSubContext(dataContext);
 		
-
-//		// Seting display updating interval
-//		DisplayGIS.GIS_FRAME_UPDATE_INTERVAL=1000;
-		
 		// debug here
 		for (Context<?> con : context.getSubContexts()) {
-			System.out.println("SubContext typeIDs: " + con.getTypeID());
+			logger.info("SubContext typeIDs: " + con.getTypeID());
 		}
 		// debug ends
 		
@@ -158,9 +128,6 @@ public class ContextCreator implements ContextBuilder<Object> {
 			for (int i = 0; i < coords.length - 1; i++) {
 				distance += getDistance(coords[i], coords[i + 1]);
 			}
-//			if(Math.abs(distance-lane.getLength())>1){
-//				System.out.println("Lane ID: " + lane.getLaneid() + "," + " Calculated distance: "+ distance+","+"Real distance: " + lane.getLength());
-//			}
 			lane.setLength(distance);
 		}
 		
@@ -226,7 +193,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 			ThreadedScheduler s = new ThreadedScheduler(GlobalVariables.N_Partition);
 			schedule.schedule(agentParams, s, "step");
 			double delay = agentParams.getDuration();
-			System.out.println("TIME BETWEEN TWO TICKS " + delay);
+			logger.info("TIME BETWEEN TWO TICKS " + delay);
 //			schedule.schedule(agentParams, vehicleContext, "refreshAllVehicles");
 //			for (Road r : getRoadContext().getObjects(Road.class)) {
 //				schedule.schedule(agentParams, r, "step");
@@ -290,7 +257,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 	}
 	
 	public void printTick(){
-		System.out.println("Tick: "
+		logger.info("Tick: "
 				+ RunEnvironment.getInstance().getCurrentSchedule().getTickCount());
 	}
 	
@@ -298,66 +265,31 @@ public class ContextCreator implements ContextBuilder<Object> {
 		ISchedule sched = RunEnvironment.getInstance().getCurrentSchedule();
 		sched.setFinishing(true);
 		sched.executeEndActions();
-		System.out.println("ContextCreator has been told to stop by  "
+		logger.info("ContextCreator has been told to stop by  "
 				+ clazz.getName()+ ex);
 	}
 	
 	public static void end() {
-		System.out.println("Finished sim: "
+		logger.info("Finished sim: "
 				+ (System.currentTimeMillis() - startTime));
 		try {
 			bw.close();
 		} catch (IOException e){
 			e.printStackTrace();
 		}
-		String logText = System.out.toString();
-		try {
-			PrintWriter out = new PrintWriter("simulation_output/output.log");
-			out.println(logText);
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-//		// RV: write the console output as a log file
-//		try {
-//			//create a buffered reader that connects to the console, we use it so we can read lines
-//			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-//			
-//			//read a line from the console
-//			String lineFromInput = in.readLine();
-//			
-//			//create an print writer for writing to a file
-//			PrintWriter out = new PrintWriter(new
-//					FileWriter("simulation_output/output.log"));
-//			
-//			//output to the file a line
-//			out.println(lineFromInput);
-//			
-//			//close the file (VERY IMPORTANT!)
-//			out.close();
-//	   }
-//	      catch(IOException e1) {
-//	        System.out.println("Error during reading/writing");
-//	   }
-//		PrintStream out;
-//		try {
-//			out = new PrintStream(new FileOutputStream("simulation_output/output.log"));
-//			System.setOut(out);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
-		
 	}
 
-	/** RV: Prematurely end the simulation if there is no vehicle on the road network or
-	 *  in the queue of loaded vehicles. This is achieved with a proxy and is not fool proof.
-	 *  IF the no. of vehicles generated so far is the same as (or fewer in the pathological
-	 *  case) the no. of vehicles destroyed so far (after they reach the destination).
-	 *  This excludes the case in the beginning when both of these terms are zero.
-	 *  This may not work in the special case when there
-	 *  is a gap in the demand file so large that all vehicles reach their destination in that
-	 *  time and there is no vehicle on the network.
-	 *  */
+	/**
+	 * RV: Prematurely end the simulation if there is no vehicle on the road
+	 * network or in the queue of loaded vehicles. This is achieved with a
+	 * proxy and is not fool proof. If the no. of vehicles generated so far is
+	 * the same as (or fewer in the pathological case) the no. of vehicles
+	 * destroyed so far (after they reach the destination). This excludes the
+	 * case in the beginning when both of these terms are zero. This may not
+	 * work in the special case when there is a gap in the demand file so large
+	 * that all vehicles reach their destination in that time and there is no
+	 * vehicle on the network.
+	 */
 	public static void endIfNoVehicle() {
 		int nGenerated = GlobalVariables.NUM_GENERATED_VEHICLES;
 		int nDestroyed = GlobalVariables.NUM_KILLED_VEHICLES;
@@ -376,7 +308,6 @@ public class ContextCreator implements ContextBuilder<Object> {
 	/**
 	 * Creates a unique identifier for an agent. IDs are created in ascending
 	 * order.
-	 * 
 	 * @return the unique identifier.
 	 */
 	public static int generateAgentID() {
@@ -449,6 +380,23 @@ public class ContextCreator implements ContextBuilder<Object> {
 		return distInMeters;
 	}
 	
+	private double getDistance(Coordinate c1, Coordinate c2) {
+		// GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
+		// .getRoadGeography().getCRS());
+		GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
+				.getLaneGeography().getCRS());
+		calculator.setStartingGeographicPoint(c1.x, c1.y);
+		calculator.setDestinationGeographicPoint(c2.x, c2.y);
+		double distance;
+		try {
+			distance = calculator.getOrthodromicDistance();
+		} catch (AssertionError ex) {
+			logger.error("Error with finding distance");
+			distance = 0.0;
+		}
+		return distance;
+	}
+	
 	/**
 	 * LZ,RV: Create a logger for vehicle attributes during data collection
 	 * as part of the analysis for shelter routing and to prevent reading the
@@ -484,10 +432,74 @@ public class ContextCreator implements ContextBuilder<Object> {
 					"totalDistance,visitedShelters");
 			bw.newLine();
 			bw.flush();
-			System.out.println("Vehicle logger created");
+			logger.info("Vehicle logger created");
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Vehicle logger failed");
+			logger.error("Vehicle logger failed");
 		}
+	}
+	
+	/**
+	 * RV: Set the name of a simulation run (scenario) based on its
+	 * demand file.
+	 * @throws Exception when the processed name is null or empty
+	 */
+	public static String setScenarioName() {
+		// get the base name of the demand file
+		String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
+        String temp2 = temp1[temp1.length - 1];
+        String scenarioName = temp2.substring(0, temp2.lastIndexOf('.'));
+        	// check for error
+        	if (scenarioName == null || scenarioName.length() <= 0) {
+        		// but do not break the code, but just print the error
+        		System.err.println("Invalid scenario name");
+        	}
+		return scenarioName;
+	}
+	
+	/**
+	 * RV: Modify the default simulation output directory to be a subdirectory
+	 * of the default output directory, named by its scenario name.
+	 * @return outDir name of the (possibly updated) output directory
+	 */
+	public static String updateOutputDirectory() {
+		String outDir;
+		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+			outDir = GlobalVariables.DEFAULT_OUTPUT_DIR;
+	        	// set this base name as a subdirectory
+	        	// do not use File.separatorChar here since it creates problems afterwards
+	        	outDir = outDir + "/" + GlobalVariables.SCENARIO_NAME;
+	        	// if the directory does not exist, create it
+			try {
+				Files.createDirectories(Paths.get(outDir));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			// set it as the default output directory
+			GlobalVariables.OUTPUT_DIR = outDir;
+		}
+		else {
+			outDir = GlobalVariables.DEFAULT_OUTPUT_DIR;
+		}
+		return outDir;
+	}
+	
+	/**
+	 * RV: Specify the properties of and set up a global simulation logger.
+	 * This uses another properties file originally called "sim_logger.properties". 
+	 */
+	public void setSimulationLogger() {
+        	// prepare the path of the log file
+		String logFilePath = GlobalVariables.OUTPUT_DIR +
+				File.separatorChar + "logger-sim-" +
+				GlobalVariables.SCENARIO_NAME + "-" +
+				new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss").format(new Date()) +
+				".log";
+		System.setProperty("logFilePath", logFilePath);
+		// create a logger configured in GlobalVariables.LOGGER_PROPERTIES
+		logger = Logger.getLogger(this.getClass());
+		PropertyConfigurator.configure(GlobalVariables.LOGGER_PROPERTIES);
+		
+		logger.info("Logging started");
 	}
 }

@@ -10,6 +10,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -21,6 +23,7 @@ import evacSim.data.DataCollector;
 import evacSim.vehiclecontext.Vehicle;
 
 public class Road {
+	private Logger logger = ContextCreator.logger;
 	private int id;
 	private int linkid;
 	private int left;
@@ -133,7 +136,7 @@ public class Road {
 				v = this.newqueueHead(); // BL: change to use the TreeMap
 
 //				if (v.atActivityLocation()) {
-////					System.out.println(v.getCurrentCoord());
+////					logger.info(v.getCurrentCoord());
 //					v.setCoordMap(this.firstLane());
 //				}
 				
@@ -174,7 +177,7 @@ public class Road {
 			Vehicle pv = this.firstVehicle(); // The first vehicle in a road
 			if(pv !=null){
 				if(pv.leading()!=null){ // The behind vehicle surpass the front one, which should not happen.
-					System.out.println("Oh, my..."
+					logger.info("Oh, my..."
 							+ "," + pv.getLane().getLaneid()
 							+","+pv.getLane().getLength()
 							+","+pv.leading().getLane().getLaneid()
@@ -188,16 +191,13 @@ public class Road {
 //			int counter = 0;
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
-//					System.out.println("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
+//					logger.info("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
 					pv = pv.macroTrailing();
 					continue; //Skip this vehicle.
 				}
 				pv.updateLastMoveTick(tickcount);
-//				if(!pv.calcState()){ //This vehicle is corrupted, do not proceed for this road
-////					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
-//					System.out.print('.');
 				if(!pv.calcState()){ //This vehicle list is corrupted, do not proceed for this road
-					System.out.println("Link "+this.linkid+" vehicle list is corrupted");
+					logger.info("Link "+this.linkid+" vehicle list is corrupted");
 					break;
 				}
 				
@@ -216,7 +216,7 @@ public class Road {
 //					if (v == null) {
 //						break;
 //					} else {
-////						System.out.println(v.getMoveVehicleFlag());
+////						logger.info(v.getMoveVehicleFlag());
 //						if (v.currentSpeed()==0) {
 //							double maxMove = this.freeSpeed_
 //									* GlobalVariables.SIMULATION_STEP_SIZE;
@@ -240,7 +240,7 @@ public class Road {
 //			}
 			
 		} catch (Exception e) {
-			System.err.println("Road " + this.linkid
+			logger.error("Road " + this.linkid
 					+ " had an error while moving vehicles");
 			e.printStackTrace();
 			RunEnvironment.getInstance().pauseRun();
@@ -355,7 +355,7 @@ public class Road {
 
 	public int getLeft() {
 		/*
-		 * if (left == "" || left == null) { System.err.println(
+		 * if (left == "" || left == null) { logger.error(
 		 * "Road: error, the name field for this road has not been initialised."
 		 * +
 		 * "\n\tIf reading in a shapefile please make sure there is a string column called 'left' which is"
@@ -370,7 +370,7 @@ public class Road {
 
 	public int getThrough() {
 		/*
-		 * if (through == "" || through == null) { System.err.println(
+		 * if (through == "" || through == null) { logger.error(
 		 * "Road: error, the name field for this road has not been initialised."
 		 * +
 		 * "\n\tIf reading in a shapefile please make sure there is a string column called 'through' which is"
@@ -385,7 +385,7 @@ public class Road {
 
 	public int getRight() {
 		/*
-		 * if (right == "" || right == null) { System.err.println(
+		 * if (right == "" || right == null) { logger.error(
 		 * "Road: error, the name field for this road has not been initialised."
 		 * +
 		 * "\n\tIf reading in a shapefile please make sure there is a string column called 'right' which is"
@@ -448,7 +448,7 @@ public class Road {
 	public void roadMovement() {
 		ArrayList<Road> allRoads_ = new ArrayList<Road>();
 		ArrayList<Road> allMovements_ = new ArrayList<Road>();
-		// System.out.println("Searching connection for road " +
+		// logger.info("Searching connection for road " +
 		// this.getIdentifier());
 		if (this.getJunctions() != null) {
 			for (Road r : this.getJunctions().get(1).getRoads()) {
@@ -470,8 +470,8 @@ public class Road {
 			// BL: print all movements found
 			/*
 			 * if (this.getName().equals("dummy")) {
-			 * System.out.println("All movements found: "); for (int
-			 * i=0;i<allRoads_.size();i++){ System.out.println("Road " +
+			 * logger.info("All movements found: "); for (int
+			 * i=0;i<allRoads_.size();i++){ logger.info("Road " +
 			 * allRoads_.get(i).getIdentifier()); } }
 			 */
 
@@ -568,7 +568,7 @@ public class Road {
 	public void firstVehicle(Vehicle v) {
 		if (v != null) {
 			if(v.leading()!=null){
-				System.out.println("Well");
+				logger.info("Well");
 			}
 			this.firstVehicle_ = v;
 		}
@@ -741,7 +741,7 @@ public class Road {
 			Vehicle pv = this.firstVehicle();
 			while (pv != null) {
 				if (pv.currentSpeed() < 0) {
-					System.err.println("Vehicle " + pv.getId()
+					logger.error("Vehicle " + pv.getId()
 							+ " has error speed of " + pv.currentSpeed());
 				} else
 					averageSpeed = +pv.currentSpeed();
@@ -751,7 +751,7 @@ public class Road {
 				averageSpeed = 0.001f;
 			} else {
 				if (this.nVehicles_ < 0) {
-					System.err.println("Road " + this.getLinkid() + " has "
+					logger.error("Road " + this.getLinkid() + " has "
 							+ this.nVehicles_ + " vehicles");
 					averageSpeed = (float) this.freeSpeed_;
 				} else
@@ -845,10 +845,10 @@ public class Road {
 	}
 
 	public void printRoadInfo() {
-		System.out.println("Road: " + this.getIdentifier()
+		logger.info("Road: " + this.getIdentifier()
 				+ " has lanes from left to right as follow: ");
 		for (int i = 0; i < this.lanes.size(); i++) {
-			System.out.println(this.lanes.get(i).getLaneid()
+			logger.info(this.lanes.get(i).getLaneid()
 					+ " with Repast ID: " + this.lanes.get(i).getID());
 		}
 	}
@@ -857,9 +857,9 @@ public class Road {
 		Coordinate start, end;
 		start = this.getJunctions().get(0).getCoordinate();
 		end = this.getJunctions().get(1).getCoordinate();
-		System.out.println("Coordinate of road: " + this.getLinkid());
-		System.out.println("Starting point: " + start);
-		System.out.println("Ending point: " + end);
+		logger.info("Coordinate of road: " + this.getLinkid());
+		logger.info("Starting point: " + start);
+		logger.info("Ending point: " + end);
 	}
 	
 	/* This one uses the predefined free flow speed for each hour */
@@ -929,6 +929,6 @@ public class Road {
 	
 	public void printTick(){
 		int tickcount = (int) RepastEssentials.GetTickCount();
-		System.out.println("Tick: "+tickcount);
+		logger.info("Tick: "+tickcount);
 	}
 }

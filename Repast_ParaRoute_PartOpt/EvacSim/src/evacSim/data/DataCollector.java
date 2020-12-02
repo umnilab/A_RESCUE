@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.NetworkEventObject;
 import evacSim.citycontext.Road;
@@ -692,7 +693,7 @@ public class DataCollector {
             }
             debugMessage += ">> " + msg;
             
-            System.out.println(debugMessage);
+            ContextCreator.logger.warn(debugMessage);
         }
     }
 }

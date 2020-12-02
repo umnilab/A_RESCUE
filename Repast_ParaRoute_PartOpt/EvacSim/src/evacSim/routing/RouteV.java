@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
+
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.*;
@@ -24,6 +26,7 @@ import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.RepastEdge;
 
 public class RouteV {
+	private static Logger logger = ContextCreator.logger;
 	public static Geography<Vehicle> vehicleGeography;
 	public static Geography<Junction> junctionGeography;
 	public static Network<Junction> roadNetwork;
@@ -101,14 +104,14 @@ public class RouteV {
 // <<<<<<< HEAD
 		if (curDownJunc.getID() == destDownJunc.getID()) {
 			if (veh.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
-				System.out.println("Destination road reached " + destRoad.getLinkid()
+				logger.info("Destination road reached " + destRoad.getLinkid()
 					+ " from current road: " + currentRoad.getLinkid());
 			}
 			Map<Double, Queue<Road>> empty = new HashMap<Double, Queue<Road>>();
 			empty.put(0.0, new ArrayDeque<Road>());
 // =======
 // 		if (curDownJunc.getID() == destDownJunc.getID() || (currentRoad.getLinkid()==104819 || currentRoad.getLinkid()==101235)) {
-// //			System.out.println("Destination road reached " + destRoad.getLinkid()
+// //			logger.info("Destination road reached " + destRoad.getLinkid()
 // //					+ " from current road: " + currentRoad.getLinkid());
 // 			Map<Double, Queue<Road>> empty = new HashMap<Double, Queue<Road>>();
 // 			empty.put(0.0, new ArrayDeque<Road>());
@@ -141,7 +144,6 @@ public class RouteV {
 		for (Road r : path) {
 			System.out.print(" " + r.getLinkid());
 		}
-		System.out.println();
 	}
 	
 	/**
