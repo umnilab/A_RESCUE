@@ -55,6 +55,12 @@ public class TickSnapshot {
      *  Access of this object is package-level so that DataCollector can modify it. */
     private List<ShelterSnapshot> shelters;
     
+    /** The collection of the generated and arrived vehicle data
+     * Access of this object is package-level so that DataCollector can modify it.
+     */
+    private List<NewVehSnapshot> newVehs;
+    private List<ArrVehSnapshot> arrVehs;
+    
     /** HG: The collection of event data gathered during this time tick. */
     private List<ArrayList<NetworkEventObject>> events;
 
@@ -82,12 +88,15 @@ public class TickSnapshot {
         /** Current speed of the vehicle. */
         float speed;
         
-        	/** IDs of the origin & destination zones of the vehicle. */
-        	int origID, destID;
+        /** Current bearing of the vehicle. */
+        double bearing;
         
-        /** Coordinates of the vehicle's origin & destination. */
-        double origX, origY;
-        double destX, destY;
+//        /** IDs of the origin & destination zones of the vehicle. */
+//        int origID, destID;
+//        
+//        /** Coordinates of the vehicle's origin & destination. */
+//        double origX, origY;
+//        double destX, destY;
         
 //        /** Vehicle is traveling on the last segment of its path, so close to destination. */
 //        int nearlyArrived;
@@ -104,19 +113,15 @@ public class TickSnapshot {
         		prevY = veh.getPreviousEpochCoord().y;
         		curX = coord.x;
         		curY = coord.y;
-        		origX = veh.getOriginalCoord().x;
-        		origY = veh.getOriginalCoord().y;
-        		destX = veh.getDestCoord().x;
-        		destY = veh.getDestCoord().y;
+//        		origX = veh.getOriginalCoord().x;
+//        		origY = veh.getOriginalCoord().y;
+//        		destX = veh.getDestCoord().x;
+//        		destY = veh.getDestCoord().y;
         		speed = veh.currentSpeed();
+        		bearing = veh.getBearing();
 //        		nearlyArrived = veh.nearlyArrived();
 //        		vehicleClass = veh.getVehicleClass();
         		roadID = veh.getRoad().getID();
-        		
-        		// resolve the current origin and destination ID
-            ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
-        		origID = plans.get(0).getLocation();
-        		destID = plans.get(1).getLocation();
         		
         		// validity checks
         		if (id < 0) {
@@ -129,16 +134,20 @@ public class TickSnapshot {
         				Double.isNaN(curY) || Double.isInfinite(curY)) {
                 throw new ValueException("Current coordinate invalid for " + veh);
             }
-        		if (Double.isNaN(origX) || Double.isInfinite(origX) ||
-            		Double.isNaN(origY) || Double.isInfinite(origY)) {
-                throw new ValueException("Origin coordinate invalid for " + veh);
-            }
-            if (Double.isNaN(destX) || Double.isInfinite(destX) ||
-            		Double.isNaN(destY) || Double.isInfinite(destY)) {
-                throw new ValueException("Destination coordinate invalid for " + veh);
-            }
+//        		if (Double.isNaN(origX) || Double.isInfinite(origX) ||
+//            		Double.isNaN(origY) || Double.isInfinite(origY)) {
+//                throw new ValueException("Origin coordinate invalid for " + veh);
+//            }
+//            if (Double.isNaN(destX) || Double.isInfinite(destX) ||
+//            		Double.isNaN(destY) || Double.isInfinite(destY)) {
+//                throw new ValueException("Destination coordinate invalid for " + veh);
+//            }
             if (Float.isNaN(speed) || Float.isInfinite(speed)) {
                 throw new ValueException("Speed invalid for " + veh);
+            }
+            
+            if (Double.isNaN(bearing) || Double.isInfinite(bearing)) {
+                throw new ValueException("Bearing invalid for " + veh);
             }
     		
     		// add this object to the map of vehicle snapshots in the tick snapshot
@@ -158,11 +167,14 @@ public class TickSnapshot {
         		 * point upto a precision of 6 decimal places to save some storage space.
         		 * Also converts speed from m/s to mm/s & converted as integer.
         		 */
-        		Coordinate origin = ContextCreator.getCityContext().getOrigin();
-        		int shiftedCurX = (int) ((curX - origin.x) * 1e6);
-        		int shiftedCurY = (int) ((curY - origin.y) * 1e6);
-        		int speed_mms = (int) (speed * 1e3);
-        		String output = id + "," + shiftedCurX + "," + shiftedCurY + "," + speed_mms;
+//        		Coordinate origin = ContextCreator.getCityContext().getOrigin();
+//        		int shiftedCurX = (int) ((curX - origin.x) * 1e6);
+//        		int shiftedCurY = (int) ((curY - origin.y) * 1e6);
+//        		int speed_mms = (int) (speed * 1e3);
+//        		int bearing = (int) Math.round(this.bearing * 1e4);
+//        		String output = id + "," + shiftedCurX + "," + shiftedCurY + "," + speed_mms + "," + bearing;
+        		String output = String.format("%d,%.5f,%.5f,%.2f,%.2f",
+        				id, curX, curY, speed, bearing); // 5 digits to reach precision of 1 meter.
         		if (output == null || output.isEmpty()) {
         			System.err.println("empty/null string for " + id);
         		}
@@ -171,8 +183,10 @@ public class TickSnapshot {
         
         	/** Return the string of this vehicles's attributes to be exported to CSV */
         	String getCSVLine() {
-        		return String.format("%d,%d,%d,%.6f,%.6f,%.3f",
-        				id, origID, destID, curX, curY, speed);
+//        		return String.format("%d,%d,%d,%.6f,%.6f,%.3f",
+//        				id, origID, destID, curX, curY, speed);
+        		return String.format("%d, %.6f,%.6f,%.3f",
+        				id, curX, curY, speed);
         	}
         
     }
@@ -215,7 +229,7 @@ public class TickSnapshot {
     		roads.add(this);
     	}
     	
-    	/** Return the string of this vehicle's attributes to be exported to JSON */
+    	/** Return the string of this road's attributes to be exported to JSON */
     	String getJSONLine() {
     		return String.format("%d,%d,%.3f", id, nVehicles, speed);
     	}
@@ -256,11 +270,55 @@ public class TickSnapshot {
     		shelters.add(this);
     	}
     	
-    	/** Return the string of this vehicle's attributes to be exported to JSON */
+    	/** Return the string of this shelter's attributes to be exported to JSON */
     	String getJSONLine() {
     		return String.format("%d,%d", id, occupancy);
     	}
     	
+    }
+    
+    private class NewVehSnapshot{
+    	final int id;
+    	/** IDs of the origin & destination zones of the vehicle. */
+    	final int origID, destID;
+        
+        /** Coordinates of the vehicle's origin & destination. */
+//    	final double origX, origY;
+//    	final double destX, destY;
+        
+    	NewVehSnapshot(Vehicle veh){
+        	id = veh.getVehicleID();
+//        	origX = veh.getOriginalCoord().x;
+//    		origY = veh.getOriginalCoord().y;
+//    		destX = veh.getDestCoord().x;
+//    		destY = veh.getDestCoord().y;
+    		// resolve the current origin and destination ID
+            ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
+        		origID = plans.get(0).getLocation();
+        		destID = plans.get(1).getLocation();
+        		
+        	newVehs.add(this);
+        }
+        
+        /** Return the string of this vehicle's attributes to be exported to JSON */
+    	String getJSONLine() {
+    		//return String.format("%d,%d,%d,%.4f,%.4f,%.4f,%.4f", id, origID, destID, origX, origY, destX, destY);
+    		return String.format("%d,%d,%d", id, origID, destID); //LZ 12/01/2020, just return IDs
+    	}
+    }
+    
+    private class ArrVehSnapshot{
+    	final int id;
+        
+    	ArrVehSnapshot(Vehicle veh){
+        	id = veh.getVehicleID();
+        	arrVehs.add(this);
+        }
+        
+        /** Return the string of this vehicle's attributes to be exported to JSON */
+    	String getJSONLine() {
+    		return String.format("%d", id);
+    	}
     }
     
     
@@ -285,6 +343,10 @@ public class TickSnapshot {
         // RV: also add the data of the roads and shelters
         this.roads = Collections.synchronizedList(new ArrayList<RoadSnapshot>());
         this.shelters = Collections.synchronizedList(new ArrayList<ShelterSnapshot>());
+        
+     // LZ: also add the data of the new and killed vehicles
+        this.newVehs = Collections.synchronizedList(new ArrayList<NewVehSnapshot>());
+        this.arrVehs = Collections.synchronizedList(new ArrayList<ArrVehSnapshot>());
         
         /* HG: setup the map for holding the event data.
          * Two sub-array lists (for starting events and ending events)
@@ -311,6 +373,16 @@ public class TickSnapshot {
     	new ShelterSnapshot(shelter);
     }
     
+    /** Record the snapshot of a generated vehicle from the DataCollector class. */
+    public void recordNewVehSnapshot(Vehicle veh) {
+    	new NewVehSnapshot(veh);
+    }
+    
+    /** Record the snapshot of a killed vehicle from the DataCollector class. */
+    public void recordArrVehSnapshot(Vehicle veh) {
+    	new ArrVehSnapshot(veh);
+    }
+    
     /** Returns the model time step for the tick this snapshot represents. */
     public int getTickNumber() {
         return this.tickNumber;
@@ -318,7 +390,7 @@ public class TickSnapshot {
     
     /** Returns whether or not anything was recorded in the snapshot. */
     public boolean isEmpty() {
-        return (vehicles.isEmpty() && roads.isEmpty() && shelters.isEmpty());
+        return (vehicles.isEmpty() && roads.isEmpty() && shelters.isEmpty() && newVehs.isEmpty() && arrVehs.isEmpty());
     }
     
     /**
@@ -351,6 +423,20 @@ public class TickSnapshot {
 	            if (shelt == null) continue;
 	            lines.add(shelt.getJSONLine());
 	        }
+    	}
+    	// for entered vehicles
+    	if (objectType == "newVeh"){
+    		for(NewVehSnapshot veh: newVehs){
+    			if(veh == null) continue;
+    			lines.add(veh.getJSONLine());
+    		}
+    	}
+    	// for arrived vehicles
+    	if (objectType == "arrVeh"){
+    		for(ArrVehSnapshot veh: arrVehs){
+    			if(veh == null) continue;
+    			lines.add(veh.getJSONLine());
+    		}
     	}
     	return lines;
     }

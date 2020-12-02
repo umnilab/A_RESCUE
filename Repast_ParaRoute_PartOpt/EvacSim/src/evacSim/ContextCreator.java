@@ -250,7 +250,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		// schedule the data collection framework tasks to mark the start
 		// and stop of the model and the start and stop of each sim tick
 		// TODO: figure out the double value for the tick duration
-		double tickDuration = 1.0d;
+		double tickDuration = GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
 				
 	    if(GlobalVariables.ENABLE_DATA_COLLECTION){
 	    		//Data collection, priority infinity
@@ -269,6 +269,10 @@ public class ContextCreator implements ContextBuilder<Object> {
 			ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(
 					0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
 			schedule.schedule(tickEndParams, dataContext, "stopTick");
+			
+//			ScheduleParameters tickEndParams = ScheduleParameters.createRepeating(
+//					0.0d, tickDuration, ScheduleParameters.LAST_PRIORITY);
+//			schedule.schedule(tickEndParams, dataContext, "stopTick");
 			
 			// RV: schedule the recording of shelter snapshots for the visualization interface
 			ScheduleParameters recordShelterSnapshotParams = ScheduleParameters.createRepeating(

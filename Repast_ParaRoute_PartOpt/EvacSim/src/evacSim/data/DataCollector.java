@@ -34,7 +34,6 @@ public class DataCollector {
 
     /** This instance is the only data collector object in the program. */
     private static final DataCollector instance = new DataCollector();
-
     
     /** A flag for knowing if the collector is running. */
     private boolean collecting;
@@ -45,7 +44,6 @@ public class DataCollector {
     /** The time step number of the last tick stored in the buffer. */
     private double lastTick;
     
-    
     /** The double-ended queue which is the data buffer for the simulation. */
     private ConcurrentLinkedDeque<TickSnapshot> buffer;
     
@@ -54,7 +52,6 @@ public class DataCollector {
     
     /** The current tick snapshot into which new data is being stored. */
     private TickSnapshot currentSnapshot;
-    
     
     /** This timer manages periodically cleaning the buffer of old data. */
     private Timer cleanupTimer;
@@ -65,7 +62,6 @@ public class DataCollector {
     /** A count of how many times the buffer cleanup method has been called. */
     private int cleanupCount;
   
-    
     /**
      * Constructs the data collection system and performs any steps
      * necessary to start it like initializing the data buffer.
@@ -90,7 +86,6 @@ public class DataCollector {
         this.lastTick = -1.0;
     }
     
-    
     /**
      * Returns a reference to the singleton instance of this class.
      * 
@@ -100,7 +95,6 @@ public class DataCollector {
         return DataCollector.instance;
     }
     
-    
     /**
      * Returns whether or not the data collector is currently running.
      * 
@@ -109,7 +103,6 @@ public class DataCollector {
     public boolean isCollecting() {
         return this.collecting;
     }
-    
     
     /**
      * Returns whether or not the data collector is currently paused.
@@ -145,7 +138,7 @@ public class DataCollector {
         // we need to prep the buffer to start fresh. 
         this.buffer = new ConcurrentLinkedDeque<>();
         this.lastTick = -1.0;
-        this.currentSnapshot = null;
+        this.currentSnapshot = null; //Initialize for time 0
         
         // start the cleanup thread
         if (this.cleanupTask != null) {
@@ -273,13 +266,13 @@ public class DataCollector {
     public void stopTickCollection() {
     	
         // place the current tick into the buffer if anything was recorded
-        if (!this.currentSnapshot.isEmpty()) {
-            this.buffer.add(this.currentSnapshot);
-        }
-        
-        // update the counter of the latest tick buffered
-        this.lastTick = this.currentSnapshot.getTickNumber();
-        
+//        if (!this.currentSnapshot.isEmpty()) { // LZ: remove this as an empty file is still making sense
+    	if(this.currentSnapshot != null){
+    		 this.buffer.add(this.currentSnapshot);
+//           }
+           // update the counter of the latest tick buffered
+           this.lastTick = this.currentSnapshot.getTickNumber();
+    	}
         // remove the reference to the current tick snapshot object
         this.currentSnapshot = null;
     }
@@ -345,6 +338,39 @@ public class DataCollector {
         // create the snapshot
     	this.currentSnapshot.recordShelterSnapshot(shelt);
     }
+    
+    /**
+     * LZ: Record the new entered vehicles
+     */
+    public void recordNewVehicleTickSnapshot(Vehicle vehicle){
+    	// make sure the given vehicle object is valid
+        if (vehicle == null) {
+            throw new IllegalArgumentException("No vehicle given.");
+        }
+     // make sure a tick is currently being processed
+        if (this.currentSnapshot == null) {
+            throw new RuntimeException("No tick snapshot being processed.");
+        }
+        	// create the snapshot
+        	this.currentSnapshot.recordNewVehSnapshot(vehicle);
+    }
+    
+    /**
+     * LZ: Record the arrived vehicles
+     */
+    public void recordArrVehicleTickSnapshot(Vehicle vehicle){
+    	// make sure the given vehicle object is valid
+        if (vehicle == null) {
+            throw new IllegalArgumentException("No vehicle given.");
+        }
+     // make sure a tick is currently being processed
+        if (this.currentSnapshot == null) {
+            throw new RuntimeException("No tick snapshot being processed.");
+        }
+        	// create the snapshot
+        	this.currentSnapshot.recordArrVehSnapshot(vehicle);
+    }
+    
     
     /**
      * HG: Records starting and ending of events

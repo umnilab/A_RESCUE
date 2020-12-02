@@ -108,7 +108,7 @@ public class JsonOutputWriter implements DataConsumer {
         // set the initial state of the writer
         this.consuming = false;
         this.paused = false;
-        this.currentTick = -1.0;
+        this.currentTick = 0.0;
         this.writer = null;
         this.writingThread = null;
         this.fileSeriesNumber = 1;
@@ -255,7 +255,7 @@ public class JsonOutputWriter implements DataConsumer {
                     double nextTick = JsonOutputWriter.this.currentTick +
                     		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
-                    
+//                    System.out.println("Snapshot tick is called at "+ nextTick);
                     if (snapshot == null) {
                         // the buffer has no more items for us at this time
                         if (writeCount > 0) {
@@ -271,7 +271,7 @@ public class JsonOutputWriter implements DataConsumer {
                             // the collector is stopped so no more are coming
                             break;
                         }
-                        // we will wait for our longer "the buffer is empty"
+                        // we will wait longer for our "the buffer is empty"
                         // delay to give it a chance to add a few new data
                         // items before we loop around and try again...
                         try {
@@ -284,6 +284,7 @@ public class JsonOutputWriter implements DataConsumer {
                         }
                     }
                     
+//                    System.out.println("Snapshot tick: " + snapshot.getTickNumber());
                     // update the currently processing tick index to this item
                     JsonOutputWriter.this.currentTick = snapshot.getTickNumber();
                     
@@ -306,7 +307,7 @@ public class JsonOutputWriter implements DataConsumer {
                         Thread.sleep(5);
                     }
                     catch (InterruptedException ie) {
-                        // the thread has been told to stop wrting data
+                        // the thread has been told to stop writing data
                         break;
                     }
                 }
@@ -545,7 +546,7 @@ public class JsonOutputWriter implements DataConsumer {
 //                            GlobalVariables.JSON_DEFAULT_EXTENSION;
         String currentEnd = "." + this.previousFileName + "." +
                 GlobalVariables.JSON_DEFAULT_EXTENSION;
-        String nextEnd = "." + (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2) + "." +
+        String nextEnd = "." + (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1) + "." +
                          GlobalVariables.JSON_DEFAULT_EXTENSION;
         
         //System.out.println("filename" + currentEnd + ", "+ nextEnd);
@@ -584,7 +585,7 @@ public class JsonOutputWriter implements DataConsumer {
         
         // finally, having successfully moved to the next file, update counter
         this.fileSeriesNumber++;
-        this.previousFileName = (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2);
+        this.previousFileName = (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1);
     }
     
     
@@ -636,15 +637,19 @@ public class JsonOutputWriter implements DataConsumer {
         ArrayList<String> vehTickArray = tick.createJSONTickLines("vehicle");
         ArrayList<String> roadTickArray = tick.createJSONTickLines("road");
         ArrayList<String> sheltTickArray = tick.createJSONTickLines("shelter");
+        ArrayList<String> newVehTickArray = tick.createJSONTickLines("newVeh");
+        ArrayList<String> arrVehTickArray = tick.createJSONTickLines("arrVeh");
         
-        if (vehTickArray == null) {
-            return; // there was no JSON output created by this tick
-        }
+//        if (vehTickArray == null) {
+//            return; // there was no JSON output created by this tick
+//        }
         	
         // add the data
         tickData.put("vehicles", vehTickArray);
         tickData.put("shelters", sheltTickArray);
         tickData.put("roads", roadTickArray);
+        tickData.put("newVehs", newVehTickArray);
+        tickData.put("arrVehs", arrVehTickArray);
         
         this.storeJsonObjects.put(tickString, tickData);
         

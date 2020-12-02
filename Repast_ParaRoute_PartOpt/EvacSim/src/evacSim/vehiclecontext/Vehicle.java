@@ -54,6 +54,7 @@ public class Vehicle {
 	private double distance_;
 	private float currentSpeed_;
 	private double accRate_;
+	private double bearing_;
 	private float desiredSpeed_; // in meter/sec
 	private  int regime_;
 	protected float maxAcceleration_; // in meter/sec2
@@ -132,6 +133,8 @@ public class Vehicle {
 //	private ReentrantLock lock;
 	// LZ, number of times the vehicle get stuck
 	protected int stuck_time = 0;
+	// LZ, whether the vehicle has been moved
+	protected boolean movingFlag = false; 
 
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
@@ -938,10 +941,12 @@ public class Vehicle {
 					int canEnterNextRoad = this.appendToJunction(nextLane_); 
 					if (canEnterNextRoad == 0) { // cannot enter next road
 						this.lastStepMove_ = 0;
+						this.movingFlag = false;
 					} else { // successfully entered the next road
 						// update the lastStepMove and accumulatedDistance
 						this.lastStepMove_ = distance_;
 						this.accummulatedDistance_ += this.lastStepMove_;
+						this.movingFlag = true;
 					}
 					return; // move finished
 				} else { // not on lane, directly changing road
@@ -949,12 +954,14 @@ public class Vehicle {
 						// 0 means the vehicle cannot enter the next road
 						stuck_time += 1;
 						this.lastStepMove_ = 0;
+						this.movingFlag = false;
 					} else {
 						// successfully entered the next road, update the
 						// lastStepMove and accumulatedDistance
 						stuck_time = 0;
 						this.lastStepMove_ = distance_;
 						this.accummulatedDistance_ += this.lastStepMove_;
+						this.movingFlag = true;
 					}
 				}
 			}
@@ -964,9 +971,10 @@ public class Vehicle {
 		double dv = accRate_ * step; // Change of speed
 		if (dv > -currentSpeed_) { // still moving at the end of the cycle
 			dx = currentSpeed_ * step + 0.5f * dv * step;
+
 		} else { // stops before the cycle end
 			dx = -0.5f * currentSpeed_ * currentSpeed_ / accRate_;
-			if (currentSpeed_ == 0.0f && accRate_ == 0.0f) {
+			if (currentSpeed_ < minSpeed && accRate_ < minAcc) {
 				dx = 0.0f;
 			}
 		}
@@ -992,18 +1000,19 @@ public class Vehicle {
 		if (dx < 0.0f) { // negative dx is not allowed
 			dx = 0.0;
 		}
+		
 		/* Check if the vehicle's dx is under some threshold, i.e. it
 		 * will move to the next road
 		 * 1. Search for the junction
 		 * 2. Search for road id
 		 * 3. Find the first vehicle of all the lanes of those roads.
 		 */
+		double[] distAndAngle = new double[2];
 		while (!travelledMaxDist) {
 			currentCoord = this.getCurrentCoord(); // current location
 			target = this.coordMap.get(0);
 			// LZ: replace previous vehicle movement function
 			// the first element is the distance, and the second is the radius
-			double[] distAndAngle = new double[2];
 			double distToTarget = this.distance2(currentCoord, target, distAndAngle);
 			
 			/* if the distance $this can travel (dx) exceeds the distance (distToTarget)
@@ -1064,6 +1073,13 @@ public class Vehicle {
 		}
 		// reduce the distance to junction by the amount moved, can distTravelled larger than dx?
 		distance_ -= distTravelled;
+		this.setBearing(distAndAngle[1]);
+		if(distTravelled>0){
+			this.movingFlag = true;
+		}
+		else{
+			this.movingFlag = false;
+		}
 		// make sure the distance_ to junction is not negative
 		if (distance_ < 0) {
 			distance_ = 0;
@@ -1468,11 +1484,11 @@ public class Vehicle {
 		this.trailing_ = null;
 		this.coordMap = null;
 		this.currentSpeed_ = 0.0f;
-		this.destCoord = null;
-		this.destZone = null;
+//		this.destCoord = null;
+//		this.destZone = null;
 		this.targetLane_ = null;
 		this.currentCoord_ = null;
-		this.house = null;
+//		this.house = null;
 		// ZH: clear any remaining shadow impact
 		this.clearShadowImpact();
 		/* HG: Keep increasing this variable to count the number of vehicles 
@@ -2497,5 +2513,17 @@ public class Vehicle {
 	/** LZ: whether this vehicle is at origin */
 	public boolean isAtOrigin(){
 		return this.atOrigin;
+	}
+
+	public double getBearing() {
+		return bearing_;
+	}
+
+	public void setBearing(double bearing_) {
+		this.bearing_ = bearing_;
+	}
+	
+	public boolean getMovingFlag(){
+		return this.movingFlag;
 	}
 }

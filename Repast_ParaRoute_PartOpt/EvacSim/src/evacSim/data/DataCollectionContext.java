@@ -79,7 +79,7 @@ public class DataCollectionContext extends DefaultContext<Object> {
             RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
         
         // tell the data framework what tick is starting
-        // TODO: figure out tick int/double issue
+        // figure out tick int/double issue
         this.collector.startTickCollection(tickNumber);
     }
     

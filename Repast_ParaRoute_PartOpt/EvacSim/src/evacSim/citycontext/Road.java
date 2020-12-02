@@ -59,6 +59,9 @@ public class Road {
 	private double defaultFreeSpeed_; // Store default speed limit value in case of events
 //	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
 //	private List<Vehicle> enteringVehicles;
+	
+	private ArrayList<Vehicle> newVehs;
+	private ArrayList<Vehicle> arrVehs;
 
 	// Road constructor
 	public Road() {
@@ -84,6 +87,8 @@ public class Road {
 		this.lastRecordedSpeed = 0f;
 		
 		// LZ: Handle vehicles' entering the link in single thread manner
+		this.newVehs = new ArrayList<Vehicle>();
+		this.arrVehs = new ArrayList<Vehicle>();
 //		enteringVehicles = Collections.synchronizedList(new ArrayList<Vehicle>());
 	}
 	
@@ -121,27 +126,30 @@ public class Road {
 	public void step() {	
 		// if (RepastEssentials.GetTickCount() % 10 == 0)
 		// this.setTravelTime();
-//		double time = System.currentTimeMillis();
+		// double time = System.currentTimeMillis();
 		Vehicle v;
 		int tickcount = (int) RepastEssentials.GetTickCount();
-//		double maxHours = 0.5;
-//		double maxTicks = 3600 * maxHours // time that a path is kept in the
-											// list
-//				/ GlobalVariables.SIMULATION_STEP_SIZE;
+		// double maxHours = 0.5;
+		// double maxTicks = 3600 * maxHours // time that a path is kept in the
+		// list
+		// / GlobalVariables.SIMULATION_STEP_SIZE;
 		try {
 			while (this.newqueue.size() > 0) {
 				v = this.newqueueHead(); // BL: change to use the TreeMap
 
-//				if (v.atActivityLocation()) {
-////					System.out.println(v.getCurrentCoord());
-//					v.setCoordMap(this.firstLane());
-//				}
-				
+				// if (v.atActivityLocation()) {
+				//// System.out.println(v.getCurrentCoord());
+				// v.setCoordMap(this.firstLane());
+				// }
+
 				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
-					if(v.enterNetwork(this)==1){
-						v.advanceInMacroList(); //Vehicle entering network
+					if (v.enterNetwork(this) == 1) {
+						newVehs.add(v);
+						v.advanceInMacroList();
 					}
-					break;
+					else {
+						break;
+					}
 				} else {
 					// BL: iterate all element in the TreeMap
 					Set keys = (Set) this.newqueue.keySet();
@@ -151,8 +159,7 @@ public class Road {
 						for (Vehicle pv : temList) {
 							if (tickcount >= pv.getDepTime()) {
 								pv.primitiveMove();
-							}
-							else{
+							} else {
 								break;
 							}
 						}
@@ -201,15 +208,41 @@ public class Road {
 					break;
 				}
 				
-				if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){
+				if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0 && pv.getMovingFlag()){
 					pv.recVehSnaphotForVisInterp(); // LZ: Note vehicle can be killed after calling pv.travel, so we record vehicle location here!
 				}
 				
 				pv.travel();
 				
+				if(pv.atDestination()){
+					arrVehs.add(pv);
+				}
+
 				pv = pv.macroTrailing();
 			}
 			
+			if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ==0){
+				for (Vehicle veh : newVehs) {
+					try {
+						DataCollector.getInstance().recordNewVehicleTickSnapshot(veh);
+					} catch (Throwable t) {
+						System.out.println("Cannot store the new vehicles "+veh.getVehicleID()+","+veh.getOriginalCoord()+","+veh.getDestCoord());
+						DataCollector.printDebug("ERR" + t.getMessage());
+					}
+				}
+				for (Vehicle veh : arrVehs) {
+					try {
+						DataCollector.getInstance().recordArrVehicleTickSnapshot(veh);
+					} catch (Throwable t) {
+						// System.out.println("Cannot store the
+						// data"+t.getMessage());
+						System.out.println("Cannot store the arrived vehicles"+t.getMessage());
+						DataCollector.printDebug("ERR" + t.getMessage());
+					}
+				}
+				newVehs = new ArrayList<Vehicle>();
+				arrVehs = new ArrayList<Vehicle>();
+			}
 //			for (Lane l : this.getLanes()) {
 //				while (true) {
 //					v = l.firstVehicle();
