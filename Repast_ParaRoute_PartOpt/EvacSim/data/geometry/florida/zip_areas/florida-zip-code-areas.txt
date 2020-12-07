@@ -1,0 +1,40 @@
+========================================================================
+ Florida Zip Code Areas
+------------------------------------------------------------------------
+ https://koordinates.com/layer/97895-florida-zip-code-areas/
+========================================================================
+From: State of Florida
+
+Description:
+  ZIP Code Areas (Five-Digit) represents five-digit ZIP Code areas used by the
+  U.S. Postal Service to deliver mail more effectively. The first digit of a
+  five-digit ZIP Code divides the United States into 10 large groups of states
+  numbered from 0 in the Northeast to 9 in the far West. Within these areas, each
+  state is divided into an average of 10 smaller geographical areas, identified by
+  the second and third digits. These digits, in conjunction with the first digit,
+  represent a sectional center facility or a mail processing facility area. The
+  fourth and fifth digits identify a post office, station, branch or local
+  delivery area.
+  
+  
+  © United States Postal Servic
+  
+  © FDEP
+
+Projection: NAD83(HARN) / Florida GDL Albers
+
+------------------------------------------------------------------------
+ Processing steps applied by Koordinates
+------------------------------------------------------------------------
+
+- imported to Koordinates in Esri JSON format on 26 Sep 2018
+- 175 invalid geometries fixed at import time 
+    (see https://koordinates.com/layer/97895-florida-zip-code-areas/history/)
+- converted by Koordinates to Shapefile on 01 Dec 2020 (reference #2066697)
+
+====================
+No license specified
+====================
+
+No license was specified for this layer. This could mean default rights under copyright law for your legal jurisdiction may apply. Please check with Koordinates if you're unsure of your right to access and use this layer.
+
