@@ -140,7 +140,6 @@ public class Priority {
    * @param rule  the ordering specification
    * @return      a worklist matching the specification
    */
-  @SuppressWarnings("unchecked")
   public static <T> OrderableWorklist<T> makeOrdered(Rule rule) {
     Worklist<T> wl = make(false, rule);
     if (wl instanceof OrderableWorklist) {
@@ -217,8 +216,7 @@ public class Priority {
      * @see #thenLocally(Class, Object...)
      * @see Priority#first(Class, Object...)
      */
-    @SuppressWarnings("unchecked")
-    public Rule then(Class<? extends Worklist> rule, Object... args) {
+    public Rule then(@SuppressWarnings("rawtypes") Class<? extends Worklist> rule, Object... args) {
       this.rule = rule;
       this.args = args;
       next = new Rule();
@@ -237,8 +235,7 @@ public class Priority {
      * @return      a reference to the updated order
      * @see #then(Class, Object...)
      */
-    @SuppressWarnings("unchecked")
-    public Rule thenLocally(Class<? extends Worklist> rule, Object... args) {
+    public Rule thenLocally(@SuppressWarnings("rawtypes") Class<? extends Worklist> rule, Object... args) {
       this.isLocalRule = true;
       return then(rule, args);
     }
@@ -400,8 +397,7 @@ public class Priority {
    * @return      a reference to the updated order
    * @see Priority.Rule#then(Class, Object...)
    */
-  @SuppressWarnings("unchecked")
-  public static Rule first(Class<? extends Worklist> rule, Object... args) {
+  public static Rule first(@SuppressWarnings("rawtypes") Class<? extends Worklist> rule, Object... args) {
     return new Rule().then(rule, args);
   }
 
@@ -414,9 +410,8 @@ public class Priority {
    */
   public static <T> Rule withWorklist(final Worklist<T> worklist) {
     return new Rule() {
-      @SuppressWarnings("unchecked")
       @Override
-      public Rule then(Class<? extends Worklist> rule, Object... arg) {
+      public Rule then(@SuppressWarnings("rawtypes") Class<? extends Worklist> rule, Object... arg) {
         throw new UnsupportedOperationException();
       }
 

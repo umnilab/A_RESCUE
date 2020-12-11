@@ -53,7 +53,8 @@ final class SerialLocalComputationObjectGraph<N extends GObject, E> implements O
   private void createGraph(final ObjectGraph<N, E> g) {
     int numNodes = g.size();
     this.nodes = (Node[]) new SerialLocalComputationObjectGraph.Node[numNodes];
-    final GNode[] rnodes = new GNode[numNodes];
+    @SuppressWarnings("rawtypes")
+	final GNode[] rnodes = new GNode[numNodes];
     final TObjectIntHashMap<GNode<N>> nodeMap = new TObjectIntHashMap<GNode<N>>();
 
     g.map(new LambdaVoid<GNode<N>>() {
@@ -102,7 +103,7 @@ final class SerialLocalComputationObjectGraph<N extends GObject, E> implements O
   }
 
   @SuppressWarnings("unchecked")
-  private int getId(GNode n) {
+  private int getId(@SuppressWarnings("rawtypes") GNode n) {
     return ((Node) n).id;
   }
 

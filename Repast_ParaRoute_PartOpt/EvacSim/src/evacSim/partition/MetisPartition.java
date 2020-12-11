@@ -43,6 +43,7 @@ public class MetisPartition {
 	private int npartition;
 	private ArrayList<ArrayList<Road>> PartitionedInRoads;
 	private ArrayList<Road> PartitionedBwRoads;
+	@SuppressWarnings("unused")
 	private int partition_duration; // how old is the current partition when next partitioning occurs
 	
 	public MetisPartition(int nparts) {

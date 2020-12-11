@@ -2,7 +2,6 @@ package evacSim.routing;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -52,10 +51,6 @@ public class SOShelterRouting {
 	private Double maxDistance;
 
 	public SOShelterRouting(ArrayList<Zone> allshelters) {
-		// for testing with 180 vehicles & 26 shelters
-		// TODO delete this after testing
-//		shelters = new ArrayList<Zone>(allshelters.subList(0, 20));
-		
 		this.shelters = allshelters;
 		int nShelters = this.shelters.size();
 		demandSum = 0;
@@ -134,9 +129,7 @@ public class SOShelterRouting {
 						if (dist > maxDist) maxDist = dist;
 					}
 				} catch (NullPointerException e) {
-					// TODO: RV: Check the exact cause of this error & fix it
-					logger.info("Error in calc. dist. b/w " + orig + " & " + dest);
-//					dMatrix.get(i).set(j, maxDist);
+					logger.error("Error in calc. dist. b/w " + orig + " & " + dest);
 				}
 			}
 		}	

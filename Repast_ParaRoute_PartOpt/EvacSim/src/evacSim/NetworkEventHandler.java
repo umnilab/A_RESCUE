@@ -30,6 +30,7 @@ public class NetworkEventHandler {
 	private TreeMap<Integer, ArrayList<NetworkEventObject>> runningQueue;
 	
 	// Connection manager maintains the socket server for remote programs
+	@SuppressWarnings("unused")
 	private static final ConnectionManager manager = ConnectionManager.getInstance();
 	
 	

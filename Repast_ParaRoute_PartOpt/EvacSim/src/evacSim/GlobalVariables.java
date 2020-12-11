@@ -60,8 +60,6 @@ public class GlobalVariables {
 	        config = new Properties();
 	        try {
 			    config.load(new FileInputStream("data/Data.properties"));
-//			    config.load(new FileInputStream("dynamic_dest_test/properties/case_3-1.properties"));
-//			    config.load(new FileInputStream("config/Data.properties"));
 		    } catch (IOException ex) {
 			    ex.printStackTrace();
 		    }
@@ -141,17 +139,17 @@ public class GlobalVariables {
 			.valueOf(loadConfig("SIMULATION_STOP_TIME"));
 	public static final double TRAVEL_PER_TURN = Double
 			.valueOf(loadConfig("TRAVEL_PER_TURN"));
-	// RV: if change in lat/lon of vehicle per turn is less than this, make it zero
-	// this is useful to overcome the precision error in GeodeticCalculator
+	/* RV: if change in lat/lon of vehicle per turn is less than this, make it zero
+	 * this is useful to overcome the precision error in GeodeticCalculator */
 	public static final double MIN_DX_DY_PER_TURN = Double
 			.valueOf(loadConfig("MIN_DX_DY_PER_TURN"));
 	
-	// RV: Stop the simulation if all vehicles have been killed
+	/* RV: Stop the simulation if all vehicles have been killed */
 	public static final boolean ENABLE_SIMULATION_STOP_IF_NO_VEHICLE =
 			Boolean.valueOf(loadConfig("ENABLE_SIMULATION_STOP_IF_NO_VEHICLE"));
 	public static final int SIMULATION_STOP_IF_NO_VEHICLE_CHECK_INTERVAL =
 			Integer.valueOf(loadConfig("SIMULATION_STOP_IF_NO_VEHICLE_CHECK_INTERVAL"));
-	// RV: no. of houses in the demand file; used to check when to stop the simulation
+	/* RV: no. of houses in the demand file; used to check when to stop the simulation */
 	public static int NUM_HOUSES = 0;
 
 	public static final int Global_Vehicle_ID = Integer
@@ -161,18 +159,17 @@ public class GlobalVariables {
 	public static final boolean Debug_On_Road = Boolean
 			.valueOf(loadConfig("Debug_On_Road"));
 
+	/* used in CityContext.getRoadAtCoords() */
 	public static final double XXXX_BUFFER = Double
-			.valueOf(loadConfig("XXXX_BUFFER")); // used in CityContext.getRoadAtCoords()
+			.valueOf(loadConfig("XXXX_BUFFER")); 
+	
 	public static final boolean MULTI_THREADING = Boolean
 			.valueOf(loadConfig("MULTI_THREADING"));
-	
 	public static final int N_THREADS = Integer
 			.valueOf(loadConfig("N_THREADS"));
 	
 	/* Load the number of partitions from the config file */
 	public static final int N_Partition = Integer.valueOf(loadConfig("N_THREADS"));
-
-//	public static final float FREE_SPEED = Float.valueOf(loadConfig("FREE_SPEED"));
 
 	public static final float MAX_ACCELERATION = Float
 			.valueOf(loadConfig("MAX_ACCELERATION")); // meter/sec2
@@ -220,22 +217,15 @@ public class GlobalVariables {
 	public static final float GAMMA_ACC = Float
 			.valueOf(loadConfig("GAMMA_ACC"));
 
-//	public static final boolean APPROX_DYNAMIC_ROUTING = Boolean
-//			.valueOf(loadConfig("APPROX_DYNAMIC_ROUTING")); // SH - created this
-//															// variable to
-//	// enable dynamic routing
+	/* SH - created this variable to enable dynamic routing */
 	public static final boolean SINGLE_SHORTEST_PATH = Boolean
-			.valueOf(loadConfig("SINGLE_SHORTEST_PATH")); // SH - created this
-															// variable to
-															// enable
-	// dynamic routing
-	// Both SINGLE_SHORTEST_PATH and K_SHORTEST_PATH can't be true or false if
-	// APPROX_DYNAMIC_ROUTING= true
+			.valueOf(loadConfig("SINGLE_SHORTEST_PATH"));
+	/* Both SINGLE_SHORTEST_PATH and K_SHORTEST_PATH can't be true or false if
+	   APPROX_DYNAMIC_ROUTING= true */
+	/* SH - created this variable to enable dynamic routing */
 	public static final boolean K_SHORTEST_PATH = Boolean
-			.valueOf(loadConfig("K_SHORTEST_PATH")); // SH - created this
-														// variable to enable
-	// dynamic routing
-
+			.valueOf(loadConfig("K_SHORTEST_PATH"));
+	
 	public static final int K_VALUE = Integer.valueOf(loadConfig("K_VALUE"));
 	public static final double THETA_LOGIT = Double
 			.valueOf(loadConfig("THETA_LOGIT"));
@@ -243,9 +233,7 @@ public class GlobalVariables {
 	/* Number of future road segments to be considered in counting shadow vehicles */
 	public static final int N_SHADOW = Integer.valueOf(loadConfig("N_SHADOW"));
 
-	/*
-	 * BL: Following are parameters used in lane changing model
-	 */
+	/* BL: Following are parameters used in lane changing model */
 	// public static final double minLead = 0.914; //(m/sec)
 	// public static final double minLag = 1.524; //(m/sec)
 	public static final double minLead = 3.0; // (m/sec)
@@ -272,7 +260,7 @@ public class GlobalVariables {
 	public static final boolean SET_DEMAND_FROM_ACTIVITY_MODELS = Boolean
 			.valueOf(loadConfig("SET_DEMAND_FROM_ACTIVITY_MODELS"));
 	
-	/** Chris:
+	/* Chris:
 	 * DEBUG_DATA_BUFFER and DEBUG_NETWORK are the ones that determine whether or not the 
 	 * data collection classes or the network classes print their debugging statements to the 
 	 * simulation stdout.  I checked it into the repository with them both disabled.
@@ -336,11 +324,11 @@ public class GlobalVariables {
 			Boolean.valueOf(loadConfig("ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME"));
 	public static final String DEFAULT_SNAPSHOT_FILENAME =
 			loadConfig("DEFAULT_SNAPSHOT_FILENAME");
-	// RV: actual output directory - may be modified by the simulator
-	// depending on whether ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME is true
+	/* RV: actual output directory - may be modified by the simulator
+	   depending on whether ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME is true */
 	public static String OUTPUT_DIR = DEFAULT_OUTPUT_DIR;
-	// RV: name of the simulation scenario used to define the output directory
-	// and the names of output files
+	/* RV: name of the simulation scenario used to define the output directory
+	   and the names of output files */
 	public static String SCENARIO_NAME = null; 
 	
 	/* Parameters for the CSV output file writer */
@@ -351,8 +339,9 @@ public class GlobalVariables {
 	public static final int CSV_LINE_LIMIT =
 	        Integer.valueOf(loadConfig("CSV_LINE_LIMIT"));
 	
-	/* Parameters for the JSON output file writer (similar to as the csv parameters except
-	 * JSON_TICK_LIMIT_PER_FILE which represents the number of ticks are written in a json file) */
+	/* Parameters for the JSON output file writer (similar to as the csv
+	 * parameters except JSON_TICK_LIMIT_PER_FILE which represents the number
+	 * of ticks are written in a json file) */
 	public static final boolean ENABLE_JSON_WRITE =
 	        Boolean.valueOf(loadConfig("ENABLE_JSON_WRITE"));
 	public static final int JSON_BUFFER_REFRESH =
@@ -374,17 +363,18 @@ public class GlobalVariables {
 	public static final int NETWORK_MAX_MESSAGE_SIZE =
 	        Integer.valueOf(loadConfig("NETWORK_MAX_MESSAGE_SIZE"));
 	
-	/** H Gehlot: Parameter to determine how frequently (in terms of ticks) we should separately 
-	 * record the snapshot (for visualization interpolation purposes) of each vehicle in the 
-	 * network irrespective of whether it moves or not.
-	 * Note that this is independent of the snapshot that is getting collected from the movement 
-	 * of vehicles. If a vehicle moves in a tick and it happens that in this tick we had also 
-	 * recorded the snapshot for visualization purposes before then finally the snapshot 
-	 * corresponding to the movement will have priority and it will override the snapshot written 
-	 * for visualization purposes (everything will be overwritten except the coordinated for 
-	 * previous epoch when same recording was done).
-	 * This variable is also useful for sending the data at this frequency.
-	 * */
+	/* HG: Parameter to determine how frequently (in terms of ticks) we
+	 * should separately record the snapshot (for visualization interpolation
+	 * purposes) of each vehicle in the network irrespective of whether it
+	 * moves or not. Note that this is independent of the snapshot that is
+	 * getting collected from the movement of vehicles. If a vehicle moves in
+	 * a tick and it happens that in this tick we had also recorded the
+	 * snapshot for visualization purposes before then finally the snapshot
+	 * corresponding to the movement will have priority and it will override
+	 * the snapshot written for visualization purposes (everything will be
+	 * overwritten except the coordinated for previous epoch when same
+	 * recording was done). This variable is also useful for sending the data
+	 * at this frequency. */
 	public static final int FREQ_RECORD_VEH_SNAPSHOT_FORVIZ = 
 			Integer.valueOf(loadConfig("FREQ_RECORD_VEH_SNAPSHOT_FORVIZ"));
 	public static final int FREQ_RECORD_ROAD_SNAPSHOT_FORVIZ =
@@ -400,23 +390,23 @@ public class GlobalVariables {
 	public static LinkedList<NetworkEventObject> newEventQueue = new
 			LinkedList<NetworkEventObject>();//Global queue for storing events
 	
-	/* 
-	 * RV: This variable tracks the no. of generated vehicles (loaded from demand) so far 
-	 * This is useful to let the simulator know when to stop
-	 * Similarly, also track the number of vehicles having entered the network so far.
-	 * */
+	/* RV: This variable tracks the no. of generated vehicles (loaded from
+	 * demand) so far. This is useful to let the simulator know when to stop
+	 * Similarly, also track the number of vehicles having entered the
+	 * network so far. */
 	public static int NUM_GENERATED_VEHICLES = 0;
 	public static int NUM_VEHICLES_ENTERED_ROAD_NETWORK = 0;
 	
-	/* Gehlot: This variable will keep track of the number of vehicles arrived 
-	 * at destination for visualization purposes*/
+	/* HG: This variable will keep track of the number of vehicles arrived
+	 * at destination for visualization purposes. */
 	public static int NUM_KILLED_VEHICLES = 0;
 	
 	public static int NUM_FAILED_VEHICLES = 0;
 	
 	/* Parameters for handling multiclass routing.
-	 * Note that the proportion of original routing vehicles being generated is equal to
-	 * 1 - (PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES + PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES). */ 
+	 * Note that the proportion of original routing vehicles being generated
+	 * is equal to 1 - (PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES +
+	 * PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES). */ 
 	public static final boolean ENABLE_MULTICLASS_ROUTING =
 	        Boolean.valueOf(loadConfig("ENABLE_MULTICLASS_ROUTING"));
 	public static final double PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES =
@@ -453,15 +443,16 @@ public class GlobalVariables {
 			new ArrayList<ArrayList<Integer>>();	
 	public static final Boolean ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION = 
 			Boolean.valueOf(loadConfig("ENABLE_NEW_VEHICLE_MOVEMENT_FUNCTION"));
-	// RV: Record the runtime spent in each 1000 ticks for performance analysis */
+	
+	/* RV: Record the runtime spent in each 1000 ticks for performance analysis */
 	public static final boolean ENABLE_RUNTIME_RECORD =
 			Boolean.valueOf(loadConfig("ENABLE_RUNTIME_RECORD"));
 	public static final int RUNTIME_RECORD_INTERVAL =
 			Integer.valueOf(loadConfig("RUNTIME_RECORDER_INTERVAL"));
 	public static ArrayList<Double> RUNTIME_RECORD_LIST = new ArrayList<Double>();
+	
 	// LZ
 	public static final Boolean DISABLE_GEOMETRY = Boolean.valueOf(loadConfig("DISABLE_GEOMETRY"));
-	
 	public static final int MAX_STUCK_TIME = Integer.valueOf(loadConfig("MAX_STUCK_TIME"));
 	public static final int MAX_STUCK_TIME2 = Integer.valueOf(loadConfig("MAX_STUCK_TIME2"));
 }

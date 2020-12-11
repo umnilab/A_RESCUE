@@ -68,13 +68,13 @@ public class ObjectUndirectedEdge<N extends GObject, E> extends UnorderedPair<GN
     return ownerRef;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof ObjectUndirectedEdge)) {
       return false;
     }
-    ObjectUndirectedEdge objectUndirectedEdge = (ObjectUndirectedEdge) obj;
+    @SuppressWarnings("rawtypes")
+	ObjectUndirectedEdge objectUndirectedEdge = (ObjectUndirectedEdge) obj;
     return super.equals(objectUndirectedEdge) && data.equals(objectUndirectedEdge.data);
   }
 

@@ -33,6 +33,7 @@ public class LaneContext extends DefaultContext<Lane> {
 
 	// NM: Cache every coordinate which forms a road so that Route.onRoad() is
 	// quicker.
+	@SuppressWarnings("unused")
 	private static Map<Coordinate, ?> coordCache;
 
 	public LaneContext() {
@@ -65,11 +66,11 @@ public class LaneContext extends DefaultContext<Lane> {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			while (laneLoader.hasNext()) {
 				Lane lane = laneLoader.next();
-				String line=br.readLine();
-				String[] result=line.split(",");
-				lane=setAttribute(lane,result);
+				String line = br.readLine();
+				String[] result = line.split(",");
+				lane = setAttribute(lane, result);
 			}
-
+			br.close();
 		} catch (java.net.MalformedURLException e) {
 			System.out
 					.println("ContextCreator: malformed URL exception when reading roadshapefile. Check the 'roadLoc' parameter is correct");
@@ -80,7 +81,6 @@ public class LaneContext extends DefaultContext<Lane> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();}
-
 	}
 	
 	public Lane setAttribute(Lane l, String[] att){

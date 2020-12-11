@@ -1,7 +1,6 @@
 package evacSim.routing;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -243,6 +242,7 @@ public class RouteV {
 	 * @param coord: the coordinate which we want to test
 	 * @return true if the coordinate is part of a road segment
 	 */
+	@SuppressWarnings("unused")
 	private static boolean onRoad(Coordinate coord) {
 		return RoadContext.onRoad(coord);
 	}

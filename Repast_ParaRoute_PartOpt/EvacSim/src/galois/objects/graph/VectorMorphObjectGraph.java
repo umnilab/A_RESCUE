@@ -60,7 +60,7 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
   }
 
   @SuppressWarnings("unchecked")
-  private EdgeGraphNode downcast(GNode n) {
+  private EdgeGraphNode downcast(@SuppressWarnings("rawtypes") GNode n) {
     return (EdgeGraphNode) n;
   }
 
@@ -321,7 +321,8 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
     return curr.iterateVersion.compareAndSet(old, mapVersionNumber);
   }
 
-  private EdgeGraphNode scanForNode(LinkedNode start) {
+  @SuppressWarnings("unchecked")
+private EdgeGraphNode scanForNode(LinkedNode start) {
     while (start != null) {
       if (start.isDummy()) {
         start = start.getNext();
@@ -506,7 +507,8 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
     map(body, MethodFlag.ALL);
   }
 
-  @Override
+  @SuppressWarnings("unchecked")
+@Override
   public void map(LambdaVoid<GNode<N>> body, byte flags) {
     ObjectGraphLocker.mapProlog(flags);
     boolean prevModNodes = modNodes;
@@ -530,7 +532,8 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
     map(body, arg1, MethodFlag.ALL);
   }
 
-  @Override
+  @SuppressWarnings("unchecked")
+@Override
   public <A1> void map(Lambda2Void<GNode<N>, A1> body, A1 arg1, byte flags) {
     ObjectGraphLocker.mapProlog(flags);
     boolean prevModNodes = modNodes;
@@ -563,7 +566,8 @@ final class VectorMorphObjectGraph<N extends GObject, E> implements ObjectGraph<
     while (curr != null) {
       if (!curr.isDummy()) {
         checkForConcurrentModifications(modNodes);
-        EdgeGraphNode gsrc = (EdgeGraphNode) curr;
+        @SuppressWarnings("unchecked")
+		EdgeGraphNode gsrc = (EdgeGraphNode) curr;
         assert gsrc.isIn();
         body.call(gsrc, arg1, arg2);
       }

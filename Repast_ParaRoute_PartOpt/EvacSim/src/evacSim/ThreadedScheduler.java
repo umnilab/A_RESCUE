@@ -2,13 +2,8 @@ package evacSim;
 
 import java.util.concurrent.*;
 import java.util.*;
-
-//import repast.simphony.engine.environment.RunEnvironment;
 import evacSim.ContextCreator;
 import evacSim.citycontext.Road;
-//import evacSim.partition.MetisPartition;
-import evacSim.vehiclecontext.Vehicle;
-
 
 public class ThreadedScheduler {
 //	private boolean roadFinishedStepping;
@@ -19,6 +14,7 @@ public class ThreadedScheduler {
 	private int min_para_time;
 	private int max_para_time;
 	private int avg_para_time;
+	@SuppressWarnings("unused")
 	private int seq_time;
 
 	public ThreadedScheduler(int N_threads) {
@@ -124,10 +120,6 @@ public class ThreadedScheduler {
 	}
 	
 	public void reportTime() {
-//		System.out.println("Tick:\t" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount() + 
-//				"\tMin para time:\t" + min_para_time + "\tMax para time\t" + max_para_time
-//				+ "\tAvg para time:\t" + avg_para_time + "\tSequential time:\t" + seq_time);
-		
 		this.min_para_time = 0;
 		this.max_para_time = 0;
 		this.avg_para_time = 0;

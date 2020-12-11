@@ -322,6 +322,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		return (VehicleContext) mainContext.findContext("VehicleContext");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Geography<Vehicle> getVehicleGeography() {
 		return (Geography<Vehicle>) ContextCreator.getVehicleContext()
 				.getProjection("VehicleGeography");
@@ -331,11 +332,13 @@ public class ContextCreator implements ContextBuilder<Object> {
 		return (JunctionContext) mainContext.findContext("JunctionContext");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Geography<Junction> getJunctionGeography() {
 		return ContextCreator.getJunctionContext().getProjection(
 				Geography.class, "JunctionGeography");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Network<Junction> getRoadNetwork() {
 		return ContextCreator.getJunctionContext().getProjection(Network.class,
 				"RoadNetwork");
@@ -355,6 +358,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		return (LaneContext) mainContext.findContext("LaneContext");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Geography<Lane> getLaneGeography() {
 		return (Geography<Lane>) ContextCreator.getLaneContext().getProjection(
 				"LaneGeography");
@@ -368,6 +372,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		return (ZoneContext) mainContext.findContext("ZoneContext");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Geography<Zone> getZoneGeography() {
 		return (Geography<Zone>) ContextCreator.getZoneContext().getProjection(
 				"ZoneGeography");

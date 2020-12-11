@@ -26,7 +26,7 @@ import repast.simphony.parameter.Parameters;
 
 public class ZoneContext extends DefaultContext<Zone> {
 	Logger logger = ContextCreator.logger;
-	
+
 	public DatasetOfHouseholdsPerZones dataset;
 	public SOShelterRouting soShelterMatcher; // RV: shelter SO routing matcher object
 	public ArrayList<Zone> shelters; // RV: added for quick access in this.recordShelterStatus()
@@ -34,18 +34,15 @@ public class ZoneContext extends DefaultContext<Zone> {
 	public ZoneContext() {
 
 		super("ZoneContext");
-		
+
 		logger.info("ZoneContext creation");
-		/*
-		 * GIS projection for spatial information about Roads. This is used to
-		 * then create junctions and finally the road network.
-		 */
+		/* GIS projection for spatial information about Roads. This is used to
+		 * then create junctions and finally the road network. */
 		GeographyParameters<Zone> geoParams = new GeographyParameters<Zone>();
 		// geoParams.setCrs("EPSG:32618");
 		Geography<Zone> zoneGeography = GeographyFactoryFinder
 				.createGeographyFactory(null).createGeography("ZoneGeography",
 						this, geoParams);
-//		CityContext cityContext = ContextCreator.getCityContext();
 
 		/* Read in the data and add to the context and geography */
 		try {
@@ -63,7 +60,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 				zone.setGeometry(zoneGeography);
 				int_id += 1;
 			}
-			
+
 			/* Load the emergency shelters (as zones) */
 			File shelterFile = null;
 			String shelterCsvName = null;
@@ -76,7 +73,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 			uri = shelterFile.toURI();
 			shelterLoader = new ShapefileLoader<Zone>(Zone.class,
 					uri.toURL(), zoneGeography, this);
-			
+
 			// read the shelter attributes CSV file
 			shelterCsvName = GlobalVariables.SHELTERS_CSV;
 			BufferedReader br = new BufferedReader(new FileReader(shelterCsvName));
@@ -96,34 +93,34 @@ public class ZoneContext extends DefaultContext<Zone> {
 				shelters.add(shelter);
 			}
 			br.close();
-			
+
 			// create the SO routing scheduler
 			this.soShelterMatcher = new SOShelterRouting(shelters);
 			logger.info("Created SO shelter matcher: " + this.soShelterMatcher.toString());
-			
+
 			// RV: also add the list of shelter objects so that
 			this.shelters = shelters;
 
 		} catch (java.net.MalformedURLException e) {
 			System.err
-					.println("Malformed URL exception when reading housesshapefile.");
+			.println("Malformed URL exception when reading housesshapefile.");
 			e.printStackTrace();
 		} catch (FileNotFoundException e){
 			System.out
 			.println("ContextCreator: No road csv file found");
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		// RV: Shelter matching for excess shelter seekers
 		if (GlobalVariables.DYNAMIC_DEST_STRATEGY == 3) {
 			logger.info("Trying shelter matching!");
 		}
-		
+
 		// SH - for implementing activity simulator
 		if (GlobalVariables.SET_DEMAND_FROM_ACTIVITY_MODELS) {
-			/* Gehlot and Chris: this is to be true when we plan to run 
+			/* HG, CT: this is to be true when we plan to run 
 			 * multiple instances of demand simultaneously in batches. 
 			 * Before setting it true, we need to have demand files numbered
 			 * 1,2,.. etc. in the folder multiple_instances_of_demand
@@ -132,18 +129,15 @@ public class ZoneContext extends DefaultContext<Zone> {
 			 * */
 			if (GlobalVariables.SIMULATION_MULTIPLE_DEMAND_INPUTS) {
 				Parameters params = RunEnvironment.getInstance().getParameters();
-                int demandNumber = params.getInteger("demandFiles");
-                String a_filepath = "data/multiple_instances_of_demand/" + demandNumber + ".csv";
-                logger.info("data file: "+a_filepath);
-    			dataset = new DatasetOfHouseholdsPerZones(a_filepath);
+				int demandNumber = params.getInteger("demandFiles");
+				String a_filepath = "data/multiple_instances_of_demand/" + demandNumber + ".csv";
+				logger.info("data file: "+a_filepath);
+				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
 			} else {
 				String a_filepath = GlobalVariables.ACTIVITY_CSV;
 				logger.info("data file: "+a_filepath);
 				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
 			}
-			
-			//loadDemandofNextHour();
-			// turnOnAfterTest
 			HashMap<Integer, ArrayList<House>> housesbyzone = dataset.
 					getHousesByHour().pollFirstEntry().getValue();
 			for (Zone z : zoneGeography.getAllObjects()) {
@@ -155,12 +149,10 @@ public class ZoneContext extends DefaultContext<Zone> {
 						hh.setZone(z);
 					}
 				}
-//				// Update the total demand
-//				z.setEvacuationDemand();
 			}
 		}
 	}
-	
+
 	public void loadDemandofNextHour() {
 		HashMap<Integer, ArrayList<House>> housesbyzone = dataset.
 				getHousesByHour().pollFirstEntry().getValue(); // turnOnAfterTest
@@ -179,7 +171,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 			}
 		}
 	}
-	
+
 	/**
 	 * RV: Whenever vehicles are recorded for visualization,
 	 * also record the status of all the shelters. This function
@@ -196,5 +188,5 @@ public class ZoneContext extends DefaultContext<Zone> {
 			}
 		}
 	}
-	
+
 }

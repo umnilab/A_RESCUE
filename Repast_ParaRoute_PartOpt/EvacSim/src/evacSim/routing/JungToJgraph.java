@@ -17,7 +17,7 @@ import repast.simphony.space.graph.RepastEdge;
 public class JungToJgraph<T>
 {
 
-   @SuppressWarnings("unchecked")
+   @SuppressWarnings({ "unchecked", "rawtypes" })
    public org.jgrapht.WeightedGraph<T, RepastEdge<T>> convertToJgraph(
                                                                       Graph<T, RepastEdge<T>> jungGraph)
    {

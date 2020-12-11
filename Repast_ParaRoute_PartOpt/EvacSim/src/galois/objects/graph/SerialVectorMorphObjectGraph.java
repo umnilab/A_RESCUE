@@ -52,7 +52,7 @@ final class SerialVectorMorphObjectGraph<N extends GObject, E> implements Object
   }
 
   @SuppressWarnings("unchecked")
-  private EdgeGraphNode downcast(GNode n) {
+  private EdgeGraphNode downcast(@SuppressWarnings("rawtypes") GNode n) {
     return (EdgeGraphNode) n;
   }
 
@@ -148,7 +148,8 @@ final class SerialVectorMorphObjectGraph<N extends GObject, E> implements Object
     if (index < 0) {
       return false;
     }
-    E data = gsrc.outData.get(index);
+    @SuppressWarnings("unused")
+	E data = gsrc.outData.get(index);
     // src has to be connected to dst
     gsrc.removeNeighborRetEdgeData(gdst, true);
     // dst might no be connected to src if src==dst && the graph is undirected
@@ -288,7 +289,8 @@ final class SerialVectorMorphObjectGraph<N extends GObject, E> implements Object
     return true;
   }
 
-  private EdgeGraphNode scanForNode(LinkedNode start) {
+  @SuppressWarnings("unchecked")
+private EdgeGraphNode scanForNode(LinkedNode start) {
     while (start != null) {
       if (start.isDummy()) {
         start = start.getNext();
@@ -428,7 +430,8 @@ final class SerialVectorMorphObjectGraph<N extends GObject, E> implements Object
     map(body, MethodFlag.ALL);
   }
 
-  @Override
+  @SuppressWarnings("unchecked")
+@Override
   public void map(LambdaVoid<GNode<N>> body, byte flags) {
     boolean prevModNodes = modNodes;
     modNodes = false;
@@ -459,7 +462,8 @@ final class SerialVectorMorphObjectGraph<N extends GObject, E> implements Object
     while (curr != null) {
       if (!curr.isDummy()) {
         checkForConcurrentModifications(modNodes);
-        EdgeGraphNode gsrc = (EdgeGraphNode) curr;
+        @SuppressWarnings("unchecked")
+		EdgeGraphNode gsrc = (EdgeGraphNode) curr;
         assert gsrc.isIn();
         body.call(gsrc, arg1);
       }
@@ -482,7 +486,8 @@ final class SerialVectorMorphObjectGraph<N extends GObject, E> implements Object
     while (curr != null) {
       if (!curr.isDummy()) {
         checkForConcurrentModifications(modNodes);
-        EdgeGraphNode gsrc = (EdgeGraphNode) curr;
+        @SuppressWarnings("unchecked")
+		EdgeGraphNode gsrc = (EdgeGraphNode) curr;
         assert gsrc.isIn();
         body.call(gsrc, arg1, arg2);
       }

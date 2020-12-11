@@ -34,7 +34,8 @@ public class ConnectionManager {
     private Server server;
     
     /** The list of connections currently open in the system. */
-    private Vector<Connection> connections;
+    @SuppressWarnings("unused")
+	private Vector<Connection> connections;
         
     // TODO: Pick a permanent port number for the socket to use for listening.
     // This temporary value (33131) is the zip-code of downtown Miami.  Jetty

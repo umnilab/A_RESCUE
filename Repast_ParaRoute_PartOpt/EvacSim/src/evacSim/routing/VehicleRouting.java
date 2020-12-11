@@ -40,6 +40,7 @@ public class VehicleRouting {
 	private WeightedGraph<Junction, RepastEdge<Junction>> transformedNetwork = null;
 	private CityContext cityContext;
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public VehicleRouting(Network<Junction> network){
 		this.cityContext = ContextCreator.getCityContext();
 		this.network = network;
@@ -58,6 +59,7 @@ public class VehicleRouting {
 	/**
 	 * Creates routing info using the Node Based routing algorithm
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void calcRoute() {
 		Graph<Junction, RepastEdge<Junction>> graphA = null;
 

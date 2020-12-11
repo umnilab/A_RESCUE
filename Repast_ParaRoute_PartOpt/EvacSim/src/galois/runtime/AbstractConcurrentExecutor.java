@@ -518,7 +518,8 @@ abstract class AbstractConcurrentExecutor<T> implements Executor {
           / (double) totalThread);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void merge(Object obj) {
       IdlenessStatistics other = (IdlenessStatistics) obj;
       threadTimes.addAll(other.threadTimes);

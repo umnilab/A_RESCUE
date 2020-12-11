@@ -271,7 +271,8 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
     return true;
   }
 
-  private IndexedTreeNode scanForNode(LinkedNode start) {
+  @SuppressWarnings("unchecked")
+private IndexedTreeNode scanForNode(LinkedNode start) {
     while (start != null) {
       if (start.isDummy()) {
         start = start.getNext();
@@ -415,7 +416,8 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
     LinkedNode curr = head;
     while (curr != null) {
       if (!curr.isDummy()) {
-        IndexedTreeNode gsrc = (IndexedTreeNode) curr;
+        @SuppressWarnings("unchecked")
+		IndexedTreeNode gsrc = (IndexedTreeNode) curr;
         assert gsrc.in;
         body.call(gsrc);
       }
@@ -433,7 +435,8 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
     LinkedNode curr = head;
     while (curr != null) {
       if (!curr.isDummy()) {
-        IndexedTreeNode gsrc = (IndexedTreeNode) curr;
+        @SuppressWarnings("unchecked")
+		IndexedTreeNode gsrc = (IndexedTreeNode) curr;
         assert gsrc.in;
         body.call(gsrc, arg1);
       }
@@ -451,7 +454,8 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
     LinkedNode curr = head;
     while (curr != null) {
       if (!curr.isDummy()) {
-        IndexedTreeNode gsrc = (IndexedTreeNode) curr;
+        @SuppressWarnings("unchecked")
+		IndexedTreeNode gsrc = (IndexedTreeNode) curr;
         assert gsrc.in;
         body.call(gsrc, arg1, arg2);
       }
@@ -498,7 +502,8 @@ final class SerialArrayIndexedTree<N extends GObject> implements IndexedGraph<N>
     private LinkedNode dummy;
     private LinkedNode next;
 
-    public IndexedTreeNode(N nodedata) {
+    @SuppressWarnings("unchecked")
+	public IndexedTreeNode(N nodedata) {
       data = nodedata;
       child = (IndexedTreeNode[]) Array.newInstance(this.getClass(), maxNeighbors);
       Arrays.fill(child, null);

@@ -9,7 +9,6 @@ import evacSim.data.TickSnapshot;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -44,7 +43,8 @@ public class Connection implements DataConsumer {
     private int id;
 
     /** A local convenience reference to manager for this connection. */
-    private ConnectionManager manager = ConnectionManager.getInstance();
+    @SuppressWarnings("unused")
+	private ConnectionManager manager = ConnectionManager.getInstance();
     
     /** A local convenience reference to the collection buffer for the sim. */
     private DataCollector collector = DataCollector.getInstance();
@@ -512,55 +512,6 @@ public class Connection implements DataConsumer {
     }
     
     
-//    /**
-//     * Returns the socket message representation of the given vehicle.
-//     * 
-//     * @param vehicle the snapshot of a vehicle to convert into a message.
-//     * @return the socket message representation of the given vehicle.
-//     */
-//    public static String createVehicleMessage(VehicleSnapshot vehicle) {
-//        // check if the vehicle snapshot even exists
-//        if (vehicle == null) {
-//            return null;
-//        }
-//        
-//        // extract all the values from the vehicle snapshot
-//        int id = vehicle.getId();
-//        double prev_x = vehicle.getPrevX();
-//        double prev_y = vehicle.getPrevY();
-//        double x = vehicle.getX();
-//        double y = vehicle.getY();
-//        float speed = vehicle.getSpeed();
-//        double originalX = vehicle.getOriginX();
-//        double originalY = vehicle.getOriginY();
-//        double destX = vehicle.getDestX();
-//        double destY = vehicle.getDestY();
-//        int nearlyArrived = vehicle.getNearlyArrived();
-//        int vehicleClass = vehicle.getvehicleClass();
-//        int roadID = vehicle.getRoadID();    
-//        //int departure = vehicle.getDeparture();
-//        //int arrival = vehicle.getArrival();
-//        //float distance = vehicle.getDistance();
-//
-//        // put them together into a string for the socket and return it
-//        return id + "," +
-//        	   prev_x + "," +
-//        	   prev_y + "," +
-//               x + "," +
-//               y + "," +
-//               speed + "," +
-//               originalX + "," +
-//               originalY + "," +
-//               destX + "," +
-//               destY + "," +
-//               nearlyArrived + "," +
-//               vehicleClass + "," +      
-//               roadID ;
-//               //departure + "," +
-//               //arrival + "," +
-//               //distance + "," +
-//}
-    
     /**
      * Returns the socket message representation of the given vehicle.
      * 
@@ -728,8 +679,6 @@ public class Connection implements DataConsumer {
         
         @Override
         public void run() {
-            int count = 0;
-            
             // wait for session to exist if it hasn't been created yet
             while (session == null) {
                 try {

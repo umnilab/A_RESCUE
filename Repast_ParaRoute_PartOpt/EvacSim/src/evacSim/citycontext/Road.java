@@ -35,7 +35,6 @@ public class Road {
 	private int toNode;
 	private int curhour; // BL: to find the current hour of the simulation
 	private String identifier; // can be used to match with shape file roads
-//	private String description = "";
 	private int nVehicles_; // SH: number of vehicles currently in the road
 	private double length;
 	private float speed_; // current speed
@@ -46,22 +45,28 @@ public class Road {
 	private ArrayList<Lane> lanes; // Use lanes as objects inside the road
 	private ArrayList<Junction> junctions;
 	
-	// For adaptive network partitioning
-	private int nShadowVehicles; // Potential vehicles might be loaded on the road
-	private int nFutureRoutingVehicles; // Potential vehicles might performing routing on the road
+	/* For adaptive network partitioning */
+	// Potential vehicles might be loaded on the road
+	private int nShadowVehicles;
+	// Potential vehicles might performing routing on the road
+	private int nFutureRoutingVehicles;
 	
-	// RV: Road snapshot parameters
+	/* RV: Road snapshot parameters */
+	// No. of vehicles & avg. speed on road as of last recording
 	private int lastRecordedNumVehicles;
 	private float lastRecordedSpeed;
 	
-	private ArrayList<Double> dynamicTravelTime; // SH: Dynamic travel time of
-	private TreeMap<Double, Queue<Vehicle>> newqueue; // LZ: Use LinkedList which implement Queue for O(1) complexity of removing vehicles.
-	private Vehicle lastVehicle_ = null; //LZ: Can be null when no vehicle is was on the road
+	// SH: Dynamic travel time of
+	private ArrayList<Double> dynamicTravelTime;
+	// LZ: Use LinkedList which implement Queue for O(1) complexity of removing vehicles.
+	private TreeMap<Double, Queue<Vehicle>> newqueue;
+	//LZ: Can be null when no vehicle is was on the road
+	private Vehicle lastVehicle_ = null;
 	private Vehicle firstVehicle_ = null;
-	private boolean eventFlag; // Indicator whether there is an event happening on the road
-	private double defaultFreeSpeed_; // Store default speed limit value in case of events
-//	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
-//	private List<Vehicle> enteringVehicles;
+	// Indicator whether there is an event happening on the road
+	private boolean eventFlag;
+	// Store default speed limit value in case of events
+	private double defaultFreeSpeed_;
 	
 	private ArrayList<Vehicle> newVehs;
 	private ArrayList<Vehicle> arrVehs;
@@ -69,7 +74,6 @@ public class Road {
 	// Road constructor
 	public Road() {
 		this.id = ContextCreator.generateAgentID();
-//		this.description = "road " + id;
 		this.junctions = new ArrayList<Junction>();
 		this.lanes = new ArrayList<Lane>();
 		this.nVehicles_ = 0;
@@ -156,8 +160,10 @@ public class Road {
 					}
 				} else {
 					// BL: iterate all element in the TreeMap
+					@SuppressWarnings("rawtypes")
 					Set keys = (Set) this.newqueue.keySet();
-					for (Iterator i = (Iterator) keys.iterator(); i.hasNext();) {
+					for (@SuppressWarnings("rawtypes")
+					Iterator i = (Iterator) keys.iterator(); i.hasNext();) {
 						Double key = (Double) i.next();
 						Queue<Vehicle> temList = this.newqueue.get(key);
 						for (Vehicle pv : temList) {
@@ -172,62 +178,52 @@ public class Road {
 				}
 
 			}
-//			Vehicle v_ = this.firstVehicle();
-			//HGehlot: This loop iterates over all the vehicles on the current road to record their vehicle snapshot 
-			//if the tick corresponds to periodic time set for recording vehicle snapshot for visualization interpolation.
-			//LZ: this can also cause thread deadlock, since two thread can modify the same vehicleSnapshot in the same time!! I move this to the next bracket
-//			if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){
-//				while (v_ != null) {
-//					v_.recVehSnaphotForVisInterp();
-//					v_ = v_.macroTrailing();//get the next vehicle behind the current vehicle
-//				}
-//			}
-			Vehicle pv = this.firstVehicle(); // The first vehicle in a road
-			if(pv !=null){
-				if(pv.leading()!=null){ // The behind vehicle surpass the front one, which should not happen.
-					logger.info("Oh, my..."
-							+ "," + pv.getLane().getLaneid()
-							+","+pv.getLane().getLength()
-							+","+pv.leading().getLane().getLaneid()
-							+","+pv.distance()
-							+","+ pv.leading().distance());
-//					pv.leading().trailing(null);
-				}
-//				pv.leading(null);
-//				pv.clearMacroLeading(); 
+			// the first vehicle in a road
+			Vehicle pv = this.firstVehicle();
+			if (pv != null && pv.leading() != null) {
+				// if the behind vehicle surpass the front one, it's a problem
+				logger.warn("Road.step(): Oh, my..."
+						+ "," + pv.getLane().getLaneid()
+						+ "," + pv.getLane().getLength()
+						+ "," + pv.leading().getLane().getLaneid()
+						+ "," + pv.distance()
+						+ "," + pv.leading().distance());
 			}
-//			int counter = 0;
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
-//					logger.info("Vehicle " + pv.getId() +" has been processed by other road within Tick " + tickcount);
 					pv = pv.macroTrailing();
-					continue; //Skip this vehicle.
+					continue; // skip this vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
-				if(!pv.calcState()){ //This vehicle list is corrupted, do not proceed for this road
+				if (!pv.calcState()) {
+					// this vehicle list is corrupted, do not proceed for this road
 					logger.info("Link "+this.linkid+" vehicle list is corrupted");
 					break;
 				}
-				
-				if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0){ //LZ: if you don't want to record unmoved vehicles, uncommented this && pv.getMovingFlag()){
-					pv.recVehSnaphotForVisInterp(); // LZ: Note vehicle can be killed after calling pv.travel, so we record vehicle location here!
+				if (tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0) {
+					/* LZ: if you don't want to record unmoved vehicles,
+					 * also add the condition in the if block: && pv.getMovingFlag()){
+					 * LZ: Note vehicle can be killed after calling pv.travel,
+					 * so we record vehicle location here! */
+					pv.recVehSnaphotForVisInterp();
 				}
-				
+				// main step in traveling
 				pv.travel();
 				
-				if(pv.atDestination()){
+				if (pv.atDestination()) {
 					arrVehs.add(pv);
 				}
-
 				pv = pv.macroTrailing();
 			}
-			
 			if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ==0){
 				for (Vehicle veh : newVehs) {
 					try {
 						DataCollector.getInstance().recordNewVehicleTickSnapshot(veh);
 					} catch (Throwable t) {
-						System.out.println("Cannot store the new vehicles "+veh.getVehicleID()+","+veh.getOriginalCoord()+","+veh.getDestCoord());
+						logger.error("Cannot store the new vehicles " +
+								veh.getVehicleID() + "," +
+								veh.getOriginalCoord() + "," + 
+								veh.getDestCoord());
 						DataCollector.printDebug("ERR" + t.getMessage());
 					}
 				}
@@ -244,35 +240,6 @@ public class Road {
 				newVehs = new ArrayList<Vehicle>();
 				arrVehs = new ArrayList<Vehicle>();
 			}
-//			for (Lane l : this.getLanes()) {
-//				while (true) {
-//					v = l.firstVehicle();
-//					if (v == null) {
-//						break;
-//					} else {
-////						logger.info(v.getMoveVehicleFlag());
-//						if (v.currentSpeed()==0) {
-//							double maxMove = this.freeSpeed_
-//									* GlobalVariables.SIMULATION_STEP_SIZE;
-////							double maxMove =
-////							v.currentSpeed()*GlobalVariables.SIMULATION_STEP_SIZE; //Use vehicle speed is more reasonable
-//							if (v.distance() < maxMove) {
-//								// this move exceed the available distance of
-//								// the link.
-//								if (!v.isOnLane()) {
-//									if (v.changeRoad() == 0)
-//										break;
-//								} else if (v.isOnLane()) {
-//									if (v.appendToJunction(v.getNextLane()) == 0)
-//										break;
-//								}
-//							}
-//						}
-//						break;
-//					}
-//				}
-//			}
-			
 		} catch (Exception e) {
 			logger.error("Road " + this.linkid
 					+ " had an error while moving vehicles");
@@ -301,27 +268,6 @@ public class Road {
 		
 	}
 	
-	// Handling the vehicles entering new link
-//	public void postStep(){
-//		for(Vehicle v: enteringVehicles){
-//			
-//		}
-//	}
-	
-//	@Override
-//	public String toString() {
-//		return "Agent id: " + id + " description: " + description;
-//	}
-	
-//	public void updateLastEnterTick(int current_tick){
-//		this.lastEnterTick = current_tick;
-//	}
-//	
-//	public int getLastEnterTick(){
-//		return this.lastEnterTick;
-//	}
-	
-
 	public void setLinkid(int linkid) {
 		this.linkid = linkid;
 	}
@@ -351,10 +297,6 @@ public class Road {
 		return this.oppositeRoad;
 	}
 	
-//	public void setFreeflowsp(double freeflowsp) {
-//		this.freeSpeed_ = freeflowsp * 0.44704;
-//	}	
-
 	public void sortLanes() {
 		Collections.sort(this.lanes, new LaneComparator());
 	}
@@ -382,7 +324,6 @@ public class Road {
 		return identifier;
 	}
 
-	// set left
 	public void setLeft(int left) {
 		this.left = left;
 	}
@@ -501,16 +442,8 @@ public class Road {
 					}
 				}
 			}
-			// BL: print all movements found
-			/*
-			 * if (this.getName().equals("dummy")) {
-			 * logger.info("All movements found: "); for (int
-			 * i=0;i<allRoads_.size();i++){ logger.info("Road " +
-			 * allRoads_.get(i).getIdentifier()); } }
-			 */
 
 			double[] angles_ = new double[allMovements_.size()];
-			// add all downstream movements to a list regardless the turning
 
 			// TODO: form this to a separated function to calculate the
 			// counterclockwise angle between two links
@@ -671,8 +604,9 @@ public class Road {
 			this.nFutureRoutingVehicles = 0;
 	}
 	
-
-	// BL: this add queue using TreeMap structure
+	/**
+	 * BL: this add queue using TreeMap structure
+	 */
 	public void addVehicleToNewQueue(Vehicle v) {
 		double departuretime_ = 0;
 		departuretime_ = v.getDepTime();
@@ -686,7 +620,6 @@ public class Road {
 		v.setRoad(this);
 //		v.setGeography();
 	}
-
 
 	/**
 	 * RemoveVehicleFromNewQueue BL: will remove vehicle v from the TreeMap by
@@ -704,7 +637,6 @@ public class Road {
 		}
 	}
 
-
 	public Vehicle newqueueHead() {
 		if (this.newqueue.size() > 0) {
 			double firstDeparture_ = this.newqueue.firstKey();
@@ -721,20 +653,6 @@ public class Road {
 		return this.freeSpeed_;
 	}
 
-//	/**
-//	 * RV: Get the number of vehicles currently on the road,
-//	 * including those at the junction (unlike `this.calcSpeed()`)
-//	 */
-//	public int getNumVehicles() {
-//		int nVehicles = 0;
-//		Vehicle pv = this.firstVehicle();
-//		while ((pv != null)) {
-//			nVehicles += 1;
-//			pv = pv.macroTrailing();
-//		}
-//		return nVehicles;
-//	}
-	
 	public float calcSpeed() {
 		if (nVehicles_ < 1)
 			return speed_ = freeSpeed_;
@@ -896,26 +814,6 @@ public class Road {
 		logger.info("Ending point: " + end);
 	}
 	
-	/* This one uses the predefined free flow speed for each hour */
-	//public void updateFreeFlowSpeed_old() {
-	//int tickcount = (int) RepastEssentials.GetTickCount();
-		
-		/*
-		 * To integrate speed profile
-		 */
-		// double simtime = tickcount*GlobalVariables.SIMULATION_STEP_SIZE;
-	//int hour = (int) Math.floor(tickcount
-	//		* GlobalVariables.SIMULATION_STEP_SIZE / 3600);
-	//hour = hour % 24;
-	//if (hour == 0 && curhour > hour)
-	//	this.curhour = -1;
-	//if (curhour < hour) {
-		// get the free flow speed in m/s unit.b
-	//		this.freeSpeed_ = this.getSpeedProfile().get(hour) * 0.44704f; 
-	//	this.curhour = hour;
-	//}
-	//}
-	
 	/**
 	 * Wenbo: update bakcground traffic through speed file.
 	 * if road event flag is true, just pass to default free speed,
@@ -956,7 +854,9 @@ public class Road {
 		this.curhour=hour;
 		}
 		
-	/* Modify the free flow speed based on the events */
+	/**
+	 * Modify the free flow speed based on the events
+	 * */
 	public void updateFreeFlowSpeed_event(float newFFSpd) {
 		this.freeSpeed_ = (float) (newFFSpd* 0.44704); //HG: convert from Miles per hour to meter per second
 	}

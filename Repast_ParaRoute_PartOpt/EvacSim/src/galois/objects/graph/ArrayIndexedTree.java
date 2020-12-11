@@ -366,7 +366,8 @@ public final class ArrayIndexedTree<N extends GObject> implements IndexedGraph<N
     return curr.iterateVersion.compareAndSet(old, mapVersionNumber);
   }
 
-  private IndexedTreeNode scanForNode(LinkedNode start) {
+  @SuppressWarnings("unchecked")
+private IndexedTreeNode scanForNode(LinkedNode start) {
     while (start != null) {
       if (start.isDummy()) {
         start = start.getNext();
@@ -556,7 +557,8 @@ public final class ArrayIndexedTree<N extends GObject> implements IndexedGraph<N
     LinkedNode curr = head.get();
     while (curr != null) {
       if (!curr.isDummy()) {
-        IndexedTreeNode gsrc = (IndexedTreeNode) curr;
+        @SuppressWarnings("unchecked")
+		IndexedTreeNode gsrc = (IndexedTreeNode) curr;
         assert gsrc.in;
         body.call(gsrc);
       }
@@ -575,7 +577,8 @@ public final class ArrayIndexedTree<N extends GObject> implements IndexedGraph<N
     LinkedNode curr = head.get();
     while (curr != null) {
       if (!curr.isDummy()) {
-        IndexedTreeNode gsrc = (IndexedTreeNode) curr;
+        @SuppressWarnings("unchecked")
+		IndexedTreeNode gsrc = (IndexedTreeNode) curr;
         assert gsrc.in;
         body.call(gsrc, arg1);
       }
@@ -594,7 +597,8 @@ public final class ArrayIndexedTree<N extends GObject> implements IndexedGraph<N
     LinkedNode curr = head.get();
     while (curr != null) {
       if (!curr.isDummy()) {
-        IndexedTreeNode gsrc = (IndexedTreeNode) curr;
+        @SuppressWarnings("unchecked")
+		IndexedTreeNode gsrc = (IndexedTreeNode) curr;
         assert gsrc.in;
         body.call(gsrc, arg1, arg2);
       }
@@ -647,7 +651,8 @@ public final class ArrayIndexedTree<N extends GObject> implements IndexedGraph<N
     private LinkedNode dummy;
     private LinkedNode next;
 
-    public IndexedTreeNode(N nodedata) {
+    @SuppressWarnings("unchecked")
+	public IndexedTreeNode(N nodedata) {
       data = nodedata;
       child = (IndexedTreeNode[]) Array.newInstance(this.getClass(), maxNeighbors);
       Arrays.fill(child, null);

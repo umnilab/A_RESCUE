@@ -1,13 +1,8 @@
 package evacSim.data;
 
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-//import java.util.LinkedList;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -18,10 +13,8 @@ import evacSim.NetworkEventObject;
 import evacSim.citycontext.Plan;
 import evacSim.citycontext.Road;
 import evacSim.citycontext.Zone;
-//import evacSim.citycontext.Road;
 import evacSim.vehiclecontext.Vehicle;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
-
 
 /**
  * evacSim.data.TickSnapshot
@@ -68,10 +61,6 @@ public class TickSnapshot {
     /** HG: The collection of event data gathered during this time tick. */
     private List<ArrayList<NetworkEventObject>> events;
 
-//    /** RV:DynaDestTest: String containing relevant details of vehicles 
-//     * in this tick for testing purposes */
-//    public ArrayList<String> dynamicDestTestVehDetails = new ArrayList<String>();
-    
     /**
      * Additional subclasses for snapshots of specific simulation objects.
      * These have package-level access.
@@ -527,80 +516,4 @@ public class TickSnapshot {
         return snapshot;
     }
       
-//  /**
-//  * Stores the current state of the given vehicle to the tick snapshot.
-//  * If this vehicle has already been logged in the current snapshot, its
-//  * values will be overwritten.  Each vehicle can only report one snapshot
-//  * of current values per simulation tick.
-//  * 
-//  * @param vehicle the vehicle from which data values are being recorded.
-//  * @param coordinate the current vehicle position in the simulation.
-//  * @throws Throwable if there is an error getting data from the vehicle.
-//  */
-// public void logVehicle(Vehicle vehicle, Coordinate coordinate) throws Throwable {
-//     if (vehicle == null) {
-//         return;
-//     }
-//     if (coordinate == null) {
-//         return;
-//     }
-//     // pull out values from the vehicle & coord we need to capture
-//     int id = vehicle.getVehicleID();
-//     double prev_x = vehicle.getPreviousEpochCoord().x;
-//     double prev_y = vehicle.getPreviousEpochCoord().y;
-//     double x = coordinate.x;
-//     double y = coordinate.y;
-//     float speed = vehicle.currentSpeed();
-//     double originalX =  vehicle.getOriginalCoord().x;
-//     double originalY = vehicle.getOriginalCoord().y;
-//     double destX = vehicle.getDestCoord().x;
-//     double destY = vehicle.getDestCoord().y;
-//     int nearlyArrived = vehicle.nearlyArrived();
-//     int vehicleClass = vehicle.getVehicleClass();
-//     int roadID = vehicle.getRoad().getLinkid();
-//     //int departure = vehicle.getDepTime();
-//     //int arrival = vehicle.getEndTime();
-//     //float distance = vehicle.accummulatedDistance_;
-//     //double z = coordinate.z;
-//     
-//     // TODO: perform any checks on the extracted values
-//     
-//     //HGehlot: Check if there is already a vehicleSnapshot in this tick due to visualization interpolation recording.
-//     //If so, then use the previous coordinates from the recorded snapshot because we had set the previous coordinates to the current coordinates 
-//     //when we ended the function recVehSnaphotForVisInterp() in vehicle class.
-//     //LZ: Not sure why this is necessary, this may require a lock of vehicles
-////     if(this.getVehicleSnapshot(id)!=null){
-////     	prev_x = this.getVehicleSnapshot(id).prev_x;
-////     	prev_y = this.getVehicleSnapshot(id).prev_y;
-////     }
-//     
-//     // create a snapshot for the vehicle and store it in the map
-////     VehicleSnapshot snapshot = new VehicleSnapshot(
-////     		id, prev_x, prev_y, x, y, speed, originalX, originalY,
-////     		destX, destY, nearlyArrived, vehicleClass, roadID
-////     		//departure, arrival, distance
-////     		);
-////     this.vehicles.put(id, snapshot);
-//     // RV:DynaDestTest
-//     storeDynamicDestTestDetails(vehicle, coordinate);
-// }
-// 
-// /** 
-//  * RV:DynaDestTest: This code is only for testing the dynamic destination feature.
-//  * It stores the info of a given vehicle relevant to get its trajectory. This is
-//  * different from VehicleSnapShot in that it does not get a lot of other info.
-//  */
-// private void storeDynamicDestTestDetails(Vehicle veh, Coordinate coord) 
-// 		throws Throwable {
-// 	
-// 	// resolve the current origin and destination ID
-//     ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
-//     int origID = plans.get(0).getLocation();
-//     int destID = plans.get(1).getLocation();
-//     
-//     // store the vehicle ID, coordinates, speed & current destination
-//     this.dynamicDestTestVehDetails.add(String.format("%d,%d,%d,%.6f,%.6f,%.3f",
-//     		veh.getVehicleID(), origID, destID, coord.x, coord.y, veh.currentSpeed()));
-// }
-//    
 }
