@@ -654,7 +654,7 @@ public class CityContext extends DefaultContext<Object> {
 		double minDist = Double.MAX_VALUE;
 		Zone nearestShelter = null;
 		Map<Double, Queue<Road>> currentPathPlusDist = null;
-		ArrayList<Integer> visitedShelterIds = new ArrayList<Integer>();
+//		ArrayList<Integer> visitedShelterIds = new ArrayList<Integer>();
 		ArrayList<Zone> eligibleShelters = new ArrayList<Zone>();
 		
 		// get the shelter zones
@@ -665,27 +665,30 @@ public class CityContext extends DefaultContext<Object> {
 		Geometry buffer = point.buffer(GlobalVariables.XXXX_BUFFER); // use a buffer for efficiency
 		Iterable<Zone> zones = zoneGeography.getObjectsWithin(buffer.getEnvelopeInternal(), Zone.class);
 
-		// get the zones that have been previously visited
-		ArrayList<Plan> plans = vehicle.getHouse().getActivityPlan();
-		for (int i = 0; i < plans.size(); i++) { // includes the current destination
-			visitedShelterIds.add(plans.get(i).getLocation());
-		}
-		
+//		// get the zones that have been previously visited
+//		ArrayList<Plan> plans = vehicle.getHouse().getActivityPlan();
+//		for (int i = 0; i < plans.size(); i++) { // includes the current destination
+//			visitedShelterIds.add(plans.get(i).getLocation());
+//		}
 		// prepare the list of candidate shelters depending on the strategy
 		for (Zone zone : zones) {
-			// consider only unvisited shelters
-			if (zone.getType() == 1 && !visitedShelterIds.contains(zone.getIntegerId())) {
-				if (strategy == 1) { // include all shelters, irrespective of occupancy
-					eligibleShelters.add(zone);
-				}
-				// else if strategy is 2 or 3, include only shelters with available capacity
-				else if (zone.getOccupancy() < zone.getCapacity()) {
-					eligibleShelters.add(zone);
+			// consider only shelters
+			if (zone.getType() == 1) {
+				// consider only unvisited shelters
+				if (!vehicle.getVisitedShelters().containsKey(zone.getIntegerId())) {
+					// include all shelters, irrespective of occupancy
+					if (strategy == 1) {
+						eligibleShelters.add(zone);
+					}
+					// else if strategy is 2 or 3, include only shelters with
+					// available capacity
+					else if (zone.getOccupancy() < zone.getCapacity()) {
+						eligibleShelters.add(zone);
+					}
 				}
 			}
 		}
 		// if there is no candidate shelter, return null
-		// TODO: find a proper solution here; null can also be returned otherwise in a bad code
 		if (eligibleShelters.size() == 0) {
 			return null;
 		}
