@@ -149,7 +149,6 @@ public class Road {
 //					v.setCoordMap(this.firstLane());
 //				}
 				
-
 				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
 					if (v.enterNetwork(this) == 1) {
 						newVehs.add(v);
@@ -188,11 +187,12 @@ public class Road {
 						+ "," + pv.leading().getLane().getLaneid()
 						+ "," + pv.distance()
 						+ "," + pv.leading().distance());
+//				pv.leading(null);
 			}
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
 					pv = pv.macroTrailing();
-					continue; // skip this vehicle
+					break; // reached the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
 				if (!pv.calcState()) {
@@ -200,7 +200,7 @@ public class Road {
 					logger.info("Link "+this.linkid+" vehicle list is corrupted");
 					break;
 				}
-				if (tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0) {
+				if (tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ == 0 && pv.getMovingFlag()) {
 					/* LZ: if you don't want to record unmoved vehicles,
 					 * also add the condition in the if block: && pv.getMovingFlag()){
 					 * LZ: Note vehicle can be killed after calling pv.travel,
