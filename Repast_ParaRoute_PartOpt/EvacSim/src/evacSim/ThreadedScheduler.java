@@ -1,9 +1,19 @@
 package evacSim;
 
 import java.util.concurrent.*;
+
+import org.json.simple.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import evacSim.ContextCreator;
 import evacSim.citycontext.Road;
+import evacSim.vehiclecontext.Vehicle;
+import repast.simphony.essentials.RepastEssentials;
 
 public class ThreadedScheduler {
 //	private boolean roadFinishedStepping;
@@ -31,7 +41,7 @@ public class ThreadedScheduler {
 	public void step(){
 		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
 			   r.step();
-		   }
+		}
         // Record vehicle trajectories
 //		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
 //			   Vehicle pv = r.firstVehicle();
@@ -54,7 +64,6 @@ public class ThreadedScheduler {
 		}
 		try {
 			List<Future<Integer>> futures = executor.invokeAll(tasks);
-			
 			ArrayList<Integer> time_stat = new ArrayList<Integer>();
 			for (int i = 0; i < N_Partition; i++)
 				time_stat.add(futures.get(i).get());
@@ -70,14 +79,64 @@ public class ThreadedScheduler {
 //				   pv = pv.macroTrailing();
 //			   }
 //		   }
-			
 			// Step over the boundary roads
 //			double start_t = System.currentTimeMillis();
 //			stepBwRoads();
 //			seq_time = seq_time + (int)(System.currentTimeMillis() - start_t);
-			
+			// Generate a vehicle list, filename by the corresponding ticks
+			int tickcount = (int) RepastEssentials.GetTickCount();
+			if(tickcount % 6000 == 0) { //Every 30 min
+				createVehicleList();
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void createVehicleList() {
+		// get the default output directory
+		String outDir = GlobalVariables.OUTPUT_DIR;
+
+		// get the basename of the demand file -
+		String basename = "";
+		if (GlobalVariables.ORGANIZE_OUTPUT_BY_ACTIVITY_FNAME) {
+			String[] temp = GlobalVariables.OUTPUT_DIR.split("/");
+			basename = temp[temp.length - 1];
+		}
+		int tickcount = (int) RepastEssentials.GetTickCount();
+
+		// create the overall file path, named after the demand filename
+		String outpath = outDir + File.separatorChar + "vehicle-list-" + basename + "-" + tickcount/6000 + ".json";
+		BufferedWriter bw = null;
+		// check the path will be a valid file
+		try {
+			FileWriter fw = new FileWriter(outpath, false);
+			bw = new BufferedWriter(fw);
+			
+			HashMap<Integer, String> storeJsonObjects = new HashMap<Integer, String>();
+			
+			for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
+				   Vehicle pv = r.firstVehicle();
+				   while(pv!=null){
+					   String info= String.format("%d,%d,%.5f,%.5f",
+		        				pv.getHouse().getZoneId(), pv.getDestinationID(), pv.getCurrentCoord().x, pv.getCurrentCoord().y);
+					   storeJsonObjects.put(pv.getVehicleID(), info);
+					   pv = pv.macroTrailing();
+				   }
+			   }
+		   JSONObject jsonObject = new JSONObject();
+     	   jsonObject.putAll(storeJsonObjects);
+     	   bw.write(JSONObject.toJSONString(jsonObject));
+		   bw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				bw.close();
+			} catch (IOException e){
+				e.printStackTrace();
+			}
 		}
 	}
 	

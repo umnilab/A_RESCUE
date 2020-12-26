@@ -437,8 +437,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 		try {
 			FileWriter fw = new FileWriter(outpath, false);
 			bw = new BufferedWriter(fw);
-			bw.write("vehicleID,zoneType,startTime,endTime,originID,destID," + 
-					"totalDistance,visitedShelters");
+			bw.write("vehicleID;zoneType;startTime;endTime;originID;destID;" + 
+					"totalDistance;visitedShelters; visitedRoad; visitedTime");
 			bw.newLine();
 			bw.flush();
 			logger.info("Vehicle logger created");

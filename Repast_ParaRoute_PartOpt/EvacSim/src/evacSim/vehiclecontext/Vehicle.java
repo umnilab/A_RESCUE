@@ -138,7 +138,10 @@ public class Vehicle {
 	protected int stuck_time = 0;
 	// LZ, whether the vehicle has been moved
 	protected boolean movingFlag = false; 
-
+	// LZ, record when and where the vehicle enters each link, and store it whenever the vehicle is arrived
+	protected ArrayList<Integer> linkHistory;
+    protected ArrayList<Integer> linkTimeHistory;
+	
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
 		this.house = h;
@@ -185,6 +188,8 @@ public class Vehicle {
 		this.visitedShelters = new HashMap<Integer, Integer>();
 		Plan startPlan = house.getActivityPlan().get(0);
 		this.visitedShelters.put(startPlan.getLocation(), startPlan.getDuration());
+		this.linkHistory = new ArrayList<Integer>();
+		this.linkTimeHistory = new ArrayList<Integer>();
 		GlobalVariables.NUM_GENERATED_VEHICLES++;
 	}
 
@@ -242,6 +247,9 @@ public class Vehicle {
 			this.setCoordMap(firstlane);
 			this.append(firstlane);
 			this.appendToRoad(this.road);
+			// Record the vehicle movement here
+			this.linkHistory.add(this.road.getLinkid());
+			this.linkTimeHistory.add(tickcount);
 			this.setNextRoad();
 			this.assignNextLane();
 			GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK++;
@@ -358,7 +366,6 @@ public class Vehicle {
 					this.nextRoad_ = null;
 					return;
 				}
-
 				boolean flag = false; // LZ: successfully reroute
 				if (this.lastRouteTime < RouteV.getValidTime()) { // path is not valid
 					// the information are outdated, needs to be recomputed.
@@ -510,7 +517,7 @@ public class Vehicle {
 
 	/**
 	 * update the coordinates of vehicle to the lane coordinate
-	 * 
+	 * tdnlane
 	 * @param: lane
 	 */
 	private void updateCoordMap(Lane lane) {
@@ -1153,6 +1160,8 @@ public class Vehicle {
 				this.removeFromMacroList();
 				this.setCoordMap(nextLane_);
 				this.appendToRoad(this.nextRoad());
+				this.linkHistory.add(this.nextRoad().getLinkid());
+				this.linkTimeHistory.add(tickcount);
 				this.append(nextLane_); // LZ: Two vehicles entered the same lane, then messed up.
 				this.setNextRoad();
 				this.assignNextLane();
@@ -1180,6 +1189,8 @@ public class Vehicle {
 							this.removeFromLane();
 							this.removeFromMacroList();
 							this.appendToRoad(dnlane.road_());
+							this.linkHistory.add(dnlane.road_().getID());
+							this.linkTimeHistory.add(tickcount);
 							this.append(dnlane);
 							this.lastRouteTime = -1; // old route is not valid for sure
 							this.setNextRoad();
@@ -1419,13 +1430,15 @@ public class Vehicle {
 			this.reachDest = true;
 			// LZ: Log the vehicle information here
 			String formated_msg = (this.getVehicleID() + 
-					"," + 0 +
-					"," + this.getDepTime() +
-					"," + this.getEndTime() +
-					"," + this.getHouse().getZoneId() +
-					"," + this.getDestinationID() +
-					"," + this.accummulatedDistance_ +
-					"," + this.visitedShelters.size()
+					";" + 0 +
+					";" + this.getDepTime() +
+					";" + this.getEndTime() +
+					";" + this.getHouse().getZoneId() +
+					";" + this.getDestinationID() +
+					";" + this.accummulatedDistance_ +
+					";" + this.visitedShelters.size() +
+					";" + this.linkHistory.toString() +
+					";" + this.linkTimeHistory.toString()
 					);
 			try {
 				ContextCreator.bw.write(formated_msg);
@@ -2399,13 +2412,15 @@ public class Vehicle {
 			this.reachDest = true;
 			logger.info(this + " reached dest shelter " + curDest);
 			String formatted_msg = (getVehicleID()
-					+ "," + 1 +
-					"," + getDepTime() + 
-					"," + getEndTime() +
-					"," + getHouse().getZoneId() +
-					"," + getDestinationID() + 
-					"," + accummulatedDistance_ +
-					"," + visitedShelters.size()
+					+ ";" + 1 +
+					";" + getDepTime() + 
+					";" + getEndTime() +
+					";" + getHouse().getZoneId() +
+					";" + getDestinationID() + 
+					";" + accummulatedDistance_ +
+					";" + visitedShelters.size()+
+					";" + this.linkHistory.toString() +
+					";" + this.linkTimeHistory.toString()
 					);
 			try {
 				ContextCreator.bw.write(formatted_msg);
