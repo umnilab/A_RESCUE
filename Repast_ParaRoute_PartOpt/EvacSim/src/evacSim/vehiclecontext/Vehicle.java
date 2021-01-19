@@ -2314,7 +2314,8 @@ public class Vehicle {
 		}
 		return distance;
 	}
-
+	
+	// LZ: Jan 19, 2021, it turns out the Azimuth is not the bearing, so I replaced the caculation of radius
 	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
 		double distance;
 		double radius;
@@ -2343,7 +2344,7 @@ public class Vehicle {
 
 	/**
 	 * LZ: A light weight move function based on moveVehicleByVector, and is 
-	 * much faster than the one using geom.
+	 * much faster than the one using geom
 	 */
 	private void move2(Coordinate coord, double distance, double angleInDegrees){
 		this.calculator.setStartingGeographicPoint(coord.x, coord.y);

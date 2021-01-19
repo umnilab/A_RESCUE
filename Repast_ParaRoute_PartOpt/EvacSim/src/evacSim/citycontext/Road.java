@@ -181,7 +181,7 @@ public class Road {
 			Vehicle pv = this.firstVehicle();
 			if (pv != null && pv.leading() != null) {
 				// if the behind vehicle surpass the front one, it's a problem
-				logger.warn("Road.step(): Oh, my..."
+				logger.warn("Road.step(): An abnormal surpass happened"
 						+ "," + pv.getLane().getLaneid()
 						+ "," + pv.getLane().getLength()
 						+ "," + pv.leading().getLane().getLaneid()
@@ -676,8 +676,8 @@ public class Road {
 		this.length = (float) ContextCreator.convertToMeters(roadGeom
 				.getLength());
 		this.initDynamicTravelTime();
-		System.out
-				.println("Road " + this.linkid + " has length " + this.length);
+//		System.out
+//				.println("Road " + this.linkid + " has length " + this.length);
 	}
 	
 	/**
