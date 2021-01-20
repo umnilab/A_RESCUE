@@ -53,8 +53,13 @@ public class Vehicle {
 	 * to store vehicle location when it does not enter the network */
 	private Coordinate currentCoord_;
 	private float length;
+	
 	// distance from downstream junction
 	private double distance_;
+	// distance from the start point of next line segment
+	private double nextDistance_;
+	
+	
 	private float currentSpeed_;
 	private double accRate_;
 	private double bearing_;
@@ -506,6 +511,13 @@ public class Vehicle {
 			this.coordMap.remove(0);
 			//LZ: lastStepMove_ does note make sense, should be this.length/2
 			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2;
+			
+			double[] distAndAngle = new double[2];
+			// LZ: replace previous vehicle movement function
+			// the first element is the distance, and the second is the radius
+			this.distance2(this.getCurrentCoord(), this.coordMap.get(0), distAndAngle);
+			this.nextDistance_ = distAndAngle[0];
+			this.setBearing(distAndAngle[1]);
 		} 
 		else {
 			logger.error("There is no target lane to set!");
@@ -535,9 +547,10 @@ public class Vehicle {
 			accDist-=distance(coords[i], coords[i+1]);
 			if (this.distance_ >= accDist) { // Find the first pt in CoordMap that has smaller distance;
 				double[] distAndAngle = new double[2];
-				distance2(coords[i+1], coords[i], distAndAngle);
-				Coordinate coord = coords[i+1];
-				move2(coord, this.distance_- accDist, distAndAngle[1]); // Update vehicle location
+				distance2(coords[i], coords[i+1], distAndAngle);
+				move2(coords[i], coords[i+1], distAndAngle[0], distAndAngle[0] - (this.distance_- accDist)); // Update vehicle location
+				this.nextDistance_ = distAndAngle[0] - (this.distance_- accDist);
+				this.setBearing(distAndAngle[1]);
 				for (int j = i+1; j < coords.length; j++){ // Add the rest coords into the CoordMap
 					coordMap.add(coords[j]);
 				}
@@ -546,9 +559,10 @@ public class Vehicle {
 		}
 		if (coordMap.size() == 0) { // perhaps when $this is too close to a junction
 			double[] distAndAngle = new double[2];
-			distance2(coords[coords.length-1], coords[coords.length-2], distAndAngle);
-			Coordinate coord = coords[coords.length-1];
-			move2(coord, this.distance_, distAndAngle[1]); // update vehicle location
+			distance2(coords[coords.length-2], coords[coords.length-1], distAndAngle);
+			move2(coords[coords.length-2], coords[coords.length-1], distAndAngle[0], distAndAngle[0] - this.distance_); // Update vehicle location
+			this.nextDistance_ = distAndAngle[0] - this.distance_;
+			this.setBearing(distAndAngle[1]);
 			coordMap.add(coords[coords.length-1]);
 		}
 	}
@@ -1007,18 +1021,18 @@ public class Vehicle {
 		 */
 		double[] distAndAngle = new double[2];
 		while (!travelledMaxDist) {
-			currentCoord = this.getCurrentCoord(); // current location
+//			currentCoord = this.getCurrentCoord(); // current location
 			target = this.coordMap.get(0);
 			// LZ: replace previous vehicle movement function
 			// the first element is the distance, and the second is the radius
-			double distToTarget = this.distance2(currentCoord, target, distAndAngle);
+//			double distToTarget = this.distance2(currentCoord, target, distAndAngle);
 
 			/* if the distance $this can travel (dx) exceeds the distance (distToTarget)
 			 * to the next control point on the route (target), then directly move it to
 			 * the target point
 			 */
-			if (distTravelled + distToTarget <= dx) {
-				distTravelled += distToTarget;
+			if (distTravelled + nextDistance_ <= dx) {
+				distTravelled += nextDistance_;
 				this.setCurrentCoord(target);
 				/* LZ: Oct 31, the distance and calculated value is not consistent
 				 * (Vehicle reached the end of the link does not mean Vehicle
@@ -1053,6 +1067,12 @@ public class Vehicle {
 						break;
 					}
 				}
+				else{
+					currentCoord = this.getCurrentCoord();
+					this.distance2(currentCoord, this.coordMap.get(0), distAndAngle);
+					this.nextDistance_ = distAndAngle[0];
+					this.setBearing(distAndAngle[1]);
+				}
 			}
 			/* otherwise, the distance to travel does not require changing the control
 			 * point and thus, use linear interpolation to decide the final coordinates
@@ -1062,16 +1082,18 @@ public class Vehicle {
 			 */
 			else {
 				// move by distance in the calculated direction
-				move2(currentCoord, dx-distTravelled, distAndAngle[1]);
+				double distanceToTarget = this.nextDistance_;
+				this.nextDistance_ -= dx - distTravelled;
+				currentCoord = this.getCurrentCoord();
+				move2(currentCoord, this.coordMap.get(0), distanceToTarget, dx-distTravelled);
 				distTravelled = dx;
 				this.accummulatedDistance_ += dx;
 				lastStepMove_ = dx;
 				travelledMaxDist = true;
 			}
 		}
-		// reduce the distance to junction by the amount moved, can distTravelled larger than dx?
+		// reduce the distance to junction by the amount moved
 		distance_ -= distTravelled;
-		this.setBearing(distAndAngle[1]);
 		if(distTravelled>0){
 			this.movingFlag = true;
 		}
@@ -1132,7 +1154,7 @@ public class Vehicle {
 			double distToTravel = travelPerTurn;
 			this.accummulatedDistance_ += distToTravel;
 			// LZ: implementation 3: drop the geom class and change the coordinates
-			move2(currentCoord, distToTravel, distAndAngle[1]);
+			move2(currentCoord, target, distToTarget, distToTravel);
 		}
 		return;
 	}
@@ -1185,13 +1207,13 @@ public class Vehicle {
 					for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 10 minutes, go to the connected empty lane and reroute itself.
 						if (this.entranceGap(dnlane) >= 1.2*this.length() && (tickcount > dnlane.getLastEnterTick())) {
 							dnlane.updateLastEnterTick(tickcount);
-							this.setCoordMap(dnlane);
 							this.removeFromLane();
 							this.removeFromMacroList();
+							this.setCoordMap(dnlane);
 							this.appendToRoad(dnlane.road_());
+							this.append(dnlane);
 							this.linkHistory.add(dnlane.road_().getID());
 							this.linkTimeHistory.add(tickcount);
-							this.append(dnlane);
 							this.lastRouteTime = -1; // old route is not valid for sure
 							this.setNextRoad();
 							this.assignNextLane();
@@ -1516,6 +1538,7 @@ public class Vehicle {
 
 	public void removeFromLane() {
 		this.lane.removeVehicles();
+		this.leading_ = null;
 		if (this.trailing_ != null) {
 			this.lane.firstVehicle(this.trailing_);
 			this.trailing_.leading(null);
@@ -1523,6 +1546,7 @@ public class Vehicle {
 			this.lane.firstVehicle(null); 
 			this.lane.lastVehicle(null);
 		}
+		this.trailing_ = null;
 	}
 
 
@@ -1819,6 +1843,7 @@ public class Vehicle {
 						lane.getLaneid() + " with length=" + lane.getLength());
 			}
 			this.lane.firstVehicle(this);
+			this.leading(null); //LZ: 2021/1/20, this line was missing
 			this.trailing_ = lagVehicle;
 			this.trailing_.leading(this);
 		} else {
@@ -2345,17 +2370,26 @@ public class Vehicle {
 	/**
 	 * LZ: A light weight move function based on moveVehicleByVector, and is 
 	 * much faster than the one using geom
+	 * 2021/1/20 update, this is just for getting the coordinate within line segments (has nothing to do with the distance update), therefore linear interpolation is enough
 	 */
-	private void move2(Coordinate coord, double distance, double angleInDegrees){
-		this.calculator.setStartingGeographicPoint(coord.x, coord.y);
-		this.calculator.setDirection(angleInDegrees, distance);
-		Point2D p = this.calculator.getDestinationGeographicPoint();
-		if (p != null) {
-			this.setCurrentCoord(new Coordinate(p.getX(), p.getY()));
+	private void move2(Coordinate origin, Coordinate target, double distanceToTarget, double distanceTravelled){
+//		this.calculator.setStartingGeographicPoint(coord.x, coord.y);
+//		this.calculator.setDirection(angleInDegrees, distance);
+//		Point2D p = this.calculator.getDestinationGeographicPoint();
+//		if (p != null) {
+//			this.setCurrentCoord(new Coordinate(p.getX(), p.getY()));
+//		}
+//		else{
+//			logger.error("Vehicle.move2(): Cannot move " + this + "from "
+//					+ coord + " by dist=" + distance + ", angle=" + angleInDegrees);
+//		}
+		double p = distanceTravelled/distanceToTarget;
+		if(p<1){
+			this.setCurrentCoord(new Coordinate((1-p)*origin.x + p*target.x , (1-p)*origin.y + + p*target.y));
 		}
 		else{
 			logger.error("Vehicle.move2(): Cannot move " + this + "from "
-					+ coord + " by dist=" + distance + ", angle=" + angleInDegrees);
+			+ origin + " by dist=" +  distanceTravelled);
 		}
 	}
 

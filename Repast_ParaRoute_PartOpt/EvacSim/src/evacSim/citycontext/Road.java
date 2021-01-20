@@ -181,13 +181,13 @@ public class Road {
 			Vehicle pv = this.firstVehicle();
 			if (pv != null && pv.leading() != null) {
 				// if the behind vehicle surpass the front one, it's a problem
-				logger.warn("Road.step(): An abnormal surpass happened"
+				logger.warn("Road.step(): Inconsistency of macroleading and leading is detected"
 						+ "," + pv.getLane().getLaneid()
 						+ "," + pv.getLane().getLength()
 						+ "," + pv.leading().getLane().getLaneid()
 						+ "," + pv.distance()
 						+ "," + pv.leading().distance());
-//				pv.leading(null);
+				pv.leading(null);
 			}
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
@@ -535,7 +535,7 @@ public class Road {
 	public void firstVehicle(Vehicle v) {
 		if (v != null) {
 			if(v.leading()!=null){
-				logger.info("Well");
+				logger.info("Well " + v.distance() + ","+v.getLane().getLaneid() + "," + v.leading().distance()+"," +v.leading().getLane().getLaneid());
 			}
 			this.firstVehicle_ = v;
 		}
