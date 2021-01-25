@@ -6,16 +6,12 @@ import evacSim.NetworkEventObject;
 import evacSim.data.DataCollector;
 import evacSim.data.DataConsumer;
 import evacSim.data.TickSnapshot;
-import evacSim.NetworkEventHandler;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Collection;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
