@@ -1,17 +1,21 @@
 package evacSim.network;
 
+
 import evacSim.GlobalVariables;
 import evacSim.NetworkEventObject;
 import evacSim.data.DataCollector;
 import evacSim.data.DataConsumer;
 import evacSim.data.TickSnapshot;
+import evacSim.NetworkEventHandler;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
-
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.*;
+import java.util.List;
+import java.util.Collection;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
@@ -33,7 +37,6 @@ import repast.simphony.essentials.RepastEssentials;
  * @version 1.0
  * @date 17 October 2017
  */
-@WebSocket
 public class Connection implements DataConsumer {
     
     /** The number of instances of the connection class created so far. */
@@ -43,14 +46,10 @@ public class Connection implements DataConsumer {
     private int id;
 
     /** A local convenience reference to manager for this connection. */
-    @SuppressWarnings("unused")
-	private ConnectionManager manager = ConnectionManager.getInstance();
+    private ConnectionManager manager = ConnectionManager.getInstance();
     
     /** A local convenience reference to the collection buffer for the sim. */
     private DataCollector collector = DataCollector.getInstance();
-    
-    /** The websocket session object for the connection this object serves. */
-    private Session session;
     
     /**Prefix for event */
     private static final String EVENT_MSG = "EVENT";
@@ -58,14 +57,28 @@ public class Connection implements DataConsumer {
     /**Prefix for event */
     private static final String START_MSG = "START";
     
-    /** The address of the remote host for this connection. */
-    private InetAddress ip;
+    
+    /** The address of the host to which the connection is made. */
+    private String host;
+    
+    /** The port at which the remote host is accepting connections. */
+    private int port;
+    
+    /** The socket which is used to connect to the remote host. */
+    private MessageSocket socket;
+    
+    /** The unique id value assigned to this copy of the model. */
+    private String modelId;
+    
     
     /** A thread which periodically sends buffer contents over the socket. */
     private Thread sendingThread;
     
     /** A "heartbeat" thread which pings remote end often to keep it alive. */
     private Thread heartbeatThread;
+    
+    /** A thread which monitors the underlying socket for new incoming data. */
+    private Thread receivingThread;
     
     
     /** Whether or not the connection is currently consuming buffer data. */
@@ -77,12 +90,26 @@ public class Connection implements DataConsumer {
     /** The current tick number being processed (or just processed). */
     private double currentTick;
     
+    
     /**
      * Performs any preparation needed for this object to be ready to
      * receive a new socket connection and begin processing the data in
      * the simulation data buffer.
+     * 
+     * @param host the address of the remote host.
+     * @param port the port at which the remote host accepts connections.
      */
-    public Connection() {
+    public Connection(String host, int port) {
+    	// check the given host and port are valid
+    	if (host == null || host.trim().length() < 1) {
+    	   throw new IllegalArgumentException("Host address not specified.");
+    	}
+    	if (port < 1 || port > 65535) {
+    		throw new IllegalArgumentException("Port number not valid.");
+    	}
+    	this.host = host;
+    	this.port = port;
+    	
         // increment our instance counter and save this object's number
         this.id = ++Connection.COUNTER;
         
@@ -107,8 +134,74 @@ public class Connection implements DataConsumer {
         // the socket is open.
         this.sendingThread = null;
         
+        // the control program which created this copy of the model should
+        // have assigned a unique id value for this particular copy.  this
+        // value is transmitted as part of the connection establishing
+        // process so the remote control program can properly route the
+        // traffic of this connection to the correct location within itself.
+        this.modelId = this.loadModelId();
+        
         ConnectionManager.printDebug(this.id + "-CTRL", 
                                      "Connection object created.");
+    }
+    
+    
+    /**
+     * Attempts to open the connect to the remote host and starts the
+     * message processing loop which will handle all incoming data from
+     * the remote host.
+     * 
+     * @throws IOException if the connection could not be established.
+     */
+    public void open() throws IOException {
+    	// check the socket does not already exist and is not already open
+    	if (this.socket != null) {
+        	if (this.socket.isOpen()) {
+    			// this connection already exists and is still open, so
+        		// we will do nothing and just return here.
+        		return;
+    		}
+        	else {
+        		// the connection already exists but is not open.  as the
+        		// connection is established when the socket object is
+        		// created, this must mean it has died.  we will throw out
+        		// this socket object and create a fresh connection.
+        		this.socket = null;
+        	}
+    	}
+    	
+    	// TODO: perform any pre-opening tasks
+    	
+    	// attempt to open the connection 
+    	try {
+    	    this.socket = new MessageSocket(this.host, this.port);
+    	}
+    	catch (Throwable t) {
+    		// a problem occurred attempting to establish the socket
+    		throw new IOException("Could not open socket to remote host.", t);
+    	}
+    	
+    	// perform any post-opening tasks
+    	this.onConnect();
+    }
+    
+    
+    /**
+     * Closes the connection and triggers any tasks that need to be handled
+     * for shutting down the connection.
+     * 
+     * @throws IOException if an error occurred closing the connection.
+     */
+    public void close() throws IOException {
+    	// TODO: perform any pre-closing tasks
+    	
+    	// attempt to close the socket
+    	if (this.socket != null) {
+    		this.socket.disconnect();
+    	}
+    	this.socket = null;
+    	
+    	// TOOD: perform any post-closing clean-up tasks 
     }
     
     
@@ -264,7 +357,6 @@ public class Connection implements DataConsumer {
      * @param statusCode the status code for why the connection closed.
      * @param reason a text description of why the connection closed.
      */
-    @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
         // TODO: handle any tasks needed when socket closes.
         ConnectionManager.printDebug(this.id + "-CTRL", 
@@ -279,7 +371,6 @@ public class Connection implements DataConsumer {
      * 
      * @param t the error or exception thrown because of the problem.
      */
-    @OnWebSocketError
     public void onError(Throwable t) {
         // TODO: gracefully handle socket errors 
         ConnectionManager.printDebug(this.id + "-ERR", 
@@ -288,27 +379,20 @@ public class Connection implements DataConsumer {
     
     
     /**
-     * This method is called when the WebSocket connection is established
+     * This method is called when the socket connection is established
      * to handle any tasks needing to happen when the connection is started.
      * 
      * @param session the WebSocket session object for this connection.
      */
-    @OnWebSocketConnect
-    public void onConnect(Session session) {
+    public void onConnect() {
 
-        if (session == null) {
-            // is there any way the jetty library would do this?
+        if (this.socket == null) {
+            // is there any reason this would be called if socket was null?
             return;
         }
         
-        this.ip = session.getRemoteAddress().getAddress();
-        //ConnectionManager.printDebug("CTRL", "New connection from: " + ip);
-        
         ConnectionManager.printDebug(this.id + "-CTRL", 
-                "Connected to " + this.ip.toString() + ".");
-        
-        // save a reference to the session for this socket connection
-        this.session = session;
+                "Connected to " + this.host + ".");
         
         // register the connection as a data consumer
         this.collector.registerDataConsumer(this);
@@ -316,12 +400,24 @@ public class Connection implements DataConsumer {
         // create the heartbeat thread to keep the connection open
         this.heartbeatThread = new Thread(new HeartbeatRunnable());
         this.heartbeatThread.start();
+        
+        // create the thread for receiving and processing incoming data
+        this.receivingThread = new Thread(new ReceivingRunnable());
+        this.receivingThread.start();
+        
+        // identify this simulation by sending the unique model id
+        try {
+            this.sendModelId();
+        }
+        catch (IOException ioe) {
+        	// TODO: handle being unable to send the model id value
+        }
     }
     
     
     /**
      * This method is called whenever the remote hosts sends a message
-     * through the WebSocket to the simulation.  This should be a command
+     * through the socket to the simulation.  This should be a command
      * from the remote viewer to alter the simulation in some fashion or 
      * perhaps a request for a more detailed or specific piece of data from
      * the simulation.  This method should perform any minimal processing
@@ -330,7 +426,6 @@ public class Connection implements DataConsumer {
      * 
      * @param message the contents of the message from the remote host.
      */
-    @OnWebSocketMessage
     public void onMessage(String message) {
         ConnectionManager.printDebug(this.id + "-RECV", message);
         
@@ -349,17 +444,17 @@ public class Connection implements DataConsumer {
         else if (message.startsWith(EVENT_MSG)){
         	try{
         		NetworkEventObject event = ParseString(message);
-                
-                insertExternalEvent(event);
-                //HG: store event adding information in data buffer 
-                try {
-                    DataCollector.getInstance().recordEventSnapshot(event, 3);//Here 3 value denotes adding of external event to global queue
-                }
-                catch (Throwable t) {
-                    // could not log the event ending in data buffer!
-                    DataCollector.printDebug("ERR" + t.getMessage());
-                }
-        		
+        		if(event.eventID == 2){//HG: check if the event type is external blocking of road then insert it in global event queue. 1 = Predefined blockage of road, 2 = External blocking of road
+        			insertExternalEvent(event);
+        			//HG: store event adding information in data buffer 
+    				try {
+    						DataCollector.getInstance().recordEventSnapshot(event, 3);//Here 3 value denotes adding of external event to global queue
+    				}
+    				catch (Throwable t) {
+    				    // could not log the event ending in data buffer!
+    				    DataCollector.printDebug("ERR" + t.getMessage());
+    				}
+        		}
         	}catch (NumberFormatException nfe) {
                 // one of the values is malformed during parsing
                 System.out.println(nfe);
@@ -374,6 +469,23 @@ public class Connection implements DataConsumer {
         	System.out.print("Unknown Information");
         }
 
+    }
+    
+    
+    /**
+     * Sends the unique model id generated for this copy of the simulation
+     * to the remote listener.
+     * 
+     * @throws IOException if a problem occured sending the message
+     */
+    private void sendModelId() throws IOException {
+    	// create the message for communicating the model id
+    	String[] msg = { "MODEL_ID", this.modelId };
+    	
+    	// send it over the socket
+    	if (this.socket != null) {
+    	    this.socket.send(msg);
+    	}
     }
     
     
@@ -397,12 +509,12 @@ public class Connection implements DataConsumer {
         }
         
         // check the connection is open and ready for sending
-        if (session == null || !session.isOpen()) {
-            throw new IOException("Socket session is not open.");
+        if (this.socket == null || !this.socket.isOpen()) {
+            throw new IOException("Socket is not open.");
         }
         
         // send the message over the socket
-        session.getRemote().sendString(message);
+        this.socket.send(new String[] { message });
     }
     
     
@@ -418,43 +530,118 @@ public class Connection implements DataConsumer {
             return null;
         }
         double tickNum = tick.getTickNumber();
+                
+        // open the socket tick message by saying which tick this is
+        ArrayList<String> lines = new ArrayList<String>();
+        lines.add("TICK," + tickNum);
+
+        // get the data representation of the tick
+        ArrayList<String> tickData = tick.createCSVTickLines();
+        for (String dataLine : tickData) {
+        	lines.add(dataLine);
+        }
+
+        // HG: loop through the list of starting events and convert each to a string
+        for (NetworkEventObject event : tick.getEventList().get(0)) {
+            if (event == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createEventMessage(event);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "EVENT_START," + line;
+            lines.add(line);
+        }
         
-        //LZ: Oct 21, the empty vehicle list issue is handled in tickSnapshot
-//        // get the list of vehicles stored in the tick snapshot
-//        ArrayList<VehicleSnapshot> vehicleIDs = tick.getVehicleList();
-//        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
-//            return null;
-//        }
+        // HG: loop through the list of ending events and convert each to a string
+        for (NetworkEventObject event : tick.getEventList().get(1)) {
+            if (event == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createEventMessage(event);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "EVENT_END," + line;
+            lines.add(line);
+        }
+        
+     // HG: loop through the list of external event feedbacks being added and convert each to a string
+        for (NetworkEventObject event : tick.getEventList().get(2)) {
+            if (event == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createEventMessage(event);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "EVENT_FROM_REMOTE_ADDED," + line;
+            lines.add(line);
+        }
+        
+        // join the array of lines to one socket message to return
+        return String.join("\n", lines);
+    }
+
+    /**
+    /**
+     * Returns the socket message representation of the given tick.
+     * 
+     * @param tick the snapshot of a tick to convert to a socket message.
+     * @return the socket message representation of the given tick.
+     * /
+    public static String createTickMessage(TickSnapshot tick) {
+        // check if the tick snapshot even exists
+        if (tick == null) {
+            return null;
+        }
+        double tickNum = tick.getTickNumber();
+        
+        // get the list of vehicles stored in the tick snapshot
+        Collection<Integer> vehicleIDs = tick.getVehicleList();
+        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
+            return null;
+        }
         
         // open the socket tick message by saying which tick this is
         ArrayList<String> lines = new ArrayList<String>();
         lines.add("TICK," + tickNum);
         
         // loop through the list of vehicles and convert each to a string
-        	for (String line : tick.createCSVTickLines()) {
-        		lines.add("V," + line);
-        	}
-//        for (Integer id : vehicleIDs) {
-//            if (id == null) {
-//                continue;
-//            }
-//            
-//            // retrieve the vehicle snapshot from the tick snapshot
-//            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
-//            if (vehicle == null) {
-//                continue;
-//            }
-//            
-//            // get the string representation of the vehicle
-//            String line = Connection.createVehicleMessage(vehicle);
-//            if (line == null) {
-//                continue;
-//            }
-//            
-//            // prepend the tick number, data type token, and add to array
-//            line = "V," + line;
-//            lines.add(line);
-//        }
+        for (Integer id : vehicleIDs) {
+            if (id == null) {
+                continue;
+            }
+            
+            // retrieve the vehicle snapshot from the tick snapshot
+            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
+            if (vehicle == null) {
+                continue;
+            }
+            
+            // get the string representation of the vehicle
+            String line = Connection.createVehicleMessage(vehicle);
+            if (line == null) {
+                continue;
+            }
+            
+            // prepend the tick number, data type token, and add to array
+            line = "V," + line;
+            lines.add(line);
+        }
 
         // HG: loop through the list of starting events and convert each to a string
         for (NetworkEventObject event : tick.getEventList().get(0)) {
@@ -517,6 +704,69 @@ public class Connection implements DataConsumer {
      * 
      * @param vehicle the snapshot of a vehicle to convert into a message.
      * @return the socket message representation of the given vehicle.
+     * /
+    public static String createVehicleMessage(VehicleSnapshot vehicle) {
+        // check if the vehicle snapshot even exists
+        if (vehicle == null) {
+            return null;
+        }
+        
+        // extract all the values from the vehicle snapshot
+        /*int id = vehicle.getId();
+        double prev_x = vehicle.getPrevX();
+        double prev_y = vehicle.getPrevY();
+        double x = vehicle.getX();
+        double y = vehicle.getY();
+        float speed = vehicle.getSpeed();
+        double originalX = vehicle.getOriginX();
+        double originalY = vehicle.getOriginY();
+        double destX = vehicle.getDestX();
+        double destY = vehicle.getDestY();
+        int nearlyArrived = vehicle.getNearlyArrived();
+        int vehicleClass = vehicle.getvehicleClass();
+        int roadID = vehicle.getRoadID();* /    
+        int id = vehicle.id;
+        double prev_x = vehicle.getPrevX();
+        double prev_y = vehicle.getPrevY();
+        double x = vehicle.getX();
+        double y = vehicle.getY();
+        float speed = vehicle.getSpeed();
+        double originalX = vehicle.getOriginX();
+        double originalY = vehicle.getOriginY();
+        double destX = vehicle.getDestX();
+        double destY = vehicle.getDestY();
+        int nearlyArrived = vehicle.getNearlyArrived();
+        int vehicleClass = vehicle.getvehicleClass();
+        int roadID = vehicle.getRoadID();
+        //int departure = vehicle.getDeparture();
+        //int arrival = vehicle.getArrival();
+        //float distance = vehicle.getDistance();
+
+        // put them together into a string for the socket and return it
+        return id + "," +
+        	   prev_x + "," +
+        	   prev_y + "," +
+               x + "," +
+               y + "," +
+               speed + "," +
+               originalX + "," +
+               originalY + "," +
+               destX + "," +
+               destY + "," +
+               nearlyArrived + "," +
+               vehicleClass + "," +      
+               roadID ;
+               //departure + "," +
+               //arrival + "," +
+               //distance + "," +
+    } */
+    
+    
+    /**
+     * Returns the socket message representation of the given vehicle.
+     * 
+     * @param vehicle the snapshot of a vehicle to convert into a message.
+     * @return the socket message representation of the given vehicle.
      */
     public static String createEventMessage(NetworkEventObject event) {
         // check if the event even exists
@@ -536,6 +786,55 @@ public class Connection implements DataConsumer {
         	eventID + "," +
         	roadID ;
     }
+    
+    
+    /**
+     * Returns the unique id value created for this copy of the model.  This
+     * value has been generated external to this program and inserted into
+     * the appropriate place in the model's data files so that it can be used
+     * at runtime to help the control program managing this model identify
+     * among all the connections it is handling which copy of the model is
+     * at the other end of each of these sockets.
+     * 
+     * @return the unique id value created for this copy of the model.
+     */
+    public String loadModelId() {
+    	String unknownId = "UNKNOWN";
+    	
+    	// get the path to the id file
+	    String modelIdPath = GlobalVariables.MODEL_ID_FILE;
+	    if (modelIdPath == null || modelIdPath.trim().length() < 1) {
+	    	// the config file does not contain the location of id file
+	    	return unknownId;
+	    }
+    	
+    	// load the contents of the id file
+	    File modelIdFile = new File(modelIdPath);
+	    if (!modelIdFile.isFile()) {
+	    	// the model id file does not actually exist where expected
+	    	return unknownId;
+	    }
+	    
+	    try {
+	        FileReader fr = new FileReader(modelIdFile);
+	        BufferedReader br = new BufferedReader(fr);
+	        String id = br.readLine();
+	        br.close();
+	        
+	        if (id == null || id.trim().length() < 1) {
+	        	// the file had no contents to read
+	        	return unknownId;
+	        }
+	        
+	        return id;
+	    }
+	    catch (Throwable t) {
+	    	// we were given a path to a valid file, but something went
+	    	// wrong trying to read the first line to get the id value
+	    	return unknownId;
+	    }    	
+    }
+    
       
     /**
      * This is the control portion of the body of the thread which runs
@@ -550,9 +849,9 @@ public class Connection implements DataConsumer {
         }
         
         @Override
-        public void run() {
+        public void run() {        	
             // wait for session to exist if it hasn't been created yet
-            while (session == null) {
+            while (socket == null) {
                 try {
                     Thread.sleep(GlobalVariables.NETWORK_BUFFER_RERESH);
                 }
@@ -650,25 +949,112 @@ public class Connection implements DataConsumer {
                 }
             }
             
+            ConnectionManager.printDebug(id + "-SEND", "SEND THREAD EXITING");
+            
             // TODO: handle any post-consuming cleanup tasks for the thread
             
             // set the data consumption flags as finished
             Connection.this.paused = false;
             Connection.this.consuming = false;
+            
+            // halt the status and receiving threads
+            // TODO: find a better place to perform this step?
+            Thread heartbeatThread = Connection.this.heartbeatThread;
+            Thread receivingThread = Connection.this.receivingThread;
+            try {
+                if (heartbeatThread != null && heartbeatThread.isAlive()) {
+                	heartbeatThread.interrupt();
+                }
+                
+                if (receivingThread != null && receivingThread.isAlive()) {
+                	receivingThread.interrupt();
+                }
+            }
+            catch (Throwable t) {
+            	// couldn't stop the threads for some reason
+            }
+            
+            // close the underlying socket now that the threads have halted
+            try {
+            	Thread.sleep(5000);
+                Connection.this.socket.disconnect();
+            }
+            catch (Throwable t) {
+            	// couldn't stop the underlying socket for some reason
+            }
         }
     } //class SendingRunnable
     
     
+    
     /**
      * This is the body of a thread which runs periodically while the
-     * connection is open and sends "pings" to the remote program just
-     * to keep the socket connection open and preventing it from closing
-     * due to any kind of a timeout either within the jetty library or
-     * some other layer of network stack outside Java which may detect
-     * the connection as dormant.
-     * 
-     * This could also be a mechanism in the future for sending automatic
-     * periodic general status updates about the state of the simulation. 
+     * connection is open and reads from the underlying MessageSocket
+     * queue of incoming data to process messages that have been
+     * received from the remote host.
+     */
+    public class ReceivingRunnable implements Runnable {
+    	
+    	public ReceivingRunnable() {
+    		ConnectionManager.printDebug(id + "-CTRL",
+    				                     "Created receiving thread.");
+    	}
+    	
+    	@Override
+    	public void run() {
+    		// this is the milliseconds to wait between queue checks
+    		int delay = 500;
+    		
+    		// wait for the initial socket connection to be established
+    		while (socket == null) {
+    			try {
+    				Thread.sleep(delay);
+    			}
+    			catch (InterruptedException ie) {
+    				// we have received the signal to shut down thread
+    				return;
+    			}
+    		}
+    		
+    		// now that the connection is established, we need to loop
+    		// as long as it is still open and while it still has more
+    		// messages to process, reading each one and delivering to
+    		// the appropriate section of code for handling the message
+    		while (!socket.isDone()) {
+    			try {
+    				// read all the messages waiting in the queue
+    				while (socket.hasNext()) {
+    					String[] message = socket.nextMessage();
+    					if (message == null) { break; }
+    					
+    					// process the message
+    					onMessage(String.join("\n", message));
+    				}
+    				
+    				// wait a bit before checking for more messages
+    				Thread.sleep(delay);
+    			}
+    			catch (InterruptedException ie) {
+    				// the message reading thread has been told to stop
+    				return;
+    			}
+    			catch (Throwable t) {
+    				// an error occurred processing incoming messages
+    				ConnectionManager.printDebug("ERR", t.getMessage());
+    			}
+    		}
+    	}
+    }
+    
+    
+    /**
+     * This is the body of a thread which runs periodically while the
+     * connection is open and sends "pings" in the form of overall status 
+     * updates about the model to the remote program just to keep the socket
+     * connection open and preventing it from closing due to any kind of an
+     * idle timeout in the network library implementation at either end.  It
+     * also allows for detection of the connection having closed prematurely,
+     * which the Java libraries are not good at noticing natively.
      */
     private class HeartbeatRunnable implements Runnable {
         
@@ -678,9 +1064,13 @@ public class Connection implements DataConsumer {
         }
         
         @Override
+        @SuppressWarnings("unused")
         public void run() {
+            int count = 0;
+            boolean hasStarted = false;
+            
             // wait for session to exist if it hasn't been created yet
-            while (session == null) {
+            while (socket == null) {
                 try {
                     Thread.sleep(GlobalVariables.NETWORK_STATUS_REFRESH);
                 }
@@ -692,7 +1082,7 @@ public class Connection implements DataConsumer {
             }
             
             // loop as long as session is open and periodically send a message
-            while (session.isOpen()) {
+            while (socket.isOpen()) {
                 // wait a bit before firing off another ping message
                 try {
                     Thread.sleep(GlobalVariables.NETWORK_STATUS_REFRESH);
@@ -718,6 +1108,7 @@ public class Connection implements DataConsumer {
                         
                         if (schedule != null) {
                             double tick = schedule.getTickCount();
+                            hasStarted = true;
                             
                             if (tick < 0.0) {
                                 // the model is still initializing
@@ -732,7 +1123,22 @@ public class Connection implements DataConsumer {
                     // send the status message over the socket
                     String message = "STATUS," +
                             (new java.util.Date()).toString() + "\n" + state;
-                    session.getRemote().sendString(message);
+                    socket.send(new String[] { message });
+
+                    
+                    // check if the simulation has finished.  we could have checked
+                    // this first, but we will do it last to give a chance so that we 
+                    // will have sent one final status message with the end tick #.
+                    /*if (hasStarted &&
+                        !Connection.this.paused &&
+                        !Connection.this.consuming) {
+
+                    	String finalMessage = "STATUS," +
+                                (new java.util.Date()).toString() + "\n" + "FInished";
+                    	socket.send(new String[] { finalMessage } );
+                    	break;
+                    }*/
+
                 }
                 catch (IOException ioe) {
                     ConnectionManager.printDebug(id + "-ERR", 
@@ -742,6 +1148,8 @@ public class Connection implements DataConsumer {
                     ConnectionManager.printDebug(id + "-ERR", t.getMessage());
                 }
             }
+            
+            ConnectionManager.printDebug(id + "-SEND", "HEARTBEAT THREAD EXITING");
         }
     } //class HeartbeatRunnable
     

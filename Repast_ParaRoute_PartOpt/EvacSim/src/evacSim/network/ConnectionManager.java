@@ -3,11 +3,6 @@ package evacSim.network;
 
 import java.util.Vector;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
-import org.eclipse.jetty.websocket.server.WebSocketHandler;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-
 import evacSim.GlobalVariables;
 
 
@@ -29,13 +24,8 @@ public class ConnectionManager {
     /** This instance is the only connection manager object in the system. */
     private static ConnectionManager instance;
     
-    
-    /** The server which listens for incoming sockets to create. */
-    private Server server;
-    
     /** The list of connections currently open in the system. */
-    @SuppressWarnings("unused")
-	private Vector<Connection> connections;
+    private Vector<Connection> connections;
         
     // TODO: Pick a permanent port number for the socket to use for listening.
     // This temporary value (33131) is the zip-code of downtown Miami.  Jetty
@@ -64,7 +54,7 @@ public class ConnectionManager {
                 @Override
                 public void run() {
                     try { Thread.sleep(5000); } catch (Throwable t) { }
-                    ConnectionManager.this.startServer();
+                    ConnectionManager.this.startGatewayConnection();
                 }
             };
             Thread startThread = new Thread(startRunnable);
@@ -88,11 +78,75 @@ public class ConnectionManager {
     
     
     /**
+     * This method starts the custom messaging protocol socket connection to the
+     * EvacSim gateway control program so this instance of the model can report
+     * its status to remote users and receive commands from them.
+     */
+    public void startGatewayConnection() {
+    	// the connection details for the gateway as provided by config file
+    	String gwAddr = GlobalVariables.GATEWAY_ADDRESS;
+        int gwPort = GlobalVariables.GATEWAY_PORT;
+        
+        // create a connection using these details
+    	try {
+    		this.addConnection(gwAddr, gwPort);
+    	}
+    	catch (Throwable t) {
+    		// Something went wrong creating the network connection
+    		// TODO: handle the gateway connection error
+    		ConnectionManager.printDebug("ERR", t.getMessage());
+    		return;
+    	}    	
+    }
+    
+    
+    /**
+     * Creates a connection to the specified remote system and adds it to
+     * the list of all open connections.
+     * 
+     * @param address the address to the remote host being contacted.
+     * @param port the port of the remote host where connections are accepted.
+     * 
+     * @throws IllegalArgumentException if connection details are not valid.
+     */
+    public void addConnection(String address, int port) {
+    	// verify the address and port given are valid
+    	if (address == null || address.trim().length() < 1) {
+    		throw new IllegalArgumentException("No remote host specified.");
+    	}
+        if (port < 1 || port > 65535) {
+        	throw new IllegalArgumentException("The port given is invalid.");
+        }
+        
+        // attempt to create the connection object
+        Connection connection = new Connection(address, port);
+        
+        // add the connection to the list of open connections
+        this.connections.add(connection);
+        
+        // attempt to open the connection
+        Runnable r = new Runnable() {
+        	@Override
+        	public void run() {
+        		try {
+        		  connection.open();
+        		}
+        		catch (Throwable t) {
+        			// TODO: handle gateway connection errors
+        		}
+        	}
+        };
+        Thread t = new Thread(r);
+        t.start();
+    }
+    
+    
+    /**
      * This method starts the WebSocket server on the listening port to
      * create new connection objects for incoming requests from remote
      * listening programs.  If the server is already accepting incoming
      * connections, this method will do nothing to alter it.
-     */
+     *
     public void startServer() {
         if (this.server != null) {
             // the server already exists so check if it is running
@@ -167,14 +221,14 @@ public class ConnectionManager {
             ConnectionManager.printDebug("ERR", e.getMessage());
         }
     }
-    
+    */
     
     /**
      * This method will stop the server from accepting new incoming socket
      * connections and dispose of it, if it is already running or will be
      * running soon.  If the server is already stopped or failed, this
      * method will do nothing but dispose of the server object.
-     */
+     *
     public void stopServer() {
         // check the server object exists
         if (this.server == null) {
@@ -223,6 +277,7 @@ public class ConnectionManager {
             }
         }
     }
+    */
     
     
     /**

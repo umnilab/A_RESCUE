@@ -362,6 +362,10 @@ public class GlobalVariables {
 	        Integer.valueOf(loadConfig("NETWORK_LISTEN_PORT"));
 	public static final int NETWORK_MAX_MESSAGE_SIZE =
 	        Integer.valueOf(loadConfig("NETWORK_MAX_MESSAGE_SIZE"));
+    public static final int GATEWAY_PORT =
+            Integer.valueOf(loadConfig("GATEWAY_PORT"));
+    public static final String GATEWAY_ADDRESS = loadConfig("GATEWAY_ADDRESS");
+    public static final String MODEL_ID_FILE = loadConfig("MODEL_ID_FILE");
 	
 	/* HG: Parameter to determine how frequently (in terms of ticks) we
 	 * should separately record the snapshot (for visualization interpolation
