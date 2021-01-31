@@ -139,13 +139,15 @@ public class Vehicle {
 
 	// Create a lock variable, this is to enforce concurrency within vehicle update computation
 	//	private ReentrantLock lock;
-	// LZ, number of times the vehicle get stuck
+	// LZ: number of times the vehicle get stuck
 	protected int stuck_time = 0;
-	// LZ, whether the vehicle has been moved
+	// LZ: whether the vehicle has been moved
 	protected boolean movingFlag = false; 
-	// LZ, record when and where the vehicle enters each link, and store it whenever the vehicle is arrived
+	// LZ: record when and where the vehicle enters each link, and store it whenever the vehicle is arrived
 	protected ArrayList<Integer> linkHistory;
     protected ArrayList<Integer> linkTimeHistory;
+    // LZ: current index (rank) of the segments
+    protected int rank_ = 0;
 	
 	public Vehicle(House h) {
 		this.id = ContextCreator.generateAgentID();
@@ -513,9 +515,11 @@ public class Vehicle {
 			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2;
 			
 			double[] distAndAngle = new double[2];
+			this.rank_ = 0;
 			// LZ: replace previous vehicle movement function
 			// the first element is the distance, and the second is the radius
-			this.distance2(this.getCurrentCoord(), this.coordMap.get(0), distAndAngle);
+			plane.getSetgmentLength(this.rank_, distAndAngle);
+			// this.distance2(this.getCurrentCoord(), this.coordMap.get(0), distAndAngle);
 			this.nextDistance_ = distAndAngle[0];
 			this.setBearing(distAndAngle[1]);
 		} 
@@ -547,7 +551,8 @@ public class Vehicle {
 			accDist-=distance(coords[i], coords[i+1]);
 			if (this.distance_ >= accDist) { // Find the first pt in CoordMap that has smaller distance;
 				double[] distAndAngle = new double[2];
-				distance2(coords[i], coords[i+1], distAndAngle);
+				this.rank_ = i;
+				lane.getSetgmentLength(this.rank_, distAndAngle);
 				move2(coords[i], coords[i+1], distAndAngle[0], distAndAngle[0] - (this.distance_- accDist)); // Update vehicle location
 				this.nextDistance_ = distAndAngle[0] - (this.distance_- accDist);
 				this.setBearing(distAndAngle[1]);
@@ -559,7 +564,8 @@ public class Vehicle {
 		}
 		if (coordMap.size() == 0) { // perhaps when $this is too close to a junction
 			double[] distAndAngle = new double[2];
-			distance2(coords[coords.length-2], coords[coords.length-1], distAndAngle);
+			this.rank_ = lane.getSegmentNum()-1;
+			lane.getSetgmentLength(this.rank_, distAndAngle);
 			move2(coords[coords.length-2], coords[coords.length-1], distAndAngle[0], distAndAngle[0] - this.distance_); // Update vehicle location
 			this.nextDistance_ = distAndAngle[0] - this.distance_;
 			this.setBearing(distAndAngle[1]);
@@ -1039,6 +1045,7 @@ public class Vehicle {
 				 * .distance_ <= 0), therefore, use a intersection buffer（see
 				 * the changeRoad block above) */
 				this.coordMap.remove(0);
+				this.rank_+=1;
 				if (this.coordMap.isEmpty()) { // this is close to intersection
 					if (this.nextRoad() != null) { // has a next road
 						if (this.isOnLane()) { // is still on the road
@@ -1069,7 +1076,7 @@ public class Vehicle {
 				}
 				else{
 					currentCoord = this.getCurrentCoord();
-					this.distance2(currentCoord, this.coordMap.get(0), distAndAngle);
+					this.getLane().getSetgmentLength(this.rank_, distAndAngle);
 					this.nextDistance_ = distAndAngle[0];
 					this.setBearing(distAndAngle[1]);
 				}

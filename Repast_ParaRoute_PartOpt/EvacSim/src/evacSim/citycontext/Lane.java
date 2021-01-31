@@ -52,6 +52,12 @@ public class Lane {
 	private int index;
 	
 	private int lastEnterTick = -1; //LZ: Store the latest enter time of vehicles
+	
+	private ArrayList<Double> segments_ = new ArrayList<Double>(); //LZ: Store the length of each line segment
+	
+	private ArrayList<Double> angles_ = new ArrayList<Double>(); //LZ: Store the angle of each line segment
+	
+	private int segmentNum_ = 0; // Number of line segments
 
 	public Lane() {
 		this.id = ContextCreator.generateAgentID();
@@ -281,6 +287,42 @@ public class Lane {
 	public int index() {
 		return this.index;
 	}
+	
+	// Set the length for new segment
+	public void setSegmentLength(double slength, double angle){
+		this.segments_.add(slength);
+		this.angles_.add(angle);
+		this.segmentNum_ += 1;
+	}
+	
+	// Get the length for the rank-th segment
+	public double getSetgmentLength(int rank, double[] returnVals){
+		if(rank<this.segmentNum_){
+			if (returnVals != null && returnVals.length == 2) {
+				returnVals[0] = this.segments_.get(rank);
+				returnVals[1] = this.angles_.get(rank);
+			}
+			return this.segments_.get(rank);
+		}
+		else if(rank == this.segmentNum_){ // For the last dummy segment (endpt to endpt)
+			if (returnVals != null && returnVals.length == 2) {
+				returnVals[0] = 0;
+				returnVals[1] = this.angles_.get(this.angles_.size()-1);
+			}
+			return 0;
+		}
+		else{
+			logger.warn("This rank is incorrect, the rank is " + rank + ", but the total number of segments is "+ this.segmentNum_);
+			return 0;
+		}
+	}
+	
+	// Get num of segments
+	public int getSegmentNum(){
+		return this.segmentNum_;
+	}
+	
+	/*---Functions for vehicles----*/
 
 	// Return number of vehicles
 	public int nVehicles() {
