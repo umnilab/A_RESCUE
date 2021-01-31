@@ -121,15 +121,12 @@ public class ContextCreator implements ContextBuilder<Object> {
 		}
 		// debug ends
 		
-		// Calculate length directly from lane's geometry, todo: move this function into Lane class
+		// Check if link length and geometry are consistent, fix the inconsistency if there is.
 		for(Lane lane: ContextCreator.getLaneGeography().getAllObjects()){
 			Coordinate[] coords = ContextCreator.getLaneGeography().getGeometry(lane).getCoordinates();
 			double distance = 0;
 			for (int i = 0; i < coords.length - 1; i++) {
-				double[] distAndAngle = new double[2];
-				distance2(coords[i], coords[i + 1], distAndAngle);
-				distance += distAndAngle[0];
-				lane.setSegmentLength(distAndAngle[0], distAndAngle[1]);
+				distance += getDistance(coords[i], coords[i + 1]);
 			}
 			lane.setLength(distance);
 		}
@@ -392,34 +389,22 @@ public class ContextCreator implements ContextBuilder<Object> {
 		return distInMeters;
 	}
 	
-	private double distance2(Coordinate c1, Coordinate c2, double[] returnVals) {
-		double distance;
-		double radius;
+	private double getDistance(Coordinate c1, Coordinate c2) {
+		// GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
+		// .getRoadGeography().getCRS());
 		GeodeticCalculator calculator = new GeodeticCalculator(ContextCreator
 				.getLaneGeography().getCRS());
 		calculator.setStartingGeographicPoint(c1.x, c1.y);
 		calculator.setDestinationGeographicPoint(c2.x, c2.y);
+		double distance;
 		try {
 			distance = calculator.getOrthodromicDistance();
-			radius = calculator.getAzimuth(); // the azimuth in degree, value from -180-180
-		} catch (AssertionError e) {
-			logger.error("Error with finding distance: " + e);
+		} catch (AssertionError ex) {
+			logger.error("Error with finding distance");
 			distance = 0.0;
-			radius = 0.0;
-		}
-		if (returnVals != null && returnVals.length == 2) {
-			returnVals[0] = distance;
-			returnVals[1] = radius;
-		}
-		if (Double.isNaN(distance)) {
-			// RV: Check if this condition ever occurs
-			logger.error("Geodetic distance is NaN for " + this);
-			distance = 0.0;
-			radius = 0.0;
 		}
 		return distance;
 	}
-
 	
 	/**
 	 * LZ,RV: Create a logger for vehicle attributes during data collection
