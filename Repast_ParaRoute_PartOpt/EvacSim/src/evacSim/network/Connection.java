@@ -1,6 +1,7 @@
 package evacSim.network;
 
 
+import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.NetworkEventObject;
 import evacSim.data.DataCollector;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.essentials.RepastEssentials;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -87,6 +90,10 @@ public class Connection implements DataConsumer {
     private double currentTick;
     
     
+    /** The console logging system used across the whole simulation. */
+    private Logger logger;
+    
+    
     /**
      * Performs any preparation needed for this object to be ready to
      * receive a new socket connection and begin processing the data in
@@ -96,6 +103,9 @@ public class Connection implements DataConsumer {
      * @param port the port at which the remote host accepts connections.
      */
     public Connection(String host, int port) {
+    	// Get a reference to the system-wide logging system
+    	this.logger = ContextCreator.logger;
+    	
     	// check the given host and port are valid
     	if (host == null || host.trim().length() < 1) {
     	   throw new IllegalArgumentException("Host address not specified.");
@@ -430,11 +440,11 @@ public class Connection implements DataConsumer {
         		GlobalVariables.SIMULATION_SLEEPS = 1;
         	}catch (NumberFormatException nfe) {
                 // one of the values is malformed during parsing
-                System.out.println(nfe);
+                logger.error("ERROR IN RECEIVED NETWORK DATA", nfe);
             }
             catch (Throwable t) {
                 // something went wrong creating the snapshot object
-            	System.out.println(t);
+            	logger.error("ERROR IN RECEIVED NETWORK DATA", t);
             }
         }
         else if (message.startsWith(EVENT_MSG)){
@@ -453,16 +463,16 @@ public class Connection implements DataConsumer {
         		}
         	}catch (NumberFormatException nfe) {
                 // one of the values is malformed during parsing
-                System.out.println(nfe);
+                logger.error("ERROR IN PARSING EVENT NETWORK MESSAGE", nfe);
             }
             catch (Throwable t) {
                 // something went wrong creating the snapshot object
-            	System.out.println(t);
+            	logger.error("ERROR CREATING EVENT SNAPSHOT FOR NETWORK", t);
             }
             
         }
         else{
-        	System.out.print("Unknown Information");
+        	logger.error("Unknown Information");
         }
 
     }

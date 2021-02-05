@@ -310,7 +310,7 @@ public class ConnectionManager {
             }
             debugMessage += ">> " + msg;
             
-            System.out.println(debugMessage);
+            evacSim.ContextCreator.logger.debug(debugMessage);
         }
     }
     

@@ -16,6 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
+import evacSim.ContextCreator;
+
 
 /**
  * evacSim.network.MessageSocket
@@ -96,6 +100,10 @@ class MessageSocket {
   /** Whether or not to utilize a heartbeat thread for the connection. */
   private boolean keepAlive;
 
+  
+  /** The console logging system used by the simulation. */
+  private Logger logger;
+
 
 
   /**
@@ -112,6 +120,9 @@ class MessageSocket {
    * @throws IllegalArgumentException if the connection details were not valid.
    */
   MessageSocket(String host, int port, boolean keepAlive) {
+	// retrieve a reference to the system-wide logging system
+	this.logger = ContextCreator.logger;
+	
     // check the validity of the remote host and port, then save these values
     if (host.trim().length() < 1) {
       // if the host string is empty, change it to null so that
@@ -478,8 +489,7 @@ class MessageSocket {
       catch (IOException ioe) {
         // an exception was thrown while trying to read from the socket
         // TODO: handle the socket error states
-        System.out.println("SOCKET READ ERROR!");
-        ioe.printStackTrace();
+        logger.error("SOCKET READ ERROR!", ioe);
       }
 
       // take a brief pass in reading so that this class doesn't block the
@@ -528,8 +538,7 @@ class MessageSocket {
       }
       catch (IOException ioe) {
         // TODO: handle the send error!
-        System.out.println("HEARTBEAT SENDING ERROR");
-        ioe.printStackTrace();
+        logger.error("HEARTBEAT SENDING ERROR", ioe);
 
         this.done = true;
       }
