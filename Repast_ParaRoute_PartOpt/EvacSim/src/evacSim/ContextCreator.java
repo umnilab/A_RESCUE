@@ -298,7 +298,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 		int nGenerated = GlobalVariables.NUM_GENERATED_VEHICLES;
 		int nDestroyed = GlobalVariables.NUM_KILLED_VEHICLES;
 		int nHouses = GlobalVariables.NUM_HOUSES;
-		if ((nGenerated >= nHouses-1) & (nGenerated <= nDestroyed)) {
+		if ((nGenerated >= nHouses-1) && (nGenerated <= nDestroyed) && 
+				(RunEnvironment.getInstance().getCurrentSchedule().getTickCount()>GlobalVariables.DEMAND_MAX_TICK)) {
 			ISchedule sched = RunEnvironment.getInstance().getCurrentSchedule();
 			sched.setFinishing(true);
 			sched.executeEndActions();
