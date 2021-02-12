@@ -17,7 +17,7 @@ import java.util.*;
 public class BackgroundTraffic{
 	public static TreeMap<Integer,ArrayList<Float>> backgroundTraffic;
 	// no. of hours in the demand file
-	public static int numHours = 78;
+	public static int numHours = GlobalVariables.HOUR_OF_SPEED;
 	
 	//initialize everything
 	public BackgroundTraffic(){

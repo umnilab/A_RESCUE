@@ -461,4 +461,5 @@ public class GlobalVariables {
 	public static final int MAX_STUCK_TIME2 = Integer.valueOf(loadConfig("MAX_STUCK_TIME2"));
 	public static final int REROUTE_FREQ = Integer.valueOf(loadConfig("REROUTE_FREQ"));
 	public static final int DEMAND_MAX_TICK = Integer.valueOf(loadConfig("DEMAND_MAX_TICK"));
+	public static final int HOUR_OF_SPEED = Integer.valueOf(loadConfig("HOUR_OF_SPEED"));
 }
