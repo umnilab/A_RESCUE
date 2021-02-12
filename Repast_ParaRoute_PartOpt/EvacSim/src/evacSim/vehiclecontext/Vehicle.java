@@ -59,7 +59,6 @@ public class Vehicle {
 	// distance from the start point of next line segment
 	private double nextDistance_;
 	
-	
 	private float currentSpeed_;
 	private double accRate_;
 	private double bearing_;
@@ -1010,7 +1009,9 @@ public class Vehicle {
 			accRate_ = (float) ((currentSpeed_ - oldv) / step);
 		}
 		if (dx < 0.0f) { // negative dx is not allowed
-			dx = 0.0;
+			lastStepMove_ = 0;
+			this.movingFlag = false;
+			return;
 		}
 
 		/* Check if the vehicle's dx is under some threshold, i.e. it
@@ -1196,15 +1197,15 @@ public class Vehicle {
 					this.currentSpeed_ = this.road.getFreeSpeed();
 				return 1;
 			}
-			// this vehicle has been stuck for more than 2 minutes, if both of the followings does not work, then failed vehicle number +=1
+			// this vehicle has been stuck for more than 5 minutes, if both of the followings does not work, then failed vehicle number +=1
 			else if (this.stuck_time > GlobalVariables.MAX_STUCK_TIME) {
-				if(this.stuck_time <= GlobalVariables.MAX_STUCK_TIME2){ // Wait for more than 2 minutes but less than 10 minutes, reroute itself
+				if((this.stuck_time <= GlobalVariables.MAX_STUCK_TIME2) && (tickcount % (int)(GlobalVariables.REROUTE_FREQ/GlobalVariables.SIMULATION_STEP_SIZE))==0){ // Wait for more than 5 but less than 60 minutes, reroute itself every 1 minutes
 					this.lastRouteTime = -1; //old route is not valid 
 					this.setNextRoad();
 					this.assignNextLane();
 				}
 				else{
-					for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 10 minutes, go to the connected empty lane and reroute itself.
+					for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 60 minutes, go to the connected empty lane and reroute itself.
 						if (this.entranceGap(dnlane) >= 1.2*this.length() && (tickcount > dnlane.getLastEnterTick())) {
 							dnlane.updateLastEnterTick(tickcount);
 							this.removeFromLane();
@@ -1218,11 +1219,7 @@ public class Vehicle {
 							this.setNextRoad();
 							this.assignNextLane();
 							this.desiredSpeed_ = this.road.getFreeSpeed();
-							// HG: Need to update current speed according to the
-							// new free speed
-							// LZ: Use current speed instead of the free speed,
-							// be
-							// consistent with the setting in enteringNetwork
+							// LZ: Use current speed instead of the free speed, be consistent with the setting in enteringNetwork
 							if (this.currentSpeed_ > this.road.getFreeSpeed())
 								this.currentSpeed_ = this.road.getFreeSpeed();
 							return 1;
