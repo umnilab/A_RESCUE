@@ -21,7 +21,7 @@ public class Lane {
 	private int left;
 	private int through;
 	private int right;
-	private double length;
+	private float length;
 
 	private Road road_; // SH: The Road for which this lane belongs to
 	private int nVehicles_; // SH: number of vehicle in the lane //
@@ -82,11 +82,11 @@ public class Lane {
 		this.laneid = laneid;
 	}
 
-	public void setLength(double length) {
+	public void setLength(float length) {
 		this.length = length;
 	}
 
-	public double getLength() {
+	public float getLength() {
 		return length;
 	}
 	

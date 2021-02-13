@@ -83,9 +83,9 @@ public class VehicleRouting {
 	
 	/* Perform the routing computation */
 	/* Xue: Oct 2019, change the return type to HashMap, where the double value is the route time, and the list<Road> is the path */
-	public Map<Double,Queue<Road>> computeRoute(Road currentRoad, Road destRoad,  
+	public Map<Float, Queue<Road>> computeRoute(Road currentRoad, Road destRoad,  
 			Junction currJunc, Junction destJunc) {
-		Map<Double, Queue<Road>> computeRouteResult = new HashMap<Double,Queue<Road>>();  
+		Map<Float, Queue<Road>> computeRouteResult = new HashMap<Float,Queue<Road>>();  
 		Queue<Road> roadPath_;
 		List<RepastEdge<Junction>> shortestPath;
 		shortestPath = null;
@@ -160,7 +160,7 @@ public class VehicleRouting {
 //			}
 		}
 		// Find the roads which are associated with these edges
-		double shortestPathLength = 0.0f;
+		Float shortestPathLength = 0.0f;
 		roadPath_ = new ArrayDeque<Road>();
 		roadPath_.add(currentRoad);
 		for (RepastEdge<Junction> edge : shortestPath) {
@@ -168,7 +168,7 @@ public class VehicleRouting {
 			Road road = cityContext.findRoadWithLinkID(linkID);
 //			logger.info("linkID: " + linkID + " Path-" + road.getID());
 			roadPath_.offer(road);
-			shortestPathLength = shortestPathLength + edge.getWeight();
+			shortestPathLength = (float) (shortestPathLength + edge.getWeight());
 		}
 //		shortestPath = null;
 		computeRouteResult.put(shortestPathLength, roadPath_);      

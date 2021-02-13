@@ -83,7 +83,7 @@ public class RouteV {
 	 * @author LZ,RV: added the parameter "checkZone" which makes the function work
 	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter()
 	 * */
-	public static Map<Double,Queue<Road>> vehicleRoute(Vehicle veh,
+	public static Map<Float, Queue<Road>> vehicleRoute(Vehicle veh,
 			Zone destZone) throws Exception {
 
 		// Find origin and destination junctions & resolving their road segments
@@ -106,8 +106,8 @@ public class RouteV {
 				logger.info("Destination road reached " + destRoad.getLinkid()
 					+ " from current road: " + currentRoad.getLinkid());
 			}
-			Map<Double, Queue<Road>> empty = new HashMap<Double, Queue<Road>>();
-			empty.put(0.0, new ArrayDeque<Road>());
+			Map<Float, Queue<Road>> empty = new HashMap<Float, Queue<Road>>();
+			empty.put(0.0f, new ArrayDeque<Road>());
 // =======
 // 		if (curDownJunc.getID() == destDownJunc.getID() || (currentRoad.getLinkid()==104819 || currentRoad.getLinkid()==101235)) {
 // //			logger.info("Destination road reached " + destRoad.getLinkid()
@@ -127,7 +127,7 @@ public class RouteV {
 	 * RV: Normal shortest route between any two points at current time;
 	 * needed for shortest path between zones without involvement of any vehicle
 	 * */
-	public static Map<Double, Queue<Road>> nonVehicleRouting(
+	public static Map<Float, Queue<Road>> nonVehicleRouting(
 			Coordinate origCoord, Coordinate destCoord) {
 		// resolve the nearest roads & their downstream junctions
 		Road origRoad = cityContext.findRoadAtCoordinates(origCoord);

@@ -42,8 +42,8 @@ public class Vehicle_predefinedroutes extends Vehicle {
 					// Check if the current lane connects to the next road in the new path
 					// List<Road> tempPath = RouteV.vehicleRoute(this, this.destCoord); //
 					
-					Map<Double, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);  //return the HashMap
-					Entry<Double, Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 //get the entry
+					Map<Float, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);  //return the HashMap
+					Entry<Float, Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 //get the entry
 					Queue<Road> tempPath = entry.getValue(); //get the path
 					Iterator<Road> iter = tempPath.iterator();
 					iter.next();
@@ -99,8 +99,8 @@ public class Vehicle_predefinedroutes extends Vehicle {
 				this.clearShadowImpact();
 				// Compute new route
 				// this.roadPath = RouteV.vehicleRoute(this, this.destCoord);	  //
-				Map<Double,Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);  //get the HashMap
-				Map.Entry<Double,Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 //get the entry
+				Map<Float, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);  //get the HashMap
+				Entry<Float, Queue<Road>> entry = tempPathMap.entrySet().iterator().next();	 //get the entry
 				Queue<Road> tempPath = entry.getValue(); //get the value
 				this.roadPath = tempPath;  //get the path
 				

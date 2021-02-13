@@ -137,11 +137,11 @@ public class GlobalVariables {
 			.valueOf(loadConfig("SIMULATION_INTERVAL_SIZE"));
 	public static final int SIMULATION_STOP_TIME = Integer
 			.valueOf(loadConfig("SIMULATION_STOP_TIME"));
-	public static final double TRAVEL_PER_TURN = Double
+	public static final float TRAVEL_PER_TURN = Float
 			.valueOf(loadConfig("TRAVEL_PER_TURN"));
 	/* RV: if change in lat/lon of vehicle per turn is less than this, make it zero
 	 * this is useful to overcome the precision error in GeodeticCalculator */
-	public static final double MIN_DX_DY_PER_TURN = Double
+	public static final double MIN_DX_DY_PER_TURN = Float
 			.valueOf(loadConfig("MIN_DX_DY_PER_TURN"));
 	
 	/* RV: Stop the simulation if all vehicles have been killed */
@@ -187,9 +187,9 @@ public class GlobalVariables {
 	public static final float MIN_UTURN_LENGTH = Float
 			.valueOf(loadConfig("MIN_UTURN_LENGTH")); //meters
 
-	public static final double SPEED_EPSILON = Double
+	public static final float SPEED_EPSILON = Float
 			.valueOf(loadConfig("SPEED_EPSILON")); // meter/sec
-	public static final double ACC_EPSILON = Double
+	public static final float ACC_EPSILON = Float
 			.valueOf(loadConfig("ACC_EPSILON")); // meter/sec2
 
 	public static final float LANE_WIDTH = Float
@@ -236,24 +236,24 @@ public class GlobalVariables {
 	/* BL: Following are parameters used in lane changing model */
 	// public static final double minLead = 0.914; //(m/sec)
 	// public static final double minLag = 1.524; //(m/sec)
-	public static final double minLead = 3.0; // (m/sec)
-	public static final double minLag = 5.0; // (m/sec)
+	public static final float minLead = 3.0f; // (m/sec)
+	public static final float minLag = 5.0f; // (m/sec)
 
 	/* Parameters for MLC */
-	public static final double betaLeadMLC01 = 0.05;
-	public static final double betaLeadMLC02 = 0.15;
-	public static final double betaLagMLC01 = 0.15;
-	public static final double betaLagMLC02 = 0.40;
-	public static final double gama = 2.5e-5;
-	public static final double critDisFraction = 0.6;
+	public static final float betaLeadMLC01 = 0.05f;
+	public static final float betaLeadMLC02 = 0.15f;
+	public static final float betaLagMLC01 = 0.15f;
+	public static final float betaLagMLC02 = 0.40f;
+	public static final float gama = 2.5e-5f;
+	public static final float critDisFraction = 0.6f;
 
 	/* Parameters for DLC */
-	public static final double betaLeadDLC01 = 0.05;
-	public static final double betaLeadDLC02 = 0.15;
-	public static final double betaLagDLC01 = 0.15;
-	public static final double betaLagDLC02 = 0.40;
-	public static final double minLeadDLC = 0.05;
-	public static final double minLagDLC = 0.05;
+	public static final float betaLeadDLC01 = 0.05f;
+	public static final float betaLeadDLC02 = 0.15f;
+	public static final float betaLagDLC01 = 0.15f;
+	public static final float betaLagDLC02 = 0.40f;
+	public static final float minLeadDLC = 0.05f;
+	public static final float minLagDLC = 0.05f;
 
 	public static final String DB_URL = String.valueOf(loadConfig("DB_URL"));
 
@@ -432,8 +432,8 @@ public class GlobalVariables {
 			.valueOf(loadConfig("MAX_DECELERATION_2")); // meter/sec2
 	
 	/* Parameters for adaptive routing */
-	public static final double ETA = Double.valueOf(loadConfig("ETA"));
-	public static final double TAU  = Double.valueOf(loadConfig("TAU"));
+	public static final float ETA = Float.valueOf(loadConfig("ETA"));
+	public static final float TAU  = Float.valueOf(loadConfig("TAU"));
 	
 	/* LZ,RV: Dynamic destination strategy.
 	 * See CityContext.getClosestShelter() for details */

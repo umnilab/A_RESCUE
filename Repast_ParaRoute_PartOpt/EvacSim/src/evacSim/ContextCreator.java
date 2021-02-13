@@ -124,7 +124,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		// Check if link length and geometry are consistent, fix the inconsistency if there is.
 		for(Lane lane: ContextCreator.getLaneGeography().getAllObjects()){
 			Coordinate[] coords = ContextCreator.getLaneGeography().getGeometry(lane).getCoordinates();
-			double distance = 0;
+			float distance = 0;
 			for (int i = 0; i < coords.length - 1; i++) {
 				distance += getDistance(coords[i], coords[i + 1]);
 			}

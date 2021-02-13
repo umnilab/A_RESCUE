@@ -653,7 +653,7 @@ public class CityContext extends DefaultContext<Object> {
 		int strategy = GlobalVariables.DYNAMIC_DEST_STRATEGY;
 		double minDist = Double.MAX_VALUE;
 		Zone nearestShelter = null;
-		Map<Double, Queue<Road>> currentPathPlusDist = null;
+		Map<Float, Queue<Road>> currentPathPlusDist = null;
 //		ArrayList<Integer> visitedShelterIds = new ArrayList<Integer>();
 		ArrayList<Zone> eligibleShelters = new ArrayList<Zone>();
 		
