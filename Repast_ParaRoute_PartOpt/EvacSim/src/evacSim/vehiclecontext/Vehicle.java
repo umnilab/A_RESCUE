@@ -741,11 +741,10 @@ public class Vehicle {
 	public float gapDistance(Vehicle front) {
 		float headwayDistance;
 		if (front != null) { // front = vehicle ahead	
-//			if (front.lane == null){ // front vehicle is being killed, ??
-//				headwayDistance = Float.MAX_VALUE;
-//			}
-			// if front vehicle is on the same lane as $this
-			if (this.lane.getID() == front.lane.getID()) {
+			if (front.lane == null){ // front vehicle is in the intersection
+				headwayDistance = this.distance_ - front.length();
+			}
+			else if (this.lane.getID() == front.lane.getID()) {// if front vehicle is on the same lane as $\this
 				headwayDistance = this.distance_ - front.distance()-front.length();
 				// if front vehicle is on different lane
 			} else {
