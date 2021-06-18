@@ -84,6 +84,8 @@ public class GlobalVariables {
 	public static final String SHELTERS_CSV = loadConfig("SHELTERS_CSV");
 	
 	public static final String ACTIVITY_CSV = loadConfig("ACTIVITY_SEQ_CSV");
+	
+	public static final String MULTIPLE_DEMAND_CSV_DIR = loadConfig("MULTIPLE_DEMAND_CSV_DIR");
 
 	public static final String LOGGER_PROPERTIES = loadConfig("LOGGER_PROPERTIES");
 	
@@ -139,10 +141,6 @@ public class GlobalVariables {
 			.valueOf(loadConfig("SIMULATION_STOP_TIME"));
 	public static final float TRAVEL_PER_TURN = Float
 			.valueOf(loadConfig("TRAVEL_PER_TURN"));
-	/* RV: if change in lat/lon of vehicle per turn is less than this, make it zero
-	 * this is useful to overcome the precision error in GeodeticCalculator */
-	public static final double MIN_DX_DY_PER_TURN = Float
-			.valueOf(loadConfig("MIN_DX_DY_PER_TURN"));
 	
 	/* RV: Stop the simulation if all vehicles have been killed */
 	public static final boolean ENABLE_SIMULATION_STOP_IF_NO_VEHICLE =
@@ -152,12 +150,12 @@ public class GlobalVariables {
 	/* RV: no. of houses in the demand file; used to check when to stop the simulation */
 	public static int NUM_HOUSES = 0;
 
-	public static final int Global_Vehicle_ID = Integer
-			.valueOf(loadConfig("Global_Vehicle_ID"));
-	public static final int Global_Road_ID = Integer
-			.valueOf(loadConfig("Global_Road_ID"));
-	public static final boolean Debug_On_Road = Boolean
-			.valueOf(loadConfig("Debug_On_Road"));
+	public static final int GLOBAL_VEHICLE_ID = Integer
+			.valueOf(loadConfig("GLOBAL_VEHICLE_ID"));
+	public static final int GLOBAL_ROAD_ID = Integer
+			.valueOf(loadConfig("GLOBAL_ROAD_ID"));
+	public static final boolean DEBUG_ON_ROAD = Boolean
+			.valueOf(loadConfig("DEBUG_ON_ROAD"));
 
 	/* used in CityContext.getRoadAtCoords() */
 	public static final double XXXX_BUFFER = Double
@@ -218,17 +216,16 @@ public class GlobalVariables {
 			.valueOf(loadConfig("GAMMA_ACC"));
 
 	/* SH - created this variable to enable dynamic routing */
-	public static final boolean SINGLE_SHORTEST_PATH = Boolean
-			.valueOf(loadConfig("SINGLE_SHORTEST_PATH"));
+//	public static final boolean SINGLE_SHORTEST_PATH = Boolean
+//			.valueOf(loadConfig("SINGLE_SHORTEST_PATH"));
 	/* Both SINGLE_SHORTEST_PATH and K_SHORTEST_PATH can't be true or false if
 	   APPROX_DYNAMIC_ROUTING= true */
 	/* SH - created this variable to enable dynamic routing */
-	public static final boolean K_SHORTEST_PATH = Boolean
-			.valueOf(loadConfig("K_SHORTEST_PATH"));
-	
-	public static final int K_VALUE = Integer.valueOf(loadConfig("K_VALUE"));
-	public static final double THETA_LOGIT = Double
-			.valueOf(loadConfig("THETA_LOGIT"));
+//	public static final boolean K_SHORTEST_PATH = Boolean
+//			.valueOf(loadConfig("K_SHORTEST_PATH"));
+	public static final int NUM_SHORTEST_PATHS = Integer.valueOf(loadConfig("NUM_SHORTEST_PATHS"));
+	public static final double THETA_LOGIT_SHORTEST_PATH = Double
+			.valueOf(loadConfig("THETA_LOGIT_SHORTEST_PATH"));
 	
 	/* Number of future road segments to be considered in counting shadow vehicles */
 	public static final int N_SHADOW = Integer.valueOf(loadConfig("N_SHADOW"));

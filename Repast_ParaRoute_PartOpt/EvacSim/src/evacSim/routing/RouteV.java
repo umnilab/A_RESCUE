@@ -102,7 +102,7 @@ public class RouteV {
 
 // <<<<<<< HEAD
 		if (curDownJunc.getID() == destDownJunc.getID()) {
-			if (veh.getVehicleID() == GlobalVariables.Global_Vehicle_ID) {
+			if (veh.getVehicleID() == GlobalVariables.GLOBAL_VEHICLE_ID) {
 				logger.info("Destination road reached " + destRoad.getLinkid()
 					+ " from current road: " + currentRoad.getLinkid());
 			}

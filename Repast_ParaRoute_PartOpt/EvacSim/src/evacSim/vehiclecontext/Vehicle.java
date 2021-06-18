@@ -1122,7 +1122,7 @@ public class Vehicle {
 	}
 
 	public void printGlobalVehicle(float dx) {
-		if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID) {
+		if (this.vehicleID_ == GlobalVariables.GLOBAL_VEHICLE_ID) {
 			logger.info("Next Road ID for vhielc: " + this.vehicleID_
 					+ " is: " + this.nextRoad().getLinkid() + " step size is: "
 					+ dx + " distance to downstream: " + this.distance_ + 
@@ -1689,7 +1689,7 @@ public class Vehicle {
 		Road curRoad = this.getRoad();
 
 		if (this.nextRoad() == null) {
-			if (this.getVehicleID() == GlobalVariables.Global_Vehicle_ID)
+			if (this.getVehicleID() == GlobalVariables.GLOBAL_VEHICLE_ID)
 				logger.info("Assign next lane: current link ID= "
 						+ curRoad.getLinkid() + " current lane ID: "
 						+ curLane.getLaneid() + " next link ID="
@@ -2241,8 +2241,8 @@ public class Vehicle {
 		if (!this.coordMap.isEmpty()) {
 			int end = this.coordMap.size() - 1;
 			coor1 = this.coordMap.get(end);
-			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
-					&& !GlobalVariables.Debug_On_Road) {
+			if (this.vehicleID_ == GlobalVariables.GLOBAL_VEHICLE_ID
+					&& !GlobalVariables.DEBUG_ON_ROAD) {
 				logger.error("Vehicle.updateCoordMapWithNewLane(): " + this +
 						" already had its coordinate map but need to update " +
 						"for moving through junction which connects to the " +
@@ -2259,8 +2259,8 @@ public class Vehicle {
 			c1 = coords[0];
 			c2 = coords[coords.length - 1];
 			coor2 = getNearestCoordinate(coor1, c1, c2);
-			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
-					&& !GlobalVariables.Debug_On_Road) {
+			if (this.vehicleID_ == GlobalVariables.GLOBAL_VEHICLE_ID
+					&& !GlobalVariables.DEBUG_ON_ROAD) {
 				logger.info("The adding coordinate is from the lane: "
 						+ plane.getLaneid());
 			}
@@ -2268,20 +2268,20 @@ public class Vehicle {
 			coor2 = this.destCoord;
 		if (!coor2.equals(coor1)) {
 			this.coordMap.add(coor2);
-			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
-					&& !GlobalVariables.Debug_On_Road) {
+			if (this.vehicleID_ == GlobalVariables.GLOBAL_VEHICLE_ID
+					&& !GlobalVariables.DEBUG_ON_ROAD) {
 				logger.info("Vehicle.updateCoorMapWithNewLane(): " +
 						" Added new coordinate " + this);
 			}
 		} else {
-			if (this.vehicleID_ == GlobalVariables.Global_Vehicle_ID
-					&& !GlobalVariables.Debug_On_Road) {
+			if (this.vehicleID_ == GlobalVariables.GLOBAL_VEHICLE_ID
+					&& !GlobalVariables.DEBUG_ON_ROAD) {
 				logger.info("Vehicle.updateCoorMapWithNewLane(): " +
 						" No coordinate added " + this);
 			}
 		}
-		if (this.id == GlobalVariables.Global_Vehicle_ID
-				&& !GlobalVariables.Debug_On_Road) {
+		if (this.id == GlobalVariables.GLOBAL_VEHICLE_ID
+				&& !GlobalVariables.DEBUG_ON_ROAD) {
 			int end = this.coordMap.size() - 1;
 			logger.info("Vehicle.updateCoorMapWithNewLane(): " +
 					" Coordinate map after the next lane for " + this + ": ");

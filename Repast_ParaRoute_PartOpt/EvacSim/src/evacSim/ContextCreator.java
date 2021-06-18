@@ -2,26 +2,18 @@ package evacSim;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
-//import java.util.concurrent.locks.ReentrantLock;
-
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.geotools.referencing.GeodeticCalculator;
-
 import com.vividsolutions.jts.geom.Coordinate;
-
-//import com.vividsolutions.jts.geom.Coordinate;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
@@ -67,13 +59,13 @@ public class ContextCreator implements ContextBuilder<Object> {
 	
 	public Context<Object> build(Context<Object> context) {
 		
-		// read the simulation settings
-		Properties propertyFile = new Properties();
-		try {
-			propertyFile.load(new FileInputStream("data/Data.properties"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		// read the simulation settings
+//		Properties propertyFile = new Properties();
+//		try {
+//			propertyFile.load(new FileInputStream("data/Data.properties"));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		// RV: get the name of the simulation run scenario to be used in
 		// naming the output files and directory & set it as a global variable
@@ -176,7 +168,7 @@ public class ContextCreator implements ContextBuilder<Object> {
 		}
 		
 		// Schedule parameters for both serial and parallel road updates
-		if (GlobalVariables.MULTI_THREADING){
+		if (GlobalVariables.N_THREADS > 1) {
 			ThreadedScheduler s = new ThreadedScheduler(GlobalVariables.N_Partition);
 			ScheduleParameters agentParaParams = ScheduleParameters.createRepeating(1, 1, 0);
 			schedule.schedule(agentParaParams, s, "paraStep");
@@ -194,18 +186,10 @@ public class ContextCreator implements ContextBuilder<Object> {
 			schedule.schedule(agentParams, s, "step");
 			double delay = agentParams.getDuration();
 			logger.info("TIME BETWEEN TWO TICKS " + delay);
-//			schedule.schedule(agentParams, vehicleContext, "refreshAllVehicles");
-//			for (Road r : getRoadContext().getObjects(Road.class)) {
-//				schedule.schedule(agentParams, r, "step");
-//			}
 		}
 		
-//		ScheduleParameters printParams = ScheduleParameters.createRepeating(1,1,0);
-//		Road r=getRoadContext().getRandomObject();
-		//schedule.schedule(agentParams, r, "printTick");
-		
 		/* Schedule Parameters for the graph partitioning */
-		if (GlobalVariables.MULTI_THREADING){
+		if (GlobalVariables.N_THREADS > 1) {
 			ScheduleParameters partitionParams = ScheduleParameters.createRepeating(duration03_, duration03_, 2);
 			//Network partitioning, priority 2
 			ScheduleParameters initialPartitionParams = ScheduleParameters.createOneTime(0, 2);
@@ -299,7 +283,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 		int nDestroyed = GlobalVariables.NUM_KILLED_VEHICLES;
 		int nHouses = GlobalVariables.NUM_HOUSES;
 		if ((nGenerated >= nHouses-1) && (nGenerated <= nDestroyed) && 
-				(RunEnvironment.getInstance().getCurrentSchedule().getTickCount()>GlobalVariables.DEMAND_MAX_TICK)) {
+				(RunEnvironment.getInstance().getCurrentSchedule()
+						.getTickCount() > GlobalVariables.DEMAND_MAX_TICK)) {
 			ISchedule sched = RunEnvironment.getInstance().getCurrentSchedule();
 			sched.setFinishing(true);
 			sched.executeEndActions();
@@ -503,13 +488,12 @@ public class ContextCreator implements ContextBuilder<Object> {
 		String logFilePath = GlobalVariables.OUTPUT_DIR +
 				File.separatorChar + "logger-sim-" +
 				GlobalVariables.SCENARIO_NAME + "-" +
-				new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss").format(new Date()) +
-				".log";
+				new SimpleDateFormat("YYYY-MM-dd-hh-mm-ss").format(new Date()) + ".log";
 		System.setProperty("logFilePath", logFilePath);
 		// create a logger configured in GlobalVariables.LOGGER_PROPERTIES
 		logger = Logger.getLogger(this.getClass());
+		System.out.println("Logger properties file is:" + GlobalVariables.LOGGER_PROPERTIES);
 		PropertyConfigurator.configure(GlobalVariables.LOGGER_PROPERTIES);
-		
 		logger.info("Logging started");
 	}
 }

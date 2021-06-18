@@ -129,14 +129,16 @@ public class ZoneContext extends DefaultContext<Zone> {
 			 * */
 			if (GlobalVariables.SIMULATION_MULTIPLE_DEMAND_INPUTS) {
 				Parameters params = RunEnvironment.getInstance().getParameters();
-				int demandNumber = params.getInteger("demandFiles");
-				String a_filepath = "data/multiple_instances_of_demand/" + demandNumber + ".csv";
-				logger.info("data file: "+a_filepath);
-				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
+				int demandNumber = params.getInteger("demandFile");
+				System.out.println("Demand file number is " + demandNumber);
+				String folder = GlobalVariables.MULTIPLE_DEMAND_CSV_DIR;
+				String filepath = folder + "/" + demandNumber + ".csv";
+				logger.info("data file: " + filepath);
+				dataset = new DatasetOfHouseholdsPerZones(filepath);
 			} else {
-				String a_filepath = GlobalVariables.ACTIVITY_CSV;
-				logger.info("data file: "+a_filepath);
-				dataset = new DatasetOfHouseholdsPerZones(a_filepath);
+				String filepath = GlobalVariables.ACTIVITY_CSV;
+				logger.info("data file: "+filepath);
+				dataset = new DatasetOfHouseholdsPerZones(filepath);
 			}
 			HashMap<Integer, ArrayList<House>> housesbyzone = dataset.
 					getHousesByHour().pollFirstEntry().getValue();

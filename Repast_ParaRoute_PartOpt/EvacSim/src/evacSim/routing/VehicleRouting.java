@@ -91,10 +91,10 @@ public class VehicleRouting {
 		shortestPath = null;
 		
 		// Get the edges that make up the shortest path
-		int K = GlobalVariables.K_VALUE;
-		double theta = GlobalVariables.THETA_LOGIT;
+		int K = GlobalVariables.NUM_SHORTEST_PATHS;
+		double theta = GlobalVariables.THETA_LOGIT_SHORTEST_PATH;
 		
-		if (GlobalVariables.K_SHORTEST_PATH) {
+		if (K > 1) { // for k-shortest path when k > 1
 			// Find the k-shortest path
 			KShortestPaths<Junction, RepastEdge<Junction>> ksp = new KShortestPaths<Junction, RepastEdge<Junction>>(transformedNetwork, currJunc, K);
 			List<GraphPath<Junction, RepastEdge<Junction>>> kshortestPath = ksp.getPaths(destJunc);
@@ -131,7 +131,7 @@ public class VehicleRouting {
 				}
 			}
 			shortestPath = kshortestPath.get(k).getEdgeList();
-		}  else if (GlobalVariables.SINGLE_SHORTEST_PATH) {
+		}  else if (K == 1) { // for single shortest path
 			/* Old thread unsafe implementation using shortest path algorithm from Repast library
 			ShortestPath<Junction> p = new ShortestPath<Junction>(network);
 			shortestPath = p.getPath(currJunc, destJunc);
@@ -142,22 +142,6 @@ public class VehicleRouting {
 				DijkstraShortestPath<Junction, RepastEdge<Junction>>
 				(transformedNetwork, currJunc, destJunc);
 			shortestPath = sp.getPathEdgeList();
-			
-//			/*debugging*/
-//			Junction currJunc_db = null;
-//			Junction destJunc_db = null;
-//			for (Junction node: this.transformedNetwork.vertexSet())
-//			{
-//				if(node.getJunctionID()==11010)
-//					currJunc_db = node;
-//				if(node.getJunctionID()==11073)
-//					destJunc_db = node;
-//			}
-//			DijkstraShortestPath<Junction, RepastEdge<Junction>> sp_debug = new DijkstraShortestPath<Junction, RepastEdge<Junction>>(transformedNetwork, currJunc_db, destJunc_db);
-//			for (RepastEdge<Junction> edge : sp_debug.getPathEdgeList())
-//			{
-//				logger.info("id="+cityContext.getLinkIDFromEdge(edge));
-//			}
 		}
 		// Find the roads which are associated with these edges
 		Float shortestPathLength = 0.0f;
@@ -166,7 +150,6 @@ public class VehicleRouting {
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);
 			Road road = cityContext.findRoadWithLinkID(linkID);
-//			logger.info("linkID: " + linkID + " Path-" + road.getID());
 			roadPath_.offer(road);
 			shortestPathLength = (float) (shortestPathLength + edge.getWeight());
 		}
