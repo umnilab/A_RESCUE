@@ -183,6 +183,15 @@ public class NetworkEventHandler {
 								road.setDefaultFreeSpeed();
 								road.updateFreeFlowSpeed_event((float) event.value1);
 								road.setEventFlag();
+								// if opposite link has speed
+								if((float) event.value2>=0){
+									for(Road road2: roadGeography.getAllObjects()){
+										if(road2.getLinkid() == road.getTlinkid()){
+											road2.setDefaultFreeSpeed();
+											road2.updateFreeFlowSpeed_event((float) event.value2);
+										}
+									}
+								}
 								return event;
 							} else {
 								// If there is another event running on the same road, we need to terminate it
@@ -211,9 +220,8 @@ public class NetworkEventHandler {
 									tempEvent = setEvent(event, true);
 									return tempEvent;
 								}
-								
 							}
-						// Other cases to be implemented later
+						// Other cases to be implemented here, if there are any
 						default: break;
 					}
 				} else {
@@ -222,6 +230,13 @@ public class NetworkEventHandler {
 						case 1: // restore speed limit
 							road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); // To be moved into a buffer variable in the road
 							road.restoreEventFlag();
+							if((float) event.value2>=0){
+								for(Road road2: roadGeography.getAllObjects()){
+									if(road2.getLinkid() == road.getTlinkid()){
+										road2.updateFreeFlowSpeed_event((float) road2.getDefaultFreeSpeed());
+									}
+								}
+							}
 							return event;
 						// Other cases to be implemented later
 						default: break;

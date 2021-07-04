@@ -445,8 +445,7 @@ public class Road {
 
 			double[] angles_ = new double[allMovements_.size()];
 
-			// TODO: form this to a separated function to calculate the
-			// counterclockwise angle between two links
+			// Form this to a separated function to calculate the counterclockwise angle between two links
 			if (allMovements_.size() != 0) {
 				double x1 = this.getJunctions().get(0).getCoordinate().x;
 				double y1 = this.getJunctions().get(0).getCoordinate().y;
