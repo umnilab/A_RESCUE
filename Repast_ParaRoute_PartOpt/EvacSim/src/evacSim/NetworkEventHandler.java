@@ -176,9 +176,8 @@ public class NetworkEventHandler {
 			if (road.getLinkid() == event.roadID) {
 				// Found the road, and we do the change
 				if (mode) {
-					// Set the event
 					switch (event.eventID) {
-						case 1: // Change speed limit
+						case 1: // Change speed limit, set the event from file
 							if (!road.checkEventFlag()) {
 								road.setDefaultFreeSpeed();
 								road.updateFreeFlowSpeed_event((float) event.value1);
@@ -221,11 +220,52 @@ public class NetworkEventHandler {
 									return tempEvent;
 								}
 							}
+						case 2:
+							if (!road.checkEventFlag()) {
+								road.setDefaultFreeSpeed();
+								road.updateFreeFlowSpeed_event((float) event.value1);
+								road.setEventFlag();
+								// if opposite link has speed
+								if((float) event.value2>=0){
+									for(Road road2: roadGeography.getAllObjects()){
+										if(road2.getLinkid() == road.getTlinkid()){
+											road2.setDefaultFreeSpeed();
+											road2.updateFreeFlowSpeed_event((float) event.value2);
+										}
+									}
+								}
+								return event;
+							} else {
+								// If there is another event running on the same road, we need to terminate it
+								NetworkEventObject conflictEvent = null;
+								for (Map.Entry<Integer, ArrayList<NetworkEventObject>> entry: runningQueue.entrySet()) {
+									ArrayList<NetworkEventObject> tempEventList = entry.getValue();
+									// Iterate through the event list
+									for (NetworkEventObject e : tempEventList) {
+										if (e.roadID == event.roadID) {
+											// We found a conflicting event
+											conflictEvent = e;
+											break;
+										}
+									}
+								}
+								
+								// terminate the conflict event
+								if (conflictEvent != null) {
+									// restore the event
+									NetworkEventObject tempEvent = setEvent(conflictEvent, false);
+									// Clear the running queue
+									runningQueue.get(conflictEvent.endTime).remove(conflictEvent);
+									// Set the new event
+									tempEvent = setEvent(event, true);
+									return tempEvent;
+								}
+							}
 						// Other cases to be implemented here, if there are any
 						default: break;
 					}
 				} else {
-					// Restore the event
+					// Restore the event from file
 					switch (event.eventID) {
 						case 1: // restore speed limit
 							road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); // To be moved into a buffer variable in the road
@@ -239,6 +279,17 @@ public class NetworkEventHandler {
 							}
 							return event;
 						// Other cases to be implemented later
+						case 2:
+							road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); // To be moved into a buffer variable in the road
+							road.restoreEventFlag();
+							if((float) event.value2>=0){
+								for(Road road2: roadGeography.getAllObjects()){
+									if(road2.getLinkid() == road.getTlinkid()){
+										road2.updateFreeFlowSpeed_event((float) road2.getDefaultFreeSpeed());
+									}
+								}
+							}
+							return event;
 						default: break;
 					}
 				}
