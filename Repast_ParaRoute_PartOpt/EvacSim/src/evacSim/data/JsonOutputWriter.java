@@ -32,7 +32,7 @@ import repast.simphony.essentials.RepastEssentials;
  * for two ticksnaphots. Each ticksnapshot starts with the tick and consists 
  * of a list of lists to stores entries for different vehicle snapshots.
  * 
- * @author Christopher Thompson (thompscs@purdue.edu) and Hemant Gehlot 
+ * @author Christopher Thompson (thompscs@purdue.edu); Hemant Gehlot 
  * @version 1.0
  * @date 10 August 2017, 6 June 2019
  */
@@ -260,7 +260,6 @@ public class JsonOutputWriter implements DataConsumer {
                     double nextTick = JsonOutputWriter.this.currentTick +
                     		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
-//                    System.out.println("Snapshot tick is called at "+ nextTick);
                     if (snapshot == null) {
                         // the buffer has no more items for us at this time
                         if (writeCount > 0) {
@@ -269,7 +268,6 @@ public class JsonOutputWriter implements DataConsumer {
                             DataCollector.printDebug("JSON", report);
                             writeCount = 0;
                         }
-                        
                         // is the data collection process finished?
                         if (!collector.isCollecting() &&
                             !collector.isPaused()) {
@@ -288,8 +286,6 @@ public class JsonOutputWriter implements DataConsumer {
                             break;
                         }
                     }
-                    
-//                    System.out.println("Snapshot tick: " + snapshot.getTickNumber());
                     // update the currently processing tick index to this item
                     JsonOutputWriter.this.currentTick = snapshot.getTickNumber();
                     
@@ -300,11 +296,10 @@ public class JsonOutputWriter implements DataConsumer {
                         writeCount++;
                     }
                     catch (IOException ioe) {
-                        // TODO: Handle being unable to write output lines?
+                        // unable to write output lines
                         String errMsg = "WRITE ERROR: " + ioe.getMessage();
                         DataCollector.printDebug("JSON" + errMsg);
                     }
-                    
                     // wait a short delay (a few ms) to give java's thread
                     // scheduler a chance to switch contexts if necessary
                     // before we loop around and grab the next buffer item
@@ -316,15 +311,13 @@ public class JsonOutputWriter implements DataConsumer {
                         break;
                     }
                 }
-                
                 // we have finished collecting data, so we will close the file
                 try {
                     JsonOutputWriter.this.closeOutputFileWriter();
                 }
                 catch (IOException ioe) {
-                    // TODO: Handle not being able to close the output file?
+                    // not being able to close the output file
                 }
-                
                 // set the data consumption flags as finished
                 JsonOutputWriter.this.paused = false;
                 JsonOutputWriter.this.consuming = false;
@@ -531,10 +524,8 @@ public class JsonOutputWriter implements DataConsumer {
     private void startNextOutputFile(int current_time) throws IOException {
         if (this.file == null ) {
             // there is no file currently open to increment!
-            // TODO: figure out how to deal with this situation...
             return;
         }
-        
         // determine the current filename being written
         String filename = this.file.getName();
         if (filename == null || filename.trim().length() < 1) {
@@ -542,57 +533,29 @@ public class JsonOutputWriter implements DataConsumer {
             // whitespace with no valid characters!
             return;
         }
-        
-        // if we are using default filenames, we know for certain the format
-        // of the series.  it should end ".1.json", ".2.json", etc.  we can
-        // easily create the next in the series this way.  if no t, we will
-        // have to do a little extra checking to setup the next file.
-//        String currentEnd = "." + this.fileSeriesNumber + "." + 
-//                            GlobalVariables.JSON_DEFAULT_EXTENSION;
-
+         /*
+          * if we are using default filenames, we know for certain the format
+          * of the series.  it should end ".1.json", ".2.json", etc.  we can
+          * easily create the next in the series this way.  if no t, we will
+          * have to do a little extra checking to setup the next file.
+          */
         String currentEnd = "." + this.previousFileName + ".json";
-        String nextEnd = "." + (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1) + ".json";
-        
-        //System.out.println("filename" + currentEnd + ", "+ nextEnd);
-
-        
+        String nextEnd = "." + (current_time/GlobalVariables
+        		.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1) + ".json";
         String newFilename = filename;
-        
         newFilename = newFilename.replaceAll(currentEnd + "$", nextEnd);
-        
-//        if (newFilename.endsWith(currentEnd)) {
-//            // the user is using a standard format filename so easy to update
-//            newFilename = newFilename.replaceAll(currentEnd + "$", nextEnd);
-//        }
-//        else {
-//            // the user is using a custom filename format so we need to
-//            // do a little extra work to create the next filename...
-//            String extEnd = "." + GlobalVariables.JSON_DEFAULT_EXTENSION;
-//            if (newFilename.endsWith(extEnd)) {
-//                newFilename = newFilename.replaceAll(extEnd + "$", nextEnd);
-//            }
-//            else {
-//                // TODO: continue checking for other filename variants?
-//            }
-//        }
-        
         // create the next filename in this output file series
         File nextFile = new File(this.file.getParent(), newFilename);
-        
-        
         // close out the current output file
         this.closeOutputFileWriter();
-        
         // open the new output file for writing
         this.file = nextFile;
         FileWriter fw = new FileWriter(this.file);
         this.writer = new BufferedWriter(fw);
-        
         // finally, having successfully moved to the next file, update counter
         this.fileSeriesNumber++;
         this.previousFileName = (current_time/GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ/2+1);
     }
-    
     
     /**
      * HG: Writes the given tick snapshot to the output file.  The buffered writer is flushed at the
@@ -606,12 +569,10 @@ public class JsonOutputWriter implements DataConsumer {
         if (tick == null) {
             return;
         }
-
         // check the file has been opened
         if (this.writer == null) {
         		throw new IOException("The JSON file is not open for writing.");
         }
-        
         // check if writing these lines will go over our output file limit
         // and create the next output file in the series if necessary
         if (this.ticksWritten >= GlobalVariables.JSON_TICK_LIMIT_PER_FILE) {
@@ -619,7 +580,6 @@ public class JsonOutputWriter implements DataConsumer {
             this.ticksWritten = 0;
             this.storeJsonObjects = new HashMap<String, Object>();
         }
-        
         /*
          * RV: Change the structure of this hashmap to include the status of roads and shelters.
          * Previously, it was of the format:
@@ -631,7 +591,6 @@ public class JsonOutputWriter implements DataConsumer {
          *   "tick2": ...
          * }
          */
-
         // get the JSON representation of this tick
         String tickString = String.valueOf(tick.getTickNumber());
         
@@ -645,10 +604,6 @@ public class JsonOutputWriter implements DataConsumer {
         ArrayList<String> newVehTickArray = tick.createJSONTickLines("newVeh");
         ArrayList<String> arrVehTickArray = tick.createJSONTickLines("arrVeh");
         
-//        if (vehTickArray == null) {
-//            return; // there was no JSON output created by this tick
-//        }
-        	
         // add the data
         tickData.put("vehicles", vehTickArray);
         tickData.put("shelters", sheltTickArray);
@@ -669,104 +624,6 @@ public class JsonOutputWriter implements DataConsumer {
         // flush all of our changes now so nothing waits cached in memory
         this.writer.flush();
     }
-    
-    
-//    /**
-//     * HG: Returns the given tick snapshot as an array of arrays.
-//     * 
-//     * @param tick: the snapshot of the tick to convert.
-//     * @param object: the type of simulation object (vehicle/road/shelter) that
-//     * @return the array of array for the given tick snapshot.
-//     */
-//    public static ArrayList<ArrayList<String>> createTickLines(TickSnapshot tick) {
-//        // check the tick snapshot exists
-//        if (tick == null) {
-//            return null;
-//        }
-//
-//        // output array
-//        ArrayList<ArrayList<String>> tickArray = new ArrayList<ArrayList<String>>();
-//        
-//        // get the list of of vehicles stored in the tick snapshot
-//        Collection<Integer> vehicleIDs = tick.getVehicleList();
-//        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
-//            return null;
-//        }
-//        
-//        // loop through the list of vehicles and convert each to a arraylist
-//        for (Integer id : vehicleIDs) {
-//            if (id == null) {
-//                continue;
-//            }
-//            
-//            // retrieve the vehicle snapshot from the tick snapshot
-//            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
-//            if (vehicle == null) {
-//                continue;
-//            }
-//            
-//            // get the arraylist representation of this vehicle
-//            ArrayList<String> vehicleArray = JsonOutputWriter.createVehicleLine(vehicle);
-//            if (vehicleArray == null) {
-//                continue;
-//            }
-//            
-//            //add the vehicle array to the tick arraylist
-//            tickArray.add(vehicleArray);
-//            
-//        }
-//        
-//        return tickArray;
-//        
-//    }
-//    
-//    
-//    /**
-//     * HG: Returns the arraylist representation of the given vehicle snapshot. 
-//     * 
-//     * @param vehicle the vehicle snapshot to convert to arraylist.
-//     * @return the arraylist representation of the given vehicle snapshot.
-//     */
-//    public static ArrayList<String> createVehicleLine(VehicleSnapshot vehicle) {
-//        if (vehicle == null) {
-//            return null;
-//        }
-//        
-//        // extract the values from the vehicle snapshot
-//        ArrayList<String> vehicleArray = new ArrayList<String>();
-//        vehicleArray.add(Integer.toString(vehicle.getId()));
-//        vehicleArray.add(vehicle.getPrevXString());
-//        vehicleArray.add(vehicle.getPrevYString());
-//        vehicleArray.add(vehicle.getXString());
-//        vehicleArray.add(vehicle.getYString());
-//        vehicleArray.add(vehicle.getSpeedString());
-//        
-////        vehicleArray.add(vehicle.getOriginXString());
-////        vehicleArray.add(vehicle.getOriginYString());
-////        vehicleArray.add(vehicle.getDestXString());
-////        vehicleArray.add(vehicle.getDestYString());
-////        vehicleArray.add(Integer.toString(vehicle.getNearlyArrived()));
-////        vehicleArray.add(Integer.toString(vehicle.getvehicleClass()));
-////        vehicleArray.add(Integer.toString(vehicle.getRoadID()));
-//        //double z = vehicle.getZ();
-//   
-//        //int departure = vehicle.getDeparture();
-//        //int arrival = vehicle.getArrival();
-//        //float distance = vehicle.getDistance();
-//
-//
-//        return vehicleArray;
-//        // build the json line and return it
-//        //return (id + "," + x + "," + y + "," + OriginalX + "," + OriginalY + "," + DestX + "," + DestY + "," + roadID + ","
-//        //+ speed + "," +departure + "," + arrival + "," + distance + "," + nearlyArrived + "," + vehicleClass + "," + prev_x + "," + prev_y);
-////        return (id + "," + prev_x + "," + prev_y + "," + x + "," + y + "," + speed + "," +
-////        		originalX + "," + originalY + "," + destX + "," + destY + "," +
-////                nearlyArrived + "," + vehicleClass + "," + roadID);
-//        //departure + "," +
-//        //arrival + "," +
-//        //distance + "," +
-//    }
-//    
     
     /**
      * Returns a guaranteed unique absolute path for writing output

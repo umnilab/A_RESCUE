@@ -582,7 +582,7 @@ public class CityContext extends DefaultContext<Object> {
 		for (Road r : ContextCreator.getRoadGeography().getAllObjects()) {
 			allRoads.put(r, ContextCreator.getRoadGeography().getGeometry(r));
 		}
-
+//		System.out.println("zoneID,zoneX,zoneY,roadID,juncX,juncY");
 		for (Zone h : ContextCreator.getZoneGeography().getAllObjects()) {
 			double minDist = Double.MAX_VALUE;
 			Coordinate houseCoord = ContextCreator.getZoneGeography()
@@ -590,6 +590,7 @@ public class CityContext extends DefaultContext<Object> {
 			Coordinate nearestPoint = null;
 			Point coordGeom = ContextCreator.getZoneGeography().getGeometry(h)
 					.getCentroid();
+			Road closestRoad = null;
 			for (Road r : allRoads.keySet()) {
 				Geometry roadGeom = allRoads.get(r);
 				DistanceOp distOp = new DistanceOp(coordGeom, roadGeom);
@@ -602,13 +603,16 @@ public class CityContext extends DefaultContext<Object> {
 					for (Coordinate c : distOp.nearestPoints()) {
 						if (!c.equals(houseCoord)) {
 							nearestPoint = c;
+							closestRoad = r;
 							break;
 						}
 					}
 				} // if thisDist < minDist
 			} // for allRoads
 			this.nearestRoadCoordCache.put(houseCoord, nearestPoint);
-		}// for Houses
+//			System.out.println(h.getIntegerId() + "," + houseCoord.x + "," + houseCoord.y +
+//					"," + closestRoad.getID() + "," + nearestPoint.x + "," + nearestPoint.y);
+		} // for Houses
 	}
 
 	public Coordinate getNearestRoadCoordFromCache(Coordinate c) {

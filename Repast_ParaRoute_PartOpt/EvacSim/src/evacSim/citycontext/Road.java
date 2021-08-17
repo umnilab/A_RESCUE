@@ -233,7 +233,7 @@ public class Road {
 					} catch (Throwable t) {
 						// System.out.println("Cannot store the
 						// data"+t.getMessage());
-						System.out.println("Cannot store the arrived vehicles"+t.getMessage());
+						System.err.println("Cannot store the arrived vehicles"+t.getMessage());
 						DataCollector.printDebug("ERR" + t.getMessage());
 					}
 				}

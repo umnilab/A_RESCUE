@@ -31,6 +31,7 @@ public class DataCollectionContext extends DefaultContext<Object> {
     /** A consumer of output data from the buffer which saves it to disk. */
     private JsonOutputWriter jsonOutputWriter;
     
+    
     /**
      * Creates the data collection framework for the program and ensures
      * it is ready to start receiving data when the simulation starts.
@@ -66,13 +67,16 @@ public class DataCollectionContext extends DefaultContext<Object> {
         	}
     }
 
+    
     public void startCollecting() {
         this.collector.startDataCollection();
     }
     
+    
     public void stopCollecting() {
         this.collector.stopDataCollection();
     }
+    
     
     public void startTick() {
         // get the current tick number from the system
@@ -84,9 +88,11 @@ public class DataCollectionContext extends DefaultContext<Object> {
         this.collector.startTickCollection(tickNumber);
     }
     
+    
     public void stopTick() {
         this.collector.stopTickCollection();
     }
+    
     
     /**
      * RV: Record runtime per few ticks for performance analysis (in seconds)

@@ -28,7 +28,6 @@ import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
  * simulation output data will read one tick snapshot from the buffer, 
  * process it, and then read the next tick snapshot from the buffer.
  * 
- * 
  * @author Christopher Thompson (thompscs@purdue.edu)
  * @version 1.0
  * @date 28 June 2017
@@ -319,6 +318,7 @@ public class TickSnapshot {
      * Creates the tick snapshot with the given simulation tick number and
      * initializes all the data structures for holding the data gathered
      * during the tick.
+     * 
      * @param tickNumber the tick number within the simulation.
      * @throws IllegalArgumentException if the tick number given is invalid.
      */
@@ -389,6 +389,7 @@ public class TickSnapshot {
     /**
      * Create an array of tick lines to be exported to JSON (not CSV) where
      * each line has comma-separated attributes of the simulation object type
+     * 
      * @param objectType type of simulation object ("vehicle"/"road"/"shelter")
      * to be used to provide the attributes in the current tick.
      * @return lines: the array of strings each containing info of an object
@@ -437,6 +438,7 @@ public class TickSnapshot {
     /**
      * Create an array of tick lines to be exported to CSV (not JSON) where
      * each line has comma-separated attributes of each vehicle in the tick snapshot.
+     * 
      * @return lines: the array of strings each containing info of an object
      */
     public ArrayList<String> createCSVTickLines() {

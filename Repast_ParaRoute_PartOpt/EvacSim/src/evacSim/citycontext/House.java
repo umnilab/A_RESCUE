@@ -20,7 +20,7 @@ public class House {
 		this.zoneid = 0;
 		this.evacuate = 0;
 		this.evacuationtime = 0;
-		this.destzone = 0; // Unfinished?
+		this.destzone = 0;
 		this.numPeople = 0;
 	}
 
@@ -35,31 +35,20 @@ public class House {
 		return "House<" + id + ", " + zoneid + ">";
 	}
 	
+	/* Getters */
+	
 	public int getId() {
 		return id;
 	}
 
-	public Coordinate getCoord() {
-		return ContextCreator.getZoneGeography().getGeometry(this)
-				.getCentroid().getCoordinate();
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public Zone getZone() {
+		return this.zone;
 	}
 
 	public int getZoneId() {
 		return zoneid;
 	}
 
-	public void setZone(Zone z) {
-		this.zone = z;
-	}
-
-	public Zone getZone() {
-		return this.zone;
-	}
-	
 	public int getNumPeople() {
 		return this.numPeople;
 	}
@@ -67,27 +56,10 @@ public class House {
 	public int getEvacuate() {
 		return evacuate;
 	}
-
-	public void setActivityPlan(ArrayList<Integer> locations, ArrayList<Integer> durations) {
-		for (int i = 0; i < locations.size(); i++) {
-			Plan p = new Plan(locations.get(i), durations.get(i));
-			this.activityplan.add(p);
-		}
-		this.destzone = locations.get(locations.size()-1); //LZ: Set the id of the destination zone.
-	}
 	
-	// RV:DynamicDestTest: unlike setActivityPlan(), this function only adds 
-	public void addActivityPlan(Plan plan) {
-		this.activityplan.add(plan);
-		this.destzone = plan.getLocation();
-	}
-
-	public ArrayList<Plan> getActivityPlan() {
-		return this.activityplan;
-	}
-
-	public void removePlan(Plan p) {
-		this.activityplan.remove(p);
+	public Coordinate getCoord() {
+		return ContextCreator.getZoneGeography().getGeometry(this)
+				.getCentroid().getCoordinate();
 	}
 
 	public int getEvacuationTime() {
@@ -96,6 +68,40 @@ public class House {
 
 	public int getDestZone() {
 		return this.destzone;
+	}
+	
+	public ArrayList<Plan> getActivityPlan() {
+		return this.activityplan;
+	}
+	
+	/* Setters */
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setZone(Zone z) {
+		this.zone = z;
+	}
+	
+	public void setActivityPlan(ArrayList<Integer> locations, ArrayList<Integer> durations) {
+		for (int i = 0; i < locations.size(); i++) {
+			Plan p = new Plan(locations.get(i), durations.get(i));
+			this.activityplan.add(p);
+		}
+		// LZ: Set the id of the destination zone.
+		this.destzone = locations.get(locations.size()-1);
+	}
+	
+	/* Other methods */
+	
+	public void addActivityPlan(Plan plan) {
+		this.activityplan.add(plan);
+		this.destzone = plan.getLocation();
+	}
+
+	public void removePlan(Plan p) {
+		this.activityplan.remove(p);
 	}
 
 }

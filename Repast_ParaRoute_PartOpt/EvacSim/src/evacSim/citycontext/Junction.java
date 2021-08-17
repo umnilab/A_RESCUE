@@ -15,7 +15,7 @@ import evacSim.ContextCreator;
 
 public class Junction {
 	private int ID;
-	private int junctionID; //from shape file
+	private int junctionID; // from shapefile
 	private Coordinate coord;
 	protected int hasControl;
 	private ArrayList<Road> roads = new ArrayList<Road>(); 
@@ -32,6 +32,8 @@ public class Junction {
 		return "Junction " + this.ID + " at: " + this.coord.toString();
 	}
 
+	/* Getters */
+	
 	public int getID() {
 		return ID;
 	}
@@ -40,20 +42,28 @@ public class Junction {
 		return junctionID;
 	}
 	
+	public int getHasControl() {
+		return this.hasControl;
+	}
+	
+	public Coordinate getCoordinate() {
+		return this.coord;
+	}
+
+	public ArrayList<Road> getRoads() {
+		return this.roads;
+	}
+	
+	/* Setters */
+	
 	public void setID(int id) {
 		this.ID = id;
 	}
 
+	/* Other methods */
+	
 	public void setHasControl(int _cntrl) {
 		this.hasControl = _cntrl;
-	}
-
-	public int getHasControl() {
-		return this.hasControl;
-	}
-
-	public Coordinate getCoordinate() {
-		return this.coord;
 	}
 
 	public boolean equals(Junction j) {
@@ -61,10 +71,6 @@ public class Junction {
 			return true;
 		else
 			return false;
-	}
-
-	public ArrayList<Road> getRoads() {
-		return this.roads;
 	}
 
 	public void addRoad(Road road) {

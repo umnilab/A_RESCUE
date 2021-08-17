@@ -25,11 +25,12 @@ import evacSim.demand.DatasetOfHouseholdsPerZones;
 import repast.simphony.parameter.Parameters;
 
 public class ZoneContext extends DefaultContext<Zone> {
-	Logger logger = ContextCreator.logger;
-
 	public DatasetOfHouseholdsPerZones dataset;
-	public SOShelterRouting soShelterMatcher; // RV: shelter SO routing matcher object
-	public ArrayList<Zone> shelters; // RV: added for quick access in this.recordShelterStatus()
+	// RV: shelter SO routing matcher object
+	public SOShelterRouting soShelterMatcher;
+	// RV: added for quick access in this.recordShelterStatus()
+	public ArrayList<Zone> shelters;
+	Logger logger = ContextCreator.logger;
 
 	public ZoneContext() {
 
@@ -39,10 +40,9 @@ public class ZoneContext extends DefaultContext<Zone> {
 		/* GIS projection for spatial information about Roads. This is used to
 		 * then create junctions and finally the road network. */
 		GeographyParameters<Zone> geoParams = new GeographyParameters<Zone>();
-		// geoParams.setCrs("EPSG:32618");
 		Geography<Zone> zoneGeography = GeographyFactoryFinder
-				.createGeographyFactory(null).createGeography("ZoneGeography",
-						this, geoParams);
+				.createGeographyFactory(null)
+				.createGeography("ZoneGeography", this, geoParams);
 
 		/* Read in the data and add to the context and geography */
 		try {
@@ -177,7 +177,7 @@ public class ZoneContext extends DefaultContext<Zone> {
 	/**
 	 * RV: Whenever vehicles are recorded for visualization,
 	 * also record the status of all the shelters. This function
-	 * is scheduled in 
+	 * is scheduled in `cityContext`.
 	 */
 	public void recordShelterStatus() {
 		for (Zone shelter : this.shelters) {

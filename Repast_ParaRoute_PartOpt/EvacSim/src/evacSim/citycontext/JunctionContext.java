@@ -44,9 +44,10 @@ public class JunctionContext extends DefaultContext<Junction>
 
    }
 
-   /*
-    * Runs through all the junctions in the context. If it finds one with coordinates which are the
-    * same as the Junction passed to this functions it returns true.
+   /**
+    * Runs through all the junctions in the context. If it finds one with 
+    * coordinates which are the same as the Junction passed to this functions 
+    * it returns true.
     */
    public boolean existsInContext(Junction j)
    {

@@ -62,6 +62,7 @@ public class DataCollector {
     /** A count of how many times the buffer cleanup method has been called. */
     private int cleanupCount;
   
+    
     /**
      * Constructs the data collection system and performs any steps
      * necessary to start it like initializing the data buffer.
@@ -279,7 +280,7 @@ public class DataCollector {
     
     
     /**
-     * Records the current state of the given vehicle object into the
+     * Records the current state of the given vehicle object into the.
      * 
      * @param vehicle the vehicle for which a snapshot is being recorded.
      * @param coordinate the current vehicle position in the simulation.
@@ -308,7 +309,8 @@ public class DataCollector {
     }
     
     /**
-     * RV: Record the current status of the road & add it to the tick snapshot
+     * Record the current status of the road & add it to the tick snapshot.
+     * @author Rajat Verma
      * @param road: Road to be recorded
      */
     public void recordRoadTickSnapshot(Road road) {
@@ -324,7 +326,8 @@ public class DataCollector {
     }
     
     /**
-     * RV: Record the current status of a shelter & add it to the tick snapshot
+     * Record the current status of a shelter & add it to the tick snapshot.
+     * @author Rajat Verma
      * @param shelt: Shelter to be recorded
      */
     public void recordShelterTickSnapshot(Zone shelt) {
@@ -340,7 +343,8 @@ public class DataCollector {
     }
     
     /**
-     * LZ: Record the new entered vehicles
+     * Record the new entered vehicles.
+     * @author Zengxiang Lei
      */
     public void recordNewVehicleTickSnapshot(Vehicle vehicle){
     	// make sure the given vehicle object is valid
@@ -356,7 +360,8 @@ public class DataCollector {
     }
     
     /**
-     * LZ: Record the arrived vehicles
+     * Record the arrived vehicles.
+     * @author Zengxiang Lei
      */
     public void recordArrVehicleTickSnapshot(Vehicle vehicle){
     	// make sure the given vehicle object is valid
@@ -373,8 +378,9 @@ public class DataCollector {
     
     
     /**
-     * HG: Records starting and ending of events
+     * Records starting and ending of events.
      * 
+     * @author Hemant Gehlot
      * @param event the event for which a snapshot is being recorded.
      * @param type whether it is starting or end of the event. 1: starting, 2: ending
      * @throws Throwable if an error occurs trying to record the event.
@@ -718,7 +724,7 @@ public class DataCollector {
             }
             debugMessage += ">> " + msg;
             
-            System.out.println(debugMessage);
+            System.err.println(debugMessage);
         }
     }
 }
