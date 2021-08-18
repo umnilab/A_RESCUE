@@ -1,0 +1,186 @@
+#Config File by Zhan
+#Input Files 
+
+ROADS_SHAPEFILE = data/jacksonville/road.shp
+LANES_SHAPEFILE = data/jacksonville/lane.shp
+ZONES_SHAPEFILE = data/jacksonville/hh.shp
+#ROADS_SHAPEFILE = data/large/road.shp
+#LANES_SHAPEFILE = data/large/lane.shp
+#ZONES_SHAPEFILE = data/large/house.shp
+#ROADS_SHAPEFILE = data/small/road.shp
+#LANES_SHAPEFILE = data/small/lane.shp
+#ZONES_SHAPEFILE = data/small/house.shp
+ROADS_CSV = data/jacksonville/road.csv
+LANES_CSV = data/jacksonville/lane.csv
+#ROADS_CSV = data/large/road.csv
+#LANES_CSV = data/large/lane.csv
+
+#ACTIVITY_SEQ_CSV = data/shape/sorted_Filtered_Modified_data_06.csv
+#ACTIVITY_SEQ_CSV = data/Year2005/evacuation_intermediate_2005_test.csv
+#ACTIVITY_SEQ_CSV = data/Year2005/evacuation_intermediate_2005_reduced.csv
+#ACTIVITY_SEQ_CSV = data/Year2005/evacuation_intermediate_2005_new.csv
+#ACTIVITY_SEQ_CSV = data/Year2005/evacuation_intermediate_2005duplicate.csv
+#ACTIVITY_SEQ_CSV = data/Year2005/evacuation_intermediate_2005test_negVehnum.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_trialjacksonville.csv
+#ACTIVITY_SEQ_CSV = data/newcode_demand_debug2.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_about200vehicles_noduplicates_sameOD.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_about200vehicles_noduplicates_5ODpairs.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_about200vehicles_noduplicates_sameOD_trialjacksonville.csv
+ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_about200vehicles_noduplicates_sameOD_trialjacksonville_dd.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_empty.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_about200vehicles_noduplicates.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_new_small_1X.csv
+#ACTIVITY_SEQ_CSV = data/newcode_demand_debug.csv
+#ACTIVITY_SEQ_CSV = data/newcode_demand.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_new.csv
+#ACTIVITY_SEQ_CSV = data/evacuation_only_2005_low_531householdremoved.csv
+
+#background traffic (BT) event file by Wenbo
+#BT_EVENT_FILE=data/background_traffic_Miami.csv
+#BT_EVENT_FILE=data/background_traffic_jacksonvilletrial.csv
+BT_EVENT_FILE=data/background_traffic_jack_10_10.csv
+
+#Event File
+#EVENT_FILE = data/supply_side_events_empty.csv
+EVENT_FILE = data/supply_side_events_10_10_jacksonville.csv
+EVENT_CHECK_FREQUENCY = 10
+
+MULTI_THREADING = true
+N_THREADS = 4
+
+#Number of Partitions: 1 not allowed, only number of partition=2^k can produce correct partitions
+N_PARTITION = 4
+
+#Parameters for the adaptive network weighting: for network partitioning
+PART_ALPHA = 15
+PART_BETA = 5
+PART_GAMMA = 10
+
+# SH - created these variable to enable dynamic routing
+# APPROX_DYNAMIC_ROUTING = true
+
+SINGLE_SHORTEST_PATH = true
+K_SHORTEST_PATH = false
+
+#Number of future road segments to be considered in counting shadow vehicles
+N_SHADOW = 10
+
+#Simulation Setup 
+SIMULATION_STEP_SIZE = 0.3
+SIMULATION_NETWORK_REFRESH_INTERVAL = 1000
+SIMULATION_PARTITION_REFRESH_INTERVAL = 1000
+SIMULATION_MAX_PARTITION_REFRESH_INTERVAL = 10000
+THRESHOLD_VEHICLE_NUMBER = 200
+SIMULATION_SLEEPS = 1
+SIMULATION_MULTIPLE_DEMAND_INPUTS = false
+
+SIMULATION_INTERVAL_SIZE = 100
+SIMULATION_STOP_TIME = 250000
+TRAVEL_PER_TURN = 0.00001
+
+# Parameters for data collection buffer
+ENABLE_DATA_COLLECTION = true
+DEBUG_DATA_BUFFER = false
+DATA_CLEANUP_REFRESH = 30000
+
+# Parameters for CSV output file writer
+ENABLE_CSV_WRITE = false
+CSV_DEFAULT_FILENAME = EOut
+CSV_DEFAULT_EXTENSION = csv
+#CSV_DEFAULT_PATH = C:/Temp
+CSV_BUFFER_REFRESH = 5000
+CSV_LINE_LIMIT = 1000000
+
+# Parameters for JSON output file writer
+ENABLE_JSON_WRITE = false
+JSON_DEFAULT_FILENAME = EOut
+JSON_DEFAULT_EXTENSION = json
+#JSON_DEFAULT_PATH = C:/Temp
+JSON_BUFFER_REFRESH = 100
+JSON_TICK_LIMIT_PER_FILE = 2
+
+# Parameters for handling network connections
+ENABLE_NETWORK = true
+DEBUG_NETWORK = true
+NETWORK_BUFFER_REFRESH = 2500
+NETWORK_STATUS_REFRESH = 5000
+NETWORK_LISTEN_PORT = 33131
+NETWORK_MAX_MESSAGE_SIZE = 1000000000
+
+#Parameter for recording vehicle snapshot separately for visualization purposes
+FREQ_RECORD_VEH_SNAPSHOT_FORVIZ = 20
+
+#Parameters for handling multiclass routing vehicles. 
+ENABLE_MULTICLASS_ROUTING = false
+PROPORTION_OF_PREDEFINED_ROUTING_VEHICLES = 0.5
+PROPORTION_OF_LESS_FREQUENT_ROUTING_VEHICLES = 0.2
+PROBABILITY_OF_UPDATING_ROUTING = 0.5
+
+#Parameters for multiclass vehicles (having different parameters)
+ENABLE_MULTICLASS_VEHICLES_DIFF_PARAMETERS = false
+RATIO_OF_ORIGINIAL_CLASS = 0.5
+MAX_ACCELERATION_2 = 5.0
+MAX_DECELERATION_2 = -5.0
+
+#Veh 1917 on 101732(1) -> 101080 & Veh 14928
+Global_Vehicle_ID = 10134791
+Global_Road_ID = 101609
+Debug_On_Road = true
+
+XXXX_BUFFER = 10.0
+
+MAX_ACCELERATION = 3.0
+MAX_DECELERATION = -3.0
+
+DEFAULT_VEHICLE_WIDTH = 1.8
+DEFAULT_VEHICLE_LENGTH = 5.5
+
+SPEED_EPSILON = 0.001
+ACC_EPSILON = 0.001
+
+LANE_WIDTH = 3.5
+
+Vehicle_Per_House = 50
+
+#FREE_SPEED=13.4112f
+H_UPPER = 1.36
+H_LOWER = 0.5
+
+FLT_INF = Float.MAX_VALUE
+FLT_EPSILON = 1.0 / FLT_INF
+
+#some constants
+#STATUS_REGIME = 0x00000180
+#STATUS_REGIME_FREEFLOWING = 0x00000000
+#STATUS_REGIME_CARFOLLOWING = 0x00000080
+#STATUS_REGIME_EMERGENCY = 0x00000100
+#STATUS_REGIME = 384
+STATUS_REGIME_FREEFLOWING = 0
+STATUS_REGIME_CARFOLLOWING = 128
+STATUS_REGIME_EMERGENCY =256
+
+#Car following model constants
+ALPHA_DEC = 1.55
+BETA_DEC = 1.08
+GAMMA_DEC = 1.65
+
+ALPHA_ACC = 2.15
+BETA_ACC = -1.67
+GAMMA_ACC = -0.89
+
+#Both SINGLE_SHORTEST_PATH and K_SHORTEST_PATH can't be true or false if
+#APPROX_DYNAMIC_ROUTING= true
+
+K_VALUE = 3
+THETA_LOGIT = 0.25
+
+# true runs from Households_Per_Zone
+SET_DEMAND_FROM_ACTIVITY_MODELS = true
+
+# Parameters for the adaptive routing 
+ETA = 0.20                                      
+TAU = 60                                        
+
+
+

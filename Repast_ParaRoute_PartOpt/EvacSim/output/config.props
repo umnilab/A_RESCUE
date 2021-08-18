@@ -1,0 +1,9 @@
+model.archive = /Volumes/data/OneDrive - purdue.edu/Purdue/Projects/HSEES/EvacSim/Repast_ParaRoute_PartOpt/EvacSim/output/complete_model.jar
+batch.params.file = scenario.rs/batch_params.xml
+ssh.key_dir = /Users/rverma/.ssh
+poll.frequency = 60.0
+model.output = /Volumes/data/OneDrive - purdue.edu/Purdue/Projects/HSEES/EvacSim/Repast_ParaRoute_PartOpt/EvacSim/output
+
+vm.arguments = 
+local.0.instances = 2
+local.0.working_directory = /var/folders/v2/8b1b262j47v_glwttz720sv80000gn/T/

@@ -1,0 +1,465 @@
+INFO  [Thread-4] 2021-06-17 21:19:50,938 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:50:INFO: Tick: 82000
+INFO  [Thread-4] 2021-06-17 21:19:51,010 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: Finished reading Repast graph 2725 5427 # Leftover roads: 6
+INFO  [Thread-4] 2021-06-17 21:19:51,144 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=83000.0, cumRuntime=106.871
+INFO  [Thread-4] 2021-06-17 21:19:51,148 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: Tick: 83000
+INFO  [Thread-4] 2021-06-17 21:19:51,305 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=84000.0, cumRuntime=107.033
+INFO  [Thread-4] 2021-06-17 21:19:51,311 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: Tick: 84000
+INFO  [Thread-4] 2021-06-17 21:19:51,455 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=85000.0, cumRuntime=107.183
+INFO  [Thread-4] 2021-06-17 21:19:51,459 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: Tick: 85000
+INFO  [Thread-4] 2021-06-17 21:19:51,628 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=86000.0, cumRuntime=107.355
+INFO  [Thread-4] 2021-06-17 21:19:51,632 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: Tick: 86000
+INFO  [Thread-4] 2021-06-17 21:19:51,680 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1903> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:51,743 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1357> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:51,765 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh970> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:51,824 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=87000.0, cumRuntime=107.552
+INFO  [Thread-4] 2021-06-17 21:19:51,830 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: Tick: 87000
+INFO  [Thread-4] 2021-06-17 21:19:51,832 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1876> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:51,833 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh831> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:51,843 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1188> reached dest shelter <Zone-13>
+INFO  [Thread-4] 2021-06-17 21:19:51,873 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1876> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:51,886 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh825> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:51,929 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh387> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:51,936 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1917> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:51,961 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh1919> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:51,979 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:51:INFO: <Veh393> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:52,015 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh376> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:52,015 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh2016> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:52,017 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1156> reached dest shelter <Zone-13>
+INFO  [Thread-4] 2021-06-17 21:19:52,022 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh378> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:52,024 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1460> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:52,053 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh377> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:52,075 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1608> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:52,080 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh686> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:52,095 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh839> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:52,098 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1445> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:52,112 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh853> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:52,114 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1585> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:52,125 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=88000.0, cumRuntime=107.853
+INFO  [Thread-4] 2021-06-17 21:19:52,128 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1585> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:52,131 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Tick: 88000
+INFO  [Thread-4] 2021-06-17 21:19:52,141 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1537> reached dest shelter <Zone-11>
+INFO  [Thread-4] 2021-06-17 21:19:52,145 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1877> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:52,153 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1639> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:52,159 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh438> reached dest shelter <Zone-17>
+INFO  [Thread-4] 2021-06-17 21:19:52,173 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh437> reached dest shelter <Zone-17>
+INFO  [Thread-4] 2021-06-17 21:19:52,177 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: <Veh1652> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:52,182 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=679, nVehFailed=0, tick=17000.0, cumRuntime=107.958
+INFO  [Thread-4] 2021-06-17 21:19:52,187 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Tick: 17000
+INFO  [Thread-4] 2021-06-17 21:19:52,320 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=89000.0, cumRuntime=108.048
+INFO  [Thread-4] 2021-06-17 21:19:52,323 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Tick: 89000
+INFO  [Thread-4] 2021-06-17 21:19:52,479 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=90000.0, cumRuntime=108.206
+INFO  [Thread-4] 2021-06-17 21:19:52,483 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Tick: 90000
+INFO  [Thread-4] 2021-06-17 21:19:52,651 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=91000.0, cumRuntime=108.379
+INFO  [Thread-4] 2021-06-17 21:19:52,655 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Tick: 91000
+INFO  [Thread-4] 2021-06-17 21:19:52,755 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Finished reading Repast graph 2725 5427 # Leftover roads: 6
+INFO  [Thread-4] 2021-06-17 21:19:52,873 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=92000.0, cumRuntime=108.601
+INFO  [Thread-4] 2021-06-17 21:19:52,878 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:52:INFO: Tick: 92000
+INFO  [Thread-4] 2021-06-17 21:19:53,060 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=93000.0, cumRuntime=108.788
+INFO  [Thread-4] 2021-06-17 21:19:53,063 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: Tick: 93000
+INFO  [Thread-4] 2021-06-17 21:19:53,219 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=94000.0, cumRuntime=108.947
+INFO  [Thread-4] 2021-06-17 21:19:53,222 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: Tick: 94000
+INFO  [Thread-4] 2021-06-17 21:19:53,394 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=95000.0, cumRuntime=109.121
+INFO  [Thread-4] 2021-06-17 21:19:53,397 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: Tick: 95000
+INFO  [Thread-4] 2021-06-17 21:19:53,563 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=96000.0, cumRuntime=109.29
+INFO  [Thread-4] 2021-06-17 21:19:53,572 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: Tick: 96000
+INFO  [Thread-4] 2021-06-17 21:19:53,594 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh391> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,612 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh378> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,621 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh413> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,626 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh35> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:53,632 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh390> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,645 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1461> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:53,673 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh430> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,679 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh765> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:53,692 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh765> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:53,701 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh765> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:53,723 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1414> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:53,726 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh482> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:53,729 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh998> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:53,743 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1416> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:53,744 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh2019> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:53,746 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1361> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:53,754 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh646> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:53,754 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1466> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:53,765 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1655> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,771 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh494> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:53,774 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1360> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:53,792 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1643> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,792 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh240> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:53,797 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=97000.0, cumRuntime=109.525
+INFO  [Thread-4] 2021-06-17 21:19:53,799 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1610> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,801 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh375> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,803 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: Tick: 97000
+INFO  [Thread-4] 2021-06-17 21:19:53,808 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1416> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:53,817 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1625> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,817 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh373> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:53,827 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh674> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:53,838 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1632> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,846 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh673> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:53,850 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1624> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,856 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1614> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,862 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1321> reached dest shelter <Zone-7>
+INFO  [Thread-4] 2021-06-17 21:19:53,871 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1613> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,874 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1916> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:53,899 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh882> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:53,915 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh881> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:53,921 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1599> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:53,923 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh975> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:53,924 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=719, nVehFailed=0, tick=18000.0, cumRuntime=109.7
+INFO  [Thread-4] 2021-06-17 21:19:53,929 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: Tick: 18000
+INFO  [Thread-4] 2021-06-17 21:19:53,951 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh883> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:53,982 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh977> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:53,994 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:53:INFO: <Veh1647> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:54,032 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=98000.0, cumRuntime=109.76
+INFO  [Thread-4] 2021-06-17 21:19:54,037 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 98000
+INFO  [Thread-4] 2021-06-17 21:19:54,045 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1322> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:54,046 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1030> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:54,048 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1565> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,064 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1566> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,071 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1555> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,074 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh359> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:54,112 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1067> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,119 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh670> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:54,136 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh672> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:54,146 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh671> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:54,160 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh159> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,163 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh670> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:54,174 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1721> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:54,192 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1252> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,199 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh338> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:54,227 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh859> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,228 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1368> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:54,230 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh836> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,233 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1060> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,237 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh182> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:54,238 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh860> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,242 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1906> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:54,242 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1230> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,247 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1092> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,249 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh183> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:54,253 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1230> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,265 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1079> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,270 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh682> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,274 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1830> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:54,275 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1992> reached dest shelter <Zone-14>
+INFO  [Thread-4] 2021-06-17 21:19:54,284 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1058> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,286 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh681> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,302 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1083> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,313 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1923> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:54,320 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=756, nVehFailed=0, tick=19000.0, cumRuntime=110.096
+INFO  [Thread-4] 2021-06-17 21:19:54,325 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 19000
+INFO  [Thread-4] 2021-06-17 21:19:54,329 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=99000.0, cumRuntime=110.056
+INFO  [Thread-4] 2021-06-17 21:19:54,331 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1925> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:54,333 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 99000
+INFO  [Thread-4] 2021-06-17 21:19:54,337 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh409> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,357 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1923> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:54,363 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1129> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,365 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh410> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,366 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1678> reached dest shelter <Zone-5>
+INFO  [Thread-4] 2021-06-17 21:19:54,373 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh409> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,377 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1921> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:54,382 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1551> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,382 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh410> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,397 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh408> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,399 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1550> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,401 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1136> reached dest shelter <Zone-13>
+INFO  [Thread-4] 2021-06-17 21:19:54,404 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1936> reached dest shelter <Zone-9>
+INFO  [Thread-4] 2021-06-17 21:19:54,416 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1678> reached dest shelter <Zone-5>
+INFO  [Thread-4] 2021-06-17 21:19:54,425 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh837> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,427 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1832> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:54,464 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1872> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:54,472 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1571> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,479 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh692> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,486 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1571> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,492 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh818> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,500 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1228> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,502 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1083> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,507 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh819> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,519 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1618> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:54,519 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh692> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,522 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1082> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,522 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh806> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,527 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh868> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,536 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh808> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,541 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh158> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,554 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1240> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,558 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=696, nVehEnteredNetwork=696, nVehKilled=696, nVehFailed=0, tick=100000.0, cumRuntime=110.286
+INFO  [Thread-4] 2021-06-17 21:19:54,558 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1476> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:54,561 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh329> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:54,563 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 100000
+INFO  [Thread-4] 2021-06-17 21:19:54,563 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1240> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,566 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh479> reached dest shelter <Zone-17>
+INFO  [Thread-4] 2021-06-17 21:19:54,570 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Finished sim: 45917.0
+INFO  [Thread-4] 2021-06-17 21:19:54,573 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1868> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:54,578 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1988> reached dest shelter <Zone-14>
+INFO  [Thread-4] 2021-06-17 21:19:54,579 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1222> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,582 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1867> reached dest shelter <Zone-19>
+INFO  [Thread-4] 2021-06-17 21:19:54,583 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1328> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:54,587 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1221> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,603 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh357> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:54,610 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=800, nVehFailed=0, tick=20000.0, cumRuntime=110.386
+INFO  [Thread-4] 2021-06-17 21:19:54,614 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 20000
+INFO  [Thread-4] 2021-06-17 21:19:54,621 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1202> reached dest shelter <Zone-13>
+INFO  [Thread-4] 2021-06-17 21:19:54,631 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1572> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,649 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1572> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,653 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1020> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:54,667 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1020> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:54,668 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1403> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:54,676 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1021> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:54,677 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1485> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:54,684 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1019> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:54,685 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1126> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,689 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1127> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,696 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1257> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,704 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1257> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,705 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh523> reached dest shelter <Zone-20>
+INFO  [Thread-4] 2021-06-17 21:19:54,712 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1235> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,716 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh2031> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:54,733 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1257> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,737 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1386> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:54,742 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh2023> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:54,743 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1526> reached dest shelter <Zone-11>
+INFO  [Thread-4] 2021-06-17 21:19:54,744 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1261> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,746 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1387> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:54,749 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1529> reached dest shelter <Zone-11>
+INFO  [Thread-4] 2021-06-17 21:19:54,750 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh2025> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:54,754 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1530> reached dest shelter <Zone-11>
+INFO  [Thread-4] 2021-06-17 21:19:54,764 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh2020> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:54,769 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1481> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:54,770 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh175> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,774 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1364> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:54,778 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh174> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,781 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh426> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,785 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh174> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,789 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh424> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:54,790 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1087> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,791 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh173> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,792 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh813> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,798 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh813> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:54,799 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=837, nVehFailed=0, tick=21000.0, cumRuntime=110.575
+INFO  [Thread-4] 2021-06-17 21:19:54,803 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 21000
+INFO  [Thread-4] 2021-06-17 21:19:54,816 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1089> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,826 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1484> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:54,830 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1630> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:54,839 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1583> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,846 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1583> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:54,873 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh11> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,888 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh4> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,894 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh8> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:54,897 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1101> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,903 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1101> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,908 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1098> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,911 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1649> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:54,912 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1099> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,916 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1101> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:54,917 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1049> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,924 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1282> reached dest shelter <Zone-7>
+INFO  [Thread-4] 2021-06-17 21:19:54,925 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh2038> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:54,927 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1050> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,927 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1370> reached dest shelter <Zone-15>
+INFO  [Thread-4] 2021-06-17 21:19:54,935 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh2038> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:54,937 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1049> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,943 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1049> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:54,953 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: <Veh1244> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:54,960 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=860, nVehFailed=0, tick=22000.0, cumRuntime=110.736
+INFO  [Thread-4] 2021-06-17 21:19:54,964 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:54:INFO: Tick: 22000
+INFO  [Thread-4] 2021-06-17 21:19:55,014 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1025> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:55,027 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh811> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:55,033 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh813> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:55,051 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh172> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:55,059 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh172> reached dest shelter <Zone-21>
+INFO  [Thread-4] 2021-06-17 21:19:55,083 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1989> reached dest shelter <Zone-14>
+INFO  [Thread-4] 2021-06-17 21:19:55,095 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=866, nVehFailed=0, tick=23000.0, cumRuntime=110.871
+INFO  [Thread-4] 2021-06-17 21:19:55,099 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 23000
+INFO  [Thread-4] 2021-06-17 21:19:55,119 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1237> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:55,119 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh2039> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:55,125 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1237> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:55,138 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh2040> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:55,143 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1982> reached dest shelter <Zone-14>
+INFO  [Thread-4] 2021-06-17 21:19:55,144 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh2037> reached dest shelter <Zone-1>
+INFO  [Thread-4] 2021-06-17 21:19:55,149 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1325> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:55,155 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1325> reached dest shelter <Zone-12>
+INFO  [Thread-4] 2021-06-17 21:19:55,185 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh865> reached dest shelter <Zone-23>
+INFO  [Thread-4] 2021-06-17 21:19:55,187 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh367> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:55,204 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1982> reached dest shelter <Zone-14>
+INFO  [Thread-4] 2021-06-17 21:19:55,213 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh959> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:55,229 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh371> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:55,240 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=879, nVehFailed=0, tick=24000.0, cumRuntime=111.015
+INFO  [Thread-4] 2021-06-17 21:19:55,245 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 24000
+INFO  [Thread-4] 2021-06-17 21:19:55,266 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1591> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:55,301 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1097> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:55,319 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1661> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:55,328 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1630> reached dest shelter <Zone-2>
+INFO  [Thread-4] 2021-06-17 21:19:55,364 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=883, nVehFailed=0, tick=25000.0, cumRuntime=111.14
+INFO  [Thread-4] 2021-06-17 21:19:55,367 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 25000
+INFO  [Thread-4] 2021-06-17 21:19:55,374 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1547> reached dest shelter <Zone-16>
+INFO  [Thread-4] 2021-06-17 21:19:55,409 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh332> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:55,412 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1041> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:55,420 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1041> reached dest shelter <Zone-22>
+INFO  [Thread-4] 2021-06-17 21:19:55,431 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh364> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:55,442 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh365> reached dest shelter <Zone-18>
+INFO  [Thread-4] 2021-06-17 21:19:55,468 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1486> reached dest shelter <Zone-4>
+INFO  [Thread-4] 2021-06-17 21:19:55,489 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=890, nVehFailed=0, tick=26000.0, cumRuntime=111.265
+INFO  [Thread-4] 2021-06-17 21:19:55,493 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 26000
+INFO  [Thread-4] 2021-06-17 21:19:55,536 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1207> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:55,602 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=891, nVehFailed=0, tick=27000.0, cumRuntime=111.378
+INFO  [Thread-4] 2021-06-17 21:19:55,606 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 27000
+INFO  [Thread-4] 2021-06-17 21:19:55,613 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1210> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:55,619 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1957> reached dest shelter <Zone-14>
+INFO  [Thread-4] 2021-06-17 21:19:55,623 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1208> reached dest shelter <Zone-10>
+INFO  [Thread-4] 2021-06-17 21:19:55,623 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh433> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:55,649 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh435> reached dest shelter <Zone-3>
+INFO  [Thread-4] 2021-06-17 21:19:55,692 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1097> reached dest shelter <Zone-8>
+INFO  [Thread-4] 2021-06-17 21:19:55,721 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=897, nVehFailed=0, tick=28000.0, cumRuntime=111.497
+INFO  [Thread-4] 2021-06-17 21:19:55,725 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 28000
+INFO  [Thread-4] 2021-06-17 21:19:55,772 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: <Veh1091> reached dest shelter <Zone-6>
+INFO  [Thread-4] 2021-06-17 21:19:55,846 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=29000.0, cumRuntime=111.621
+INFO  [Thread-4] 2021-06-17 21:19:55,850 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 29000
+INFO  [Thread-4] 2021-06-17 21:19:55,970 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=30000.0, cumRuntime=111.746
+INFO  [Thread-4] 2021-06-17 21:19:55,974 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:55:INFO: Tick: 30000
+INFO  [Thread-4] 2021-06-17 21:19:56,086 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=31000.0, cumRuntime=111.862
+INFO  [Thread-4] 2021-06-17 21:19:56,090 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 31000
+INFO  [Thread-4] 2021-06-17 21:19:56,199 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=32000.0, cumRuntime=111.975
+INFO  [Thread-4] 2021-06-17 21:19:56,204 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 32000
+INFO  [Thread-4] 2021-06-17 21:19:56,312 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=33000.0, cumRuntime=112.088
+INFO  [Thread-4] 2021-06-17 21:19:56,316 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 33000
+INFO  [Thread-4] 2021-06-17 21:19:56,423 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=34000.0, cumRuntime=112.199
+INFO  [Thread-4] 2021-06-17 21:19:56,428 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 34000
+INFO  [Thread-4] 2021-06-17 21:19:56,537 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=35000.0, cumRuntime=112.313
+INFO  [Thread-4] 2021-06-17 21:19:56,542 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 35000
+INFO  [Thread-4] 2021-06-17 21:19:56,651 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=36000.0, cumRuntime=112.427
+INFO  [Thread-4] 2021-06-17 21:19:56,656 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 36000
+INFO  [Thread-4] 2021-06-17 21:19:56,766 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=37000.0, cumRuntime=112.542
+INFO  [Thread-4] 2021-06-17 21:19:56,770 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 37000
+INFO  [Thread-4] 2021-06-17 21:19:56,881 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=38000.0, cumRuntime=112.657
+INFO  [Thread-4] 2021-06-17 21:19:56,885 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 38000
+INFO  [Thread-4] 2021-06-17 21:19:56,992 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=39000.0, cumRuntime=112.768
+INFO  [Thread-4] 2021-06-17 21:19:56,996 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:56:INFO: Tick: 39000
+INFO  [Thread-4] 2021-06-17 21:19:57,108 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=40000.0, cumRuntime=112.884
+INFO  [Thread-4] 2021-06-17 21:19:57,112 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 40000
+INFO  [Thread-4] 2021-06-17 21:19:57,222 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=41000.0, cumRuntime=112.998
+INFO  [Thread-4] 2021-06-17 21:19:57,226 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 41000
+INFO  [Thread-4] 2021-06-17 21:19:57,333 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=42000.0, cumRuntime=113.108
+INFO  [Thread-4] 2021-06-17 21:19:57,337 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 42000
+INFO  [Thread-4] 2021-06-17 21:19:57,442 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=43000.0, cumRuntime=113.218
+INFO  [Thread-4] 2021-06-17 21:19:57,446 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 43000
+INFO  [Thread-4] 2021-06-17 21:19:57,555 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=44000.0, cumRuntime=113.331
+INFO  [Thread-4] 2021-06-17 21:19:57,559 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 44000
+INFO  [Thread-4] 2021-06-17 21:19:57,666 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=45000.0, cumRuntime=113.442
+INFO  [Thread-4] 2021-06-17 21:19:57,670 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 45000
+INFO  [Thread-4] 2021-06-17 21:19:57,779 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=46000.0, cumRuntime=113.555
+INFO  [Thread-4] 2021-06-17 21:19:57,783 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 46000
+INFO  [Thread-4] 2021-06-17 21:19:57,894 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=47000.0, cumRuntime=113.669
+INFO  [Thread-4] 2021-06-17 21:19:57,898 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:57:INFO: Tick: 47000
+INFO  [Thread-4] 2021-06-17 21:19:58,007 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=48000.0, cumRuntime=113.783
+INFO  [Thread-4] 2021-06-17 21:19:58,013 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 48000
+INFO  [Thread-4] 2021-06-17 21:19:58,135 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=49000.0, cumRuntime=113.911
+INFO  [Thread-4] 2021-06-17 21:19:58,140 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 49000
+INFO  [Thread-4] 2021-06-17 21:19:58,251 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=50000.0, cumRuntime=114.027
+INFO  [Thread-4] 2021-06-17 21:19:58,255 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 50000
+INFO  [Thread-4] 2021-06-17 21:19:58,362 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=51000.0, cumRuntime=114.137
+INFO  [Thread-4] 2021-06-17 21:19:58,365 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 51000
+INFO  [Thread-4] 2021-06-17 21:19:58,476 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=52000.0, cumRuntime=114.252
+INFO  [Thread-4] 2021-06-17 21:19:58,480 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 52000
+INFO  [Thread-4] 2021-06-17 21:19:58,593 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=53000.0, cumRuntime=114.369
+INFO  [Thread-4] 2021-06-17 21:19:58,597 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 53000
+INFO  [Thread-4] 2021-06-17 21:19:58,707 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=54000.0, cumRuntime=114.483
+INFO  [Thread-4] 2021-06-17 21:19:58,711 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 54000
+INFO  [Thread-4] 2021-06-17 21:19:58,821 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=55000.0, cumRuntime=114.597
+INFO  [Thread-4] 2021-06-17 21:19:58,824 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 55000
+INFO  [Thread-4] 2021-06-17 21:19:58,932 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=56000.0, cumRuntime=114.708
+INFO  [Thread-4] 2021-06-17 21:19:58,937 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:58:INFO: Tick: 56000
+INFO  [Thread-4] 2021-06-17 21:19:59,045 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=57000.0, cumRuntime=114.82
+INFO  [Thread-4] 2021-06-17 21:19:59,049 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 57000
+INFO  [Thread-4] 2021-06-17 21:19:59,170 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=58000.0, cumRuntime=114.946
+INFO  [Thread-4] 2021-06-17 21:19:59,174 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 58000
+INFO  [Thread-4] 2021-06-17 21:19:59,287 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=59000.0, cumRuntime=115.062
+INFO  [Thread-4] 2021-06-17 21:19:59,291 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 59000
+INFO  [Thread-4] 2021-06-17 21:19:59,398 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=60000.0, cumRuntime=115.174
+INFO  [Thread-4] 2021-06-17 21:19:59,404 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 60000
+INFO  [Thread-4] 2021-06-17 21:19:59,520 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=61000.0, cumRuntime=115.296
+INFO  [Thread-4] 2021-06-17 21:19:59,524 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 61000
+INFO  [Thread-4] 2021-06-17 21:19:59,634 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=62000.0, cumRuntime=115.41
+INFO  [Thread-4] 2021-06-17 21:19:59,638 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 62000
+INFO  [Thread-4] 2021-06-17 21:19:59,746 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=63000.0, cumRuntime=115.522
+INFO  [Thread-4] 2021-06-17 21:19:59,750 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 63000
+INFO  [Thread-4] 2021-06-17 21:19:59,861 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=64000.0, cumRuntime=115.637
+INFO  [Thread-4] 2021-06-17 21:19:59,865 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 64000
+INFO  [Thread-4] 2021-06-17 21:19:59,978 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=65000.0, cumRuntime=115.754
+INFO  [Thread-4] 2021-06-17 21:19:59,982 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:19:59:INFO: Tick: 65000
+INFO  [Thread-4] 2021-06-17 21:20:00,108 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=66000.0, cumRuntime=115.884
+INFO  [Thread-4] 2021-06-17 21:20:00,112 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 66000
+INFO  [Thread-4] 2021-06-17 21:20:00,231 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=67000.0, cumRuntime=116.007
+INFO  [Thread-4] 2021-06-17 21:20:00,235 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 67000
+INFO  [Thread-4] 2021-06-17 21:20:00,349 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=68000.0, cumRuntime=116.125
+INFO  [Thread-4] 2021-06-17 21:20:00,353 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 68000
+INFO  [Thread-4] 2021-06-17 21:20:00,469 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=69000.0, cumRuntime=116.245
+INFO  [Thread-4] 2021-06-17 21:20:00,473 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 69000
+INFO  [Thread-4] 2021-06-17 21:20:00,584 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=70000.0, cumRuntime=116.36
+INFO  [Thread-4] 2021-06-17 21:20:00,588 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 70000
+INFO  [Thread-4] 2021-06-17 21:20:00,703 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=71000.0, cumRuntime=116.479
+INFO  [Thread-4] 2021-06-17 21:20:00,707 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 71000
+INFO  [Thread-4] 2021-06-17 21:20:00,820 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=72000.0, cumRuntime=116.596
+INFO  [Thread-4] 2021-06-17 21:20:00,826 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 72000
+INFO  [Thread-4] 2021-06-17 21:20:00,940 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=73000.0, cumRuntime=116.716
+INFO  [Thread-4] 2021-06-17 21:20:00,944 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:00:INFO: Tick: 73000
+INFO  [Thread-4] 2021-06-17 21:20:01,057 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=74000.0, cumRuntime=116.833
+INFO  [Thread-4] 2021-06-17 21:20:01,061 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 74000
+INFO  [Thread-4] 2021-06-17 21:20:01,167 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=75000.0, cumRuntime=116.943
+INFO  [Thread-4] 2021-06-17 21:20:01,171 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 75000
+INFO  [Thread-4] 2021-06-17 21:20:01,276 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=76000.0, cumRuntime=117.052
+INFO  [Thread-4] 2021-06-17 21:20:01,281 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 76000
+INFO  [Thread-4] 2021-06-17 21:20:01,454 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=77000.0, cumRuntime=117.23
+INFO  [Thread-4] 2021-06-17 21:20:01,460 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 77000
+INFO  [Thread-4] 2021-06-17 21:20:01,607 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=78000.0, cumRuntime=117.383
+INFO  [Thread-4] 2021-06-17 21:20:01,612 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 78000
+INFO  [Thread-4] 2021-06-17 21:20:01,739 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=79000.0, cumRuntime=117.515
+INFO  [Thread-4] 2021-06-17 21:20:01,743 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 79000
+INFO  [Thread-4] 2021-06-17 21:20:01,857 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=80000.0, cumRuntime=117.633
+INFO  [Thread-4] 2021-06-17 21:20:01,862 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 80000
+INFO  [Thread-4] 2021-06-17 21:20:01,978 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=81000.0, cumRuntime=117.754
+INFO  [Thread-4] 2021-06-17 21:20:01,982 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:01:INFO: Tick: 81000
+INFO  [Thread-4] 2021-06-17 21:20:02,091 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=82000.0, cumRuntime=117.867
+INFO  [Thread-4] 2021-06-17 21:20:02,095 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 82000
+INFO  [Thread-4] 2021-06-17 21:20:02,203 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=83000.0, cumRuntime=117.979
+INFO  [Thread-4] 2021-06-17 21:20:02,207 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 83000
+INFO  [Thread-4] 2021-06-17 21:20:02,315 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=84000.0, cumRuntime=118.091
+INFO  [Thread-4] 2021-06-17 21:20:02,321 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 84000
+INFO  [Thread-4] 2021-06-17 21:20:02,429 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=85000.0, cumRuntime=118.204
+INFO  [Thread-4] 2021-06-17 21:20:02,433 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 85000
+INFO  [Thread-4] 2021-06-17 21:20:02,547 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=86000.0, cumRuntime=118.323
+INFO  [Thread-4] 2021-06-17 21:20:02,551 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 86000
+INFO  [Thread-4] 2021-06-17 21:20:02,657 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=87000.0, cumRuntime=118.433
+INFO  [Thread-4] 2021-06-17 21:20:02,661 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 87000
+INFO  [Thread-4] 2021-06-17 21:20:02,767 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=88000.0, cumRuntime=118.543
+INFO  [Thread-4] 2021-06-17 21:20:02,771 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 88000
+INFO  [Thread-4] 2021-06-17 21:20:02,878 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=89000.0, cumRuntime=118.654
+INFO  [Thread-4] 2021-06-17 21:20:02,882 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 89000
+INFO  [Thread-4] 2021-06-17 21:20:02,990 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=90000.0, cumRuntime=118.766
+INFO  [Thread-4] 2021-06-17 21:20:02,994 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:02:INFO: Tick: 90000
+INFO  [Thread-4] 2021-06-17 21:20:03,102 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=91000.0, cumRuntime=118.877
+INFO  [Thread-4] 2021-06-17 21:20:03,106 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 91000
+INFO  [Thread-4] 2021-06-17 21:20:03,214 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=92000.0, cumRuntime=118.99
+INFO  [Thread-4] 2021-06-17 21:20:03,219 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 92000
+INFO  [Thread-4] 2021-06-17 21:20:03,326 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=93000.0, cumRuntime=119.101
+INFO  [Thread-4] 2021-06-17 21:20:03,329 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 93000
+INFO  [Thread-4] 2021-06-17 21:20:03,438 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=94000.0, cumRuntime=119.214
+INFO  [Thread-4] 2021-06-17 21:20:03,442 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 94000
+INFO  [Thread-4] 2021-06-17 21:20:03,547 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=95000.0, cumRuntime=119.323
+INFO  [Thread-4] 2021-06-17 21:20:03,551 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 95000
+INFO  [Thread-4] 2021-06-17 21:20:03,660 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=96000.0, cumRuntime=119.435
+INFO  [Thread-4] 2021-06-17 21:20:03,665 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 96000
+INFO  [Thread-4] 2021-06-17 21:20:03,794 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=97000.0, cumRuntime=119.57
+INFO  [Thread-4] 2021-06-17 21:20:03,798 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 97000
+INFO  [Thread-4] 2021-06-17 21:20:03,929 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=98000.0, cumRuntime=119.705
+INFO  [Thread-4] 2021-06-17 21:20:03,934 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:03:INFO: Tick: 98000
+INFO  [Thread-4] 2021-06-17 21:20:04,054 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:04:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=99000.0, cumRuntime=119.83
+INFO  [Thread-4] 2021-06-17 21:20:04,058 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:04:INFO: Tick: 99000
+INFO  [Thread-4] 2021-06-17 21:20:04,182 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:04:INFO: nVehGenerated=898, nVehEnteredNetwork=898, nVehKilled=898, nVehFailed=0, tick=100000.0, cumRuntime=119.958
+INFO  [Thread-4] 2021-06-17 21:20:04,186 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:04:INFO: Tick: 100000
+INFO  [Thread-4] 2021-06-17 21:20:04,192 repast.simphony.batch.ssh.LocalSession - 21-06-17 21:20:04:INFO: Finished sim: 45325.0
+INFO  [pool-2-thread-1] 2021-06-17 21:20:30,058 repast.simphony.batch.ssh.LocalDonePoller - Polled /var/folders/v2/8b1b262j47v_glwttz720sv80000gn/T/simphony_model_1623979042694 for DONE:  yes
+INFO  [SwingWorker-pool-1-thread-1] 2021-06-17 21:20:30,059 repast.simphony.batch.ssh.SessionsDriver - Run Time: 3.0191
+INFO  [SwingWorker-pool-1-thread-1] 2021-06-17 21:20:30,074 repast.simphony.batch.ssh.LocalSession - Finding output on localhost in /var/folders/v2/8b1b262j47v_glwttz720sv80000gn/T/simphony_model_1623979042694
+INFO  [SwingWorker-pool-1-thread-1] 2021-06-17 21:20:30,361 repast.simphony.batch.ssh.SessionsDriver - Aggregating output into /Volumes/data/OneDrive - purdue.edu/Purdue/Projects/HSEES/EvacSim/Repast_ParaRoute_PartOpt/EvacSim/output
+INFO  [SwingWorker-pool-1-thread-1] 2021-06-17 21:20:30,361 repast.simphony.batch.ssh.SessionsDriver - Get Output Time: 0.0050
+INFO  [SwingWorker-pool-1-thread-1] 2021-06-17 21:20:30,361 repast.simphony.batch.ssh.SessionsDriver - Finished. Elapsed Time: 3.1280

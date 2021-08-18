@@ -1,0 +1,86 @@
+Id,County,Name ,Address ,Lat,Lon,CapSqFt,CapPersons,CapReported
+1,Baker,Baker MS ,211 E. Jonathan Street ,30.275177,-82.118911,34023,865,0
+2,Baker,Baker SHS ,1 Wildcat Drive ,30.281508,-82.154093,5712,285,0
+3,Baker,J Franklin Keller ,420 S 8 St ,30.27726,-82.128257,2499,124,
+4,Baker,New Macclenny Elementary ,1 Wildkitten Drive ,30.297955,-82.131118,37290,1723,1675
+5,Baker,Phoenix Center ,523 W. Minnesota Ave ,30.276469,-82.130312,4140,207,0
+6,Baker,Westside ES ,One Panther Circle ,30.280926,-82.158455,5706,285,0
+7,Clay,Argyle Elementary School ,2625 Spencer Plantation Blvd ,30.176547,-81.788299,4500,225,225
+8,Clay,Clay High School ,2025 SR 16 West ,29.982073,-81.712279,0,0,932
+9,Clay,Clay Hill Elementary School ,6345 CR 218 ,30.144316,-82.008313,5260,263,263
+10,Clay,Coppergate Elementary ,2250 CR 209 North ,30.031073,-81.70731,6220,311,311
+11,Clay,Fleming Island High ,2233 Village Square Parkway ,30.087133,-81.712772,20859,1043,497
+12,Clay,Green Cove Springs Junior HS ,1220 Bonaventure Avenue ,29.990521,-81.689676,8860,443,443
+13,Clay,Keystone Heights HS ,900 SW Orchid Avenue ,29.7803,-82.041127,20863,1043,1627
+14,Clay,Lake Asbury Elementary School ,2902 Sandridge Road ,30.045533,-81.807382,15900,795,795
+15,Clay,Lake Asbury Junior HS ,2851 Sandridge Rd ,30.045415,-81.803672,5960,298,298
+16,Clay,McRae Elementary School ,6770 CR 315 ,29.817967,-81.923677,0,0,252
+17,Clay,Montclair Elementary School ,2398 Moody Road ,30.158379,-81.72453,10600,530,0
+18,Clay,Oakleaf High School ,4035 Plantation Oaks Blvd ,30.170231,-81.834388,29120,1456,1136
+19,Clay,Oakleaf Junior High School ,4085 Plantation Oaks Blvd ,30.174878,-81.839188,10880,544,544
+20,Clay,Oakleaf Village ES ,410 Oakleaf Village Park ,30.179528,-81.82033,5440,272,272
+21,Clay,Orange Park High School ,2300 Kingsley Avenue ,30.163729,-81.744192,14920,746,746
+22,Clay,Plantation Oaks Elementary School ,4150 Plantation Oaks Blvd ,30.178201,-81.84089,5440,272,272
+23,Clay,Rideout Elementary School ,3065 Apalachicola Blvd ,30.092929,-81.806725,7900,395,395
+24,Clay,Shadowlawn ES ,2945 CR 218 ,30.015206,-81.81315,5440,272,272
+25,Clay,Tynes Elementary School ,1550 Tynes Boulevard ,30.11867,-81.84636,4880,244,244
+26,Duval,Abess Park Elementary ,12731 Abess Blvd ,30.32294,-81.477735,88269,4270,4395
+27,Duval,Andrew A. Robinson Elementary School ,101 12th Street West ,30.351645,-81.656509,47451,1898,1853
+28,Duval,Arlington Middle School ,8141 Lone Star Road ,30.340013,-81.569988,63545,3178,
+29,Duval,Atlantic Coast High School ,9735 AC Skinner Parkwy ,30.202801,-81.506234,17000,850,850
+30,Duval,"Axson, John Allen ES ",4763 Sutton Park Court ,30.255289,-81.460399,25700,1285,300
+31,Duval,Baldwin COM C ,275 US-301 NORTH ,30.304445,-81.971585,1943,97,
+32,Duval,Bartram Springs Elem School ,"14799 Bartram Springs
+Parkway ",30.109266,-81.494903,8720,436,436
+33,Duval,Chaffee Trail Elem School ,11400 Sam Caruso Way ,30.279059,-81.852286,16000,800,800
+34,Duval,Chets Creek Elementary School ,13200 Chets Creek Blvd ,30.266387,-81.469153,88824,4395,3982
+35,Duval,Chimney Lakes Elementary School ,9353 Staples Mill Road ,30.195924,-81.802631,85144,3665,3894
+36,Duval,Crystal Springs Elementary School ,1200 Hammond Blvd. ,30.300642,-81.799305,66200,3310,4671
+37,Duval,Don Brewer Elementary School ,3385 Hartsfield ,30.360343,-81.557948,11972,598,598
+38,Duval,Douglas Anderson School of the Arts ,2445 San Diego Road ,30.301342,-81.638675,18000,900,600
+39,Duval,Enterprise Academy ,8085 Old Middleburg Rd S ,30.199709,-81.820903,23680,1184,
+40,Duval,Fla State College Jacksonville (FSCJ) CECIL FIELD ,13450 Lake Fretwell St. ,30.225247,-81.886895,14160,708,708
+41,Duval,Greenland Pines Elem School ,5050 Greenland Road ,30.160523,-81.574933,,,1680
+42,Duval,Kernan Trails Elementary School ,2281 Kernan Blvd south ,30.304389,-81.481926,11334,567,567
+43,Duval,Landmark MS .,101 Kernan Road ,30.323405,-81.487367,99624,3084,3084
+44,Duval,LaVilla Middle School of the Arts ,501 Davis Street North ,30.332403,-81.667774,64219,2814,2046
+45,Duval,Mandarin Middle School,5100 Hood Road ,30.189446,-81.587396,76794,3084,3084
+46,Duval,Mandarin Oaks Elementary School ,10600 Hornets Nest Road ,30.185056,-81.587742,77399,5900,3509
+47,Duval,Oceanway Elementary School ,143 Oceanway Avenue ,30.467329,-81.631295,36557,1462,537
+48,Duval,R. F. Kennedy Center ,1033 Ionia Street ,30.336655,-81.646799,,958,
+49,Duval,Sabal Palm Elementary School ,1201 Kernan Road ,30.342335,-81.488745,59000,2950,3509
+50,Duval,The Legends Center of City of Jacksonville ,5130 Soutel Drive ,30.396199,-81.725915,9560,478,478
+51,Duval,Twin Lakes Academy ,8050 Point Meadows Drive ,30.222042,-81.515852,77140,3587,5226
+52,Duval,Waterleaf ES ,450 Kernan Blvd. N. ,30.33309,-81.490596,16385,820,820
+53,Duval,Westview K-8 ,5270 Connie Jean Road ,30.25253,-81.822339,16340,817,817
+54,Duval,Woodland Acres Elementary School ,328 Bowlan Street ,30.321491,-81.571327,,,300
+55,Nassau,Bryceville Elementary School ,6504 Church Rd ,30.386127,-81.939994,2550,128,64
+56,Nassau,Callahan Elementary School ,449618 US Hwy 301 ,30.560738,-81.830457,0,0,326
+57,Nassau,Callahan Intermediate School ,34586 Ball Park Rd ,30.551279,-81.881631,0,0,326
+58,Nassau,Callahan Middle School ,450121 Old Dixie Hwy ,30.569759,-81.840449,7952,528,311
+59,Nassau,Hillard Middle / Senior High School ,1 Flashes Ave ,30.687837,-81.926677,0,0,105
+60,Nassau,Hilliard Elementary School ,275568 Ohio St ,30.692514,-81.932107,23756,1234,326
+61,Nassau,West Nassau Sr High School ,1 Warrior Drive ,30.557661,-81.830976,8579,561,280
+62,Nassau,Yulee Elementary School ,86063 Felmore Rd ,30.631798,-81.586155,13946,774,185
+63,Nassau,Yulee High School ,85375 Miner Rd ,30.610438,-81.580053,34325,1373,965
+64,Nassau,Yulee Middle School ,85439 Miner Rd ,30.611776,-81.57629,19302,965,965
+65,Nassau,Yulee Primary School ,86426 Goodbread Rd ,30.642048,-81.609066,0,0,129
+66,St. John's,Allen D Nease HS ,10550 Ray Road ,30.081687,-81.448493,0,0,800
+67,St. John's,Creekside High School ,100 Knights Lane ,30.08111,-81.562971,35822,1791,500
+68,St. John's,Cunningham Creek Elementary School ,1205 Roberts Road ,30.07672,-81.612759,33122,1669,2400
+69,St. John's,Durbin Creek Elementary ,4100 Race Track Road ,30.105439,-81.552142,54255,1501,500
+70,St. John's,Fruit Cove Middle School ,2680 Race Track Road ,30.110239,-81.578091,28060,1122,500
+71,St. John's,Hickory Creek Elem School ,235 Hickory Creek Trail ,30.064507,-81.646316,24649,1234,500
+72,St. John's,Julington Creek Elementary School,2316 Racetrack Road ,30.116079,-81.602615,7567,378,
+73,St. John's,Mill Creek Elementary School ,6350 International Golf Parkway ,29.965635,-81.491326,17121,856,
+74,St. John's,Otis Mason Elementary School ,207 Mason Manatee Way ,29.82882,-81.373979,33276,1664,
+75,St. John's,Pacetti Bay Middle School ,245 Meadowlark Lane ,29.944752,-81.502933,8000,660,
+76,St. John's,Patriot Oaks Academy ,475 Longleaf Pine Parkway ,30.082952,-81.537217,10000,500,500
+77,St. John's,Pedro Menendez High School ,600 SR-206 West ,29.756486,-81.332911,30823,1233,500
+78,St. John's,South Woods Elementary School ,4750 SR 206 West ,29.726612,-81.464373,4527,226,500
+79,St. John's,Switzerland Point Middle School ,777 Greenbriar Road ,30.062761,-81.647551,372700,3225,800
+80,St. John's,Timberlin Creek Elem School ,555 Pine Tree Lane ,30.043249,-81.565857,10038,502,1000
+81,St. John's,W Douglas Hartley Elementary School ,260 Cacique Drive ,29.789405,-81.311045,9415,471,335
+82,Union,Lake Bultler ES ,800 SW 6th St ,30.016294,-82.348125,8640,432,432
+83,Union,Lake Butler Middle School ,120 SW 6th St ,30.017061,-82.339032,26725,1102,424
+85,Union,Union County High School ,1000 S Lake Ave ,30.01512,-82.339537,14600,730,200

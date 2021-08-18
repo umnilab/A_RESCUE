@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="163" key="passwordStores.location.y"/>
+	<item value="24" key="CommitDialog.location.y"/>
+	<item value="2630" key="passwordStores.location.x"/>
+	<item value="2207" key="CommitDialog.location.x"/>
+	<item value="500" key="CommitDialog.weights.0"/>
+	<item value="500" key="CommitDialog.weights.1"/>
+	<item value="613" key="SetSvnPropertyDialog.size.x"/>
+	<item value="502" key="SetSvnPropertyDialog.size.y"/>
+	<item value="1148" key="CommitDialog.size.y"/>
+	<item value="1410" key="CommitDialog.size.x"/>
+	<item value="615" key="passwordStores.size.y"/>
+	<item value="564" key="passwordStores.size.x"/>
+	<item value="292" key="SetSvnPropertyDialog.location.y"/>
+	<item value="686" key="SetSvnPropertyDialog.location.x"/>
+	<item value="613" key="SwitchDialogWithConflictHandling.size.x"/>
+	<item value="915" key="SwitchDialogWithConflictHandling.size.y"/>
+	<item value="193" key="SwitchDialogWithConflictHandling.location.y"/>
+	<item value="503" key="SwitchDialogWithConflictHandling.location.x"/>
+	<section name="CommitWizard">
+		<item value="500" key="VWeight2"/>
+		<item value="500" key="VWeight1"/>
+		<item value="false" key="ShowCompare"/>
+	</section>
+</section>

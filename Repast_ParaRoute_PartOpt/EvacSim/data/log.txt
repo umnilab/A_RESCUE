@@ -1,0 +1,2085 @@
+Rerouting <Veh10009237>[Plan(11,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(1,0,2), Plan(13,0,2)]
+No route found for <Veh10005466>[Plan(25,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10013429>[Plan(2,0,2), Plan(25,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(1,0,1), Plan(13,0,1)]
+Tick: 401000
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10003188>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010217>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011267>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(14,0,1), Plan(26,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10007267>[Plan(2,0,1), Plan(22,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(2,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(14,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(2,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(14,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10005466>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(14,0,1), Plan(26,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(18,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(17,0,2), Plan(2,0,2)]
+Tick: 402000
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10007106>[Plan(10,0,2), Plan(14,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002640>[Plan(10,0,2), Plan(14,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000589>[Plan(10,0,2), Plan(14,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005471>[Plan(10,0,2), Plan(14,0,2)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(13,0,2), Plan(18,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010130>[Plan(14,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009575>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004088>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002093>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(25,0,1)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10009054>[Plan(2,0,2), Plan(22,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(13,0,1), Plan(18,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10004674>[Plan(2,0,2), Plan(22,0,2)]
+No route found for <Veh10012273>[Plan(14,0,1), Plan(26,0,1)]
+Tick: 403000
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10002970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000037>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10006870>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011678>[Plan(2,0,2), Plan(22,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(2,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(2,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(8,0,2), Plan(15,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(2,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(8,0,1), Plan(15,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(8,0,2), Plan(15,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(2,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(14,0,2), Plan(26,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(8,0,1), Plan(15,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005466>[Plan(2,0,2), Plan(22,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+No route found for <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+Rerouting <Veh10004088>[Plan(26,0,2), Plan(10,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10009576>[Plan(18,0,1), Plan(1,0,1)]
+<Zone26>: cap=7, occ=7
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(8,0,1), Plan(15,0,1)]
+Rerouting <Veh10002093>[Plan(26,0,1), Plan(10,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(8,0,1), Plan(15,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10018046>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10006951>[Plan(8,0,1), Plan(15,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+Tick: 404000
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(26,0,1), Plan(10,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002443>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10019240>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10004017>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10010228>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005170>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10000024>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10018351>[Plan(8,0,1), Plan(15,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(26,0,2), Plan(10,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10008544>[Plan(18,0,2), Plan(1,0,2)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10009576>[Plan(1,0,1), Plan(13,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+No route found for <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10005471>[Plan(14,0,2), Plan(26,0,2)]
+Tick: 405000
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(3,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(22,0,2), Plan(17,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(3,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10019378>[Plan(18,0,1), Plan(1,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(3,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(3,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(3,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(3,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10003188>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+No route found for <Veh10005466>[Plan(22,0,2), Plan(17,0,2)]
+Rerouting <Veh10010970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(3,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010217>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011267>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10007267>[Plan(2,0,1), Plan(22,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(1,0,2), Plan(13,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(17,0,2), Plan(3,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(26,0,2), Plan(10,0,2)]
+Tick: 406000
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(26,0,2), Plan(10,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(1,0,1), Plan(13,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(18,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10002395>[Plan(15,0,1), Plan(26,0,1)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10000103>[Plan(15,0,2), Plan(26,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10006174>[Plan(15,0,1), Plan(26,0,1)]
+Tick: 407000
+finshied reading Repast graph 2725 5427 # Leftover roads: 6
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10008206>[Plan(15,0,2), Plan(26,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10005468>[Plan(15,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone17>: cap=8, occ=8
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(2,0,1)]
+Rerouting <Veh10012272>[Plan(15,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(2,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10014825>[Plan(15,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(2,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10002548>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10013298>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10018046>[Plan(15,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10010130>[Plan(10,0,2), Plan(14,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10013337>[Plan(15,0,2), Plan(26,0,2)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10009575>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10004088>[Plan(10,0,2), Plan(14,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002093>[Plan(10,0,1), Plan(14,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(13,0,2), Plan(18,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10012273>[Plan(10,0,1), Plan(14,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+Tick: 408000
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(25,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(13,0,1), Plan(18,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10009237>[Plan(10,0,2), Plan(14,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10005170>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10000024>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10018351>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10002443>[Plan(15,0,2), Plan(26,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10009054>[Plan(3,0,2), Plan(25,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10010228>[Plan(15,0,2), Plan(26,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10006951>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10019240>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10004017>[Plan(15,0,2), Plan(26,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10004674>[Plan(3,0,2), Plan(25,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10013429>[Plan(3,0,2), Plan(25,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10002970>[Plan(3,0,2), Plan(25,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10000037>[Plan(3,0,2), Plan(25,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10006870>[Plan(3,0,2), Plan(25,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10011678>[Plan(3,0,2), Plan(25,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(14,0,1), Plan(26,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+Tick: 409000
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10009576>[Plan(18,0,1), Plan(1,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10003188>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010217>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011267>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10007267>[Plan(2,0,1), Plan(22,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(14,0,1), Plan(26,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(14,0,2), Plan(26,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(26,0,1), Plan(8,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(26,0,2), Plan(8,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10007106>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(26,0,1), Plan(8,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(26,0,2), Plan(8,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002640>[Plan(10,0,2), Plan(14,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000589>[Plan(10,0,2), Plan(14,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005471>[Plan(10,0,2), Plan(14,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10008544>[Plan(18,0,2), Plan(1,0,2)]
+Tick: 410000
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(26,0,1), Plan(10,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10009576>[Plan(1,0,1), Plan(13,0,1)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10005466>[Plan(3,0,2), Plan(1,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10018046>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(26,0,2), Plan(10,0,2)]
+No route found for <Veh10010130>[Plan(14,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10019378>[Plan(18,0,1), Plan(1,0,1)]
+No route found for <Veh10009575>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10004088>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10002093>[Plan(14,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10012273>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+Tick: 411000
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(1,0,2), Plan(13,0,2)]
+No route found for <Veh10009237>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(2,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005170>[Plan(26,0,1), Plan(10,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(14,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000024>[Plan(26,0,1), Plan(10,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(2,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10018351>[Plan(26,0,1), Plan(10,0,1)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002443>[Plan(26,0,2), Plan(10,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010228>[Plan(26,0,2), Plan(10,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006951>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10019240>[Plan(26,0,1), Plan(10,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10004017>[Plan(26,0,2), Plan(10,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(1,0,1), Plan(13,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(26,0,1), Plan(10,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(2,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(26,0,1), Plan(10,0,1)]
+Tick: 412000
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(18,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(26,0,2), Plan(10,0,2)]
+No route found for <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+No route found for <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+No route found for <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10005471>[Plan(14,0,2), Plan(26,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10003188>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010217>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011267>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10007267>[Plan(2,0,1), Plan(22,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(1,0,2), Plan(18,0,2)]
+Tick: 413000
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(13,0,2), Plan(3,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(13,0,1), Plan(3,0,1)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(25,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(26,0,2), Plan(10,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(25,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(8,0,1), Plan(15,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(25,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(8,0,1), Plan(15,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(25,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(26,0,2), Plan(10,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(8,0,2), Plan(15,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(25,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005468>[Plan(10,0,1), Plan(14,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(26,0,2), Plan(10,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(25,0,2)]
+Tick: 414000
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(26,0,2), Plan(8,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10017318>[Plan(2,0,1), Plan(25,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10012272>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10014825>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002548>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10013298>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10018046>[Plan(10,0,1), Plan(14,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10013337>[Plan(10,0,2), Plan(14,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10005466>[Plan(18,0,2), Plan(13,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10009576>[Plan(18,0,1), Plan(1,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(25,0,2)]
+Tick: 415000
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(2,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005170>[Plan(10,0,1), Plan(8,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000024>[Plan(10,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10018351>[Plan(10,0,1), Plan(8,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(14,0,1), Plan(26,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002443>[Plan(10,0,2), Plan(8,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10010228>[Plan(10,0,2), Plan(8,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10006951>[Plan(10,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10019240>[Plan(10,0,1), Plan(8,0,1)]
+Rerouting <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10008544>[Plan(3,0,2), Plan(17,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10004017>[Plan(10,0,2), Plan(8,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10009576>[Plan(1,0,1), Plan(13,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(14,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10010130>[Plan(10,0,2), Plan(8,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10018046>[Plan(14,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10009575>[Plan(10,0,1), Plan(8,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(14,0,2), Plan(26,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10004088>[Plan(10,0,2), Plan(8,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002093>[Plan(10,0,1), Plan(8,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(13,0,2), Plan(1,0,2)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10019378>[Plan(3,0,1), Plan(17,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10012273>[Plan(10,0,1), Plan(8,0,1)]
+Tick: 416000
+No route found for <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+No route found for <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10007267>[Plan(2,0,1), Plan(22,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+No route found for <Veh10005468>[Plan(14,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10012272>[Plan(14,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10014825>[Plan(14,0,1), Plan(26,0,1)]
+Tick: 417000
+No route found for <Veh10002548>[Plan(14,0,1), Plan(26,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10003188>[Plan(25,0,1), Plan(22,0,1)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10010970>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10013298>[Plan(14,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10010217>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10011267>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10018046>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013337>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(18,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10002395>[Plan(15,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10000103>[Plan(15,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(25,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10006174>[Plan(15,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(25,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10008206>[Plan(15,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(25,0,2)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(25,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(1,0,2), Plan(18,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005170>[Plan(8,0,1), Plan(26,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(26,0,1), Plan(10,0,1)]
+Tick: 418000
+finshied reading Repast graph 2725 5427 # Leftover roads: 6
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10000024>[Plan(8,0,1), Plan(26,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10018351>[Plan(8,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10003188>[Plan(25,0,1), Plan(22,0,1)]
+<Zone8>: cap=7, occ=7
+No route found for <Veh10010970>[Plan(25,0,2), Plan(22,0,2)]
+Rerouting <Veh10010228>[Plan(8,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(17,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002443>[Plan(8,0,2), Plan(26,0,2)]
+No route found for <Veh10010217>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10011267>[Plan(25,0,2), Plan(22,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10006951>[Plan(8,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10019240>[Plan(8,0,1), Plan(26,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10004017>[Plan(8,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(25,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10009237>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(26,0,1), Plan(15,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(26,0,1), Plan(15,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(26,0,1), Plan(15,0,1)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10007106>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(26,0,1), Plan(15,0,1)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10018046>[Plan(26,0,1), Plan(15,0,1)]
+No route found for <Veh10008544>[Plan(17,0,2), Plan(22,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(26,0,2), Plan(15,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002640>[Plan(10,0,2), Plan(14,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000589>[Plan(10,0,2), Plan(14,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(8,0,2), Plan(15,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(17,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10019378>[Plan(17,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(8,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(25,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(8,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(25,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(8,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(8,0,1), Plan(26,0,1)]
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(25,0,1)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(22,0,2), Plan(25,0,2)]
+Tick: 419000
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(8,0,1), Plan(26,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10005466>[Plan(18,0,2), Plan(13,0,2)]
+No route found for <Veh10008544>[Plan(22,0,2), Plan(25,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(22,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(2,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(2,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(14,0,2), Plan(26,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+No route found for <Veh10019378>[Plan(22,0,1), Plan(25,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10008544>[Plan(25,0,2), Plan(2,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10009576>[Plan(18,0,1), Plan(1,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+Tick: 420000
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10019378>[Plan(25,0,1), Plan(2,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10000618>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10005191>[Plan(25,0,2), Plan(22,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(26,0,2), Plan(10,0,2)]
+No route found for <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(13,0,2), Plan(1,0,2)]
+No route found for <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10009576>[Plan(1,0,1), Plan(13,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10007267>[Plan(25,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009237>[Plan(14,0,2), Plan(26,0,2)]
+Tick: 421000
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+No route found for <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10000618>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(25,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005170>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000024>[Plan(26,0,1), Plan(10,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(25,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10018351>[Plan(26,0,1), Plan(10,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(25,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010228>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002443>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006951>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10019240>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10004017>[Plan(26,0,2), Plan(10,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10003188>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010217>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011267>[Plan(2,0,2), Plan(22,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(25,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005468>[Plan(10,0,1), Plan(14,0,1)]
+No route found for <Veh10007267>[Plan(25,0,1), Plan(22,0,1)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+Tick: 422000
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10005471>[Plan(15,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10008544>[Plan(2,0,2), Plan(22,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(26,0,1), Plan(10,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(26,0,2), Plan(10,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10012272>[Plan(15,0,1), Plan(8,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10014825>[Plan(15,0,1), Plan(8,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(26,0,2), Plan(10,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10002548>[Plan(15,0,1), Plan(8,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(26,0,2), Plan(10,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10019378>[Plan(2,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(26,0,1), Plan(10,0,1)]
+<Zone18>: cap=5, occ=5
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(3,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(1,0,2), Plan(18,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10013298>[Plan(15,0,1), Plan(8,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10018046>[Plan(15,0,1), Plan(8,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10013337>[Plan(15,0,2), Plan(8,0,2)]
+Tick: 423000
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(2,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(14,0,1), Plan(26,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+No route found for <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(2,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(2,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10005466>[Plan(18,0,2), Plan(13,0,2)]
+Tick: 424000
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+No route found for <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10002970>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10000037>[Plan(25,0,2), Plan(22,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+No route found for <Veh10006870>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10011678>[Plan(25,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002395>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000103>[Plan(10,0,2), Plan(14,0,2)]
+No route found for <Veh10017318>[Plan(25,0,1), Plan(22,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10006174>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10008206>[Plan(10,0,2), Plan(14,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(17,0,2), Plan(25,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+No route found for <Veh10005468>[Plan(14,0,1), Plan(26,0,1)]
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(26,0,2), Plan(8,0,2)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+Tick: 425000
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone3>: cap=7, occ=7
+Rerouting <Veh10009576>[Plan(3,0,1), Plan(18,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(22,0,1), Plan(17,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+No route found for <Veh10019378>[Plan(22,0,1), Plan(17,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(2,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(13,0,2), Plan(1,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(14,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005170>[Plan(10,0,1), Plan(8,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(14,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(2,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000024>[Plan(10,0,1), Plan(8,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(14,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10018351>[Plan(10,0,1), Plan(8,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(14,0,2), Plan(26,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10008544>[Plan(25,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10010228>[Plan(10,0,2), Plan(8,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002443>[Plan(10,0,2), Plan(8,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(8,0,1), Plan(26,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(8,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10006951>[Plan(10,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10019240>[Plan(10,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10004017>[Plan(10,0,2), Plan(8,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(8,0,1), Plan(26,0,1)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10007267>[Plan(2,0,1), Plan(22,0,1)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10003188>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(17,0,1), Plan(2,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10010217>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011267>[Plan(2,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(8,0,1), Plan(26,0,1)]
+Tick: 426000
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(26,0,1), Plan(10,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10018046>[Plan(8,0,1), Plan(26,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(8,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+No route found for <Veh10008544>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10002395>[Plan(14,0,1), Plan(26,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10009054>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10004674>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10013429>[Plan(2,0,2), Plan(22,0,2)]
+Tick: 427000
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10002970>[Plan(2,0,2), Plan(22,0,2)]
+No route found for <Veh10000103>[Plan(14,0,2), Plan(26,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000037>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10006870>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011678>[Plan(2,0,2), Plan(22,0,2)]
+No route found for <Veh10006174>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10008206>[Plan(14,0,2), Plan(26,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10017318>[Plan(2,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(1,0,2), Plan(18,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10009576>[Plan(18,0,1), Plan(1,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(17,0,2), Plan(25,0,2)]
+Tick: 428000
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10019378>[Plan(2,0,1), Plan(22,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10010130>[Plan(10,0,2), Plan(14,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10009237>[Plan(10,0,2), Plan(14,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10009575>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10004088>[Plan(10,0,2), Plan(14,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002093>[Plan(10,0,1), Plan(14,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10007106>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(26,0,1), Plan(10,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002640>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(26,0,1), Plan(10,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000589>[Plan(10,0,2), Plan(14,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005170>[Plan(8,0,1), Plan(15,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(26,0,2), Plan(10,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10000024>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10018351>[Plan(8,0,1), Plan(15,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10012273>[Plan(10,0,1), Plan(14,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10010228>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002443>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10006951>[Plan(8,0,1), Plan(15,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10019240>[Plan(8,0,1), Plan(15,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10004017>[Plan(8,0,2), Plan(15,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10005466>[Plan(18,0,2), Plan(13,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10009576>[Plan(1,0,1), Plan(13,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(8,0,2), Plan(15,0,2)]
+Tick: 429000
+finshied reading Repast graph 2725 5427 # Leftover roads: 6
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(26,0,1), Plan(10,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10007267>[Plan(25,0,1), Plan(22,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(26,0,1), Plan(10,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10003188>[Plan(25,0,1), Plan(22,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10010970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10010217>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10011267>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10008544>[Plan(25,0,2), Plan(22,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(26,0,1), Plan(10,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(14,0,2), Plan(26,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+Rerouting <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(26,0,1), Plan(10,0,1)]
+No route found for <Veh10019378>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+Rerouting <Veh10018046>[Plan(26,0,1), Plan(10,0,1)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(26,0,2), Plan(10,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10005468>[Plan(10,0,1), Plan(8,0,1)]
+Tick: 430000
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(17,0,1), Plan(2,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10007267>[Plan(25,0,1), Plan(22,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10003188>[Plan(25,0,1), Plan(22,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10010970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10010217>[Plan(25,0,2), Plan(22,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10011267>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10008544>[Plan(25,0,2), Plan(22,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(2,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(13,0,2), Plan(1,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(2,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+<Zone22>: cap=9, occ=9
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(18,0,1)]
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010130>[Plan(14,0,2), Plan(26,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009237>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10009575>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10004088>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10002093>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10007106>[Plan(14,0,2), Plan(26,0,2)]
+Tick: 431000
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002640>[Plan(14,0,2), Plan(26,0,2)]
+No route found for <Veh10000589>[Plan(14,0,2), Plan(26,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+No route found for <Veh10012273>[Plan(14,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(17,0,2), Plan(25,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10009054>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10019378>[Plan(2,0,1), Plan(22,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10004674>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10013429>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10002970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000037>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10006870>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011678>[Plan(2,0,2), Plan(22,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10005170>[Plan(15,0,1), Plan(26,0,1)]
+Tick: 432000
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10000024>[Plan(15,0,1), Plan(26,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10017318>[Plan(2,0,1), Plan(22,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10018351>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10010228>[Plan(15,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10002443>[Plan(15,0,2), Plan(26,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10006951>[Plan(15,0,1), Plan(26,0,1)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10019240>[Plan(15,0,1), Plan(26,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(26,0,2), Plan(8,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10004017>[Plan(15,0,2), Plan(26,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002395>[Plan(10,0,1), Plan(14,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(26,0,2), Plan(8,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(26,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10000103>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10004088>[Plan(26,0,2), Plan(8,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10006174>[Plan(10,0,1), Plan(14,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002093>[Plan(26,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10008206>[Plan(10,0,2), Plan(14,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10007106>[Plan(26,0,2), Plan(8,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002640>[Plan(26,0,2), Plan(8,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000589>[Plan(26,0,2), Plan(8,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(1,0,2), Plan(18,0,2)]
+<Zone15>: cap=10, occ=10
+Rerouting <Veh10005471>[Plan(15,0,2), Plan(26,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10012273>[Plan(26,0,1), Plan(8,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10007267>[Plan(25,0,1), Plan(22,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10003188>[Plan(25,0,1), Plan(22,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10010970>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10010217>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10011267>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10008544>[Plan(25,0,2), Plan(22,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018923>[Plan(18,0,1), Plan(1,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(8,0,1), Plan(26,0,1)]
+Tick: 433000
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10004216>[Plan(18,0,1), Plan(1,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10012272>[Plan(10,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10014825>[Plan(10,0,1), Plan(8,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10002548>[Plan(10,0,1), Plan(8,0,1)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10009576>[Plan(18,0,1), Plan(1,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10019378>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10009054>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10019378>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10004674>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10013429>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone13>: cap=9, occ=9
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+Rerouting <Veh10018118>[Plan(13,0,1), Plan(1,0,1)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(14,0,1), Plan(26,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(14,0,2), Plan(26,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10013298>[Plan(10,0,1), Plan(8,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(14,0,1), Plan(26,0,1)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10018046>[Plan(10,0,1), Plan(8,0,1)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone14>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(14,0,2), Plan(26,0,2)]
+<Zone10>: cap=8, occ=8
+Rerouting <Veh10013337>[Plan(10,0,2), Plan(8,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10005466>[Plan(18,0,2), Plan(13,0,2)]
+No route found for <Veh10007267>[Plan(25,0,1), Plan(22,0,1)]
+No route found for <Veh10003188>[Plan(25,0,1), Plan(22,0,1)]
+No route found for <Veh10010970>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10010217>[Plan(25,0,2), Plan(22,0,2)]
+No route found for <Veh10011267>[Plan(25,0,2), Plan(22,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10017804>[Plan(13,0,2), Plan(1,0,2)]
+No route found for <Veh10008544>[Plan(25,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018923>[Plan(1,0,1), Plan(13,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10009054>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10019378>[Plan(17,0,1), Plan(25,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10004674>[Plan(17,0,2), Plan(25,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10013429>[Plan(17,0,2), Plan(25,0,2)]
+Tick: 434000
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000618>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10002970>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10000037>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10005191>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10006870>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011678>[Plan(17,0,2), Plan(2,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10004216>[Plan(1,0,1), Plan(13,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10017318>[Plan(17,0,1), Plan(2,0,1)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10009576>[Plan(1,0,1), Plan(13,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10007267>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10003188>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10010970>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10010217>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011267>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005170>[Plan(26,0,1), Plan(10,0,1)]
+No route found for <Veh10008544>[Plan(22,0,2), Plan(17,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000024>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10018351>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10010228>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002443>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006951>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10019240>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10004017>[Plan(26,0,2), Plan(10,0,2)]
+Tick: 435000
+No route found for <Veh10002395>[Plan(14,0,1), Plan(26,0,1)]
+No route found for <Veh10000103>[Plan(14,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10007267>[Plan(17,0,1), Plan(2,0,1)]
+No route found for <Veh10006174>[Plan(14,0,1), Plan(26,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10003188>[Plan(17,0,1), Plan(2,0,1)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010970>[Plan(17,0,2), Plan(2,0,2)]
+No route found for <Veh10008206>[Plan(14,0,2), Plan(26,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10010217>[Plan(17,0,2), Plan(2,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10011267>[Plan(17,0,2), Plan(2,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10005466>[Plan(13,0,2), Plan(1,0,2)]
+<Zone17>: cap=8, occ=8
+Rerouting <Veh10008544>[Plan(17,0,2), Plan(2,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005471>[Plan(26,0,2), Plan(10,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000618>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10002970>[Plan(2,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10018118>[Plan(1,0,1), Plan(18,0,1)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10000037>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10005191>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10006870>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10011678>[Plan(2,0,2), Plan(22,0,2)]
+<Zone2>: cap=6, occ=6
+Rerouting <Veh10017318>[Plan(2,0,1), Plan(22,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10012272>[Plan(8,0,1), Plan(26,0,1)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10018923>[Plan(13,0,1), Plan(18,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10014825>[Plan(8,0,1), Plan(26,0,1)]
+Tick: 436000
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10002548>[Plan(8,0,1), Plan(26,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10017804>[Plan(1,0,2), Plan(18,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10019378>[Plan(25,0,1), Plan(22,0,1)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+<Zone25>: cap=10, occ=10
+Rerouting <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10004216>[Plan(13,0,1), Plan(18,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10010130>[Plan(8,0,2), Plan(15,0,2)]
+<Zone13>: cap=9, occ=9
+Rerouting <Veh10009576>[Plan(13,0,1), Plan(18,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10005468>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10002395>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10000103>[Plan(26,0,2), Plan(10,0,2)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10006174>[Plan(26,0,1), Plan(10,0,1)]
+<Zone26>: cap=7, occ=7
+Rerouting <Veh10008206>[Plan(26,0,2), Plan(10,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10013298>[Plan(8,0,1), Plan(26,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10018046>[Plan(8,0,1), Plan(26,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10013337>[Plan(8,0,2), Plan(26,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10018118>[Plan(18,0,1), Plan(13,0,1)]
+Tick: 437000
+No route found for <Veh10009054>[Plan(25,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10019378>[Plan(25,0,1), Plan(22,0,1)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10004674>[Plan(25,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10013429>[Plan(25,0,2), Plan(22,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10000618>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10002970>[Plan(22,0,2), Plan(17,0,2)]
+<Zone22>: cap=9, occ=9
+Rerouting <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+No route found for <Veh10000037>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10005191>[Plan(22,0,2), Plan(17,0,2)]
+<Zone18>: cap=5, occ=5
+Rerouting <Veh10017804>[Plan(18,0,2), Plan(13,0,2)]
+<Zone1>: cap=8, occ=8
+Rerouting <Veh10005466>[Plan(1,0,2), Plan(18,0,2)]
+No route found for <Veh10006870>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10011678>[Plan(22,0,2), Plan(17,0,2)]
+No route found for <Veh10017318>[Plan(22,0,1), Plan(17,0,1)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10009237>[Plan(8,0,2), Plan(15,0,2)]
+<Zone8>: cap=7, occ=7
+Rerouting <Veh10009575>[Plan(8,0,1), Plan(15,0,1)]
+<Zone2>: cap=6, occ=6
