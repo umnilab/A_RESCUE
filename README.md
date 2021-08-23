@@ -4,7 +4,7 @@
 
 A-RESCUE 3.0 is an agent-based road traffic simulator specifically designed for urban hurricane evacuation simulation. It is created as a part of the NSF-funded [Hazard SEES](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1520338) project. The conceptual basis and justification for this simulator are presented in the first two papers: [**Ukkusuri et al. (2017)**](https://doi.org/10.1007/s11067-016-9323-0) (for v1.0) and **[Gehlot et al. (2019)](https://doi.org/10.1061/(ASCE)CP.1943-5487.0000802)** (for v2.0). It is built on [Repast Simphony](https://repast.github.io/repast_simphony.html) 2.6.
 
-![A-RESCUE screenshot dark.png](res/res/img/shot-simulator-dark.png)
+![A-RESCUE screenshot dark.png](res/img/shot-simulator-dark.png)
 
 Screenshot of A-RESCUE 3.0 running a preloaded simulation scenario.
 
