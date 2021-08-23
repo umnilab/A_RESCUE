@@ -4,7 +4,7 @@
 
 A-RESCUE 3.0 is an agent-based road traffic simulator specifically designed for urban hurricane evacuation simulation. It is created as a part of the NSF-funded [Hazard SEES](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1520338) project. The conceptual basis and justification for this simulator are presented in the first two papers: [**Ukkusuri et al. (2017)**](https://doi.org/10.1007/s11067-016-9323-0) (for v1.0) and **[Gehlot et al. (2019)](https://doi.org/10.1061/(ASCE)CP.1943-5487.0000802)** (for v2.0). It is built on [Repast Simphony](https://repast.github.io/repast_simphony.html) 2.6.
 
-![A-RESCUE screenshot dark.png](img/shot-simulator-dark.png)
+![A-RESCUE screenshot dark.png](res/res/img/shot-simulator-dark.png)
 
 Screenshot of A-RESCUE 3.0 running a preloaded simulation scenario.
 
@@ -66,30 +66,30 @@ An online demo has been hosted at [https://engineering.purdue.edu/HSEES/EvacVis/
     2. Click on the `Directory` button and select the subdirectory `Repast_ParaRoute_PartOpt/EvacSim` inside the target directory where you cloned the repository.
     3. Uncheck the `EvacSim/Evacsim` project (the one with lowercase 's').
 
-    ![Screenshot - Load project in Eclipse window.png](img/shot-eclipse-load-project.png)
+    ![Screenshot - Load project in Eclipse window.png](res/img/shot-eclipse-load-project.png)
 
 4. If required, modify the inputs of the simulation run scenario according to your needs in the configuration file (see `EvacSim/Repast_ParaRoute_PartOpt/EvacSim/data/Data.properties` in the *Package Explorer* panel) as described in the ['Input Data' section](#input-data) below.
 
-    ![Screenshot - Configuration file (data.properties)](img/shot-config-file.png)
+    ![Screenshot - Configuration file (data.properties)](res/img/shot-config-file.png)
 
 5. Setup the run configuration (`Run → Run Configurations`) as follows:
 
     1. Expand `Java Application` in the navigation panel on the left and select the configuration `EvacSim Model` (with uppercase 'S').
     2. You may change the memory size settings in the `VM arguments` section on the `Arguments` tab based on your requirement and the server's memory. The default setting is: `-Xss256M -Xms512M -Xmx6000M` which should work for a computer with 6 GB or more available RAM. For more information about these variables, see [this](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html).
 
-    ![Screenshot - Eclipse run configuration window](img/shot-eclipse-run-config.png)
+    ![Screenshot - Eclipse run configuration window](res/img/shot-eclipse-run-config.png)
 
 6. Click the Run button (or go to `Run → Run`) to open the Repast Simphony simulation window.
 
-    ![Screenshot - Run Repast simulation window](img/shot-eclipse-run-repast-project.png)
+    ![Screenshot - Run Repast simulation window](res/img/shot-eclipse-run-repast-project.png)
 
 7. Run the simulation (`Run → Init`). You should see the *Console* window in Eclipse printing the program runtime log. After a few seconds, you should see an image of a road network showing up in the Repast Simphony simulation window but without any vehicle moving on them. Unless there is an error in the *Console* window, this means that the simulation is running properly. Depending on the input demand size, the simulation may take a long time to finish. When it finishes without error, the console will terminate logging.
 
-    ![Screenshot - Eclipse console](img/shot-eclipse-console.png)
+    ![Screenshot - Eclipse console](res/img/shot-eclipse-console.png)
 
 8. Look in the output directory as desribed in the [Collected Output](#collected-output) section. Unless JSON or CSV data collection was disabled, you should see several JSON or CSV files there.
 
-    ![Screenshot - Simulation output folder](img/shot-sim-output-folder.png)
+    ![Screenshot - Simulation output folder](res/img/shot-sim-output-folder.png)
 
 ## Using the visualization interface (VI)
 
@@ -159,7 +159,7 @@ If desired, documentation for the specific distribution and version of Linux whi
 
 A-RESCUE is based on Repast Simphony's simulation framework where agent and environment objects are stored in "contexts" that then interact with each other. The key components and their interaction as currently implemented in A-RESCUE are shown in the following figure and explained in the subsequent sections. 
 
-![Simulator workflow flowchart](img/flowchart-simulator-workflow.png)
+![Simulator workflow flowchart](res/img/flowchart-simulator-workflow.png)
 
 Key components of the simulation framework using A-RESCUE.
 
@@ -361,7 +361,7 @@ Earlier versions of A-RESCUE featured network code that functioned as a server. 
 
 When the simulation starts, it reads network configuration values from the `Data.proprties` file (`GATEWAY_ADDRESS`, `GATEWAY_PORT`, and `ENABLE_NETWORK`) to create the connection to the OTM server as well as to determine the types of messages that should be sent to it. The OTM handles the details of forwarding the data from the simulation to the correct remote user.
 
-![Flowchart - Simulator network components](img/flowchart-sim-network-comoponents.png)
+![Flowchart - Simulator network components](res/img/flowchart-sim-network-comoponents.png)
 
 The socket connection between the simulation and the OTM is bidirectional. It can also receive control messages from the OTM or the remote user (sent through the OTM). A thread listens for all incoming data from the network and buffers it until a token that signals the end of a message. The message buffer is then processed by a function that decodes the contents and signals to the appropriate portion of the simulation how to react to the message.
 
@@ -378,7 +378,7 @@ The structure of the network code in both the OTM and the simulation do not need
 
 A web-based VI is developed to display simulation information. The VI is written using [React](https://reactjs.org/) with layers powered by [Deck.gl](https://deck.gl/). An online demo is available at [https://engineering.purdue.edu/HSEES/EvacVis/](https://engineering.purdue.edu/HSEES/EvacVis/).
 
-![Screenshot - Visualization interface components](img/shot-viz-interface-components.png)
+![Screenshot - Visualization interface components](res/img/shot-viz-interface-components.png)
 
 The VI consists of five components (as shown in the above screenshot):
 
@@ -409,7 +409,7 @@ Before starting the simulation, the GCP generates a unique ID value for each cop
 
 Separate from the GCP, it is possible to server the output files via an HTTP webserver if system administrators configure this option. This allows clients like the VI website to access output files at-will for more advanced data analysis than simple real-time status monitoring would allow.
 
-![Flowchart - Gateway component diagram](img/flowchart-gateway-component-diagram.png)
+![Flowchart - Gateway component diagram](res/img/flowchart-gateway-component-diagram.png)
 
 ## Message protocol between OTM and client programs
 
