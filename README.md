@@ -36,7 +36,7 @@ Screenshot of A-RESCUE 3.0 running a preloaded simulation scenario.
     - [Parallelization](#parallelization)
     - [Network partitioning](#network-partitioning)
   - [Collected output](#collected-output)
-  - [**Network communication in the simulation**](#network-communication-in-the-simulation)
+  - [Network communication in the simulation](#network-communication-in-the-simulation)
   - [Visualization interface (VI)](#visualization-interface-vi)
   - [Online Task Manager (OTM)](#online-task-manager-otm)
     - [Structure of the Gateway Control Program (GCP)](#structure-of-the-gateway-control-program-gcp)
@@ -59,7 +59,7 @@ An online demo has been hosted at [https://engineering.purdue.edu/HSEES/EvacVis/
 ## Building and running the simulator
 
 <!-- 1. Download and extract **Eclipse** IDE for Java Developers from [here](http://www.eclipse.org/downloads/packages/release/2021-03/r/eclipse-ide-java-developers).  -->
-1. Download the **Repast Simphony** installer from [here](https://repast.github.io/download.html) and install Repast with [Java (JDK) 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html). You may need administrative privilege to install it.
+1. Download the [**Repast Simphony** installer](https://repast.github.io/download.html) and install Repast with [Java (JDK) 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) (preferred) or later version. You may need administrative privilege to install it.
 2. Clone this A-RESCUE repository to a suitable location on your system: `git clone https://github.com/tjleizeng/A_RESCUE.git <target directory>`. To learn more about cloning in GitHub, see [this](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository).
 3. Load the `EvacSim` project in Eclipse:
     1. Open Eclipse IDE (via Repast Simphony app). Go to `File → Open Projects from File System`.
@@ -254,16 +254,17 @@ The simulator provides two types of routing methods for evacuating vehicles on t
 1. **Selfish adaptive routing**: This type of routing is called selfish because each individual looks for their best, often shortest, route which may change depending on the current location and traffic conditions, notwithstanding the effect of their choice on other people's choices. In this case, the simulator computes the shortest path for each evacuating vehicle using its current location and destination whenever it changes the road (close to intersections) and before entering the network. Other than this, the simulator also updates the routes of vehicles at a fixed interval known as the network refresh interval when the road network state is refreshed for repartitioning.
 2. **Familiar routing**: As part of the larger adaptive routing mechanism, the simulator also provides an option to realistically simulate the routing behavior of evacuees. Studies have shown that travelers do not always use optimal selfish routing but often choose routes familiar to them or deliberately not the shortest, such as for scenic beauty or leisure ([Peeta et al., 2001](https://link.springer.com/article/10.1023/A:1012827724856)). Furthermore, people who do not have access to advanced traveler information systems (ATIS) tools, such as Google Maps, Waze, or local radio, may not know the dynamically updated shortest path. These people may also rely on routes familiar to them, especially during a time like disaster evacuation.
 
-    To accommodate such behavior, the simulator uses a "sticky" routing mechanism where some vehicles/drivers are randomly assigned an "indifference band", $\eta$, based on the work of [Mahmassani and Jayakrishnan (1991)](https://www.sciencedirect.com/science/article/abs/pii/019126079190145G). At each point of rerouting, the driver first selects the top $k$ shortest remaining paths to the destination. Then, the driver randomly selects one of those routes if that route provides a sufficient benefit over the current route in terms of travel time as shown in the following formula:
+    To accommodate such behavior, the simulator uses a "sticky" routing mechanism where some vehicles/drivers are randomly assigned an "indifference band", *η*, based on the work of [Mahmassani and Jayakrishnan (1991)](https://www.sciencedirect.com/science/article/abs/pii/019126079190145G). At each point of rerouting, the driver first selects the top *k* shortest remaining paths to the destination. Then, the driver randomly selects one of those routes if that route provides a sufficient benefit over the current route in terms of travel time as shown in the following formula:
 
-    $\delta=\begin{cases}
-    1 & t_{cur}-t_{best} > \max(\eta \; t_{cur}, \tau) \\
-    0 & \text{otherwise}
-    \end{cases}$
+    <!-- 
+    \delta=\begin{cases} 1 & t_{cur}-t_{best} > \max(\eta \; t_{cur}, \tau) \\ 0 & \text{otherwise} \end{cases}
+     -->
+    ![Equation - Familiar routing selection criterion](res/eqn/familiar-routing-selection-criterion.svg)
+    <!-- <div align="center"><img style="background: white;" src="..\..\..\..\..\AppData\Local\Programs\Microsoft VS Code\svg\eKIFa63dJS.svg"></div> -->
 
-    Here, the decision $\delta$ to switch from the current path to the best (shortest) path at an intersection depends on the savings of the remaining trip time, $t_{cur}-t_{best}$, and the stickiness/indifference $\eta$. $\tau$ is an absolute minimum travel time improvement below which a driver will not switch routes. This type of routing allows people to stick to their current route unless a much better alternative is available, depending on what qualifies for each individual as "much better".
+    Here, the decision *δ* to switch from the current path to the best (shortest) path at an intersection depends on the savings of the remaining trip time, *t<sub>cur</sub> - t<sub>best</sub>*, and the stickiness/indifference *η*. *τ* is an absolute minimum travel time improvement below which a driver will not switch routes. This type of routing allows people to stick to their current route unless a much better alternative is available, depending on what qualifies for each individual as "much better".
 
-    We assigned vehicles/drivers this indifference band, $\eta$, by drawing from an isosceles triangular distribution as suggested in [Mahmassani and Jayakrishnan (1991)](https://www.sciencedirect.com/science/article/abs/pii/019126079190145G) with the parameters $\eta=0.2$ and $\tau=1$ minute (`ETA` and `TAU` in the configuration file).
+    We assigned vehicles/drivers this indifference band, *η*, by drawing from an isosceles triangular distribution as suggested in [Mahmassani and Jayakrishnan (1991)](https://www.sciencedirect.com/science/article/abs/pii/019126079190145G) with the parameters *η*=0.2 and *τ*=1 minute (`ETA` and `TAU` in the configuration file).
 
 ### Shelter routing
 
@@ -304,11 +305,11 @@ The simulator uses a dynamic load-balancing strategy that periodically repartiti
 - Repartitioning of the network is scheduled every fixed interval of time, but the actual repartitioning is executed only when the number of vehicles in the network is above a threshold.
 - To partition the traffic network into subnetworks/partitions with approximately equal computational load, the computational load in the traffic network within the future time period (until the next repartitioning period) needs to be predicted.
     - The computation load graph is a weighted graph, with weights on nodes (intersections) and edges (roads) approximating the computational load.
-    - The routing computation is more costly compared to the car-following and lane-changing updates. Thus, computational loads on roads (represented as edge weights) are estimated as the linear combination of three components: the number of current vehicles on the roads (denoted as $N_c$), predicted number of vehicles that would be traveling on the road until the next repartitioning period (given by $N_t$), and the predicted number of vehicles that would perform routing on the road until the next repartitioning period (denoted as $N_r$).
-    - The computation of $N_c$ is trivial and thus we focus on $N_t$ and $N_r$. For each vehicle, up to a given threshold downstream reachable roads on the vehicle’s current route are tracked. Reachability is examined by computing the cumulative travel time starting from the current road. If the cumulative travel time on a downstream road segment is smaller than the length of the repartitioning period, the count $N_t$ will increment by 1 on that road segment.
+    - The routing computation is more costly compared to the car-following and lane-changing updates. Thus, computational loads on roads (represented as edge weights) are estimated as the linear combination of three components: the number of current vehicles on the roads (denoted as *N<sub>c</sub>*), predicted number of vehicles that would be traveling on the road until the next repartitioning period (given by *N<sub>t</sub>*), and the predicted number of vehicles that would perform routing on the road until the next repartitioning period (denoted as *N<sub>r</sub>*).
+    - The computation of *N<sub>c</sub>* is trivial and thus we focus on *N<sub>t</sub>* and *N<sub>r</sub>*. For each vehicle, up to a given threshold downstream reachable roads on the vehicle’s current route are tracked. Reachability is examined by computing the cumulative travel time starting from the current road. If the cumulative travel time on a downstream road segment is smaller than the length of the repartitioning period, the count *N<sub>t</sub>* will increment by 1 on that road segment.
     - Up to a given number of downstream reachable roads are tracked using cumulative travel time starting from the current road. However, only those roads for which cumulative travel time exceeds an integral multiple of network refresh period are considered, and
-    then the road’s $N_r$ is incremented by 1. This is because routing is performed every time the network is refreshed. The maximum possible future routing roads of a vehicle is less than or equal to equal to the ratio of repartitioning time period to the network refresh period. Once this procedure is performed for every vehicle, the $N_r$ value for each road in the network is obtained.
-    - Note that the weights corresponding to $N_c$, $N_t$, and $N_r$ are determined by several tests where one parameter is varied while keeping others to be fixed, and the combination of the weights that maximizes the computational performance is chosen. Finally, the weight of each node (intersection) is determined as half of the sum of all neighboring edge (road) weights.
+    then the road’s *N<sub>r</sub>* is incremented by 1. This is because routing is performed every time the network is refreshed. The maximum possible future routing roads of a vehicle is less than or equal to equal to the ratio of repartitioning time period to the network refresh period. Once this procedure is performed for every vehicle, the *N<sub>r</sub>* value for each road in the network is obtained.
+    - Note that the weights corresponding to *N<sub>c</sub>*, *N<sub>t</sub>*, and *N<sub>r</sub>* are determined by several tests where one parameter is varied while keeping others to be fixed, and the combination of the weights that maximizes the computational performance is chosen. Finally, the weight of each node (intersection) is determined as half of the sum of all neighboring edge (road) weights.
 
 ## Collected output
 
@@ -353,7 +354,7 @@ An example output snapshot file reads as shown below:
 
 The CSV output is optional and mainly used for data post-processing as it can be more compact and easily manipulated than JSON. It only contains the vehicle snapshots in a tabular format with four columns for each vehicle: its ID, current longitude and latitude, and current speed (mph).
 
-## **Network communication in the simulation**
+## Network communication in the simulation
 
 In addition to the output file writers described in the previous section, the code which handles network communication within the simulation is another module that uses the data collection system. The network code consumes data collected in the buffer in the same method as the output file writers but sends it to a socket connection instead of the storage disk.
 
