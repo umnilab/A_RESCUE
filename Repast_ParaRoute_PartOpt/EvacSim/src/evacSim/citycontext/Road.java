@@ -761,6 +761,12 @@ public class Road {
 		this.lanes.add(l);
 		this.nLanes++;
 	}
+	
+	public void removeLane(Lane l) {
+		if(this.lanes.remove(l)) {
+			this.nLanes --;
+		}
+	}
 
 	public ArrayList<Lane> getLanes() {
 		return this.lanes;
