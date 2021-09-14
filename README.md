@@ -60,7 +60,7 @@ An online demo has been hosted at [https://engineering.purdue.edu/HSEES/EvacVis/
 
 <!-- 1. Download and extract **Eclipse** IDE for Java Developers from [here](http://www.eclipse.org/downloads/packages/release/2021-03/r/eclipse-ide-java-developers).  -->
 1. Download the [**Repast Simphony** installer](https://repast.github.io/download.html) and install Repast with [Java (JDK) 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) (preferred) or later version. You may need administrative privilege to install it.
-2. Clone this A-RESCUE repository to a suitable location on your system: `git clone https://github.com/tjleizeng/A_RESCUE.git <target directory>`. To learn more about cloning in GitHub, see [this](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository).
+2. Clone this A-RESCUE repository to a suitable location on your system: `git clone https://github.com/umnilab/A_RESCUE.git <target directory>`. To learn more about cloning in GitHub, see [this](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository).
 3. Load the `EvacSim` project in Eclipse:
     1. Open Eclipse IDE (via Repast Simphony app). Go to `File → Open Projects from File System`.
     2. Click on the `Directory` button and select the subdirectory `Repast_ParaRoute_PartOpt/EvacSim` inside the target directory where you cloned the repository.
@@ -95,8 +95,8 @@ An online demo has been hosted at [https://engineering.purdue.edu/HSEES/EvacVis/
 
 This is the main module for the users of this software. Steps for using the VI are:
 
-1. Clone the EvacVis repository to a suitable location: `gh repo clone tjleizeng/HSEES_Viz <target directory>` .
-2. Follow the instructions in `~/EvacVis/README.md` ([link](https://github.com/tjleizeng/HSEES_Viz/blob/master/EvacVis/README.md)). You will need `Node.js` and `NPM` for running a local server.
+1. Clone the EvacVis repository to a suitable location: `gh repo clone umnilab/HSEES_Viz <target directory>` .
+2. Follow the instructions in `~/EvacVis/README.md` ([link](https://github.com/umnilab/HSEES_Viz/blob/master/EvacVis/README.md)). You will need `Node.js` and `NPM` for running a local server.
 
 ## Installing the online task manager (OTM)
 
