@@ -308,7 +308,7 @@ public class CityContext extends DefaultContext<Object> {
 
 		// At beginning, initialize route object
 		tickcount = (int) RepastEssentials.GetTickCount();
-		logger.info("Tick: " + tickcount);
+		logger.info("Tick: " + tickcount +"/" + GlobalVariables.SIMULATION_STOP_TIME);
 		if (tickcount < 1) {
 			try {
 				RouteV.createRoute();
