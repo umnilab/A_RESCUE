@@ -7,24 +7,17 @@ class LaneComparator implements Comparator<Lane>
    // parameter are of type Object, so we have to downcast it to vehicle objects
    public int compare(Lane l1, Lane l2)
    {
-      int LaneID1, LaneID2;
-      
-      LaneID1 = Math.abs(l1.getLaneid());
-      LaneID2 = Math.abs(l2.getLaneid());
+      int laneId1, laneId2;
+//      laneId1 = Math.abs(l1.getLaneid());
+//      laneId2 = Math.abs(l2.getLaneid());
+      laneId1 = l1.getLaneid();
+      laneId2 = l2.getLaneid();
  
-      if (LaneID1 < LaneID2)
+      if (laneId1 < laneId2)
          return -1;
-      else if (LaneID1 > LaneID2)
+      else if (laneId1 > laneId2)
          return 1;
       else
          return 0;
    }
-
-
-   /*@Override
-   public int compare(Object arg0, Object arg1)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }*/
 }

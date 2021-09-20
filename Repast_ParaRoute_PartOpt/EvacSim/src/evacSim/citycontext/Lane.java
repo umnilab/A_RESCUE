@@ -5,9 +5,10 @@
 package evacSim.citycontext;
 
 import java.util.ArrayList;
-
+import java.util.Comparator;
 import org.apache.log4j.Logger;
-
+import org.apache.commons.lang3.ArrayUtils;
+import com.vividsolutions.jts.geom.Coordinate;
 import evacSim.ContextCreator;
 import evacSim.vehiclecontext.Vehicle;
 import evacSim.GlobalVariables;
@@ -49,13 +50,19 @@ public class Lane {
 	private ArrayList<Lane> dnLanes_;
 	/** LZ: Store the latest enter time of vehicles */
 	private int lastEnterTick = -1;
+	/** Attributes to be used during lane reversal */
+	private Lane preReversalLane;
+	private Lane postReversalLane;
+	
 
 	public Lane() {
-		this.id = ContextCreator.generateAgentID();
-		this.nVehicles_ = 0;
-		this.lastVehicle_ = null;
-		this.upLanes_ = new ArrayList<Lane>();
-		this.dnLanes_ = new ArrayList<Lane>();
+		id = ContextCreator.generateAgentID();
+		nVehicles_ = 0;
+		lastVehicle_ = null;
+		upLanes_ = new ArrayList<Lane>();
+		dnLanes_ = new ArrayList<Lane>();
+		preReversalLane = null;
+		postReversalLane = null;
 	}
 	
 	public String toString() {
@@ -84,7 +91,7 @@ public class Lane {
 		return link;
 	}
 	
-	public Road road_() {
+	public Road getRoad() {
 		return road_;
 	}
 
@@ -124,6 +131,14 @@ public class Lane {
 		return upLanes_;
 	}
 	
+	public Lane getPreReversalLane() {
+		return preReversalLane;
+	}
+	
+	public Lane getPostReversalLane() {
+		return postReversalLane;
+	}
+	
 	public int index() {
 		return index;
 	}
@@ -159,7 +174,7 @@ public class Lane {
 	public Lane getUpStreamConnection(Road pr) {
 		Lane connectLane = null;
 		for (Lane ul : this.getUpLanes()) {
-			if (ul.road_().equals(pr)) {
+			if (ul.getRoad().equals(pr)) {
 				connectLane = ul;
 				break;
 			}
@@ -190,6 +205,17 @@ public class Lane {
 			}
 		}
 		return (last);
+	}
+	
+	public Coordinate[] getCoordinates() {
+		// get the coordinates
+		Coordinate[] coords = ContextCreator.getLaneGeography()
+				.getGeometry(this).getCoordinates();
+		// if the lane is reversed, reverse the coordinate map
+		if (this.preReversalLane != null) {
+			ArrayUtils.reverse(coords);
+		}
+		return coords;
 	}
 	
 	/* Setters ------------------------------------------------------------- */
@@ -225,6 +251,14 @@ public class Lane {
 
 	public void setRight(int right) {
 		this.right = right;
+	}
+	
+	public void setPreReversalLane(Lane lane) {
+		this.preReversalLane = lane;
+	}
+
+	public void setPostReversalLane(Lane lane) {
+		this.postReversalLane = lane;
 	}
 	
 	public void upConnection(int n) {

@@ -1,10 +1,11 @@
-package evacSim;
+	package evacSim;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.lang.IllegalStateException;
 //import java.util.LinkedList;
 import java.util.Map;
 //import java.util.Queue;
@@ -169,16 +170,17 @@ public class NetworkEventHandler {
 	}
 	
 	// Make the event work in the simulation, do actual work. If mode = true, set the event; if false, terminate the event
-	public NetworkEventObject setEvent(NetworkEventObject event, boolean mode) {
+	public NetworkEventObject setEvent(NetworkEventObject event, boolean setEvent) {
 		if (event == null)
 			return null;
 		// Iterate over the roads to identify the correct road object
+		LaneContext laneContext = ContextCreator.getLaneContext();
 		Geography<Road> roadGeography = ContextCreator.getRoadGeography();
-		Iterable<Road> roadIt = roadGeography.getAllObjects();
-		for (Road road : roadIt) {
+		Iterable<Road> roadIterable = roadGeography.getAllObjects();
+		for (Road road : roadIterable) {
 			if (road.getLinkid() == event.roadID) {
 				// Found the road, and we do the change
-				if (mode) {
+				if (setEvent) {
 					switch (event.eventID) {
 						case 1: // Change speed limit, set the event from file
 							if (!road.checkEventFlag()) {
@@ -187,10 +189,10 @@ public class NetworkEventHandler {
 								road.setEventFlag();
 								// if opposite link has speed
 								if((float) event.value2>=0){
-									Road road2 = road.getOppositeRoad();
-									if(road2 != null) {
-										road2.setDefaultFreeSpeed();
-										road2.updateFreeFlowSpeed_event((float) event.value2);
+									Road oppRoad = road.getOppositeRoad();
+									if(oppRoad != null) {
+										oppRoad.setDefaultFreeSpeed();
+										oppRoad.updateFreeFlowSpeed_event((float) event.value2);
 									}
 								}
 								return event;
@@ -208,9 +210,6 @@ public class NetworkEventHandler {
 										}
 									}
 								}
-//								System.out.println("Conflict events on road" + event.roadID + "\n" + "Event 1: start: " + conflictEvent.startTime + " end: " + conflictEvent.endTime + 
-//										"\nEvent 2: start: " + event.startTime + " end: " + event.endTime);
-								
 								// terminate the conflict event
 								if (conflictEvent != null) {
 									// restore the event
@@ -229,10 +228,10 @@ public class NetworkEventHandler {
 								road.setEventFlag();
 								// if opposite link has speed
 								if((float) event.value2>=0){
-									Road road2 = road.getOppositeRoad();
-									if(road2 != null) {
-										road2.setDefaultFreeSpeed();
-										road2.updateFreeFlowSpeed_event((float) event.value2);
+									Road oppRoad = road.getOppositeRoad();
+									if(oppRoad != null) {
+										oppRoad.setDefaultFreeSpeed();
+										oppRoad.updateFreeFlowSpeed_event((float) event.value2);
 									}
 								}
 								return event;
@@ -262,29 +261,45 @@ public class NetworkEventHandler {
 									return tempEvent;
 								}
 							}
-							
 						case 3: // Reverse the link
-							if(!road.checkEventFlag()) {
-								Road road2 = road.getOppositeRoad();
-								if(road2 != null) {
-										// If there is a opposite lane, otherwise this event will not be triggered
-										// Want to reverse road to have the same direction as road2
-										// Step 1: Set the speed of the current link to be (close to) zero
-										road.updateFreeFlowSpeed_event((float) 1);
-										// Step 2: Add certain amount of lanes to the opposite link
-										for(Lane l: road.getLanes()) {
-											Lane new_l = new Lane();
-											ContextCreator.getLaneContext().add(new_l);
-											String[] att = new String[8];
-											// Get proper att here, note the first item is lane_ID, we can generate it based on
-											// existing lane, so we know how to remove the generate lane latter.
-											ContextCreator.getLaneContext().setAttribute(new_l, att);
-											// Step 3: Move the vehicle from this link to the opposite one
-											Vehicle first_v = l.firstVehicle();
-										}
-										// Step 4: Update the topology of the network
-										ContextCreator.getCityContext().modifyRoadNetwork();
+							if (!road.checkEventFlag()) { // if there is no event going on currently
+								Road oppRoad = road.getOppositeRoad();
+								// do nothing if there is not a road in the opposite direction
+								if (oppRoad == null) {
+									continue;
 								}
+								// Want to reverse road to have the same direction as oppRoad
+								// Step 1: Set the speed of the current link to be (close to) zero
+								road.updateFreeFlowSpeed_event((float) 1);
+								// Step 2: Add certain amount of lanes to the opposite link
+								for (int i=0; i < road.getLanes().size(); i++) {
+									Lane oldLane = road.getLane(i);
+									Lane newLane = new Lane();
+									laneContext.add(newLane);
+									// RV: set references between new and old lanes
+									newLane.setPreReversalLane(oldLane);
+									oldLane.setPostReversalLane(newLane);
+									// use the -ve index of the old lane's index as this one's
+									newLane.setLaneid(-oldLane.getLaneid());
+									// new lane's road is the old lane's opposite road
+									newLane.setRoad(oppRoad);
+									// assign the lane attributes of the opposite road to this road's new lanes
+									// throw error if the no. of lanes on the current & opposite road don't match
+									if (road.getLanes().size() == oppRoad.getLanes().size()) {
+										// get the paired lane based on the same index in the two roads
+										Lane oppLane = oppRoad.getLane(i);
+										newLane.setLeft(oppLane.getLeft());
+										newLane.setThrough(oppLane.getThrough());
+										newLane.setRight(oppLane.getRight());
+									} else {
+										throw new IllegalStateException(
+												"No. of lanes on reversed lane do not match with opposite road's lanes");
+									}
+									// Step 3: Move the vehicle from this link to the opposite one
+									Vehicle firstVehicle = oldLane.firstVehicle();
+								}
+								// Step 4: Update the topology of the network
+								ContextCreator.getCityContext().modifyRoadNetwork();
 							}
 							else {
 								// If there is another event running on the same road, we need to terminate it
@@ -300,9 +315,6 @@ public class NetworkEventHandler {
 										}
 									}
 								}
-//								System.out.println("Conflict events on road" + event.roadID + "\n" + "Event 1: start: " + conflictEvent.startTime + " end: " + conflictEvent.endTime + 
-//										"\nEvent 2: start: " + event.startTime + " end: " + event.endTime);
-								
 								// terminate the conflict event
 								if (conflictEvent != null) {
 									// restore the event
@@ -324,10 +336,10 @@ public class NetworkEventHandler {
 						case 1: // restore speed limit
 							road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); // To be moved into a buffer variable in the road
 							road.restoreEventFlag();
-							if((float) event.value2>=0){
-								Road road2 = road.getOppositeRoad();
-								if(road2 != null) {
-									road2.updateFreeFlowSpeed_event((float) road2.getDefaultFreeSpeed());
+							if ((float) event.value2 >= 0) {
+								Road oppRoad = road.getOppositeRoad();
+								if(oppRoad != null) {
+									oppRoad.updateFreeFlowSpeed_event((float) oppRoad.getDefaultFreeSpeed());
 								}
 							}
 							return event;
@@ -335,30 +347,30 @@ public class NetworkEventHandler {
 						case 2:
 							road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); // To be moved into a buffer variable in the road
 							road.restoreEventFlag();
-							if((float) event.value2>=0){
-								Road road2 = road.getOppositeRoad();
-								if(road2 != null) {
-									road2.updateFreeFlowSpeed_event((float) road2.getDefaultFreeSpeed());
+							if ((float) event.value2 >= 0) {
+								Road oppRoad = road.getOppositeRoad();
+								if(oppRoad != null) {
+									oppRoad.updateFreeFlowSpeed_event((float) oppRoad.getDefaultFreeSpeed());
 								}
 							}
 							return event;
 						case 3: // Recover the link reversal
-							Road road2 = road.getOppositeRoad();
-							if(road2 != null) {
-								for(Lane l: road.getLanes()) {
-									Lane new_l = ContextCreator.getCityContext().getLanefromID(-l.getLaneid()); // Use negative value for the reversed lane
-									// Step1: Move the vehicle from this lane to previously existing lanes 
-									Vehicle first_v = l.firstVehicle();
-									// Step2: Remove the additional lanes of the reversed link
-									ContextCreator.getLaneContext().remove(new_l);
-									road2.removeLane(new_l);
-								}
-								// Step3: Recover the speed of this link
-								road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); 
-								road.restoreEventFlag();
-								// Step4: Update the network topology
-								ContextCreator.getCityContext().modifyRoadNetwork();
+							Road oppRoad = road.getOppositeRoad();
+							if (oppRoad == null) continue;
+							for(Lane l: road.getLanes()) {
+								// Use negative value for the reversed lane
+								Lane new_l = ContextCreator.getCityContext().getLanefromID(-l.getLaneid());
+								// Step1: Move the vehicle from this lane to previously existing lanes 
+								Vehicle first_v = l.firstVehicle();
+								// Step2: Remove the additional lanes of the reversed link
+								ContextCreator.getLaneContext().remove(new_l);
+								oppRoad.removeLane(new_l);
 							}
+							// Step3: Recover the speed of this link
+							road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed()); 
+							road.restoreEventFlag();
+							// Step4: Update the network topology
+							ContextCreator.getCityContext().modifyRoadNetwork();
 						default: break;
 					}
 				}

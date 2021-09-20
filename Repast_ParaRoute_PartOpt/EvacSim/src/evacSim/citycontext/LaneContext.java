@@ -72,18 +72,19 @@ public class LaneContext extends DefaultContext<Lane> {
 			}
 			br.close();
 		} catch (java.net.MalformedURLException e) {
-			System.out
-					.println("ContextCreator: malformed URL exception when reading roadshapefile. Check the 'roadLoc' parameter is correct");
+			System.out.println(
+					"ContextCreator: malformed URL exception when reading "
+					+ "roadshapefile. Check the 'roadLoc' parameter is correct");
 			e.printStackTrace();
-		} catch (FileNotFoundException e){
-			System.out
-			.println("ContextCreator: No road csv file found");
+		} catch (FileNotFoundException e) {
+			System.out.println("ContextCreator: No road csv file found");
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();}
+            e.printStackTrace();
+        }
 	}
 	
-	public Lane setAttribute(Lane l, String[] att){
+	public Lane setAttribute(Lane l, String[] att) {
 		l.setLaneid(Integer.parseInt(att[5]));
 		l.setLink(Integer.parseInt(att[1]));
 		l.setLeft(Integer.parseInt(att[2]));

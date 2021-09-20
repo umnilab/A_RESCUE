@@ -18,7 +18,6 @@ import java.lang.Math;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.space.gis.Geography;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
 import evacSim.citycontext.CityContext;
@@ -92,7 +91,6 @@ public class Vehicle {
 	 */
 	protected Queue<Road> roadPath; 
 	private List<Coordinate> coordMap;
-	private Geography<Lane> laneGeography;
 	/** Leading vehicle in the lane */
 	private Vehicle leading_;
 	/** Trailing vehicle in the lane */
@@ -172,7 +170,6 @@ public class Vehicle {
 		this.leading_ = null;
 		this.trailing_ = null;
 		this.nextRoad_ = null;
-		this.laneGeography = ContextCreator.getLaneGeography();
 		this.coordMap = new ArrayList<Coordinate>();
 		this.destRoadID = 0;
 		// upload the vehicle into the queue of the corresponding link
@@ -355,7 +352,7 @@ public class Vehicle {
 		Lane nextLane = this.getNextLane();
 		if (nextLane != null) {
 			for (Lane pl : nextLane.getUpLanes()) {
-				if (pl.road_().equals(curRoad)) {
+				if (pl.getRoad().equals(curRoad)) {
 					this.targetLane_ = pl;
 					break;
 				}
@@ -400,8 +397,6 @@ public class Vehicle {
 		return rightLane;
 	}
 
-
-	/* Setters ------------------------------------------------------------- */
 	/* Setters ------------------------------------------------------------- */
 
 
@@ -521,7 +516,6 @@ public class Vehicle {
 		}
 	}
 
-
 	public void setNextRoad() {
 		try {
 			if (!this.atOrigin) { // Not at origin
@@ -618,19 +612,19 @@ public class Vehicle {
 		}
 	}
 
-
 	public void setCoordMap(Lane plane) {
 		if (plane != null) {
-			Coordinate[] coords = laneGeography.getGeometry(plane).getCoordinates();
+//			Coordinate[] coords = laneGeography.getGeometry(plane).getCoordinates();
+			Coordinate[] coords = plane.getCoordinates();
 			coordMap.clear();
 			for (Coordinate coord : coords) {
 				this.coordMap.add(coord);
 			}
-			//LZ: update the vehicle location to be the first pt in the coordMap
+			// LZ: update the vehicle location to be the first pt in the coordMap
 			this.setCurrentCoord(this.coordMap.get(0));
 			this.coordMap.remove(0);
-			//LZ: lastStepMove_ does note make sense, should be this.length/2
-			this.distance_ = (float) plane.getLength();// - lastStepMove_ / 2;
+			// LZ: lastStepMove_ does note make sense, should be this.length/2
+			this.distance_ = (float) plane.getLength(); // - lastStepMove_ / 2;
 
 			float[] distAndAngle = new float[2];
 			// LZ: replace previous vehicle movement function
@@ -646,7 +640,6 @@ public class Vehicle {
 			logger.error("distance_ is NaN in setCoordMap for " + this);
 		}
 	}
-
 
 	public void setReachDest() throws Exception {
 		// get the current zone (i.e., destination zone prior to relocation)
@@ -831,8 +824,8 @@ public class Vehicle {
 	private void updateCoordMap(Lane lane) {
 		// double newdist_ = 0; // distance between downstream junction & 1st downstream control point
 		// double adjustdist_ = 0; // distance between current coord & 1st downstream control point
-		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates(); // list of control points of new lane
-
+//		Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates(); // list of control points of new lane
+		Coordinate[] coords = lane.getCoordinates();
 		// LZ: This does not work properly, replace with new implementation
 		//		Coordinate juncCoordinate, nextLaneCoordinate, closeVehCoordinate;
 		//		juncCoordinate = coords[coords.length - 1]; //The last coordinate of the lane
@@ -1439,11 +1432,11 @@ public class Vehicle {
 			target = this.coordMap.get(0);
 		} else {
 			lane = this.road.firstLane();
-			Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
-			for(Coordinate coord: coords){
+//			Coordinate[] coords = laneGeography.getGeometry(lane).getCoordinates();
+			Coordinate[] coords = lane.getCoordinates();
+			for (Coordinate coord : coords) {
 				this.coordMap.add(coord);
 			}
-			//this.setCoordMap(lane);
 			target = this.coordMap.get(0);
 		}
 
@@ -1452,12 +1445,9 @@ public class Vehicle {
 		distToTarget = this.distance2(currentCoord, target, distAndAngle);
 
 		if (distToTarget <= travelPerTurn) { // Include equal, which is important
-			// this.lock.lock();
-			// vehicleGeography.move(this, targetGeom);
 			this.setCurrentCoord(target);
 		}
-		// Otherwise move as far as we can towards the target along the road
-		// we're on
+		// Otherwise move as far as we can towards the target along the road we're on
 		// Get the angle between the two points (current and target)
 		// (http://forum.java.sun.com/thread.jspa?threadID=438608&messageID=1973655)
 		else {
@@ -1518,9 +1508,9 @@ public class Vehicle {
 							this.removeFromLane();
 							this.removeFromMacroList();
 							this.setCoordMap(dnlane);
-							this.appendToRoad(dnlane.road_());
+							this.appendToRoad(dnlane.getRoad());
 							this.append(dnlane);
-							this.linkHistory.add(dnlane.road_().getID());
+							this.linkHistory.add(dnlane.getRoad().getID());
 							this.linkTimeHistory.add(tickcount);
 							this.lastRouteTime = -1; // old route is not valid for sure
 							this.setNextRoad();
@@ -1653,7 +1643,6 @@ public class Vehicle {
 	public void killVehicle() {
 		this.road = null;
 		this.lane = null;
-		this.laneGeography = null;
 		this.nextLane_ = null;
 		this.nosingFlag = false;
 		this.yieldingFlag = false;
@@ -1814,7 +1803,7 @@ public class Vehicle {
 		Lane curLane = this.lane;
 		if (nextRoad != null) {
 			for (Lane dl : curLane.getDnLanes()) {
-				if (dl.road_().equals(nextRoad)) {
+				if (dl.getRoad().equals(nextRoad)) {
 					// if this lane already connects to downstream road then
 					// assign to the connected lane
 					connected = true;
@@ -1841,7 +1830,7 @@ public class Vehicle {
 			return;
 		} else {
 			for (Lane dl : curLane.getDnLanes()) {
-				if (dl.road_().equals(this.nextRoad())) {
+				if (dl.getRoad().equals(this.nextRoad())) {
 					this.nextLane_ = dl;
 					// if this lane already connects to downstream road then
 					// assign to the connected lane
@@ -1852,7 +1841,7 @@ public class Vehicle {
 			if (!connected) {
 				for (Lane pl : this.nextRoad().getLanes()) {
 					for (Lane ul : pl.getUpLanes()) {
-						if (ul.road_().getID() == curRoad.getID()) {
+						if (ul.getRoad().getID() == curRoad.getID()) {
 							this.nextLane_ = pl;
 							break; // assign the next lane to the 1st connected lane
 						}
@@ -2357,8 +2346,8 @@ public class Vehicle {
 		if (this.nextLane_ != null) {
 			Lane plane = this.nextLane_;
 			Coordinate c1, c2;
-			Coordinate[] coords = laneGeography.getGeometry(plane)
-					.getCoordinates();
+//			Coordinate[] coords = laneGeography.getGeometry(plane).getCoordinates();
+			Coordinate[] coords = plane.getCoordinates();
 			c1 = coords[0];
 			c2 = coords[coords.length - 1];
 			coor2 = getNearestCoordinate(coor1, c1, c2);

@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
-//import java.util.List;
-//import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -19,6 +16,7 @@ import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.space.gis.Geography;
 import evacSim.*;
+import evacSim.citycontext.Lane;
 import evacSim.data.DataCollector;
 import evacSim.vehiclecontext.Vehicle;
 
@@ -28,11 +26,11 @@ public class Road {
 	private int linkid;
 	private int left;
 	private int right;
-	private int through;
-	private int tlinkid;
 	private int nLanes;
 	private int fromNode;
 	private int toNode;
+	private int through; // next link when going straight
+	private int tlinkid; // coupled (opposite direction) link
 	private int curhour; // BL: to find the current hour of the simulation
 	private String identifier; // can be used to match with shape file roads
 	private int nVehicles_; // SH: number of vehicles currently in the road
@@ -759,12 +757,14 @@ public class Road {
 
 	public void addLane(Lane l) {
 		this.lanes.add(l);
+		this.sortLanes();
 		this.nLanes++;
 	}
 	
 	public void removeLane(Lane l) {
-		if(this.lanes.remove(l)) {
-			this.nLanes --;
+		if (this.lanes.remove(l)) {
+			this.sortLanes();
+			this.nLanes--;
 		}
 	}
 
