@@ -109,7 +109,7 @@ public class TickSnapshot {
 //        		origY = veh.getOriginalCoord().y;
 //        		destX = veh.getDestCoord().x;
 //        		destY = veh.getDestCoord().y;
-        		speed = veh.currentSpeed();
+        		speed = veh.getCurrentSpeed();
         		bearing = veh.getBearing();
 //        		nearlyArrived = veh.nearlyArrived();
 //        		vehicleClass = veh.getVehicleClass();

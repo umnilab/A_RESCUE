@@ -8,9 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import evacSim.ContextCreator;
 import evacSim.citycontext.Road;
 import evacSim.vehiclecontext.Vehicle;
 import repast.simphony.essentials.RepastEssentials;
@@ -117,12 +115,12 @@ public class ThreadedScheduler {
 			HashMap<Integer, String> storeJsonObjects = new HashMap<Integer, String>();
 			
 			for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
-				   Vehicle pv = r.firstVehicle();
+				   Vehicle pv = r.getFirstVehicle();
 				   while(pv!=null){
 					   String info= String.format("%d,%d,%.5f,%.5f",
 		        				pv.getHouse().getZoneId(), pv.getDestinationID(), pv.getCurrentCoord().x, pv.getCurrentCoord().y);
 					   storeJsonObjects.put(pv.getVehicleID(), info);
-					   pv = pv.macroTrailing();
+					   pv = pv.getMacroTrailing();
 				   }
 			   }
 		   JSONObject jsonObject = new JSONObject();

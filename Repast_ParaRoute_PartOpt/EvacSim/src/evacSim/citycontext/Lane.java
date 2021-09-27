@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.vividsolutions.jts.geom.Coordinate;
 import evacSim.ContextCreator;
 import evacSim.vehiclecontext.Vehicle;
+import repast.simphony.space.gis.Geography;
 import evacSim.GlobalVariables;
 
 @SuppressWarnings("unused")
@@ -75,10 +76,6 @@ public class Lane {
 		return id;
 	}
 	
-	public int getIndex() {
-		return index;
-	}
-	
 	public int getLaneid() {
 		return laneid;
 	}
@@ -139,36 +136,28 @@ public class Lane {
 		return postReversalLane;
 	}
 	
-	public int index() {
+	public int getIndex() {
 		return index;
 	}
 	
-	public float speed() {
+	public float getSpeed() {
 		return speed_;
 	}
 	
-	public float maxSpeed() {
+	public float getMaxSpeed() {
 		return maxSpeed_;
 	}
 	
-	public double lengthRoad() {
+	public double getRoadLength() {
 		return road_.length();
 	}
 
-	public Vehicle firstVehicle() {
+	public Vehicle getFirstVehicle() {
 		return firstVehicle_;
 	}
 
-	public Vehicle lastVehicle() {
+	public Vehicle getLastVehicle() {
 		return lastVehicle_;
-	}
-	
-	public float calcMaxSpeed() {
-		return maxSpeed_;
-	}
-	
-	public int nVehicles() {
-		return nVehicles_;
 	}
 	
 	public Lane getUpStreamConnection(Road pr) {
@@ -197,7 +186,7 @@ public class Lane {
 			dlane = dnLanes_.get(i);
 			pv = dlane.lastVehicle_;
 			if (pv != null) {
-				dis = dlane.getLength() - (pv.distance() + pv.length());
+				dis = dlane.getLength() - (pv.getDistance_() + pv.getLength());
 				if (dis < mindis) {
 					mindis = dis;
 					last = pv;
@@ -208,12 +197,15 @@ public class Lane {
 	}
 	
 	public Coordinate[] getCoordinates() {
-		// get the coordinates
-		Coordinate[] coords = ContextCreator.getLaneGeography()
-				.getGeometry(this).getCoordinates();
+		// coordinate list of the lane
+		Coordinate[] coords;
+		Geography<Lane> laneGeography = ContextCreator.getLaneGeography();
 		// if the lane is reversed, reverse the coordinate map
 		if (this.preReversalLane != null) {
+			coords = laneGeography.getGeometry(this.preReversalLane).getCoordinates();
 			ArrayUtils.reverse(coords);
+		} else {
+			coords = laneGeography.getGeometry(this).getCoordinates();
 		}
 		return coords;
 	}
@@ -281,18 +273,18 @@ public class Lane {
 		this.lastEnterTick = current_tick;
 	}
 	
-	public void firstVehicle(Vehicle v) {
+	public void setFirstVehicle(Vehicle v) {
 		if (v != null) {
 			this.firstVehicle_ = v;
-			v.leading(null);
+			v.setLeading(null);
 		} else
 			this.firstVehicle_ = null;
 	}
 
-	public void lastVehicle(Vehicle v) {
+	public void setLastVehicle(Vehicle v) {
 		if (v != null) {
 			this.lastVehicle_ = v;
-			v.trailing(null);
+			v.setTrailing(null);
 		} else
 			this.lastVehicle_ = null;
 
@@ -302,12 +294,16 @@ public class Lane {
 	 * Add only the number of vehicle to lane, while addVehicle in road and
 	 * a vehicle to arrayList.
 	 */
-	public void addVehicles() {
+	public void increaseNumVehicles() {
 		nVehicles_++;
 	}
 
-	public void removeVehicles() {
+	public void decreaseNumVehicles() {
 		this.nVehicles_--;
+	}
+	
+	public void setNumVehicles(int n) {
+		this.nVehicles_ = n;
 	}
 	
 	/* Others -------------------------------------------------------------- */
