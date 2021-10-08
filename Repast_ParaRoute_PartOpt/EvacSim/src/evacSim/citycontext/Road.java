@@ -37,7 +37,6 @@ public class Road {
 	private float speed_; // current speed
 	private double travelTime;
 	private float freeSpeed_;
-	public float preReversalFreeSpeed_;
 	private Road oppositeRoad;
 	private ArrayList<Road> downStreamMovements;
 	private ArrayList<Lane> lanes; // Use lanes as objects inside the road
@@ -843,9 +842,13 @@ public class Road {
 	/**
 	 * Modify the free flow speed based on the events
 	 * */
-	public void updateFreeFlowSpeed_event(float newFFSpd) {
+	public void updateFreeFlowSpeedEvent(float newFFSpd) {
 		// HG: convert from Miles per hour to meter per second
 		this.freeSpeed_ = (float) (newFFSpd * 0.44704);
+	}
+	
+	public void updateSpeedEvent(float newSpd) {
+		this.speed_ = (float) (newSpd * 0.44704);
 	}
 
 	public void printTick(){

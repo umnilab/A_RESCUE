@@ -34,8 +34,8 @@ public class Vehicle {
 	/** Automatically generated instance ID. */
 	private int id;
 	protected int vehicleID_;
-	private int deptime;
-	private int endTime;
+	private int deptime; // departure time in ticks
+	private int endTime; // final arrival time in ticks
 	private int destinationZoneId;
 	protected int destRoadID;
 	/** The time of getting the last routing information */
@@ -660,16 +660,16 @@ public class Vehicle {
 			this.reachActLocation = false;
 			this.reachDest = true;
 			// LZ: Log the vehicle information here
-			String formated_msg = (this.getVehicleID() + 
-					";" + 0 +
-					";" + this.getDepTime() +
-					";" + this.getEndTime() +
-					";" + this.getHouse().getZoneId() +
-					";" + this.getDestinationID() +
-					";" + this.accummulatedDistance_ +
-					";" + this.visitedShelters.size() +
-					";" + this.linkHistory.toString() +
-					";" + this.linkTimeHistory.toString()
+			String formated_msg = (getVehicleID()
+					+ "," + 0 +
+					"," + getDepTime() + 
+					"," + getEndTime() +
+					"," + getHouse().getZoneId() +
+					"," + getDestinationID() + 
+					"," + accummulatedDistance_ +
+					"," + visitedShelters.size()+
+					",\"" + this.linkHistory.toString() +
+					"\",\"" + this.linkTimeHistory.toString() + "\""
 					);
 			try {
 				ContextCreator.bw.write(formated_msg);
@@ -741,7 +741,7 @@ public class Vehicle {
 			this.road.removeVehicleFromNewQueue(this);
 			this.setRoad(road);
 			this.setCoordMap(firstlane);
-			this.append(firstlane);
+			this.appendToLane(firstlane);
 			this.appendToRoad(this.road);
 			// Record the vehicle movement here
 			this.linkHistory.add(this.road.getLinkid());
@@ -796,11 +796,11 @@ public class Vehicle {
 	/**
 	 * BL: Append a vehicle to vehicle list in plane.
 	 */
-	public void append(Lane lane) {
+	public void appendToLane(Lane lane) {
 		this.lane = lane;
 		Vehicle v = lane.getLastVehicle();
 		lane.increaseNumVehicles();
-		if (v != null) {
+		if (v != null && v != this) {
 			this.setLeading(v);
 			v.setTrailing(this);
 		} else {
@@ -1452,7 +1452,7 @@ public class Vehicle {
 				this.appendToRoad(this.nextRoad());
 				this.linkHistory.add(this.nextRoad().getLinkid());
 				this.linkTimeHistory.add(tickcount);
-				this.append(nextLane_); // LZ: Two vehicles entered the same lane, then messed up.
+				this.appendToLane(nextLane_); // LZ: Two vehicles entered the same lane, then messed up.
 				this.setNextRoad();
 				this.assignNextLane();
 				// Reset the desired speed according to the new road
@@ -1479,7 +1479,7 @@ public class Vehicle {
 							this.removeFromMacroList();
 							this.setCoordMap(dnlane);
 							this.appendToRoad(dnlane.getRoad());
-							this.append(dnlane);
+							this.appendToLane(dnlane);
 							this.linkHistory.add(dnlane.getRoad().getID());
 							this.linkTimeHistory.add(tickcount);
 							this.lastRouteTime = -1; // old route is not valid for sure
@@ -1540,7 +1540,7 @@ public class Vehicle {
 		// if the macroLeading is modified in advanceInMacroList by other thread
 		// then this vehicle will be misplaced in the Linked List
 		if (road.getLastVehicle() != null) {
-			road.getLastVehicle().macroTrailing_ = this; 
+			road.getLastVehicle().macroTrailing_ = this;
 			macroLeading_ = road.getLastVehicle();
 		}
 		else {
@@ -1668,7 +1668,7 @@ public class Vehicle {
 			pr.setLastVehicle(macroLeading_);
 		}
 		// LZ: Oct 19, 2020. Replaced the redundant operations below with this
-		pr.changeNumberOfVehicles(-1); 
+		pr.changeNumberOfVehicles(-1);
 	}
 
 	/**
@@ -2468,15 +2468,15 @@ public class Vehicle {
 			this.reachDest = true;
 			logger.info(this + " reached dest shelter " + curDest);
 			String formatted_msg = (getVehicleID()
-					+ ";" + 1 +
-					";" + getDepTime() + 
-					";" + getEndTime() +
-					";" + getHouse().getZoneId() +
-					";" + getDestinationID() + 
-					";" + accummulatedDistance_ +
-					";" + visitedShelters.size()+
-					";" + this.linkHistory.toString() +
-					";" + this.linkTimeHistory.toString()
+					+ "," + 1 +
+					"," + getDepTime() + 
+					"," + getEndTime() +
+					"," + getHouse().getZoneId() +
+					"," + getDestinationID() + 
+					"," + accummulatedDistance_ +
+					"," + visitedShelters.size()+
+					",\"" + this.linkHistory.toString() +
+					"\",\"" + this.linkTimeHistory.toString() + "\""
 					);
 			try {
 				ContextCreator.bw.write(formatted_msg);

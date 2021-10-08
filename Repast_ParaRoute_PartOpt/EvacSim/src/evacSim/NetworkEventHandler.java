@@ -240,14 +240,14 @@ public class NetworkEventHandler {
 	
 	private NetworkEventObject setEvent1(Road road, NetworkEventObject event) {
 		road.setDefaultFreeSpeed();
-		road.updateFreeFlowSpeed_event((float) event.value1);
+		road.updateFreeFlowSpeedEvent((float) event.value1);
 		road.setEventFlag();
 		// if opposite link has speed
 		if((float) event.value2>=0){
 			Road oppRoad = road.getOppositeRoad();
 			if(oppRoad != null) {
 				oppRoad.setDefaultFreeSpeed();
-				oppRoad.updateFreeFlowSpeed_event((float) event.value2);
+				oppRoad.updateFreeFlowSpeedEvent((float) event.value2);
 			}
 		}
 		return event;
@@ -255,17 +255,71 @@ public class NetworkEventHandler {
 	
 	private NetworkEventObject setEvent2(Road road, NetworkEventObject event) {
 		road.setDefaultFreeSpeed();
-		road.updateFreeFlowSpeed_event((float) event.value1);
+		road.updateFreeFlowSpeedEvent((float) event.value1);
 		road.setEventFlag();
 		// if opposite link has speed
 		if((float) event.value2>=0){
 			Road oppRoad = road.getOppositeRoad();
 			if (oppRoad != null) {
 				oppRoad.setDefaultFreeSpeed();
-				oppRoad.updateFreeFlowSpeed_event((float) event.value2);
+				oppRoad.updateFreeFlowSpeedEvent((float) event.value2);
 			}
 		}
 		return event;
+	}
+	
+	/** 
+	 * Move the vehicles from one lane to another lane & from this
+	 * road to opposite road, and update the position of the reversed
+	 * lane vehicles on the new lane and update the macroList of the
+	 * opposite road.
+	 * @param fromLane the lane from which vehicles are to be transfered
+	 * @param toLane the lane to which the vehicles are to be transfered
+	 * @author Rajat
+	 * */
+	private void transferVehiclesInLaneReversal(
+			Lane fromLane, Lane toLane) {
+		System.err.println("Doing transferVehiclesInLaneReversal: {from " + 
+			fromLane + ", to " + toLane + "}");
+		toLane.setFirstVehicle(fromLane.getLastVehicle());
+		toLane.setLastVehicle(fromLane.getFirstVehicle()); // fromLane.setFirstVehicle(null); // fromLane.setLastVehicle(null); // fromLane.setNumVehicles(0);
+		Vehicle veh = fromLane.getLastVehicle();
+		System.err.println("First vehicle: " + veh + 
+				" at tick " + (int) RepastEssentials.GetTickCount());
+		while (veh != null) { // for each vehicle on the old lane
+			// remove this vehicle from previous road and lane
+			veh.removeFromLane();
+			veh.removeFromMacroList();
+			// add this vehicle to the new road and lane
+			veh.appendToLane(toLane);
+			veh.appendToRoad(toLane.getRoad());
+			veh.setNextRoad();
+			veh.assignNextLane();
+			// flip the order of the lane's vehicle linked list
+			Vehicle oldLeading = veh.getLeading();
+			if (oldLeading != null) {
+				if (veh != oldLeading.getTrailing()) {
+					throw new IllegalStateException(
+							"For vehicles x & y, if y = x.leading, then the "
+									+ "relationship x = y.trailing does not hold");
+				}
+				veh.setTrailing(oldLeading);
+				oldLeading.setLeading(veh);
+			}
+			// reverse the distance from the downstream node of the lane
+			float newDistance_ = fromLane.getLength() - veh.getDistance_();
+			if (Float.isNaN(newDistance_) || newDistance_ < 0) {
+				throw new IllegalStateException(
+						"Distance from downstream junction is negative/NaN.");
+			}
+			veh.setDistance_(newDistance_);
+			// sort the macroList according to updated position
+			veh.advanceInMacroList();
+			// move on to the next vehicle (i.e., traverse the old lane's 
+			// vehicle list upstream)
+			System.err.println(veh);
+			veh = oldLeading;
+		}
 	}
 	
 	/**
@@ -278,16 +332,25 @@ public class NetworkEventHandler {
 	 * @author Rajat
 	 */
 	private void setEvent3(Road road) {
+		System.err.println("Reversing road ID: " + road);
 		LaneContext laneContext = ContextCreator.getLaneContext();
 		Road oppRoad = road.getOppositeRoad();
 		// do nothing if there is not a road in the opposite direction
 		if (oppRoad == null) {
+			System.err.println("Skipping road " + road + ": no opposite road");
+			return;
+		}
+		if (road.getLanes().size() != oppRoad.getLanes().size()) {
+			System.err.println("Skipping road " + road + " because no. of lanes " +  
+					"does not equal that on opposite road " + oppRoad);
 			return;
 		}
 		// Want to reverse road to have the same direction as oppRoad
 		// (1) Set the speed of the current link to be (close to) zero
-		road.preReversalFreeSpeed_ = road.getFreeSpeed();
-		road.updateFreeFlowSpeed_event((float) 1);
+		road.updateFreeFlowSpeedEvent(0.01f);
+		road.updateSpeedEvent(0.01f);
+		road.setNumberOfVehicles(0);
+		ContextCreator.getCityContext().modifyRoadNetwork();
 		// (2) Add certain amount of lanes to the opposite link
 		for (int i=0; i < road.getLanes().size(); i++) { // for each lane on target road
 			Lane oldLane = road.getLane(i);
@@ -298,75 +361,18 @@ public class NetworkEventHandler {
 			oldLane.setPostReversalLane(newLane);
 			// use the negative index of the old lane's index as this one's
 			newLane.setLaneid(-oldLane.getLaneid());
-			// new lane's road is the old lane's opposite road
 			newLane.setRoad(oppRoad);
 			// assign the lane attributes of the opposite road to this road's new lanes
-			// throw error if the no. of lanes on the current & opposite road don't match
-			if (road.getLanes().size() == oppRoad.getLanes().size()) {
-				// get the paired lane based on the same index in the two roads
-				Lane oppLane = oppRoad.getLane(i);
-				newLane.setLeft(oppLane.getLeft());
-				newLane.setThrough(oppLane.getThrough());
-				newLane.setRight(oppLane.getRight());
-			} else {
-				throw new IllegalStateException(
-						"No. of lanes on reversed lane do not match with opposite road's lanes");
-			}
+			// get the paired lane based on the same index in the two roads
+			Lane oppLane = oppRoad.getLane(i);
+			newLane.setLeft(oppLane.getLeft());
+			newLane.setThrough(oppLane.getThrough());
+			newLane.setRight(oppLane.getRight());
 			/* (3) Move the vehicles from old lane to new lane & from this 
 			 * road to opposite road, and update the position of the reversed 
 			 * lane vehicles on the new lane and update the macroList of the 
 			 * opposite road */
-			transferVehiclesInLaneReversal(oldLane, newLane, oppRoad);
-		}
-		/* (4) Update the topology of the network */
-		ContextCreator.getCityContext().modifyRoadNetwork();
-	}
-	
-	/** 
-	 * Move the vehicles from old lane to new lane & from this
-	 * road to opposite road, and update the position of the reversed
-	 * lane vehicles on the new lane and update the macroList of the
-	 * opposite road.
-	 * @author Rajat
-	 * */
-	private void transferVehiclesInLaneReversal(
-			Lane preLane, Lane postLane, Road oppRoad) {
-		preLane.setFirstVehicle(postLane.getLastVehicle());
-		preLane.setLastVehicle(postLane.getFirstVehicle());
-		postLane.setFirstVehicle(null);
-		postLane.setLastVehicle(null);
-		postLane.setNumVehicles(0);
-		Vehicle veh = postLane.getFirstVehicle();
-		while (veh != null) { // for each vehicle on the old lane
-			// remove this vehicle from previous road and lane
-			veh.removeFromLane();
-			veh.removeFromMacroList();
-			// add this vehicle to the new road and lane
-			veh.setLane(preLane);
-			preLane.increaseNumVehicles();
-			veh.appendToRoad(oppRoad);
-			veh.appendToMacroList(oppRoad);
-			// flip the order of the lane's vehicle linked list
-			Vehicle oldLeading = veh.getLeading();
-			if (veh != oldLeading.getTrailing()) {
-				throw new IllegalStateException(
-						"For vehicles x & y, if y = x.leading, then the "
-						+ "relationship x = y.trailing does not hold");
-			}
-			veh.setTrailing(oldLeading);
-			oldLeading.setLeading(veh);
-			// reverse the distance from the downstream node of the lane
-			float newDistance_ = preLane.getLength() - veh.getDistance_();
-			if (Float.isNaN(newDistance_) || newDistance_ < 0) {
-				throw new IllegalStateException(
-						"Distance from downstream junction is negative/NaN.");
-			}
-			veh.setDistance_(newDistance_);
-			// sort the macroList according to updated position
-			veh.advanceInMacroList();
-			// move on to the next vehicle (i.e., traverse the old lane's 
-			// vehicle list upstream)
-			veh = oldLeading;
+			transferVehiclesInLaneReversal(oldLane, newLane);
 		}
 	}
 	
@@ -377,6 +383,7 @@ public class NetworkEventHandler {
 	 * @author Rajat
 	 */
 	private void restoreEvent3(Road road) {
+		System.err.println("Undoing reversal on road ID " + road.getLinkid());
 		LaneContext laneContext = ContextCreator.getLaneContext();
 		Road oppRoad = road.getOppositeRoad();
 		// do nothing if there is not a road in the opposite direction
@@ -385,12 +392,16 @@ public class NetworkEventHandler {
 		}
 		// Want to reverse road to have the same direction as oppRoad
 		// (1) Reset the free flow speed
-		road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed());
+		road.updateFreeFlowSpeedEvent((float) road.getDefaultFreeSpeed());
+		road.updateSpeedEvent((float) road.getDefaultFreeSpeed());
+		road.setNumberOfVehicles(0);
+		road.setTravelTime();
+		ContextCreator.getCityContext().modifyRoadNetwork();
 		// (2) Remove the added lanes
 		for (Lane postLane : road.getLanes()) { // for each lane on target road
 			Lane preLane = postLane.getPreReversalLane();
 			if (preLane == null) {
-				System.out.println("Pre-reversal lane for " + postLane.getID() 
+				System.out.println("Pre-reversal lane for " + postLane.getLaneid() 
 				+ " not found.");
 				continue;
 			}
@@ -399,22 +410,20 @@ public class NetworkEventHandler {
 			 * road to opposite road, and update the position of the reversed 
 			 * lane vehicles on the new lane and update the macroList of the 
 			 * opposite road */
-			transferVehiclesInLaneReversal(preLane, postLane, oppRoad);
+			transferVehiclesInLaneReversal(preLane, postLane);
 			// (4) Remove this lane from the list of lanes
 			laneContext.remove(postLane);
 		}
-		/* (4) Update the topology of the network */
-		ContextCreator.getCityContext().modifyRoadNetwork();
 	}
 	
 	private NetworkEventObject restoreEvent1(Road road, NetworkEventObject event) {
 		// To be moved into a buffer variable in the road
-		road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed());
+		road.updateFreeFlowSpeedEvent((float) road.getDefaultFreeSpeed());
 		road.restoreEventFlag();
 		if ((float) event.value2 >= 0) {
 			Road oppRoad = road.getOppositeRoad();
-			if(oppRoad != null) {
-				oppRoad.updateFreeFlowSpeed_event((float) oppRoad.getDefaultFreeSpeed());
+			if (oppRoad != null) {
+				oppRoad.updateFreeFlowSpeedEvent((float) oppRoad.getDefaultFreeSpeed());
 			}
 		}
 		return event;
@@ -423,12 +432,12 @@ public class NetworkEventHandler {
 	
 	private NetworkEventObject restoreEvent2(Road road, NetworkEventObject event) {
 		// To be moved into a buffer variable in the road
-		road.updateFreeFlowSpeed_event((float) road.getDefaultFreeSpeed());
+		road.updateFreeFlowSpeedEvent((float) road.getDefaultFreeSpeed());
 		road.restoreEventFlag();
 		if ((float) event.value2 >= 0) {
 			Road oppRoad = road.getOppositeRoad();
 			if(oppRoad != null) {
-				oppRoad.updateFreeFlowSpeed_event((float) oppRoad.getDefaultFreeSpeed());
+				oppRoad.updateFreeFlowSpeedEvent((float) oppRoad.getDefaultFreeSpeed());
 			}
 		}
 		return event;

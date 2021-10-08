@@ -67,7 +67,7 @@ public class Lane {
 	}
 	
 	public String toString() {
-		return "<Lane"+this.laneid+"@Road"+this.link+">";
+		return "<Lane" + laneid + ">";
 	}
 
 	/* Getters ------------------------------------------------------------- */
@@ -299,7 +299,9 @@ public class Lane {
 	}
 
 	public void decreaseNumVehicles() {
-		this.nVehicles_--;
+		if (this.nVehicles_-- < 0) {
+			throw new IllegalStateException("No. of vehicles on " + this + " < 0.");
+		}
 	}
 	
 	public void setNumVehicles(int n) {
