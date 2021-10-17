@@ -14,7 +14,6 @@ import evacSim.vehiclecontext.Vehicle;
 import repast.simphony.essentials.RepastEssentials;
 
 public class ThreadedScheduler {
-//	private boolean roadFinishedStepping;
 	private ExecutorService executor;
 	private int N_Partition;
 	private int N_threads;
@@ -40,14 +39,6 @@ public class ThreadedScheduler {
 		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
 			   r.step();
 		}
-        // Record vehicle trajectories
-//		for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
-//			   Vehicle pv = r.firstVehicle();
-//			   while(pv!=null){
-//				   pv.recVehSnaphotForVisInterp();
-//				   pv = pv.macroTrailing();
-//			   }
-//		   }
 	}
 	
 	public void paraStep() {
@@ -69,18 +60,6 @@ public class ThreadedScheduler {
 			min_para_time = min_para_time + time_result.get(0);
 			max_para_time = max_para_time + time_result.get(1);
 			avg_para_time = avg_para_time + time_result.get(2);
-			// Record vehicle trajectories
-//		   for(Road r: ContextCreator.getRoadGeography().getAllObjects()){
-//			   Vehicle pv = r.firstVehicle();
-//			   while(pv!=null){
-//				   pv.recVehSnaphotForVisInterp();
-//				   pv = pv.macroTrailing();
-//			   }
-//		   }
-			// Step over the boundary roads
-//			double start_t = System.currentTimeMillis();
-//			stepBwRoads();
-//			seq_time = seq_time + (int)(System.currentTimeMillis() - start_t);
 			// Generate a vehicle list, filename by the corresponding ticks
 			int tickcount = (int) RepastEssentials.GetTickCount();
 			if(tickcount % 6000 == 0) { //Every 30 min
@@ -105,7 +84,8 @@ public class ThreadedScheduler {
 		int tickcount = (int) RepastEssentials.GetTickCount();
 
 		// create the overall file path, named after the demand filename
-		String outpath = outDir + File.separatorChar + "vehicle-list-" + basename + "-" + tickcount/6000 + ".json";
+		String outpath = outDir + File.separatorChar + "vehicle-list-" + 
+				basename + "-" + tickcount/6000 + ".json";
 		BufferedWriter bw = null;
 		// check the path will be a valid file
 		try {
@@ -118,7 +98,8 @@ public class ThreadedScheduler {
 				   Vehicle pv = r.getFirstVehicle();
 				   while(pv!=null){
 					   String info= String.format("%d,%d,%.5f,%.5f",
-		        				pv.getHouse().getZoneId(), pv.getDestinationID(), pv.getCurrentCoord().x, pv.getCurrentCoord().y);
+		        				pv.getHouse().getZoneId(), pv.getDestinationID(), 
+		        				pv.getCurrentCoord().x, pv.getCurrentCoord().y);
 					   storeJsonObjects.put(pv.getVehicleID(), info);
 					   pv = pv.getMacroTrailing();
 				   }
@@ -141,13 +122,9 @@ public class ThreadedScheduler {
 	public void stepBwRoads() {
 		ArrayList<Road> PartitionedBwRoads = ContextCreator.partitioner
 				.getPartitionedBwRoads();
-//		try {
-			for (Road r : PartitionedBwRoads) {
-				r.step();
-			}
-		/*} catch (Exception ex) {
-			ex.printStackTrace();
-		}*/
+		for (Road r : PartitionedBwRoads) {
+			r.step();
+		}
 	}
 	
 	public void shutdownScheduler() {

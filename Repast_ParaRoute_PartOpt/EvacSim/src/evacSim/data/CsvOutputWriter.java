@@ -76,7 +76,6 @@ public class CsvOutputWriter implements DataConsumer {
         this(new File(CsvOutputWriter.createDefaultFilePath()), false);
     }
     
-    
     /**
      * Creates the CSV output writer object to place output from the
      * simulation buffer into the file specified.
@@ -111,7 +110,6 @@ public class CsvOutputWriter implements DataConsumer {
         DataCollector.printDebug("CSV", "FILE: " + this.file.getAbsolutePath());
     }
     
-    
     /**
      * Returns whether or not the writer will append to existing files.
      * 
@@ -120,7 +118,6 @@ public class CsvOutputWriter implements DataConsumer {
     public boolean isAppending() {
         return this.append;
     }
-    
     
     /**
      * Sets whether or not the writer will append to existing files.
@@ -131,7 +128,6 @@ public class CsvOutputWriter implements DataConsumer {
         this.append = append;
     }
     
-    
     /**
      * Returns the file to which output is written.
      * 
@@ -140,7 +136,6 @@ public class CsvOutputWriter implements DataConsumer {
     public File getOutputFile() {
         return this.file;
     }
-    
     
     /**
      * Sets the file to which contents will be written.  If the writer
@@ -172,7 +167,6 @@ public class CsvOutputWriter implements DataConsumer {
             this.defaultFilenames = false;
         }
     }
-    
     
     /**
      * Starts consuming data from the data buffer.  This opens the set
@@ -240,8 +234,12 @@ public class CsvOutputWriter implements DataConsumer {
                         }
                     }
                     
-                    // get the next item from the buffer. HGehlot: I have changed from 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only send the data at the new frequency for viz interpolation
-                    double nextTick = CsvOutputWriter.this.currentTick + GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
+                    /* get the next item from the buffer. 
+                     * HGehlot: I have changed from 1 to GlobalVariables
+                     * .FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only send the data 
+                     * at the new frequency for viz interpolation */
+                    double nextTick = CsvOutputWriter.this.currentTick + 
+                    		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
                     if (snapshot == null) {
                         // the buffer has no more items for us at this time
@@ -251,7 +249,6 @@ public class CsvOutputWriter implements DataConsumer {
                             DataCollector.printDebug("CSV", report);
                             writeCount = 0;
                         }
-                        
                         // is the data collection process finished?
                         if (!collector.isCollecting() &&
                             !collector.isPaused()) {
@@ -270,32 +267,24 @@ public class CsvOutputWriter implements DataConsumer {
                             break;
                         }
                     }
-                    
                     // RV:DynaDestTest: print the shelter relocations when the simulation ends
                     if (nextTick == GlobalVariables.SIMULATION_STOP_TIME - 
                     		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ) {
                     	logger.info("Shelter relocations:");
-//                    	logger.info(GlobalVariables.shelterRelocateTracker);
                     }
-                    
                     // update the currently processing tick index to this item
-                    CsvOutputWriter.this.currentTick = 
-                            snapshot.getTickNumber();
-                    
+                    CsvOutputWriter.this.currentTick = snapshot.getTickNumber();
                     // process the current item into lines in the output file
                     try {
                     	// RV:DynaDestTest: commented `writeTickSnapshot` for only testing
                         CsvOutputWriter.this.writeTickSnapshot(snapshot);
-//                    	CsvOutputWriter.this.testWriteTickSnapshot(snapshot);
                         totalCount++;
                         writeCount++;
                     }
                     catch (IOException ioe) {
-                        // TODO: Handle being unable to write output lines?
                         String errMsg = "WRITE ERROR: " + ioe.getMessage();
                         DataCollector.printDebug("CSV" + errMsg);
                     }
-                    
                     // wait a short delay (a few ms) to give java's thread
                     // scheduler a chance to switch contexts if necessary
                     // before we loop around and grab the next buffer item
@@ -307,7 +296,6 @@ public class CsvOutputWriter implements DataConsumer {
                         break;
                     }
                 }
-                
                 // we have finished collecting data, so we will close the file
                 try {
                     CsvOutputWriter.this.closeOutputFileWriter();
@@ -315,7 +303,6 @@ public class CsvOutputWriter implements DataConsumer {
                 catch (IOException ioe) {
                     // TODO: Handle not being able to close the output file?
                 }
-                
                 // set the data consumption flags as finished
                 CsvOutputWriter.this.paused = false;
                 CsvOutputWriter.this.consuming = false;
@@ -324,7 +311,6 @@ public class CsvOutputWriter implements DataConsumer {
         this.writingThread = new Thread(writingRunnable);
         this.writingThread.start();
     }
-    
     
     /**
      * Stops the data consumption and writing (after finishing any currently
@@ -343,7 +329,6 @@ public class CsvOutputWriter implements DataConsumer {
         if (!this.consuming) {
             return;
         }
-        
         // set the flags to the stopped state
         this.paused = false;
         this.consuming = false;
@@ -381,17 +366,14 @@ public class CsvOutputWriter implements DataConsumer {
         if (!this.consuming) {
             return;
         }
-        
         // set the flags to tell the consumer to stop consuming new items
         this.paused = true;
         this.consuming = true;
-        
         // we do nothing to the thread or file writer directly here.  
         // the thread on its next loop will see the paused state and 
         // start checking (with a delay) for this state to change back 
         // to normal running before resuming its work.
     }
-    
     
     /**
      * Stops the consumption of new items from the buffer, stops the file
@@ -407,15 +389,12 @@ public class CsvOutputWriter implements DataConsumer {
     public void resetConsumer() throws Throwable {
         // stop the file writer if it is currently operating
         this.stopConsumer();
-        
         // reset the flags to the initial state
         this.paused = false;
         this.consuming = false;
-        
         // reset the current tick counter back to the start
         this.currentTick = -1;
     }
-    
 
     /**
      * Returns the current tick being processed (or just processed).
@@ -426,7 +405,6 @@ public class CsvOutputWriter implements DataConsumer {
     public double getTick() {
         return this.currentTick;
     }
-    
     
     /**
      * Sets the next tick to process from the data buffer.  The next
@@ -455,12 +433,10 @@ public class CsvOutputWriter implements DataConsumer {
             // is the writer still open?
             try {
                 this.writer.flush();
-                
                 // there's no way to get the path to the file the current
                 // writer object is using, so we have no choice but to
                 // throw an error since we can't check it's the same file
                 throw new Exception();
-                
             }
             catch (IOException ioe) {
                 // if the flush threw an exception, the writer is closed
@@ -474,17 +450,14 @@ public class CsvOutputWriter implements DataConsumer {
                 throw new IOException("CSV writer already has a file open.");
             }
         }
-        
         // check the output file has been given
         if (this.file == null) {
             throw new IOException("No output file has been specified.");
         }
-        
         // create the buffered writer for the file
         FileWriter fw = new FileWriter(this.file);
         this.writer = new BufferedWriter(fw);
     }
-    
     
     /**
      * Closes the buffered writer for the output file.
@@ -496,7 +469,6 @@ public class CsvOutputWriter implements DataConsumer {
         if (this.writer == null) {
             return;
         }
-        
         // close the file writer
         this.writer.close();
         this.writer = null;
@@ -508,7 +480,6 @@ public class CsvOutputWriter implements DataConsumer {
             this.file = null;
         }
     }
-    
     
     /**
      * Closes the current output file and opens the next in the series of 
@@ -523,7 +494,6 @@ public class CsvOutputWriter implements DataConsumer {
             // TODO: figure out how to deal with this situation...
             return;
         }
-        
         // determine the current filename being written
         String filename = this.file.getName();
         if (filename == null || filename.trim().length() < 1) {
@@ -531,7 +501,6 @@ public class CsvOutputWriter implements DataConsumer {
             // whitespace with no valid characters!
             return;
         }
-        
         // if we are using default filenames, we know for certain the format
         // of the series.  it should end ".1.csv", ".2.csv", etc.  we can
         // easily create the next in the series this way.  if not, we will
@@ -571,7 +540,6 @@ public class CsvOutputWriter implements DataConsumer {
         this.fileSeriesNumber++;
     }
     
-    
     /**
      * Writes the given tick snapshot to the output file after converting
      * it to a series of CSV lines.  The buffered writer is flushed at the
@@ -610,7 +578,6 @@ public class CsvOutputWriter implements DataConsumer {
             if (line == null) {
                 continue;
             }
-            
             this.writer.write(line);
             this.writer.newLine();
         }
@@ -619,7 +586,6 @@ public class CsvOutputWriter implements DataConsumer {
         // flush all of our changes now so nothing waits cached in memory
         this.writer.flush();
     }
-    
 	
     /**
      * Returns the CSV representation of the given tick snapshot as
@@ -641,37 +607,6 @@ public class CsvOutputWriter implements DataConsumer {
         	for (int i=0; i < lines.size(); i++) {
         		lines.set(i, tickNum + "," + lines.get(i));
         	}
-        
-//        // get the list of of vehicles stored in the tick snapshot 
-//        Collection<Integer> vehicleIDs = tick.getVehicleList();
-//        if (vehicleIDs == null || vehicleIDs.isEmpty()) {
-//            return null;
-//        }
-//        
-//        // loop through the list of vehicles and convert each to a CSV line
-//        ArrayList<String> lines = new ArrayList<String>();
-//        for (Integer id : vehicleIDs) {
-//            if (id == null) {
-//                continue;
-//            }
-//            
-//            // retrieve the vehicle snapshot from the tick snapshot
-//            VehicleSnapshot vehicle = tick.getVehicleSnapshot(id);
-//            if (vehicle == null) {
-//                continue;
-//            }
-//            
-//            // get the CSV representation of this vehicle
-//            String line = CsvOutputWriter.createVehicleLine(vehicle);
-//            if (line == null) {
-//                continue;
-//            }
-//            
-//            // prepend the tick number, data type token, and add to array
-//            line = tickNum + ",V," + line;
-//            lines.add(line);
-//        }
-        
         // return the array of lines from this tick snapshot
         return lines.toArray(new String[0]);
     }
@@ -712,17 +647,16 @@ public class CsvOutputWriter implements DataConsumer {
         // check the path will be a valid file
         File outfile = new File(outpath);
         if (outfile.exists()) {
-            // a file with this name somehow already exists even though
-            // we've given it a timestamp of this very second at runtime.
-            // we will add the hashcode for the filename string object as
-            // a bit of randomization and just hope that is good enough.
+            /* a file with this name somehow already exists even though
+             * we've given it a timestamp of this very second at runtime.
+             * we will add the hashcode for the filename string object as
+             * a bit of randomization and just hope that is good enough. */
             int hashCode = System.identityHashCode(filename);
             filename = defaultFilename + "_" + timestamp + "_" +
                        hashCode + ".1.csv";
             outpath = outDir + File.pathSeparator + filename;
             outfile = new File(outpath);
         }
-
         try {
             outfile.createNewFile();
             if (!outfile.canWrite()) {
@@ -744,7 +678,6 @@ public class CsvOutputWriter implements DataConsumer {
                 return null;
             }
         }
-        
         // return the path to whatever we decided our file would be
         return outfile.getAbsolutePath();
     }

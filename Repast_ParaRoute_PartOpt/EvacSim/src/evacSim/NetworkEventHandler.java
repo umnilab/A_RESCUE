@@ -317,7 +317,7 @@ public class NetworkEventHandler {
 			veh.advanceInMacroList();
 			// move on to the next vehicle (i.e., traverse the old lane's 
 			// vehicle list upstream)
-			System.err.println(veh);
+//			System.err.println(veh);
 			veh = oldLeading;
 		}
 	}

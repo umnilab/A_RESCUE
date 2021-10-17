@@ -62,7 +62,6 @@ public class DataCollector {
     /** A count of how many times the buffer cleanup method has been called. */
     private int cleanupCount;
   
-    
     /**
      * Constructs the data collection system and performs any steps
      * necessary to start it like initializing the data buffer.
@@ -113,7 +112,6 @@ public class DataCollector {
     public boolean isPaused() {
         return this.paused;
     }
-    
     
     /**
      * Start any tasks needed to begin collecting data from the simulation
@@ -600,7 +598,7 @@ public class DataCollector {
      * deleted yet.  First the list of all registered data consumers will
      * be polled to determine the minimum time index value still being
      * processed from any data consumer.  Then any item at the front of 
-     * the buffer with an index that is less than this value is removd. 
+     * the buffer with an index that is less than this value is removed. 
      */
     private void cleanupBuffer() {
         // check if the buffer exists and has any items before proceeding

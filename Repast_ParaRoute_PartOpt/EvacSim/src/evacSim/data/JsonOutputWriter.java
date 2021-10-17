@@ -225,7 +225,6 @@ public class JsonOutputWriter implements DataConsumer {
             public void run() {
                 // get a reference to the data buffer for pulling new items
                 DataCollector collector = DataCollector.getInstance();
-
                 // loop and process data buffers until we are told to stop
                 int totalCount = 0;
                 int writeCount = 0;
@@ -236,7 +235,6 @@ public class JsonOutputWriter implements DataConsumer {
                         DataCollector.printDebug("JSON", "NOT CONSUMING");
                         break;
                     }
-                    
                     // check if we are supposed to be paused
                     if (JsonOutputWriter.this.paused) {
                         DataCollector.printDebug("JSON", "PAUSED");
@@ -252,11 +250,9 @@ public class JsonOutputWriter implements DataConsumer {
                             break;
                         }
                     }
-                    
                     /* get the next item from the buffer. HGehlot: I have changed from
                      * 1 to GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ to only 
-                     * send the data at the new frequency for viz interpolation
-                     */
+                     * send the data at the new frequency for viz interpolation */
                     double nextTick = JsonOutputWriter.this.currentTick +
                     		GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ;
                     TickSnapshot snapshot = collector.getNextTick(nextTick);
@@ -336,7 +332,6 @@ public class JsonOutputWriter implements DataConsumer {
      * have finished processing any remaining items in the buffer.  This will
      * block until the writing thread has finished running and as such should
      * be called from its own thread so as to not block the entire simulation.
-     * 
      * @throws Throwable if any problems occurred stopping the data writer.
      */
     @Override
@@ -344,11 +339,9 @@ public class JsonOutputWriter implements DataConsumer {
         if (!this.consuming) {
             return;
         }
-        
         // set the flags to the stopped state
         this.paused = false;
         this.consuming = false;
-        
         // wait for the writer thread to halt.  setting the flags above should
         // tell the thread to stop processing new items and return on its own,
         // but we will go ahead and explicitly interrupt the thread to speed
@@ -356,15 +349,12 @@ public class JsonOutputWriter implements DataConsumer {
         this.writingThread.interrupt();
         this.writingThread.join();
         this.writingThread = null;
-        
         // reset the counter to the the initial position
         this.currentTick = -1;
-        
         // dispose of anything we no longer need (like the writer)
         this.closeOutputFileWriter();
         this.writer = null;
     }
-    
     
     /**
      * Signals the pausing of consumption of new items from the buffer.
@@ -373,7 +363,6 @@ public class JsonOutputWriter implements DataConsumer {
      * state before grabbing the next tick snapshot to know to stop.  The
      * thread is left running as this is only the paused state so it is
      * expected to resume at some point in the future.
-     * 
      * @throws Throwable if any error occurs preventing the pause.
      */
     @Override
@@ -382,17 +371,14 @@ public class JsonOutputWriter implements DataConsumer {
         if (!this.consuming) {
             return;
         }
-        
         // set the flags to tell the consumer to stop consuming new items
         this.paused = true;
         this.consuming = true;
-        
         // we do nothing to the thread or file writer directly here.  
         // the thread on its next loop will see the paused state and 
         // start checking (with a delay) for this state to change back 
         // to normal running before resuming its work.
     }
-    
     
     /**
      * Stops the consumption of new items from the buffer, stops the file
@@ -401,7 +387,6 @@ public class JsonOutputWriter implements DataConsumer {
      * for the writing thread to complete its current task, so it should not
      * be called from the main program thread or the whole simulation could
      * be blocked temporarily. 
-     * 
      * @throws Throwable if a problem occurred restarting the file writer.
      */
     @Override
@@ -416,11 +401,9 @@ public class JsonOutputWriter implements DataConsumer {
         // reset the current tick counter back to the start
         this.currentTick = -1;
     }
-    
 
     /**
      * Returns the current tick being processed (or just processed).
-     * 
      * @return the current tick being processed (or just processed).
      */
     @Override
@@ -428,14 +411,12 @@ public class JsonOutputWriter implements DataConsumer {
         return this.currentTick;
     }
     
-    
     /**
      * Sets the next tick to process from the data buffer.  The next
      * tick retrieved from the data buffer will be the first found to
      * have a value equal to or greater than this value.  If the model
      * has not yet reached this tick index value, nothing will be
      * returned until the simulation has advanced to this point.
-     * 
      * @param tick the next tick to process from the data buffer.
      */
     @Override
@@ -443,11 +424,9 @@ public class JsonOutputWriter implements DataConsumer {
         this.currentTick = tick;        
     }
     
-    
     /**
      * Creates a buffered writer for saving the JSON lines to disk and
      * opens it.  Any problem doing so will throw an IOException. 
-     * 
      * @throws IOException if the file could not be opened for writing.
      */
     private void openOutputFileWriter() throws IOException {
@@ -456,18 +435,15 @@ public class JsonOutputWriter implements DataConsumer {
             // is the writer still open?
             try {
                 this.writer.flush();
-                
                 // there's no way to get the path to the file the current
                 // writer object is using, so we have no choice but to
                 // throw an error since we can't check it's the same file
                 throw new Exception();
-                
             }
             catch (IOException ioe) {
                 // if the flush threw an exception, the writer is closed
                 // and is just a stale object that wasn't destroyed.
                 // we should be safe to replace it.
-            	
             }
             catch (Exception e) {
                 // because we're already trapping IOException from the flush,
@@ -476,21 +452,17 @@ public class JsonOutputWriter implements DataConsumer {
                 throw new IOException("JSON writer already has a file open.");
             }
         }
-        
         // check the output file has been given
         if (this.file == null) {
             throw new IOException("No output file has been specified.");
         }
-        
         // create the buffered writer for the file
         FileWriter fw = new FileWriter(this.file);
         this.writer = new BufferedWriter(fw);
     }
     
-    
-    /**
+    /**  
      * Closes the buffered writer for the output file.
-     * 
      * @throws IOException if the output file could not be closed.
      */
     private void closeOutputFileWriter() throws IOException {
@@ -498,11 +470,9 @@ public class JsonOutputWriter implements DataConsumer {
         if (this.writer == null) {
             return;
         }
-        
         // close the file writer
         this.writer.close();
         this.writer = null;
-        
         // if this was a default filename, it is intended for a single
         // use and should be thrown away once it is complete so we cannot
         // accidentally write to it again
@@ -517,7 +487,6 @@ public class JsonOutputWriter implements DataConsumer {
      * output files for this simulation execution.  The filename will be the 
      * same with the increment of the series counter.
      * 6/28/2020 LZ: modify this to use time tick information
-     * 
      * @throws IOException if the new file could not be created and opened.
      */
     
@@ -560,7 +529,6 @@ public class JsonOutputWriter implements DataConsumer {
     /**
      * HG: Writes the given tick snapshot to the output file.  The buffered writer is flushed at the
      * end so any cached content is immediately written out to disk.
-     * 
      * @param tick the tick snapshot to be written to the output file.
      * @throws IOException if any error occurred writing the lines to disk.
      */
@@ -580,17 +548,6 @@ public class JsonOutputWriter implements DataConsumer {
             this.ticksWritten = 0;
             this.storeJsonObjects = new HashMap<String, Object>();
         }
-        /*
-         * RV: Change the structure of this hashmap to include the status of roads and shelters.
-         * Previously, it was of the format:
-         * { "tick 1": [[vehicle attribute1, attr2, ...], ...], "tick 2": ... }
-         * Now, changing to the new format:
-         * { "tick1": { "vehicles": [[veh attr1, attr2, ...], ...],
-         *              "roads": [[road id, speed, nVehicles], ...],
-         *              "shelters": [[shelt id, available spaces], ...] },
-         *   "tick2": ...
-         * }
-         */
         // get the JSON representation of this tick
         String tickString = String.valueOf(tick.getTickNumber());
         
@@ -634,7 +591,6 @@ public class JsonOutputWriter implements DataConsumer {
      * the file will be saved to a temporary directory determined by
      * the Java library determined by the operating system upon which
      * this program is executing.
-     * 
      * @return a guaranteed unique absolute path for writing output.
      */
     public static String createDefaultFilePath() {

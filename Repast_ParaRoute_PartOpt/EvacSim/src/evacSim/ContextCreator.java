@@ -21,7 +21,6 @@ import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.space.gis.Geography;
 import repast.simphony.space.graph.Network;
-import evacSim.GlobalVariables;
 import evacSim.citycontext.*;
 import evacSim.vehiclecontext.*;
 import evacSim.partition.*;
@@ -423,8 +422,8 @@ public class ContextCreator implements ContextBuilder<Object> {
 		try {
 			FileWriter fw = new FileWriter(outpath, false);
 			bw = new BufferedWriter(fw);
-			bw.write("vehicleID;zoneType;startTime;endTime;originID;destID;" + 
-					"totalDistance;visitedShelters; visitedRoad; visitedTime");
+			bw.write("vehicleID,zoneType,startTime,endTime,originID,destID," + 
+					"totalDistance,visitedShelters,visitedRoad,visitedTime");
 			bw.newLine();
 			bw.flush();
 			logger.info("Vehicle logger created");

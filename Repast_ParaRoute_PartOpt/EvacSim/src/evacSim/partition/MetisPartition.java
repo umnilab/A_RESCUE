@@ -68,23 +68,22 @@ public class MetisPartition {
 		System.out.println("Metis Running...");
 		
 		if (Launcher.getLauncher().isFirstRun()) {
-			System.err.println("Configuration");
-			System.err.println("-------------");
-			System.err.println(" Num of partitions: " + this.npartition);
-			System.err.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
+			System.out.println("Configuration");
+			System.out.println("-------------");
+			System.out.println(" Num of partitions: " + this.npartition);
+			System.out.println("Graph size: " + metisGraph.getGraph().size() + " nodes and " + metisGraph.getNumEdges()
 					+ " edges");
-			System.err.println();
+			System.out.println();
 		}
 		
-		System.gc(); // For gabage collection
+		System.gc(); // For garbage collection
 		
 		long time = System.nanoTime();
 		Launcher.getLauncher().startTiming();
 		IntGraph<MetisNode> resultGraph = partition(metisGraph, npartition);
 		Launcher.getLauncher().stopTiming();
 		time = (System.nanoTime() - time) / 1000000;
-		System.err.println("runtime: " + time + " ms");
-//		System.err.println();
+		System.out.println("runtime: " + time + " ms");
 		
 		// Calling GaliosToRepastGraph method for testing
 		graphConverter.GaliosToRepastGraph(resultGraph, npartition);

@@ -87,12 +87,6 @@ public class RouteV {
 			Zone destZone) throws Exception {
 
 		// Find origin and destination junctions & resolving their road segments
-//		Coordinate currentCoord = vehicleGeography.getGeometry(veh).getCoordinate();
-//
-//		if (!onRoad(currentCoord)) {
-//			Coordinate nearestRoadCoord = getNearestRoadCoord(currentCoord);
-//			currentCoord = nearestRoadCoord;
-//		}
 		Road currentRoad = veh.getRoad();
 		Road destRoad = destZone.getRoad(); //cityContext.findRoadAtCoordinates(destCoord, true);
 		
@@ -100,7 +94,6 @@ public class RouteV {
 		// downstream junction of the destination junction along that road
 		Junction destDownJunc = getNearestDownStreamJunction(destRoad);
 
-// <<<<<<< HEAD
 		if (curDownJunc.getID() == destDownJunc.getID()) {
 			if (veh.getVehicleID() == GlobalVariables.GLOBAL_VEHICLE_ID) {
 				logger.info("Destination road reached " + destRoad.getLinkid()
@@ -108,13 +101,6 @@ public class RouteV {
 			}
 			Map<Float, Queue<Road>> empty = new HashMap<Float, Queue<Road>>();
 			empty.put(0.0f, new ArrayDeque<Road>());
-// =======
-// 		if (curDownJunc.getID() == destDownJunc.getID() || (currentRoad.getLinkid()==104819 || currentRoad.getLinkid()==101235)) {
-// //			logger.info("Destination road reached " + destRoad.getLinkid()
-// //					+ " from current road: " + currentRoad.getLinkid());
-// 			Map<Double, Queue<Road>> empty = new HashMap<Double, Queue<Road>>();
-// 			empty.put(0.0, new ArrayDeque<Road>());
-// >>>>>>> 702f235241382c0a02715a83d3a38396cf90e3d1
 			return empty;
 		}
 		// Set the time that the routing is computed
@@ -164,10 +150,8 @@ public class RouteV {
 			double thisDist = distOp.distance();
 			if (thisDist < minDist) {
 				minDist = thisDist;
-				// nearestRoad = road;
 				// Two coordinates returned by closestPoints(), need to find the
-				// one which isn''t the
-				// coord parameter
+				// one which isn't the coord parameter
 				for (Coordinate c : distOp.nearestPoints()) {
 					if (!c.equals(coord)) {
 						nearestPoint = c;
@@ -176,7 +160,6 @@ public class RouteV {
 				}
 			}
 		}
-
 		return nearestPoint;
 	}
 

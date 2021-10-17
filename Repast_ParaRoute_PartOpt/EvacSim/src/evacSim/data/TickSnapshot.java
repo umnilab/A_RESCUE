@@ -83,104 +83,52 @@ public class TickSnapshot {
         /** Current bearing of the vehicle. */
         double bearing;
         
-//        /** IDs of the origin & destination zones of the vehicle. */
-//        int origID, destID;
-//        
-//        /** Coordinates of the vehicle's origin & destination. */
-//        double origX, origY;
-//        double destX, destY;
-        
-//        /** Vehicle is traveling on the last segment of its path, so close to destination. */
-//        int nearlyArrived;
-//        
-//        /** Vehicle routing class. */
-//        int vehicleClass;
-//        
         /** The road ID of the vehicle within the simulation. */
         int roadID;
         
-        	VehicleSnapshot(Vehicle veh, Coordinate coord) {
-        		id = veh.getVehicleID();
-        		prevX = veh.getPreviousEpochCoord().x;
-        		prevY = veh.getPreviousEpochCoord().y;
-        		curX = coord.x;
-        		curY = coord.y;
-//        		origX = veh.getOriginalCoord().x;
-//        		origY = veh.getOriginalCoord().y;
-//        		destX = veh.getDestCoord().x;
-//        		destY = veh.getDestCoord().y;
-        		speed = veh.getCurrentSpeed();
-        		bearing = veh.getBearing();
-//        		nearlyArrived = veh.nearlyArrived();
-//        		vehicleClass = veh.getVehicleClass();
-        		roadID = veh.getRoad().getID();
-        		
-        		// validity checks
-        		if (id < 0) {
-        			throw new ValueException("Vehicle ID cannot be negative.");
-        		}
-        		if (roadID < 0) {
-        			throw new ValueException("Road ID cannot be negative.");
-			}
-        		if (Double.isNaN(curX) || Double.isInfinite(curX) ||
-        				Double.isNaN(curY) || Double.isInfinite(curY)) {
-                throw new ValueException("Current coordinate invalid for " + veh);
-            }
-//        		if (Double.isNaN(origX) || Double.isInfinite(origX) ||
-//            		Double.isNaN(origY) || Double.isInfinite(origY)) {
-//                throw new ValueException("Origin coordinate invalid for " + veh);
-//            }
-//            if (Double.isNaN(destX) || Double.isInfinite(destX) ||
-//            		Double.isNaN(destY) || Double.isInfinite(destY)) {
-//                throw new ValueException("Destination coordinate invalid for " + veh);
-//            }
-            if (Float.isNaN(speed) || Float.isInfinite(speed)) {
+    	VehicleSnapshot(Vehicle veh, Coordinate coord) {
+    		id = veh.getVehicleID();
+    		prevX = veh.getPreviousEpochCoord().x;
+    		prevY = veh.getPreviousEpochCoord().y;
+    		curX = coord.x;
+    		curY = coord.y;
+    		speed = veh.getCurrentSpeed();
+    		bearing = veh.getBearing();
+    		roadID = veh.getRoad().getID();
+    		
+    		// validity checks
+    		if (id < 0) {
+    			throw new ValueException("Vehicle ID cannot be negative.");
+    		} else if (roadID < 0) {
+    			throw new ValueException("Road ID cannot be negative.");
+			} else if (Double.isNaN(curX) || Double.isInfinite(curX)) {
+				throw new ValueException("Current X coordinate invalid for " + veh);
+			} else if (Double.isNaN(curY) || Double.isInfinite(curY)) {
+                throw new ValueException("Current Y coordinate invalid for " + veh);
+            } else if (Float.isNaN(speed) || Float.isInfinite(speed)) {
                 throw new ValueException("Speed invalid for " + veh);
-            }
-            
-            if (Double.isNaN(bearing) || Double.isInfinite(bearing)) {
+            } else if (Double.isNaN(bearing) || Double.isInfinite(bearing)) {
                 throw new ValueException("Bearing invalid for " + veh);
             }
-    		
     		// add this object to the map of vehicle snapshots in the tick snapshot
     		vehicles.add(this); //Comment this out and see what would happen
-        	}
-        	
-        	/** Return the string of this vehicle's attributes to be exported to JSON */
-        	String getJSONLine() {
-            // format 1 includes previous coordinate (for smoother visualization)
-//        		jsonLine = String.format("%d,%.6f,%.6f,%.6f,%.6f,%.3f",
-//        				id, prevX, prevY, curX, curY, speed);
-        		
-        		// format 2 excludes previous coordinate since it is not necessary
-//        		return String.format("%d,%.6f,%.6f,%.3f", id, curX, curY, speed);
-        		
-        		/* format 3 shifts the origin of the coordinates & removes the decimal
-        		 * point upto a precision of 6 decimal places to save some storage space.
-        		 * Also converts speed from m/s to mm/s & converted as integer.
-        		 */
-//        		Coordinate origin = ContextCreator.getCityContext().getOrigin();
-//        		int shiftedCurX = (int) ((curX - origin.x) * 1e6);
-//        		int shiftedCurY = (int) ((curY - origin.y) * 1e6);
-//        		int speed_mms = (int) (speed * 1e3);
-//        		int bearing = (int) Math.round(this.bearing * 1e4);
-//        		String output = id + "," + shiftedCurX + "," + shiftedCurY + "," + speed_mms + "," + bearing;
-        		String output = String.format("%d,%.5f,%.5f,%.2f,%.2f",
-        				id, curX, curY, speed, bearing); // 5 digits to reach precision of 1 meter.
-        		if (output == null || output.isEmpty()) {
-        			logger.error("empty/null string for " + id);
-        		}
-        		return output;
-        	}
-        
-        	/** Return the string of this vehicles's attributes to be exported to CSV */
-        	String getCSVLine() {
-//        		return String.format("%d,%d,%d,%.6f,%.6f,%.3f",
-//        				id, origID, destID, curX, curY, speed);
-        		return String.format("%d, %.6f,%.6f,%.3f",
-        				id, curX, curY, speed);
-        	}
-        
+    	}
+    	
+    	/** Return the string of this vehicle's attributes to be exported to JSON */
+    	String getJSONLine() {
+    		String output = String.format("%d,%.5f,%.5f,%.2f,%.2f",
+    				id, curX, curY, speed, bearing); // 5 digits to reach precision of 1 meter.
+    		if (output == null || output.isEmpty()) {
+    			logger.error("empty/null string for " + id);
+    		}
+    		return output;
+    	}
+    	
+    	/** Return the string of this vehicles's attributes to be exported to CSV */
+    	String getCSVLine() {
+    		return String.format("%d, %.6f,%.6f,%.3f",
+    				id, curX, curY, speed);
+    	}
     }
 
     
@@ -274,16 +222,8 @@ public class TickSnapshot {
     	/** IDs of the origin & destination zones of the vehicle. */
     	final int origID, destID;
         
-        /** Coordinates of the vehicle's origin & destination. */
-//    	final double origX, origY;
-//    	final double destX, destY;
-        
     	NewVehSnapshot(Vehicle veh){
         	id = veh.getVehicleID();
-//        	origX = veh.getOriginalCoord().x;
-//    		origY = veh.getOriginalCoord().y;
-//    		destX = veh.getDestCoord().x;
-//    		destY = veh.getDestCoord().y;
     		// resolve the current origin and destination ID
             ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
         		origID = plans.get(0).getLocation();
@@ -294,8 +234,8 @@ public class TickSnapshot {
         
         /** Return the string of this vehicle's attributes to be exported to JSON */
     	String getJSONLine() {
-    		//return String.format("%d,%d,%d,%.4f,%.4f,%.4f,%.4f", id, origID, destID, origX, origY, destX, destY);
-    		return String.format("%d,%d,%d", id, origID, destID); //LZ 12/01/2020, just return IDs
+    		// LZ 12/01/2020, just return IDs
+    		return String.format("%d,%d,%d", id, origID, destID);
     	}
     }
     
@@ -494,7 +434,6 @@ public class TickSnapshot {
         if (this.events == null || this.events.isEmpty()) {
             return null;
         }
-        
         return this.events;
     }
     

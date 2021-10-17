@@ -10,7 +10,6 @@ import repast.simphony.space.gis.Geography;
 import repast.simphony.space.gis.GeographyParameters;
 import evacSim.ContextCreator;
 import evacSim.GlobalVariables;
-import evacSim.vehiclecontext.Vehicle;
 import evacSim.citycontext.*;
 
 public class VehicleContext extends DefaultContext<Vehicle> {

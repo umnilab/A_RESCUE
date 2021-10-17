@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Queue;
-
 import org.apache.log4j.Logger;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -244,41 +243,26 @@ public class CityContext extends DefaultContext<Object> {
 		ArrayList<Integer> dsLaneIds = new ArrayList<Integer>();
 		int nLanes = road.getnLanes(); // number of lanes in current road
 		Lane curLane, dsLane;
-
-		/*
-		 * logger.info("Road " + road.getLinkid() + " has "+
-		 * nLanes+" lanes and is " + road.getLength() + " meters long");
-		 */
-
 		for (int i = 0; i < nLanes; i++) {
 			curLane = road.getLanes().get(i);
 			dsLaneIds.clear();
 			dsLaneIds.add(curLane.getLeft());
 			dsLaneIds.add(curLane.getThrough());
 			dsLaneIds.add(curLane.getRight());
-			/*
-			 * logger.info("Lane: " + curLane.getLaneid() + " from road "
-			 * + curLane.road_().getIdentifier() +
-			 * " has downstream connections: ");
-			 */
 			for (double dsLaneId : dsLaneIds) {
-				// logger.info("Connection " + dsLaneId);
 				if (dsLaneId != 0) {
 					dsLane = this.lane_KeyLaneID.get((int) dsLaneId);
-					/*
-					 * logger.info("Connection " + dsLane.getLaneid() +
-					 * " Repast ID: " + dsLane.getID());
-					 */
 					curLane.addDnLane(dsLane);
 					dsLane.addUpLane(curLane);
 				}
 			}
 		}
-
 		// add u-connected lanes
 		if (road.getOppositeRoad() != null) {
 			curLane = road.getLanes().get(0);
-			if(curLane.getLength()>GlobalVariables.MIN_UTURN_LENGTH){ //LZ: Greater then 100m, otherwise the highway entrance can be link to its opposite direction...
+			// LZ: Greater than 100m, otherwise the highway entrance can be 
+			// link to its opposite direction...
+			if (curLane.getLength() > GlobalVariables.MIN_UTURN_LENGTH) {
 				dsLane = road.getOppositeRoad().getLanes().get(0);
 				curLane.addDnLane(dsLane);
 				dsLane.addUpLane(curLane);
@@ -288,14 +272,10 @@ public class CityContext extends DefaultContext<Object> {
 
 	/**
 	 * We update node based routing while modify road network
-	/* TODO: change if want to incorporate other routing method
 	 * */
 	public void modifyRoadNetwork() {
-//		logger.info("Modifying road network! Tick: "
-//				+ System.currentTimeMillis());
 		int tickcount;
 		Geography<Road> roadGeography = ContextCreator.getRoadGeography();
-		// Network<Junction> roadNetwork = ContextCreator.getRoadNetwork();
 		Iterable<Road> roadIt = roadGeography.getAllObjects();
 		for (Road road : roadIt) {
 			road.setTravelTime();
@@ -305,10 +285,9 @@ public class CityContext extends DefaultContext<Object> {
 			ContextCreator.getRoadNetwork().getEdge(junc1, junc2)
 					.setWeight(road.getTravelTime());
 		}
-
 		// At beginning, initialize route object
 		tickcount = (int) RepastEssentials.GetTickCount();
-		logger.info("Tick: " + tickcount +"/" + GlobalVariables.SIMULATION_STOP_TIME);
+		logger.info("Tick: " + tickcount + "/" + GlobalVariables.SIMULATION_STOP_TIME);
 		if (tickcount < 1) {
 			try {
 				RouteV.createRoute();
@@ -582,7 +561,6 @@ public class CityContext extends DefaultContext<Object> {
 		for (Road r : ContextCreator.getRoadGeography().getAllObjects()) {
 			allRoads.put(r, ContextCreator.getRoadGeography().getGeometry(r));
 		}
-//		System.out.println("zoneID,zoneX,zoneY,roadID,juncX,juncY");
 		for (Zone h : ContextCreator.getZoneGeography().getAllObjects()) {
 			double minDist = Double.MAX_VALUE;
 			Coordinate houseCoord = ContextCreator.getZoneGeography()
@@ -590,29 +568,22 @@ public class CityContext extends DefaultContext<Object> {
 			Coordinate nearestPoint = null;
 			Point coordGeom = ContextCreator.getZoneGeography().getGeometry(h)
 					.getCentroid();
-			Road closestRoad = null;
 			for (Road r : allRoads.keySet()) {
 				Geometry roadGeom = allRoads.get(r);
 				DistanceOp distOp = new DistanceOp(coordGeom, roadGeom);
 				double thisDist = distOp.distance();
 				if (thisDist < minDist) {
 					minDist = thisDist;
-					// Two coordinates returned by closestPoints(), need to find
-					// the one which isn''t the
-					// coord parameter
 					for (Coordinate c : distOp.nearestPoints()) {
 						if (!c.equals(houseCoord)) {
 							nearestPoint = c;
-							closestRoad = r;
 							break;
 						}
 					}
-				} // if thisDist < minDist
-			} // for allRoads
+				}
+			}
 			this.nearestRoadCoordCache.put(houseCoord, nearestPoint);
-//			System.out.println(h.getIntegerId() + "," + houseCoord.x + "," + houseCoord.y +
-//					"," + closestRoad.getID() + "," + nearestPoint.x + "," + nearestPoint.y);
-		} // for Houses
+		}
 	}
 
 	public Coordinate getNearestRoadCoordFromCache(Coordinate c) {

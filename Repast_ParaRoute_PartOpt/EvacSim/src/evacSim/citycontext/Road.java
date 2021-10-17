@@ -123,24 +123,11 @@ public class Road {
 	/* New step function using node based routing */
 	// @ScheduledMethod(start=1, priority=1, duration=1)
 	public void step() {	
-		// if (RepastEssentials.GetTickCount() % 10 == 0)
-		// this.setTravelTime();
-		// double time = System.currentTimeMillis();
 		Vehicle v;
 		int tickcount = (int) RepastEssentials.GetTickCount();
-		// double maxHours = 0.5;
-		// double maxTicks = 3600 * maxHours // time that a path is kept in the
-		// list
-		// / GlobalVariables.SIMULATION_STEP_SIZE;
 		try {
 			while (this.newqueue.size() > 0) {
-				v = this.newqueueHead(); // BL: change to use the TreeMap
-
-				//				if (v.atActivityLocation()) {
-				////					logger.info(v.getCurrentCoord());
-				//					v.setCoordMap(this.firstLane());
-				//				}
-
+				v = this.newqueueHead();
 				if (v.closeToRoad(this) == 1 && tickcount >= v.getDepTime()) {
 					if (v.enterNetwork(this) == 1) {
 						newVehs.add(v);
@@ -167,18 +154,10 @@ public class Road {
 					}
 					break;
 				}
-
 			}
 			// the first vehicle in a road
 			Vehicle pv = this.getFirstVehicle();
 			if (pv != null && pv.getLeading() != null) {
-				// if the behind vehicle surpass the front one, it's a problem
-				//				logger.warn("Road.step(): Inconsistency of macroleading and leading is detected"
-				//						+ "," + pv.getLane().getLaneid()
-				//						+ "," + pv.getLane().getLength()
-				//						+ "," + pv.leading().getLane().getLaneid()
-				//						+ "," + pv.distance()
-				//						+ "," + pv.leading().distance());
 				pv.setLeading(null);
 			}
 			while (pv != null) {
@@ -321,13 +300,6 @@ public class Road {
 	}
 
 	public int getLeft() {
-		/*
-		 * if (left == "" || left == null) { logger.error(
-		 * "Road: error, the name field for this road has not been initialised."
-		 * +
-		 * "\n\tIf reading in a shapefile please make sure there is a string column called 'left' which is"
-		 * + " unique to each feature"); }
-		 */
 		return left;
 	}
 
@@ -336,13 +308,6 @@ public class Road {
 	}
 
 	public int getThrough() {
-		/*
-		 * if (through == "" || through == null) { logger.error(
-		 * "Road: error, the name field for this road has not been initialised."
-		 * +
-		 * "\n\tIf reading in a shapefile please make sure there is a string column called 'through' which is"
-		 * + " unique to each feature"); }
-		 */
 		return through;
 	}
 
@@ -351,13 +316,6 @@ public class Road {
 	}
 
 	public int getRight() {
-		/*
-		 * if (right == "" || right == null) { logger.error(
-		 * "Road: error, the name field for this road has not been initialised."
-		 * +
-		 * "\n\tIf reading in a shapefile please make sure there is a string column called 'right' which is"
-		 * + " unique to each feature"); }
-		 */
 		return right;
 	}
 
@@ -525,9 +483,6 @@ public class Road {
 
 	public void setFirstVehicle(Vehicle v) {
 		if (v != null) {
-			//			if(v.leading()!=null){
-			//				logger.info("Well " + v.distance() + ","+v.getLane().getLaneid() + "," + v.leading().distance()+"," +v.leading().getLane().getLaneid());
-			//			}
 			this.firstVehicle_ = v;
 		}
 		else
@@ -650,7 +605,8 @@ public class Road {
 		int nVehicles = 0;
 		float sum = 0.0f;
 		Vehicle pv = this.getFirstVehicle();
-		while ((pv != null && pv.isOnLane())) { // LZ: Vehicle in junction is not taken into account
+		// LZ: Vehicle in junction is not taken into account
+		while ((pv != null && pv.isOnLane())) {
 			sum += pv.getCurrentSpeed();
 			nVehicles += 1;
 			pv = pv.getMacroTrailing();
@@ -667,8 +623,6 @@ public class Road {
 		this.length = (float) ContextCreator.convertToMeters(roadGeom
 				.getLength());
 		this.initDynamicTravelTime();
-		//		System.out
-		//				.println("Road " + this.linkid + " has length " + this.length);
 	}
 
 	/**
@@ -701,14 +655,8 @@ public class Road {
 					averageSpeed = averageSpeed / this.nVehicles_;
 			}
 		}
-		// outAverageSpeed: For output travel times
-		//		DecimalFormat myFormatter = new DecimalFormat("##.##");
-
-		//		String outAverageSpeed = myFormatter.format(averageSpeed / 0.44704);
-
 		this.travelTime = (float) this.length / averageSpeed;
 	}
-
 
 	/**
 	 * This function will initialize the dynamic travel time vector of the road.
