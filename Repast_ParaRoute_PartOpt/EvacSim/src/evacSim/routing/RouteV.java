@@ -84,11 +84,14 @@ public class RouteV {
 	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter()
 	 * */
 	public static Map<Float, Queue<Road>> vehicleRoute(Vehicle veh,
-			Zone destZone) throws Exception {
+			Zone destZone) {
 
 		// Find origin and destination junctions & resolving their road segments
 		Road currentRoad = veh.getRoad();
 		Road destRoad = destZone.getRoad(); //cityContext.findRoadAtCoordinates(destCoord, true);
+		if (currentRoad == null || destRoad == null) {
+			System.err.println("Current road = " + currentRoad + ", dest road = " + destRoad);
+		}
 		
 		Junction curDownJunc = currentRoad.getJunctions().get(1);
 		// downstream junction of the destination junction along that road
@@ -106,23 +109,23 @@ public class RouteV {
 		// Set the time that the routing is computed
 		veh.setLastRouteTime((int) RepastEssentials.GetTickCount());
 		
-		return vbr.computeRoute(currentRoad, destRoad, curDownJunc, destDownJunc);
+		return vbr.computeRoute(currentRoad, curDownJunc, destDownJunc);
 	}
 	
-	/** 
-	 * RV: Normal shortest route between any two points at current time;
-	 * needed for shortest path between zones without involvement of any vehicle
-	 * */
-	public static Map<Float, Queue<Road>> nonVehicleRouting(
-			Coordinate origCoord, Coordinate destCoord) {
-		// resolve the nearest roads & their downstream junctions
-		Road origRoad = cityContext.findRoadAtCoordinates(origCoord);
-		Road destRoad = cityContext.findRoadAtCoordinates(destCoord);
-		Junction origDownJunc = RouteV.getNearestDownStreamJunction(origRoad);
-		Junction destDownJunc = RouteV.getNearestDownStreamJunction(destRoad);
-		
-		return vbr.computeRoute(origRoad, destRoad, origDownJunc, destDownJunc);
-	}
+//	/** 
+//	 * RV: Normal shortest route between any two points at current time;
+//	 * needed for shortest path between zones without involvement of any vehicle
+//	 * */
+//	public static Map<Float, Queue<Road>> nonVehicleRouting(
+//			Coordinate origCoord, Coordinate destCoord) {
+//		// resolve the nearest roads & their downstream junctions
+//		Road origRoad = cityContext.findRoadAtCoordinates(origCoord);
+//		Road destRoad = cityContext.findRoadAtCoordinates(destCoord);
+//		Junction origDownJunc = RouteV.getNearestDownStreamJunction(origRoad);
+//		Junction destDownJunc = RouteV.getNearestDownStreamJunction(destRoad);
+//		
+//		return vbr.computeRoute(origRoad, destRoad, origDownJunc, destDownJunc);
+//	}
 
 	public static void printRoute(List<Road> path) {
 		System.out.print("Route:");

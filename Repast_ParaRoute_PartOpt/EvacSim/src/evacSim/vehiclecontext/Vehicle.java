@@ -514,119 +514,114 @@ public class Vehicle {
 	}
 
 	public void setNextRoad() {
-		// LZ: 2020-06-07. stop if current road is same as destination road
-		if (this.road.getLinkid() == this.destRoadID) {
-			this.nextRoad_ = null;
-			return;
-		}
 		int currentTick = (int) RepastEssentials.GetTickCount();
-		 try {
-			// if the vehicle has departed from its origin
-			if (!this.atOrigin) {
-				// get the current path
-				Queue<Road> curPath = this.roadPath;
-				if (curPath == null || curPath.size() == 1) {
-					System.err.println("Empty or single-element path for " +
-							"the departed " + this + ".");
+		// if the vehicle has departed from its origin
+		if (!this.atOrigin) {
+			// current path cannot be null or empty at this point
+			if (roadPath == null || roadPath.size() == 0) {
+				System.err.println("Empty path for the departed " + this + ".");
+				this.nextRoad_ = null;
+				GlobalVariables.NUM_FAILED_VEHICLES++;
+				return;
+			}
+			// if current & destination roads are same, do nothing (vehicle arrived)
+			if (this.road.getLinkid() == this.destRoadID || roadPath.size() == 1) {
+				this.nextRoad_ = null;
+				GlobalVariables.NUM_KILLED_VEHICLES++;
+				return;
+			}
+			// whether the vehicle's path is to be changed
+			boolean routeChanged = false;
+			// if the travel times have changed on the road network since 
+			// the last time this vehicle was rerouted, try to reroute it
+			if (this.lastRouteTick < RouteV.getValidTime()) {
+				// get the new (shortest) path & its travel time
+				/* JX: 2019-10-05. change the return type of RouteV.vehicleRoute 
+				 * to be a single-entry hashmap valued by best (shortest) path 
+				 * computed as of now & keyed by its travel time */
+				Map<Float, Queue<Road>> newPathMap;
+				newPathMap = RouteV.vehicleRoute(this, this.destZone);
+				Queue<Road> newPath = newPathMap.values().iterator().next();
+				float newTravTime = newPathMap.keySet().iterator().next();
+				// get time difference since last routing
+				float timeSinceLastRerouting = (currentTick - this.lastRouteTick)
+						* GlobalVariables.SIMULATION_STEP_SIZE;
+				// get current path's remaining travel time
+				float curTravTime = this.travelTimeForPreviousRoute - 
+						timeSinceLastRerouting;
+				// time difference of current remaining path with best path
+				float travTimeDiff = curTravTime - newTravTime;
+				/* JX, RV: if the difference in current path's travel time 
+				 * with the new shortest path is above a certain threshold, 
+				 * update the path of the vehicle to the (new) shortest path, 
+				 * otherwise not. This threshold is chosen according to a 
+				 * fixed minimum gap and the vehicle's indifference band. 
+				 * Reference: doi.org/10.1016/0191-2607(91)90145-G */
+				boolean switchPath = (travTimeDiff > indiffBand * 
+						curTravTime && travTimeDiff > GlobalVariables.TAU);
+				newPath = switchPath ? newPath : roadPath;
+				newTravTime = switchPath ? newTravTime : curTravTime;
+				// remove the current road from the chosen path
+				// and remove its shadow impact
+				Road curRoad = newPath.remove();
+				this.removeShadowCount(curRoad);
+				// there is a problem if chosen path minus current road is 
+				// empty, since that is only possible when $this is on 
+				// destination road, which is already accounted for above
+				if (newPath.size() == 0) {
+					System.err.println("Empty new path for " + this + 
+							" after removing current road " + curRoad);
 					this.nextRoad_ = null;
 					GlobalVariables.NUM_FAILED_VEHICLES++;
 					return;
 				}
-				// whether the vehicle's path is to be changed
-				boolean routeChanged = false;
-				// if the travel times have changed on the road network since 
-				// the last time this vehicle was rerouted, try to reroute it
-				if (this.lastRouteTick < RouteV.getValidTime()) {
-					// get the new (shortest) path & its travel time
-					/* JX: 2019-10-05. change the return type of RouteV.vehicleRoute 
-					 * to be a single-entry hashmap valued by best (shortest) path 
-					 * computed as of now & keyed by its travel time */
-					Map<Float, Queue<Road>> newPathMap;
-					newPathMap = RouteV.vehicleRoute(this, this.destZone);
-					Queue<Road> newPath = newPathMap.values().iterator().next();
-					float newTravTime = newPathMap.keySet().iterator().next();
-					// get time difference since last routing
-					float timeSinceLastRerouting = (currentTick - this.lastRouteTick)
-							* GlobalVariables.SIMULATION_STEP_SIZE;
-					// get current path's remaining travel time
-					float curTravTime = this.travelTimeForPreviousRoute - 
-							timeSinceLastRerouting;
-					// time difference of current remaining path with best path
-					float travTimeDiff = curTravTime - newTravTime;
-					if (curTravTime < newTravTime) {
-						throw new IllegalStateException("New shortest path is " + 
-								"longer than current path for " + this);
-					}
-					/* JX, RV: if the difference in current path's travel time 
-					 * with the new shortest path is above a certain threshold, 
-					 * update the path of the vehicle to the (new) shortest path, 
-					 * otherwise not. This threshold is chosen according to a 
-					 * fixed minimum gap and the vehicle's indifference band. 
-					 * Reference: doi.org/10.1016/0191-2607(91)90145-G */
-					boolean switchPath = (travTimeDiff > indiffBand * 
-							curTravTime && travTimeDiff > GlobalVariables.TAU);
-					newPath = switchPath ? newPath : curPath;
-					newTravTime = switchPath ? newTravTime : curTravTime;
-					// remove the current road from the chosen path
-					Road curRoad = newPath.poll();
-					// there is a problem if chosen path minus current road is 
-					// empty, since that is only possible when $this is on 
-					// destination road, which is already accounted for above
-					if (newPath.size() == 0) {
-						System.err.println("Empty new path for " + this + 
-								" after removing current road " + curRoad);
-						this.nextRoad_ = null;
-						GlobalVariables.NUM_FAILED_VEHICLES++;
-						return;
-					}
-					// the chosen path is only valid if the next road is connected 
-					// to the current lane
-					Road nextRoad = newPath.peek(); // may be null
-					if (this.checkNextLaneConnected(nextRoad)) {
-						// the new path qualifies to be the best one
-						routeChanged = true;
-						this.clearShadowImpact(); // clear legacy impact
-						this.roadPath = newPath; // update path with the new one
-						this.setShadowImpact(); // set new path's impact
-						this.lastRouteTick = currentTick;
-						this.travelTimeForPreviousRoute = curTravTime;
-					} else {
-						System.out.println("Current " + lane + 
-								" not connected to next " + nextRoad + ".");
-					}
+				// the chosen path is only valid if the next road is connected 
+				// to the current lane
+				Road nextRoad = newPath.peek(); // may be null
+				if (this.checkNextLaneConnected(nextRoad)) {
+					// the new path qualifies to be the best one
+					routeChanged = true;
+					this.clearShadowImpact(); // clear legacy impact
+					roadPath = newPath; // update path with the new one
+					this.nextRoad_ = newPath.iterator().next(); // set next road
+					this.setShadowImpact(); // set new path's impact
+					this.lastRouteTick = currentTick;
+					this.travelTimeForPreviousRoute = curTravTime;
+				} else {
+//						System.out.println("Current " + lane + 
+//								" not connected to next " + nextRoad + ".");
 				}
-				// if this vehicle is not rerouted
-				if (!routeChanged) {
-					// path's first road is the one which $this just finished, 
-					// so remove it & its shadow impact
-					// (note that curPath & this.roadPath point to same queue)
-					this.removeShadowCount(curPath.poll());
-					// the current road now should be the path's first road
-					// set next road
-					Iterator<Road> iter = curPath.iterator();
-					iter.next(); // move header to next road
-					this.nextRoad_ = iter.next();
-				}
-			} else { // if this vehicle is on origin
-				// clear legacy impact
-				this.clearShadowImpact();
-				// compute the route
-				Map<Float, Queue<Road>> pathMap;
-				pathMap = RouteV.vehicleRoute(this, this.destZone);
-				Queue<Road> path = pathMap.values().iterator().next();
-				float travTime = pathMap.keySet().iterator().next();
-				this.roadPath = path; // set this route
-				this.travelTimeForPreviousRoute = travTime;
-				this.setShadowImpact();
-				this.lastRouteTick = currentTick;
-				this.atOrigin = false;
-				Iterator<Road> iter = path.iterator();
-				iter.next(); // move head from current to next road
-				this.nextRoad_ = iter.next();
 			}
-		} catch (Exception e) {
-			System.err.println("Unhandled exception in " + this + 
-					".setNextRoad(): " + e);
+			// if this vehicle is not rerouted
+			if (!routeChanged) {
+				// at this point, curPath[0] should be the road $this is about to enter
+				Iterator<Road> iter = roadPath.iterator();
+				// skip to curPath[1], which is the new next road
+				iter.next();
+				this.nextRoad_ = iter.hasNext() ? iter.next() : null;
+			}
+		} else { // if this vehicle is on origin
+			// clear legacy impact
+			this.clearShadowImpact();
+			// compute the route
+			Map<Float, Queue<Road>> pathMap;
+			pathMap = RouteV.vehicleRoute(this, this.destZone);
+			Queue<Road> path = pathMap.values().iterator().next();
+			float travTime = pathMap.keySet().iterator().next();
+			this.roadPath = path; // set this route
+			this.travelTimeForPreviousRoute = travTime;
+			this.setShadowImpact();
+			this.lastRouteTick = currentTick;
+			this.atOrigin = false;
+			// move head from current to next road
+			Iterator<Road> iter = path.iterator();
+			if (iter.hasNext()) {
+				iter.next(); // returns the first road of the path
+			} else { // this is not possible since RouteV.vehicleRoute returns ≥1 roads
+				GlobalVariables.NUM_FAILED_VEHICLES++;
+			}
+			// set next road; set null for single-road path 
+			this.nextRoad_ = iter.hasNext() ? iter.next() : null;
 		}
 	}
 

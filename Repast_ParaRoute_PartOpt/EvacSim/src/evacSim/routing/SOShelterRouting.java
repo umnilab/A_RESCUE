@@ -118,8 +118,7 @@ public class SOShelterRouting {
 								dest.getRoad()));
 					}
 					Map<Float, Queue<Road>> shortPath = RouteV.vbr.computeRoute(
-							orig.getRoad(), dest.getRoad(),
-							orig.getDownJunc(), dest.getDownJunc());
+							orig.getRoad(), orig.getDownJunc(), dest.getDownJunc());
 					// get the distance of this path
 					// (by iterating over the only key-value-pair)
 					for (double dist : shortPath.keySet()) {
