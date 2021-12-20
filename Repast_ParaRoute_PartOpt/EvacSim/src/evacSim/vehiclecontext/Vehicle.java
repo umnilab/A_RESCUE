@@ -535,6 +535,7 @@ public class Vehicle {
 			// if the travel times have changed on the road network since 
 			// the last time this vehicle was rerouted, try to reroute it
 			if (this.lastRouteTick < RouteV.getValidTime()) {
+//				System.out.println("HERE 1 " + this.road.getLinkid());
 				// get the new (shortest) path & its travel time
 				/* JX: 2019-10-05. change the return type of RouteV.vehicleRoute 
 				 * to be a single-entry hashmap valued by best (shortest) path 
@@ -542,6 +543,9 @@ public class Vehicle {
 				Map<Float, Queue<Road>> newPathMap;
 				newPathMap = RouteV.vehicleRoute(this, this.destZone);
 				Queue<Road> newPath = newPathMap.values().iterator().next();
+//				System.out.println("HERE 2 " + newPath);
+				roadPath.remove();
+//				System.out.println("HERE 2.1 " + roadPath);
 				float newTravTime = newPathMap.keySet().iterator().next();
 				// get time difference since last routing
 				float timeSinceLastRerouting = (currentTick - this.lastRouteTick)
@@ -564,6 +568,8 @@ public class Vehicle {
 				// remove the current road from the chosen path
 				// and remove its shadow impact
 				Road curRoad = newPath.remove();
+//				System.out.println("HERE 3 " + newPath);
+//				System.out.println("HERE 3.1 " + curRoad.getLinkid());
 				this.removeShadowCount(curRoad);
 				// there is a problem if chosen path minus current road is 
 				// empty, since that is only possible when $this is on 
@@ -578,19 +584,22 @@ public class Vehicle {
 				// the chosen path is only valid if the next road is connected 
 				// to the current lane
 				Road nextRoad = newPath.peek(); // may be null
-				if (this.checkNextLaneConnected(nextRoad)) {
-					// the new path qualifies to be the best one
-					routeChanged = true;
-					this.clearShadowImpact(); // clear legacy impact
-					roadPath = newPath; // update path with the new one
-					this.nextRoad_ = newPath.iterator().next(); // set next road
-					this.setShadowImpact(); // set new path's impact
-					this.lastRouteTick = currentTick;
-					this.travelTimeForPreviousRoute = curTravTime;
-				} else {
+//				System.out.println("HERE 4 " + newPath);
+//				System.out.println("HERE 5 " + nextRoad.getLinkid());
+//				if (true) { //this.checkNextLaneConnected(nextRoad)
+				// the new path qualifies to be the best one
+				routeChanged = true;
+				this.clearShadowImpact(); // clear legacy impact
+				roadPath = newPath; // update path with the new one
+				this.nextRoad_ = nextRoad; // set next road
+				this.setShadowImpact(); // set new path's impact
+				this.lastRouteTick = currentTick;
+				this.travelTimeForPreviousRoute = curTravTime;
+//				} 
+//				else {
 //						System.out.println("Current " + lane + 
 //								" not connected to next " + nextRoad + ".");
-				}
+//				}
 			}
 			// if this vehicle is not rerouted
 			if (!routeChanged) {
@@ -1195,7 +1204,7 @@ public class Vehicle {
 				logger.error("Vehicle " + this.getVehicleID()
 				+ " had an error while travelling on road: "
 				+ this.road.getLinkid() + "with next road: "
-				+ this.nextRoad().getLinkid());
+				+ this.nextRoad().getLinkid() +" destination: " + this.destRoadID + " " + this.roadPath);
 				e.printStackTrace();
 				RunEnvironment.getInstance().pauseRun();
 			}
@@ -1481,33 +1490,34 @@ public class Vehicle {
 			}
 			// this vehicle has been stuck for more than 5 minutes, if both of the followings does not work, then failed vehicle number +=1
 			else if (this.stuck_time > GlobalVariables.MAX_STUCK_TIME) {
-				if((this.stuck_time <= GlobalVariables.MAX_STUCK_TIME2) && (tickcount % (int)(GlobalVariables.REROUTE_FREQ/GlobalVariables.SIMULATION_STEP_SIZE))==0){ // Wait for more than 5 but less than 60 minutes, reroute itself every 1 minutes
+				//(this.stuck_time <= GlobalVariables.MAX_STUCK_TIME2) && 
+				if((tickcount % (int)(GlobalVariables.REROUTE_FREQ/GlobalVariables.SIMULATION_STEP_SIZE))==0){ // Wait for more than 5 but less than 60 minutes, reroute itself every 1 minutes
 					this.lastRouteTick = -1; //old route is not valid 
 					this.setNextRoad();
 					this.assignNextLane();
 				}
-				else{
-					for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 60 minutes, go to the connected empty lane and reroute itself.
-						if (this.entranceGap(dnlane) >= 1.2*this.getLength() && (tickcount > dnlane.getLastEnterTick())) {
-							dnlane.updateLastEnterTick(tickcount);
-							this.removeFromLane();
-							this.removeFromMacroList();
-							this.setCoordMap(dnlane);
-							this.appendToRoad(dnlane.getRoad());
-							this.appendToLane(dnlane);
-							this.linkHistory.add(dnlane.getRoad().getID());
-							this.linkTimeHistory.add(tickcount);
-							this.lastRouteTick = -1; // old route is not valid for sure
-							this.setNextRoad();
-							this.assignNextLane();
-							this.desiredSpeed_ = this.road.getFreeSpeed();
-							// LZ: Use current speed instead of the free speed, be consistent with the setting in enteringNetwork
-							if (this.currentSpeed_ > this.road.getFreeSpeed())
-								this.currentSpeed_ = this.road.getFreeSpeed();
-							return 1;
-						}
-					}
-				}
+//				else{
+//					for(Lane dnlane: this.lane.getDnLanes()){ // Wait for more than 60 minutes, go to the connected empty lane and reroute itself.
+//						if (this.entranceGap(dnlane) >= 1.2*this.getLength() && (tickcount > dnlane.getLastEnterTick())) {
+//							dnlane.updateLastEnterTick(tickcount);
+//							this.removeFromLane();
+//							this.removeFromMacroList();
+//							this.setCoordMap(dnlane);
+//							this.appendToRoad(dnlane.getRoad());
+//							this.appendToLane(dnlane);
+//							this.linkHistory.add(dnlane.getRoad().getID());
+//							this.linkTimeHistory.add(tickcount);
+//							this.lastRouteTick = -1; // old route is not valid for sure
+//							this.setNextRoad();
+//							this.assignNextLane();
+//							this.desiredSpeed_ = this.road.getFreeSpeed();
+//							// LZ: Use current speed instead of the free speed, be consistent with the setting in enteringNetwork
+//							if (this.currentSpeed_ > this.road.getFreeSpeed())
+//								this.currentSpeed_ = this.road.getFreeSpeed();
+//							return 1;
+//						}
+//					}
+//				}
 			}
 		}
 		coordMap.clear();

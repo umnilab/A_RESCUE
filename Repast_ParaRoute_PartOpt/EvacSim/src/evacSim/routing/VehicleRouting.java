@@ -150,6 +150,9 @@ public class VehicleRouting {
 			System.err.println("VehicleRouting.computeRoute: Current road is null");
 		}
 		roadPath_.add(currentRoad);
+		if (shortestPath == null) {
+			System.out.println(currJunc +" , "+ destJunc + " , " +currentRoad );
+		}
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);
 			Road road = cityContext.findRoadWithLinkID(linkID);

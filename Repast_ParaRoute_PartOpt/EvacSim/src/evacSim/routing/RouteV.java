@@ -103,7 +103,9 @@ public class RouteV {
 					+ " from current road: " + currentRoad.getLinkid());
 			}
 			Map<Float, Queue<Road>> empty = new HashMap<Float, Queue<Road>>();
-			empty.put(0.0f, new ArrayDeque<Road>());
+			ArrayDeque<Road> res = new ArrayDeque<Road>();
+			res.add(currentRoad);
+			empty.put(0.0f, res);
 			return empty;
 		}
 		// Set the time that the routing is computed
