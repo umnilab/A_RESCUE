@@ -101,7 +101,7 @@ public class ThreadedScheduler {
 		        				pv.getHouse().getZoneId(), pv.getDestinationID(), 
 		        				pv.getCurrentCoord().x, pv.getCurrentCoord().y);
 					   storeJsonObjects.put(pv.getVehicleID(), info);
-					   pv = pv.getMacroTrailing();
+					   pv = pv.macroTrailing();
 				   }
 			   }
 		   JSONObject jsonObject = new JSONObject();

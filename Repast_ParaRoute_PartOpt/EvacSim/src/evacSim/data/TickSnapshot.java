@@ -92,7 +92,7 @@ public class TickSnapshot {
     		prevY = veh.getPreviousEpochCoord().y;
     		curX = coord.x;
     		curY = coord.y;
-    		speed = veh.getCurrentSpeed();
+    		speed = veh.currentSpeed();
     		bearing = veh.getBearing();
     		roadID = veh.getRoad().getID();
     		

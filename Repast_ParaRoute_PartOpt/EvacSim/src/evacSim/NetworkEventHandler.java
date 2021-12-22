@@ -288,37 +288,7 @@ public class NetworkEventHandler {
 				" at tick " + (int) RepastEssentials.GetTickCount());
 		while (veh != null) { // for each vehicle on the old lane
 			// remove this vehicle from previous road and lane
-			veh.removeFromLane();
-			veh.removeFromMacroList();
-			// add this vehicle to the new road and lane
-			veh.appendToLane(toLane);
-			veh.appendToRoad(toLane.getRoad());
-			veh.setNextRoad();
-			veh.assignNextLane();
-			// flip the order of the lane's vehicle linked list
-			Vehicle oldLeading = veh.getLeading();
-			if (oldLeading != null) {
-				if (veh != oldLeading.getTrailing()) {
-					throw new IllegalStateException(
-							"For vehicles x & y, if y = x.leading, then the "
-									+ "relationship x = y.trailing does not hold");
-				}
-				veh.setTrailing(oldLeading);
-				oldLeading.setLeading(veh);
-			}
-			// reverse the distance from the downstream node of the lane
-			float newDistance_ = fromLane.getLength() - veh.getDistance_();
-			if (Float.isNaN(newDistance_) || newDistance_ < 0) {
-				throw new IllegalStateException(
-						"Distance from downstream junction is negative/NaN.");
-			}
-			veh.setDistance_(newDistance_);
-			// sort the macroList according to updated position
-			veh.advanceInMacroList();
-			// move on to the next vehicle (i.e., traverse the old lane's 
-			// vehicle list upstream)
-//			System.err.println(veh);
-			veh = oldLeading;
+			veh = veh.moveToNewLane(toLane);
 		}
 	}
 	

@@ -157,12 +157,12 @@ public class Road {
 			}
 			// the first vehicle in a road
 			Vehicle pv = this.getFirstVehicle();
-			if (pv != null && pv.getLeading() != null) {
-				pv.setLeading(null);
+			if (pv != null && pv.leading() != null) {
+				pv.leading(null);
 			}
 			while (pv != null) {
 				if(tickcount<=pv.getLastMoveTick()){
-					pv = pv.getMacroTrailing();
+					pv = pv.trailing();
 					break; // reached the last vehicle
 				}
 				pv.updateLastMoveTick(tickcount);
@@ -184,7 +184,7 @@ public class Road {
 				if (pv.atDestination()) {
 					arrVehs.add(pv);
 				}
-				pv = pv.getMacroTrailing();
+				pv = pv.trailing();
 			}
 			if(tickcount % GlobalVariables.FREQ_RECORD_VEH_SNAPSHOT_FORVIZ==0){
 				for (Vehicle veh : newVehs) {
@@ -607,9 +607,9 @@ public class Road {
 		Vehicle pv = this.getFirstVehicle();
 		// LZ: Vehicle in junction is not taken into account
 		while ((pv != null && pv.isOnLane())) {
-			sum += pv.getCurrentSpeed();
+			sum += pv.currentSpeed();
 			nVehicles += 1;
-			pv = pv.getMacroTrailing();
+			pv = pv.macroTrailing();
 		}
 		if (nVehicles < 1 ){
 			return speed_ = freeSpeed_;
@@ -637,12 +637,12 @@ public class Road {
 		} else {
 			Vehicle pv = this.getFirstVehicle();
 			while (pv != null) {
-				if (pv.getCurrentSpeed() < 0) {
+				if (pv.currentSpeed() < 0) {
 					logger.error("Vehicle " + pv.getId()
-					+ " has error speed of " + pv.getCurrentSpeed());
+					+ " has error speed of " + pv.currentSpeed());
 				} else
-					averageSpeed = +pv.getCurrentSpeed();
-				pv = pv.getMacroTrailing();
+					averageSpeed = +pv.currentSpeed();
+				pv = pv.macroTrailing();
 			}
 			if (averageSpeed < 0.001f) {
 				averageSpeed = 0.001f;

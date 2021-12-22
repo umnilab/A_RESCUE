@@ -41,9 +41,9 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 				 * which we decide to update routes. If it is high then 
 				 * we update routes more frequently */
 				if((double) Math.random() < GlobalVariables.PROBABILITY_OF_UPDATING_ROUTING){
-					this.lastRouteTick = RouteV.getValidTime();
+					this.lastRouteTime = RouteV.getValidTime();
 				}
-				if (this.lastRouteTick < RouteV.getValidTime()) {
+				if (this.lastRouteTime < RouteV.getValidTime()) {
 					/* JX, Oct 2019: change the return type of RouteV
 					 * .vehicleRoute to be a HashMap, and get the 
 					 * tempPathNew and pathTimeNew. */
@@ -83,7 +83,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 						this.clearShadowImpact();
 						this.roadPath = (Queue<Road>) tempPath;
 						this.setShadowImpact();
-						this.lastRouteTick = (int) RepastEssentials.GetTickCount();
+						this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 						itr = this.roadPath.iterator();
 						itr.next();
 						this.nextRoad_ = itr.next();
@@ -114,7 +114,7 @@ public class Vehicle_less_frequent_routing extends Vehicle {
 				this.roadPath = (Queue<Road>) tempPath;  // store the route
 				
 				this.setShadowImpact();
-				this.lastRouteTick = (int) RepastEssentials.GetTickCount();
+				this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 				this.atOrigin = false;
 				Iterator<Road> itr = this.roadPath.iterator();
 				itr.next();

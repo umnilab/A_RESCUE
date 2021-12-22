@@ -186,7 +186,7 @@ public class Lane {
 			dlane = dnLanes_.get(i);
 			pv = dlane.lastVehicle_;
 			if (pv != null) {
-				dis = dlane.getLength() - (pv.getDistance_() + pv.getLength());
+				dis = dlane.getLength() - (pv.distance() + pv.length());
 				if (dis < mindis) {
 					mindis = dis;
 					last = pv;
@@ -276,7 +276,7 @@ public class Lane {
 	public void setFirstVehicle(Vehicle v) {
 		if (v != null) {
 			this.firstVehicle_ = v;
-			v.setLeading(null);
+			v.leading(null);
 		} else
 			this.firstVehicle_ = null;
 	}
@@ -284,7 +284,7 @@ public class Lane {
 	public void setLastVehicle(Vehicle v) {
 		if (v != null) {
 			this.lastVehicle_ = v;
-			v.setTrailing(null);
+			v.trailing(null);
 		} else
 			this.lastVehicle_ = null;
 

@@ -38,7 +38,7 @@ public class Vehicle_predefinedroutes extends Vehicle {
 					this.nextRoad_ = null;
 					return;
 				}
-				if (this.lastRouteTick < RouteV.getValidTime()) {
+				if (this.lastRouteTime < RouteV.getValidTime()) {
 					//return the HashMap
 					Map<Float, Queue<Road>> tempPathMap = RouteV.vehicleRoute(this, this.destZone);
 					Entry<Float, Queue<Road>> entry = tempPathMap.entrySet().iterator().next();
@@ -54,7 +54,7 @@ public class Vehicle_predefinedroutes extends Vehicle {
 						this.setShadowImpact();
 						// HG: Predefined routes are used as routing will 
 						// not happen again after the intial time
-						this.lastRouteTick = Integer.MAX_VALUE;
+						this.lastRouteTime = Integer.MAX_VALUE;
 						Iterator<Road> itr = this.roadPath.iterator();
 						itr.next();
 						this.nextRoad_ = itr.next();
@@ -86,7 +86,7 @@ public class Vehicle_predefinedroutes extends Vehicle {
 				this.roadPath = tempPath;  //get the path
 				
 				this.setShadowImpact();
-				this.lastRouteTick = (int) RepastEssentials.GetTickCount();
+				this.lastRouteTime = (int) RepastEssentials.GetTickCount();
 				this.atOrigin = false;
 				Iterator<Road> itr = this.roadPath.iterator();
 				itr.next();
