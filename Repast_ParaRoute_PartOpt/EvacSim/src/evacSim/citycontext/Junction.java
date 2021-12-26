@@ -29,7 +29,7 @@ public class Junction {
 
 	@Override
 	public String toString() {
-		return "Junction " + this.ID + " at: " + this.coord.toString();
+		return String.format("<Junc(%.6f,%.6f)>", coord.y, coord.x);
 	}
 
 	/* Getters */

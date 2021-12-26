@@ -1,15 +1,18 @@
-	package evacSim;
+package evacSim;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.lang.IllegalStateException;
 //import java.util.LinkedList;
 import java.util.Map;
 //import java.util.Queue;
 import java.util.TreeMap;
+import com.vividsolutions.jts.geom.Coordinate;
+
+import org.apache.log4j.Logger;
+
 import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.space.gis.Geography;
 import au.com.bytecode.opencsv.CSVReader;
@@ -26,6 +29,7 @@ import evacSim.vehiclecontext.Vehicle;
  * */
 
 public class NetworkEventHandler {
+	private Logger logger = ContextCreator.logger;
 	// Queue that store unhappened events
 	// Queue operations see https://docs.oracle.com/javase/7/docs/api/java/util/Queue.html
 	// A sorted list storing the running events, sorted following the order of the end time
@@ -177,6 +181,8 @@ public class NetworkEventHandler {
 	public NetworkEventObject setEvent(NetworkEventObject event, boolean setEvent) {
 		if (event == null)
 			return null;
+		if (logger == null)
+			logger = ContextCreator.logger;
 		// Iterate over the roads to identify the correct road object
 		Geography<Road> roadGeography = ContextCreator.getRoadGeography();
 		Iterable<Road> roadIterable = roadGeography.getAllObjects();
@@ -192,7 +198,7 @@ public class NetworkEventHandler {
 							case 2: // Change speed limit and the speed of the opposite link
 								return setEvent2(road, event);
 							case 3: // Reverse the road direction
-								setEvent3(road);
+								return setEvent3(road, event);
 							default:
 								break;
 						}
@@ -258,7 +264,7 @@ public class NetworkEventHandler {
 		road.updateFreeFlowSpeedEvent((float) event.value1);
 		road.setEventFlag();
 		// if opposite link has speed
-		if((float) event.value2>=0){
+		if((float) event.value2>=0) {
 			Road oppRoad = road.getOppositeRoad();
 			if (oppRoad != null) {
 				oppRoad.setDefaultFreeSpeed();
@@ -279,13 +285,9 @@ public class NetworkEventHandler {
 	 * */
 	private void transferVehiclesInLaneReversal(
 			Lane fromLane, Lane toLane) {
-		System.err.println("Doing transferVehiclesInLaneReversal: {from " + 
-			fromLane + ", to " + toLane + "}");
-		toLane.setFirstVehicle(fromLane.getLastVehicle());
-		toLane.setLastVehicle(fromLane.getFirstVehicle()); // fromLane.setFirstVehicle(null); // fromLane.setLastVehicle(null); // fromLane.setNumVehicles(0);
 		Vehicle veh = fromLane.getLastVehicle();
-		System.err.println("First vehicle: " + veh + 
-				" at tick " + (int) RepastEssentials.GetTickCount());
+//		toLane.setFirstVehicle(veh);
+//		toLane.setLastVehicle(fromLane.getFirstVehicle());
 		while (veh != null) { // for each vehicle on the old lane
 			// remove this vehicle from previous road and lane
 			veh = veh.moveToNewLane(toLane);
@@ -301,19 +303,19 @@ public class NetworkEventHandler {
 	 * the macroList.
 	 * @author Rajat
 	 */
-	private void setEvent3(Road road) {
-		System.err.println("Reversing road ID: " + road);
+	private NetworkEventObject setEvent3(Road road, NetworkEventObject event) {
+		logger.info("Reversing " + road);
 		LaneContext laneContext = ContextCreator.getLaneContext();
 		Road oppRoad = road.getOppositeRoad();
 		// do nothing if there is not a road in the opposite direction
 		if (oppRoad == null) {
-			System.err.println("Skipping road " + road + ": no opposite road");
-			return;
+			logger.warn("Skipping "+road+": no opposite road");
+			return event;
 		}
 		if (road.getLanes().size() != oppRoad.getLanes().size()) {
-			System.err.println("Skipping road " + road + " because no. of lanes " +  
-					"does not equal that on opposite road " + oppRoad);
-			return;
+			logger.warn("Skipping "+road+" because no. of lanes " +  
+					"does not equal that on opposite "+oppRoad);
+			return event;
 		}
 		// Want to reverse road to have the same direction as oppRoad
 		// (1) Set the speed of the current link to be (close to) zero
@@ -326,6 +328,12 @@ public class NetworkEventHandler {
 			Lane oldLane = road.getLane(i);
 			Lane newLane = new Lane();
 			laneContext.add(newLane);
+			newLane.setLength(oldLane.getLength());
+//			Coordinate[] laneCoords = ContextCreator.getLaneGeography()
+//					.getGeometry(oldLane).getCoordinates();
+//			for (int j = laneCoords.length - 1; j >= 0; j--) {
+//				
+//			}
 			// RV: set references between new and old lanes
 			newLane.setPreReversalLane(oldLane);
 			oldLane.setPostReversalLane(newLane);
@@ -342,8 +350,11 @@ public class NetworkEventHandler {
 			 * road to opposite road, and update the position of the reversed 
 			 * lane vehicles on the new lane and update the macroList of the 
 			 * opposite road */
-			transferVehiclesInLaneReversal(oldLane, newLane);
+			Vehicle veh = oldLane.getLastVehicle();
+			while (veh != null) // for each vehicle on the old lane
+				veh = veh.moveToNewLane(newLane);
 		}
+		return event;
 	}
 	
 	/**
@@ -353,7 +364,7 @@ public class NetworkEventHandler {
 	 * @author Rajat
 	 */
 	private void restoreEvent3(Road road) {
-		System.err.println("Undoing reversal on road ID " + road.getLinkid());
+		logger.info("Undoing reversal on road ID " + road.getLinkid());
 		LaneContext laneContext = ContextCreator.getLaneContext();
 		Road oppRoad = road.getOppositeRoad();
 		// do nothing if there is not a road in the opposite direction
@@ -371,7 +382,7 @@ public class NetworkEventHandler {
 		for (Lane postLane : road.getLanes()) { // for each lane on target road
 			Lane preLane = postLane.getPreReversalLane();
 			if (preLane == null) {
-				System.out.println("Pre-reversal lane for " + postLane.getLaneid() 
+				logger.warn("Pre-reversal lane for " + postLane.getLaneid() 
 				+ " not found.");
 				continue;
 			}

@@ -397,6 +397,7 @@ public class GlobalVariables {
 	 * network so far. */
 	public static int NUM_GENERATED_VEHICLES = 0;
 	public static int NUM_VEHICLES_ENTERED_ROAD_NETWORK = 0;
+	public static float TOT_DIST_TRAVELED = 0f;
 	
 	/* HG: This variable will keep track of the number of vehicles arrived
 	 * at destination for visualization purposes. */

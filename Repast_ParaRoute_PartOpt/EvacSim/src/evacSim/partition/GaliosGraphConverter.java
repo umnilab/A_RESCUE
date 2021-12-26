@@ -172,8 +172,8 @@ public class GaliosGraphConverter<T> implements ProjectionListener<T> {
 			metisGraph.setNumEdges(edgeNum);
 			metisGraph.setGraph(GaliosGraph);
 			computeLeftOverRoads(); // Get the leftover roads
-			logger.info("Finished reading Repast graph " + GaliosGraph.size() + " " + metisGraph.getNumEdges() + 
-					" # Leftover roads: " + this.LeftOverRoads.size());
+//			logger.info("Finished reading Repast graph " + GaliosGraph.size() + " " + metisGraph.getNumEdges() + 
+//					" # Leftover roads: " + this.LeftOverRoads.size());
 			return metisGraph;
 		} catch (Exception e){
 			e.printStackTrace();

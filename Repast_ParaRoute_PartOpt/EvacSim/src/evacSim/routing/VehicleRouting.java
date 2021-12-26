@@ -84,7 +84,7 @@ public class VehicleRouting {
 	/* Perform the routing computation */
 	/* Xue: Oct 2019, change the return type to HashMap, where the double value is the route time, and the list<Road> is the path */
 	public Map<Float, Queue<Road>> computeRoute(
-			Road currentRoad, Junction currJunc, Junction destJunc) {
+			Road currentRoad, Junction currJunc, Junction destJunc) throws NullPointerException {
 		Map<Float, Queue<Road>> computeRouteResult = new HashMap<Float,Queue<Road>>();  
 		Queue<Road> roadPath_;
 		List<RepastEdge<Junction>> shortestPath;
@@ -146,13 +146,11 @@ public class VehicleRouting {
 		// Find the roads which are associated with these edges
 		Float shortestPathLength = 0.0f;
 		roadPath_ = new ArrayDeque<Road>();
-		if (currentRoad == null) {
-			System.err.println("VehicleRouting.computeRoute: Current road is null");
-		}
+		if (currentRoad == null)
+			logger.error("VehicleRouting.computeRoute: Current road is null");
 		roadPath_.add(currentRoad);
-		if (shortestPath == null) {
-			System.out.println(currJunc +" , "+ destJunc + " , " +currentRoad );
-		}
+		if (shortestPath == null)
+			logger.warn("Shortest path is null between "+currJunc+" and "+destJunc);
 		for (RepastEdge<Junction> edge : shortestPath) {
 			int linkID = cityContext.getLinkIDFromEdge(edge);
 			Road road = cityContext.findRoadWithLinkID(linkID);

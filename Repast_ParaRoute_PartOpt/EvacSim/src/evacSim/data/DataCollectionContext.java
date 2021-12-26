@@ -98,24 +98,18 @@ public class DataCollectionContext extends DefaultContext<Object> {
      * RV: Record runtime per few ticks for performance analysis (in seconds)
      * */
     public void recordRuntime() {
+    	int curTick = (int) RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
+    	String message = "Tick=" + curTick + "/" + GlobalVariables.SIMULATION_STOP_TIME
+    			+ ", nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
+				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
+				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
+				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES
+				+ ", totalDistTraveled=" + (int) GlobalVariables.TOT_DIST_TRAVELED/1000 + " km";
     	if (GlobalVariables.ENABLE_RUNTIME_RECORD) {
     		ArrayList<Double> runtimeRecorder = GlobalVariables.RUNTIME_RECORD_LIST;
     		runtimeRecorder.add((System.currentTimeMillis() - runtimeRecorder.get(0))/1000);
-    		
-    		// print the total no. of vehicles generated and destroyed so far,
-    		// along with runtime since the last call of this function
-    		logger.info("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
-    				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
-    				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
-    				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES
-    				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount()
-    				+ ", cumRuntime=" + runtimeRecorder.get(runtimeRecorder.size() - 1));
-    	} else {
-    		logger.info("nVehGenerated=" + GlobalVariables.NUM_GENERATED_VEHICLES
-    				+ ", nVehEnteredNetwork=" + GlobalVariables.NUM_VEHICLES_ENTERED_ROAD_NETWORK
-    				+ ", nVehKilled=" + GlobalVariables.NUM_KILLED_VEHICLES
-    				+ ", nVehFailed=" + GlobalVariables.NUM_FAILED_VEHICLES
-    				+ ", tick=" + RunEnvironment.getInstance().getCurrentSchedule().getTickCount());
+    		message += (", cumRuntime=" + runtimeRecorder.get(runtimeRecorder.size() - 1) + " s");
     	}
+    	logger.info(message);
     }
 }

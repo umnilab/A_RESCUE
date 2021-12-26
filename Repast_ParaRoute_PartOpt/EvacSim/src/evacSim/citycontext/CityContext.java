@@ -287,7 +287,7 @@ public class CityContext extends DefaultContext<Object> {
 		}
 		// At beginning, initialize route object
 		tickcount = (int) RepastEssentials.GetTickCount();
-		logger.info("Tick: " + tickcount + "/" + GlobalVariables.SIMULATION_STOP_TIME);
+//		logger.info("Tick: " + tickcount + "/" + GlobalVariables.SIMULATION_STOP_TIME);
 		if (tickcount < 1) {
 			try {
 				RouteV.createRoute();
@@ -508,6 +508,10 @@ public class CityContext extends DefaultContext<Object> {
 
 	public Road findRoadWithLinkID(int linkID) {
 		return this.road_KeyLinkID.get(linkID);
+	}
+	
+	public Lane findLaneWithLaneID(int laneID) {
+		return this.lane_KeyLaneID.get(laneID);
 	}
 	
 	public Zone findHouseWithID(int id) {

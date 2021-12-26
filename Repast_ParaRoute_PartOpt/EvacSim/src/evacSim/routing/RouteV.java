@@ -84,7 +84,7 @@ public class RouteV {
 	 * distinctly for Vehicle.setNextRoad() and CityContext.getClosestShelter()
 	 * */
 	public static Map<Float, Queue<Road>> vehicleRoute(Vehicle veh,
-			Zone destZone) {
+			Zone destZone) throws NullPointerException {
 
 		// Find origin and destination junctions & resolving their road segments
 		Road currentRoad = veh.getRoad();
@@ -111,7 +111,12 @@ public class RouteV {
 		// Set the time that the routing is computed
 		veh.setLastRouteTime((int) RepastEssentials.GetTickCount());
 		
-		return vbr.computeRoute(currentRoad, curDownJunc, destDownJunc);
+		try {
+			return vbr.computeRoute(currentRoad, curDownJunc, destDownJunc);
+		} catch (NullPointerException e) {
+			throw new NullPointerException(e.getMessage());
+		}
+		
 	}
 	
 //	/** 
