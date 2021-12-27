@@ -62,7 +62,7 @@ public class ThreadedScheduler {
 			avg_para_time = avg_para_time + time_result.get(2);
 			// Generate a vehicle list, filename by the corresponding ticks
 			int tickcount = (int) RepastEssentials.GetTickCount();
-			if(tickcount % 6000 == 0) { //Every 30 min
+			if(tickcount % 12000 == 0) { //Every hour
 				createVehicleList();
 			}
 		} catch (Exception ex) {
@@ -85,7 +85,7 @@ public class ThreadedScheduler {
 
 		// create the overall file path, named after the demand filename
 		String outpath = outDir + File.separatorChar + "vehicle-list-" + 
-				basename + "-" + tickcount/6000 + ".json";
+				basename + "-" + tickcount/12000 + ".json";
 		BufferedWriter bw = null;
 		// check the path will be a valid file
 		try {

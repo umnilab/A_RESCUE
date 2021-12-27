@@ -269,8 +269,8 @@ public class Vehicle {
 
 	public Coordinate getCurrentCoord() {
 		Coordinate coord = new Coordinate();
-		assert this.currentCoord_ != null :
-			"Current coordinate is null for " + this;
+		if (currentCoord_ == null)
+			throw new NullPointerException(this+".coordinate = null");
 		coord.x = this.currentCoord_.x;
 		coord.y = this.currentCoord_.y;
 		coord.z = this.currentCoord_.z;
@@ -622,6 +622,8 @@ public class Vehicle {
 					// skip the road $this is just entering
 					iter.next();
 					this.nextRoad_ = iter.hasNext() ? iter.next() : null;
+					if (nextRoad_ == this.road)
+						throw new IllegalStateException();
 					this.setShadowImpact(); // set new path's impact
 					this.lastRouteTime = currentTick;
 					this.travelTimeForPreviousRoute = curTravTime;
@@ -631,7 +633,10 @@ public class Vehicle {
 					this.removeShadowCount(curRoad);
 					// set the next road
 					Iterator<Road> iter = this.roadPath.iterator();
+					iter.next();
 					this.nextRoad_ = iter.hasNext() ? iter.next() : null;
+					if (nextRoad_ == this.road)
+						throw new IllegalStateException();
 				}	
 			} else { // if the vehicle is at origin
 				this.clearShadowImpact(); // clear legacy impact
@@ -653,6 +658,8 @@ public class Vehicle {
 					iter.next();
 					// set the next road if it exists
 					this.nextRoad_ = iter.hasNext() ? iter.next() : null;
+					if (nextRoad_ == this.road)
+						throw new IllegalStateException();
 				}
 			}
 		} catch (Exception e) {
@@ -960,6 +967,8 @@ public class Vehicle {
 
 
 	public float calcCarFollowingRate(Vehicle front) {
+		if (this == front)
+			throw new IllegalArgumentException(this+".calcCarFollowingRate(): this = frontVehicle");
 		// SH-if there is no front vehicle the car will be in free flow regime
 		// and have max acceleration
 		if (front == null) {
@@ -1055,11 +1064,18 @@ public class Vehicle {
 
 	public Vehicle vehicleAhead() {
 		if (leading_ != null) {
+			if (leading_ == this)
+				throw new IllegalStateException(
+						this+".vehicleAhead(): this.leading = this");
 			return leading_;
 		} else if (nextLane_ != null) {
-			if (nextLane_.getLastVehicle() != null)
-				return nextLane_.getLastVehicle();
-			else
+			if (nextLane_.getLastVehicle() != null) {
+				Vehicle front = nextLane_.getLastVehicle();
+				if (front == this)
+					throw new IllegalStateException(
+							this+".vehicleAhead(): this.nextLane.last = this");
+				return front;
+			} else
 				return null;
 		} else {
 			return null;
@@ -1087,7 +1103,7 @@ public class Vehicle {
 				headwayDistance = this.distance_ - front.length();
 			}
 			else if (this.lane.getID() == front.lane.getID()) {// if front vehicle is on the same lane as $\this
-				headwayDistance = this.distance_ - front.distance()-front.length();
+				headwayDistance = this.distance_ - front.distance_ - front.length();
 				// if front vehicle is on different lane
 			} else {
 				// LZ: front vehicle is in the next road
@@ -1099,9 +1115,10 @@ public class Vehicle {
 		else {
 			headwayDistance = Float.MAX_VALUE;
 		}
-		if (Double.isNaN(headwayDistance)) {
-			logger.error("Vehicle.gapDistance(): headway=NaN for "+this);
-		}
+		if (Double.isNaN(headwayDistance))
+			logger.error(this+".gapDistance(): headway=NaN");
+		if (headwayDistance < -0.001)
+			logger.error(this+".gapDistance(): headway is negative");
 		return (headwayDistance);
 	}
 
@@ -1203,9 +1220,9 @@ public class Vehicle {
 	 * Also, we update the coordinates of the previous epoch in the end of the
 	 * function.
 	 */ 
-	public void recVehSnaphotForVisInterp(){
+	public void recVehSnaphotForVisInterp() {
 		Coordinate currentCoord = this.getCurrentCoord();
-		if( currentCoord != null){
+		if (currentCoord != null) {
 			try {
 				/*
 				 * HG: the following condition can be put to reduce the data when 
@@ -1540,7 +1557,7 @@ public class Vehicle {
 				this.removeFromLane();
 				this.removeFromMacroList();
 				this.setCoordMap(nextLane_);
-				this.appendToRoad(this.nextRoad());
+				this.appendToRoad(this.nextRoad_);
 				this.linkHistory.add(this.nextRoad().getLinkid());
 				this.linkTimeHistory.add(tickcount);
 				this.appendToLane(nextLane_); // LZ: Two vehicles entered the same lane, then messed up.
@@ -1654,10 +1671,9 @@ public class Vehicle {
 
 
 	public void leading(Vehicle v) {
-		if (v != null)
-			this.leading_ = v;
-		else
-			this.leading_ = null;
+		if (v == this)
+			throw new IllegalStateException(this+".leading(): this.leading = this");
+		this.leading_ = v;
 	}
 
 
@@ -1925,6 +1941,9 @@ public class Vehicle {
 						+ " while looking for next lane on road: "
 						+ this.nextRoad().getLinkid() + " that has "
 						+ this.nextRoad().getnLanes() + " lanes");
+			if (nextLane_ == this.lane)
+				throw new IllegalStateException(
+						this+".assignNextLane(): this.nextLane = this");
 		}
 	}
 
@@ -1941,6 +1960,9 @@ public class Vehicle {
 	public void changeLane(Lane plane, Vehicle leadVehicle, Vehicle lagVehicle) {
 		Vehicle curLeading = this.leading();
 		Vehicle curTrailing = this.trailing();
+		if (curLeading == this || curTrailing == this)
+			throw new IllegalStateException(
+					this+".changeLane(): this.leading/trailing = this");
 		if (curTrailing != null) {
 			if (curLeading != null) {
 				curLeading.trailing(curTrailing);
@@ -2221,10 +2243,15 @@ public class Vehicle {
 	 */
 	
 	public Vehicle leadVehicle(Lane plane) {
+		if (plane == this.lane)
+			throw new IllegalArgumentException(
+					this+".leadVehicle(): target lane = current lane");
 		Vehicle leadVehicle = this.macroLeading_;
 		while (leadVehicle != null && leadVehicle.lane != plane) {
 			leadVehicle = leadVehicle.macroLeading_;
 		}
+		if (leadVehicle == this)
+			throw new IllegalStateException(this+".leadVehicle(): this = leadVehicle");
 		return leadVehicle;
 	}
 
@@ -2674,8 +2701,9 @@ public class Vehicle {
 
 	public Vehicle moveToNewLane(Lane toLane) {
 		Vehicle oldLeading = this.leading();
-		assert this == oldLeading.trailing() : 
-			this + ".moveToNewLane(): this.leading.trailing != this";
+		if (oldLeading != null && oldLeading.trailing() != this)
+			throw new IllegalStateException(
+					this+".moveToNewLane(): this.leading.trailing != this");
 		this.removeFromMacroList();
 		// remove vehicle from its lane (but not call $this.removeLane())
 		this.lane.decreaseNumVehicles();
@@ -2689,10 +2717,9 @@ public class Vehicle {
 		this.trailing_ = oldLeading;
 		// reverse the distance from the downstream node of the lane
 		float newDistance_ = toLane.getLength() - this.distance();
-		if (Float.isNaN(newDistance_) || newDistance_ < 0) {
+		if (Float.isNaN(newDistance_) || newDistance_ < 0)
 			throw new IllegalStateException(
 					"Distance from downstream junction is negative/NaN.");
-		}
 		this.distance_ = newDistance_;
 		// also invert its lane's remaining control points
 		this.updateCoordMap(toLane);

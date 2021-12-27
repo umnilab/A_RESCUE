@@ -14,8 +14,6 @@ import evacSim.citycontext.Road;
 import evacSim.citycontext.Zone;
 import evacSim.vehiclecontext.Vehicle;
 import repast.simphony.engine.environment.RunEnvironment;
-import repast.simphony.essentials.RepastEssentials;
-
 
 /**
  * evacSim.data.DataCollector
@@ -156,7 +154,6 @@ public class DataCollector {
         this.cleanupTimer.schedule(this.cleanupTask,  // the cleanup method
                                    cleanupTimeout*2,  // delay until first run
                                    cleanupTimeout);   // delay between runs
-        
         // tell each of the consumers to start
         for (DataConsumer dc : this.registeredConsumers) {
             if (dc != null) {
@@ -186,9 +183,7 @@ public class DataCollector {
         // set the running flags to stopped so no new data arrives
         this.paused = false;
         this.collecting = false;
-
         // TODO: stop the cleanup thread ?
-        
         // TODO: tell each of the consumers to stop ?
     }
     
@@ -202,7 +197,6 @@ public class DataCollector {
      */
     public void pauseDataCollection() {
         DataCollector.printDebug("CTRL", "PAUSE COLLECTION");
-        
         // set the running flags to paused
         this.paused = true;
         this.collecting = false;
@@ -215,7 +209,6 @@ public class DataCollector {
      */
     public void resumeDataCollection() {
         DataCollector.printDebug("CTRL", "RESUME COLLECTION");
-        
         if (!this.collecting && this.paused) {
             // set the running flags to no longer paused
             this.paused = false;
@@ -233,26 +226,21 @@ public class DataCollector {
      * @param tickNumber the number of the time step of the simulation tick.
      */
     public void startTickCollection(double tickNumber) {
-    	
     	GlobalVariables.datacollection_start = System.currentTimeMillis();
-        
-    	
         if ((int)tickNumber % 100 == 0) {
             // print a periodic heart-beat debug statement from data buffer
             String message = "TICK " + tickNumber + 
                              " [" + this.buffer.size() + " ticks in buffer]";
             DataCollector.printDebug("CTRL", message);
         }
-        
         // verify the given tick number is valid
         if (tickNumber < 0 || tickNumber <= this.lastTick) {
             throw new IllegalArgumentException("Tick number invalid.");
         }
-        
         // create the tick snapshot object
         this.currentSnapshot = new TickSnapshot(tickNumber);
-        
-        GlobalVariables.datacollection_total+= System.currentTimeMillis() - GlobalVariables.datacollection_start;
+        GlobalVariables.datacollection_total+= (System.currentTimeMillis() - 
+        		GlobalVariables.datacollection_start);
     }
     
     
@@ -263,12 +251,9 @@ public class DataCollector {
      * signaled to know that a new piece of data is available.
      */
     public void stopTickCollection() {
-    	
         // place the current tick into the buffer if anything was recorded
-//        if (!this.currentSnapshot.isEmpty()) { // LZ: remove this as an empty file is still making sense
-    	if(this.currentSnapshot != null){
+    	if (this.currentSnapshot != null) {
     		 this.buffer.add(this.currentSnapshot);
-//           }
            // update the counter of the latest tick buffered
            this.lastTick = this.currentSnapshot.getTickNumber();
     	}
@@ -286,24 +271,14 @@ public class DataCollector {
      */
     public void recordVehicleTickSnapshot(Vehicle vehicle,
                                Coordinate coordinate) throws Throwable {
-    	
-    	@SuppressWarnings("unused")
-		double currentTick = RepastEssentials.GetTickCount();
-    	
         // make sure the given vehicle object is valid
-        if (vehicle == null) {
-            throw new IllegalArgumentException("No vehicle given.");
-        }
-        if (coordinate == null) {
-            throw new IllegalArgumentException("No coordinate given.");
-        }
-        // make sure a tick is currently being processed
-        if (this.currentSnapshot == null) {
-            throw new Exception("No tick snapshot being processed.");
-        }
-        	// create the snapshot
-        	this.currentSnapshot.recordVehicleSnapshot(vehicle, coordinate);
-//        this.currentSnapshot.logVehicle(vehicle, coordinate);
+    	assert vehicle != null : "recordVehicleTickSnapshot(): No vehicle given.";
+    	assert coordinate != null : "recordVehicleTickSnapshot(): No coordinate given,";
+    	// make sure a tick is currently being processed
+    	assert currentSnapshot != null :
+    		"recordVehicleTickSnapshot(): No tick snapshot being processed.";
+    	// create the snapshot
+    	this.currentSnapshot.recordVehicleSnapshot(vehicle, coordinate);
     }
     
     /**
@@ -312,14 +287,9 @@ public class DataCollector {
      * @param road: Road to be recorded
      */
     public void recordRoadTickSnapshot(Road road) {
-    	if (road == null) {
-    		throw new IllegalArgumentException("No road given");
-    	}
-    	// make sure a tick is currently being processed
-        if (this.currentSnapshot == null) {
-            throw new RuntimeException("No tick snapshot being processed.");
-        }
-        // create the snapshot
+    	assert road != null : "No road given.";
+    	assert currentSnapshot != null : "No tick snapshot being processed.";
+    	// create the snapshot
         this.currentSnapshot.recordRoadSnapshot(road);
     }
     
@@ -329,13 +299,8 @@ public class DataCollector {
      * @param shelt: Shelter to be recorded
      */
     public void recordShelterTickSnapshot(Zone shelt) {
-    	if (shelt == null) {
-    		throw new IllegalArgumentException("No shelter given");
-    	}
-    	// make sure a tick is currently being processed
-        if (this.currentSnapshot == null) {
-            throw new RuntimeException("No tick snapshot being processed.");
-        }
+    	assert shelt != null : "No shelter given.";
+    	assert currentSnapshot != null : "No tick snapshot being processed.";
         // create the snapshot
     	this.currentSnapshot.recordShelterSnapshot(shelt);
     }
@@ -344,17 +309,11 @@ public class DataCollector {
      * Record the new entered vehicles.
      * @author Zengxiang Lei
      */
-    public void recordNewVehicleTickSnapshot(Vehicle vehicle){
-    	// make sure the given vehicle object is valid
-        if (vehicle == null) {
-            throw new IllegalArgumentException("No vehicle given.");
-        }
-     // make sure a tick is currently being processed
-        if (this.currentSnapshot == null) {
-            throw new RuntimeException("No tick snapshot being processed.");
-        }
-        	// create the snapshot
-        	this.currentSnapshot.recordNewVehSnapshot(vehicle);
+    public void recordNewVehicleTickSnapshot(Vehicle vehicle) {
+    	assert vehicle != null : "No vehicle given.";
+    	assert currentSnapshot != null : "No tick snapshot being processed.";
+    	// create the snapshot
+    	this.currentSnapshot.recordNewVehSnapshot(vehicle);
     }
     
     /**
@@ -362,16 +321,10 @@ public class DataCollector {
      * @author Zengxiang Lei
      */
     public void recordArrVehicleTickSnapshot(Vehicle vehicle){
-    	// make sure the given vehicle object is valid
-        if (vehicle == null) {
-            throw new IllegalArgumentException("No vehicle given.");
-        }
-     // make sure a tick is currently being processed
-        if (this.currentSnapshot == null) {
-            throw new RuntimeException("No tick snapshot being processed.");
-        }
-        	// create the snapshot
-        	this.currentSnapshot.recordArrVehSnapshot(vehicle);
+    	assert vehicle != null : "No vehicle given.";
+    	assert currentSnapshot != null : "No tick snapshot being processed.";
+    	// create the snapshot
+        this.currentSnapshot.recordArrVehSnapshot(vehicle);
     }
     
     
@@ -385,16 +338,8 @@ public class DataCollector {
      */
     public void recordEventSnapshot(NetworkEventObject event,
                                int type) throws Throwable {
-        // make sure the given event object is valid
-        if (event == null) {
-            throw new IllegalArgumentException("No event given.");
-        }
-        
-        // make sure a tick is currently being processed
-        if (this.currentSnapshot == null) {
-            throw new Exception("No tick snapshot being processed.");
-        }
-      
+    	assert event != null : "No event given.";
+    	assert currentSnapshot != null : "No tick snapshot being processed.";
         // add the event to the current snapshot
         this.currentSnapshot.logEvent(event, type);
     }

@@ -443,11 +443,14 @@ public class ContextCreator implements ContextBuilder<Object> {
 		String[] temp1 = GlobalVariables.ACTIVITY_CSV.split("/");
         String temp2 = temp1[temp1.length - 1];
         String scenarioName = temp2.substring(0, temp2.lastIndexOf('.'));
-        	// check for error
-        	if (scenarioName == null || scenarioName.length() <= 0) {
-        		// but do not break the code, but just print the error
-        		System.err.println("Invalid scenario name");
-        	}
+        String[] temp3 = GlobalVariables.EVENT_FILE.split("/");
+        String temp4 = temp3[temp3.length - 1];
+        scenarioName += "__" + temp4.substring(0, temp4.lastIndexOf('.'));
+    	// check for error
+    	if (scenarioName == null || scenarioName.length() <= 0) {
+    		// but do not break the code, but just print the error
+    		System.err.println("Invalid scenario name");
+    	}
 		return scenarioName;
 	}
 	
