@@ -1737,7 +1737,7 @@ public class Vehicle {
 		//		this.destCoord = null;
 		//		this.destZone = null;
 		this.targetLane_ = null;
-		this.currentCoord_ = null;
+//		this.currentCoord_ = null;
 		//		this.house = null;
 		// ZH: clear any remaining shadow impact
 		this.clearShadowImpact();

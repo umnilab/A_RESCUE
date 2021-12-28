@@ -542,7 +542,7 @@ public class Connection implements DataConsumer {
         lines.add("TICK," + tickNum);
 
         // get the data representation of the tick
-        ArrayList<String> tickData = tick.createCSVTickLines();
+        ArrayList<String> tickData = tick.createCSVTickLines("vehicle");
         for (String dataLine : tickData) {
         	lines.add(dataLine);
         }

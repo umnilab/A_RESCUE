@@ -599,14 +599,18 @@ public class CsvOutputWriter implements DataConsumer {
         if (tick == null) {
             return null;
         }
+        // add the data
+        ArrayList<String> lines = tick.createCSVTickLines("vehicle");
+        lines.addAll(tick.createCSVTickLines("newVeh"));
+        lines.addAll(tick.createCSVTickLines("arrVeh"));
+        lines.addAll(tick.createCSVTickLines("road"));
+        lines.addAll(tick.createCSVTickLines("shelter"));
+    	
+        // add the tick number as the first column
         String tickNum = Integer.toString(tick.getTickNumber());
-        
-        	// get the list of lines corresponding to vehicles' trajectory
-        	ArrayList<String> lines = tick.createCSVTickLines();
-        	
-        	for (int i=0; i < lines.size(); i++) {
-        		lines.set(i, tickNum + "," + lines.get(i));
-        	}
+    	for (int i=0; i < lines.size(); i++) {
+    		lines.set(i, tickNum + "," + lines.get(i));
+    	}
         // return the array of lines from this tick snapshot
         return lines.toArray(new String[0]);
     }

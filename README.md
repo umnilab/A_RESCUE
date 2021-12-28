@@ -36,6 +36,8 @@ Screenshot of A-RESCUE 3.0 running a preloaded simulation scenario.
     - [Parallelization](#parallelization)
     - [Network partitioning](#network-partitioning)
   - [Collected output](#collected-output)
+    - [JSON snapshots](#json-snapshots)
+    - [CSV snapshots](#csv-snapshots)
   - [Network communication in the simulation](#network-communication-in-the-simulation)
   - [Visualization interface (VI)](#visualization-interface-vi)
   - [Online Task Manager (OTM)](#online-task-manager-otm)
@@ -315,6 +317,7 @@ The simulator uses a dynamic load-balancing strategy that periodically repartiti
 
 The simulator periodically stores "snapshots" of the current state of the simulation run as output streams (i.e., continuously, not at the end of the run). This data collection is governed by the settings in the *Data collection* and *Output data storage* sections of the configuration file. Data collection can be toggled with the inputs: `ENABLE_JSON_WRITE` and `ENABLE_CSV_WRITE`. The output directory is a folder by the name of the `ACTIVITY_SEQ_CSV` file's base name under the `DEFAULT_OUTPUT_DIR` folder as defined in the configuration file (by default `~/Repast_ParaRoute_PartOpt/EvacSim/simulation_output/200/`).
 
+### JSON snapshots
 The JSON files are mainly meant to be sent for simulation visualization to the client over the Internet. Since these files can become large when the evacuation demand is large, each output JSON file contains a small number of snapshots, given by `JSON_TICK_LIMIT_PER_FILE` (by default, 2). Each JSON object within each file stores the following information for each snapshot period:
 
 - `vehicles`: This is usually the most space-consuming part of the data as it contains the vehicle trajectory data. At each fixed time interval, given by `FREQ_RECORD_VEH_SNAPSHOT_FORVIZ`, the simulator stores the snapshot information of each vehicle currently on the road network. This is stored as a comma-separated string that contains the following information:
@@ -352,7 +355,17 @@ An example output snapshot file reads as shown below:
 }
 ```
 
-The CSV output is optional and mainly used for data post-processing as it can be more compact and easily manipulated than JSON. It only contains the vehicle snapshots in a tabular format with four columns for each vehicle: its ID, current longitude and latitude, and current speed (mph).
+### CSV snapshots
+The CSV output is optional and mainly used for data post-processing as it can be more structured and easily manipulated than JSON, although it can slightly increase the file size. It captures the same data as JSON snapshots but has the following (slightly odd) schema:
+
+| Col no. | Column | Dtype | Vehicle points | New vehicles | Arrived vehicles | Roads |	Shelters |
+| ------- | ------ | ----- | :------------: | :----------: | :--------------: | :---: |	:------: |
+| 1 | `tick` | int | | | | | |
+| 2 | `kind` (snapshot type) | int | 1 | 2 | 3 | 4 | 5 |
+| 3 | `agentId` |	int |	vehicle ID | vehicle ID | vehicle ID | road ID | shelter ID |
+| 4 | `val1` | float | current lon. | lon. of origin | lon. of destination | no. of vehicles | occupancy |
+| 5 | `val2` | float | current lat.| lat. of origin | lat. of destination | mean speed (m/s) | - |
+| 6 | `val3` | float | speed (m/s) | - | - | - | - |
 
 ## Network communication in the simulation
 

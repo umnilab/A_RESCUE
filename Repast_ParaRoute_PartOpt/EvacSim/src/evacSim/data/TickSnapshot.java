@@ -126,7 +126,7 @@ public class TickSnapshot {
     	
     	/** Return the string of this vehicles's attributes to be exported to CSV */
     	String getCSVLine() {
-    		return String.format("%d, %.6f,%.6f,%.3f",
+    		return String.format("1,%d,%.6f,%.6f,%.3f",
     				id, curX, curY, speed);
     	}
     }
@@ -173,6 +173,10 @@ public class TickSnapshot {
     	String getJSONLine() {
     		return String.format("%d,%d,%.3f", id, nVehicles, speed);
     	}
+    	
+    	String getCSVLine() {
+    		return String.format("4,%d,%d,%.3f,", id, nVehicles, speed);
+    	}
     
     }
     
@@ -215,20 +219,26 @@ public class TickSnapshot {
     		return String.format("%d,%d", id, occupancy);
     	}
     	
+    	String getCSVLine() {
+    		return String.format("5,%d,%d,,", id, occupancy);
+    	}
+    	
     }
     
     private class NewVehSnapshot{
     	final int id;
     	/** IDs of the origin & destination zones of the vehicle. */
     	final int origID, destID;
+    	final float curX, curY;
         
     	NewVehSnapshot(Vehicle veh){
         	id = veh.getVehicleID();
     		// resolve the current origin and destination ID
             ArrayList<Plan> plans = veh.getHouse().getActivityPlan();
-        		origID = plans.get(0).getLocation();
-        		destID = plans.get(1).getLocation();
-        		
+    		origID = plans.get(0).getLocation();
+    		destID = plans.get(1).getLocation();
+        	curX = (float) veh.getCurrentCoord().x;
+        	curY = (float) veh.getCurrentCoord().x;
         	newVehs.add(this);
         }
         
@@ -237,19 +247,30 @@ public class TickSnapshot {
     		// LZ 12/01/2020, just return IDs
     		return String.format("%d,%d,%d", id, origID, destID);
     	}
+    	
+    	String getCSVLine() {
+    		return String.format("2,%d,%.6f,%.6f,", id, curX, curY);
+    	}
     }
     
     private class ArrVehSnapshot{
     	final int id;
+    	final float curX, curY;
         
     	ArrVehSnapshot(Vehicle veh){
         	id = veh.getVehicleID();
+        	curX = (float) veh.getCurrentCoord().x;
+        	curY = (float) veh.getCurrentCoord().x;
         	arrVehs.add(this);
         }
         
         /** Return the string of this vehicle's attributes to be exported to JSON */
     	String getJSONLine() {
     		return String.format("%d", id);
+    	}
+    	
+    	String getCSVLine() {
+    		return String.format("3,%d,%.6f,%.6f,", id, curX, curY);
     	}
     }
     
@@ -323,7 +344,11 @@ public class TickSnapshot {
     
     /** Returns whether or not anything was recorded in the snapshot. */
     public boolean isEmpty() {
-        return (vehicles.isEmpty() && roads.isEmpty() && shelters.isEmpty() && newVehs.isEmpty() && arrVehs.isEmpty());
+        return (vehicles.isEmpty() && 
+        		roads.isEmpty() && 
+        		shelters.isEmpty() && 
+        		newVehs.isEmpty() && 
+        		arrVehs.isEmpty());
     }
     
     /**
@@ -337,37 +362,32 @@ public class TickSnapshot {
     public ArrayList<String> createJSONTickLines(String objectType) {
     	ArrayList<String> lines = new ArrayList<String>();
     	
-    	// for vehicles
     	if (objectType == "vehicle") {
 	        for (VehicleSnapshot veh : vehicles) {
 	            if (veh == null) continue;
 	            lines.add(veh.getJSONLine());
 	        }
     	}
-    	// for roads
     	if (objectType == "road") {
 	        for (RoadSnapshot road : roads) {
 	            if (road == null) continue;
 	            lines.add(road.getJSONLine());
 	        }
     	}
-    	// for shelters
     	if (objectType == "shelter") {
 	        for (ShelterSnapshot shelt : shelters) {
 	            if (shelt == null) continue;
 	            lines.add(shelt.getJSONLine());
 	        }
     	}
-    	// for entered vehicles
-    	if (objectType == "newVeh"){
-    		for(NewVehSnapshot veh: newVehs){
+    	if (objectType == "newVeh") {
+    		for(NewVehSnapshot veh: newVehs) {
     			if(veh == null) continue;
     			lines.add(veh.getJSONLine());
     		}
     	}
-    	// for arrived vehicles
-    	if (objectType == "arrVeh"){
-    		for(ArrVehSnapshot veh: arrVehs){
+    	if (objectType == "arrVeh") {
+    		for(ArrVehSnapshot veh: arrVehs) {
     			if(veh == null) continue;
     			lines.add(veh.getJSONLine());
     		}
@@ -381,13 +401,39 @@ public class TickSnapshot {
      * 
      * @return lines: the array of strings each containing info of an object
      */
-    public ArrayList<String> createCSVTickLines() {
+    public ArrayList<String> createCSVTickLines(String objectType) {
     	
     	ArrayList<String> lines = new ArrayList<String>();
-    	for (VehicleSnapshot veh: vehicles) {
-            if (veh == null) continue;
-            lines.add(veh.getCSVLine());
-        }
+    	if (objectType == "vehicle") {
+	        for (VehicleSnapshot veh : vehicles) {
+	            if (veh == null) continue;
+	            lines.add(veh.getCSVLine());
+	        }
+    	}
+    	if (objectType == "road") {
+	        for (RoadSnapshot road : roads) {
+	            if (road == null) continue;
+	            lines.add(road.getCSVLine());
+	        }
+    	}
+    	if (objectType == "shelter") {
+	        for (ShelterSnapshot shelt : shelters) {
+	            if (shelt == null) continue;
+	            lines.add(shelt.getCSVLine());
+	        }
+    	}
+    	if (objectType == "newVeh") {
+    		for(NewVehSnapshot veh: newVehs) {
+    			if(veh == null) continue;
+    			lines.add(veh.getCSVLine());
+    		}
+    	}
+    	if (objectType == "arrVeh") {
+    		for(ArrVehSnapshot veh: arrVehs) {
+    			if(veh == null) continue;
+    			lines.add(veh.getCSVLine());
+    		}
+    	}
     	return lines;
     }
     
